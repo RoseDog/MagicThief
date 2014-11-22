@@ -1,0 +1,19 @@
+fly		000 - 030
+fly attack 1	062 - 122
+fly attack 2	123 - 183
+fly hit 		184 - 214
+fly death 		215 - 286
+fly forward	288 - 318
+walk		351 - 381	
+stand		414 - 459
+idle		461 - 581
+attack 1		583 - 613
+attack 2		615 - 645
+attack 3		647 - 692
+hit 1		694 - 709
+hit 2		711 - 726
+death		728 - 787
+
+Gargoyle: 7912 tris
+Loincloth: 176 tris
+
