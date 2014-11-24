@@ -802,9 +802,11 @@ public class MapGenerate : UnityEngine.MonoBehaviour
     {
         UnityEngine.RaycastHit hitInfo;
         int layermask = 1 << 13;
+		UnityEngine.Debug.Log("ray");
         UnityEngine.Ray ray = Globals.cameraForDefender.GetComponent<UnityEngine.Camera>().ScreenPointToRay(fingerDownOnMap.nowPosition);
         if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
         {
+			UnityEngine.Debug.Log("hitted");
             return hitInfo.collider.gameObject.GetComponent<Guard>();
         }
         return null;
@@ -905,6 +907,8 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 
     public bool OnDragFingerUp(object sender)
     {
+		UnityEngine.Debug.Log("OnDragFingerUp:" + fingerDownOnMap.timeSinceTouchBegin.ToString("f4")+"," 
+		                      + UnityEngine.Vector2.Distance (fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition).ToString("f4"));
         if (draggingGuard != null)
         {
             draggingGuard.ShowBtns();
@@ -916,8 +920,9 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         }
         // 判断点击
         else if (fingerDownOnMap.timeSinceTouchBegin < 0.1f &&             
-            UnityEngine.Vector2.Distance(fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition) < UnityEngine.Mathf.Epsilon)
+            UnityEngine.Vector2.Distance(fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition) < 5.0f)
         {
+			UnityEngine.Debug.Log("click on map");
             // 如果点击到guard身上
             Guard guard = FingerRayToGuard();
             if (guard != null)
