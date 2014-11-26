@@ -5,11 +5,12 @@ public class BeginGame : MonoBehaviour
 {
     bool challengerBegan = false;
     UnityEngine.UI.Text textOnBtn;
+
     void Awake()
     {
         UnityEngine.UI.Button btn = GetComponent<UnityEngine.UI.Button>();
         btn.onClick.AddListener(() => btnClicked());
-        textOnBtn = GetComponentInChildren<UnityEngine.UI.Text>();
+        textOnBtn = GetComponentInChildren<UnityEngine.UI.Text>();        
     }
 
     public void btnClicked()
@@ -22,7 +23,6 @@ public class BeginGame : MonoBehaviour
             Globals.map.RegistChallengerEvent();
 
             // 禁用所有的Defender UI
-            Globals.selectGuardUI.CancelNextGuard();
             UnityEngine.CanvasRenderer[] canvases = GameObject.FindObjectsOfType<UnityEngine.CanvasRenderer>();
             foreach (UnityEngine.CanvasRenderer canvas in canvases)
             {

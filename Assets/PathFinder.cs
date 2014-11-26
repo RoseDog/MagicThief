@@ -33,14 +33,14 @@ public class PathFinder : UnityEngine.MonoBehaviour
         path.Scan();        
     }
 
-    public Pathfinding.Node GetSingleWalkableNode(UnityEngine.Vector3 pos)
+    public Pathfinding.Node GetSingleNode(UnityEngine.Vector3 pos, bool needWalkable)
     {
         System.Collections.Generic.List<Pathfinding.Node> nodes =
             graph.GetNodesInArea(new UnityEngine.Bounds(pos, new UnityEngine.Vector3(1.0f, 10.0f, 1.0f)));
 
         foreach (Pathfinding.Node node in nodes)
         {
-            if (node.walkable)
+            if (!needWalkable || node.walkable)
             {
                 return node;
             }

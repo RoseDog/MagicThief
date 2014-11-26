@@ -17,26 +17,31 @@ public class Patrol : GuardAction
     {
         DestroyRouteNodes();
         targetPoses.Clear();
-        //Call Start in base script (AIPath)
-        // 找到四个方向上最远可以到达的走廊
-        AddTargetPosInDirection(Globals.EAST, 4);
-        AddTargetPosInDirection(Globals.SOUTH, 6);
-        AddTargetPosInDirection(Globals.WEST, 4);
-        AddTargetPosInDirection(Globals.NORTH, 6);
+
+        if (guard.birthNode.walkable)
+        {
+            //Call Start in base script (AIPath)
+            // 找到四个方向上最远可以到达的走廊
+            AddTargetPosInDirection(Globals.EAST, 4);
+            AddTargetPosInDirection(Globals.SOUTH, 6);
+            AddTargetPosInDirection(Globals.WEST, 4);
+            AddTargetPosInDirection(Globals.NORTH, 6);
+        }
+        
 
         System.Diagnostics.Debug.Assert(targetPoses.Count == 4);
 	}
 
     void AddTargetPosInDirection(String direction, int patrolCellsCount)
     {
-        Pathfinding.Node node = Globals.pathFinder.GetSingleWalkableNode(transform.position);
+        Pathfinding.Node node = Globals.pathFinder.GetSingleNode(transform.position,true);
         float nodeSize = Globals.pathFinder.graph.nodeSize;
         for (int i = 0; i < patrolCellsCount; ++i)
         {
             // 生成表示行走区域的方块
             UnityEngine.GameObject cube = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
             cube.transform.localScale = new UnityEngine.Vector3(nodeSize, 0.5f, nodeSize);
-            cube.transform.position = new UnityEngine.Vector3(node.position.x / 1000.0f, node.position.y / 1000.0f, node.position.z / 1000.0f) + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f);
+            cube.transform.position = Globals.GetPathNodePos(node) + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f);
             cube.transform.parent = transform;
 
             patrolNodes.Add(cube);
@@ -64,17 +69,17 @@ public class Patrol : GuardAction
             }
 
             // 如果没有可以行走的node了
-            Pathfinding.Node nextNode = Globals.pathFinder.GetSingleWalkableNode(nextNodePos);
+            Pathfinding.Node nextNode = Globals.pathFinder.GetSingleNode(nextNodePos, true);
             if (nextNode == null)
             {
-                targetPoses.Add(new UnityEngine.Vector3(node.position.x / 1000.0f, node.position.y / 1000.0f, node.position.z / 1000.0f));
+                targetPoses.Add(Globals.GetPathNodePos(node));
                 return;
             }
 
             node = nextNode;
         }
 
-        targetPoses.Add(new UnityEngine.Vector3(node.position.x / 1000.0f, node.position.y / 1000.0f, node.position.z / 1000.0f));
+        targetPoses.Add(Globals.GetPathNodePos(node));
     }
 
     public void RouteConfirmed()

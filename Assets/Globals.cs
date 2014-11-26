@@ -63,4 +63,10 @@ public class Globals
 
         return null;
     }
+
+    static public UnityEngine.Vector3 GetPathNodePos(Pathfinding.Node node)
+    {
+        return new UnityEngine.Vector3(node.position.x / 1000.0f,
+            node.position.y / 1000.0f, node.position.z / 1000.0f);
+    }
 }

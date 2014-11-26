@@ -2,27 +2,22 @@
 using System.Collections;
 
 public class SelectGuard : UnityEngine.MonoBehaviour 
-{
-    UnityEngine.GameObject guardSelectedImage;
+{    
     [UnityEngine.HideInInspector]
-    public UnityEngine.UI.Button[] btns;
-    [UnityEngine.HideInInspector]
-    public String selectedGuardPrefabName;
-    [UnityEngine.HideInInspector]
-    public Guard nextGuard;
-    [UnityEngine.HideInInspector]
-    public Cell birthCell;
+    public GuardBtn[] btns;
+    
     void Awake()
     {
         Globals.selectGuardUI = this;
-        btns = GetComponentsInChildren<UnityEngine.UI.Button>();
-        foreach (UnityEngine.UI.Button btn in btns)
+        btns = GetComponentsInChildren<GuardBtn>();
+        UnityEngine.GameObject selectedImage = getChildGameObject(gameObject, "guardSelectedImage");
+        foreach (GuardBtn btn in btns)
         {
-            UnityEngine.UI.Button temp = btn;
-            btn.onClick.AddListener(() => btnClicked(temp));
+            UnityEngine.UI.Button temp = btn.GetComponent<UnityEngine.UI.Button>();
+            temp.onClick.AddListener(() => btnClicked(temp));
+            btn.guardSelectedImage = selectedImage;
+            btn.guardSelectedImage.gameObject.SetActive(false);
         }
-        guardSelectedImage = getChildGameObject(gameObject, "guardSelectedImage");
-        gameObject.SetActive(false);        
     }
 
     public UnityEngine.GameObject getChildGameObject(UnityEngine.GameObject fromGameObject, String withName)
@@ -44,46 +39,21 @@ public class SelectGuard : UnityEngine.MonoBehaviour
 	}
 
     public void btnClicked(UnityEngine.UI.Button btn)
-    {        
-        CancelNextGuard();        
+    {
+        UnityEngine.Debug.Log(btn.name);
+//         CancelNextGuard();        
+//         
+//         selectedGuardPrefabName = btn.name;
+//         ShowNextGuard();
         
-        selectedGuardPrefabName = btn.name;
-        ShowNextGuard();
-        guardSelectedImage.GetComponent<UnityEngine.RectTransform>().parent = btn.GetComponent<UnityEngine.RectTransform>();
-        guardSelectedImage.GetComponent<UnityEngine.RectTransform>().anchoredPosition = UnityEngine.Vector2.zero;
 
         // 选择南北方向最远10个格子，然后来回走        
         //guard.GetComponent<Patrol>().Excute();
     }
 
-    public void ShowNextGuard()
-    {
-        UnityEngine.Debug.Log("ShowNextGuard");
-        guardSelectedImage.gameObject.SetActive(true);
-        // 默认选择的守卫出现在地图上
-        UnityEngine.GameObject guard_prefab = UnityEngine.Resources.Load("Avatar/" + Globals.selectGuardUI.selectedGuardPrefabName) as UnityEngine.GameObject;
-        UnityEngine.GameObject guardObject = UnityEngine.GameObject.Instantiate(guard_prefab) as UnityEngine.GameObject;
-
-        Guard guard = guardObject.GetComponent<Guard>();
-        guardObject.transform.position = birthCell.GetFloorPos();
-        guard.birthCell = birthCell;
-        guard.Choosen();
-        guard.patrol.InitPatrolRoute();
-        nextGuard = guard;
-    }
-
-    public void CancelNextGuard()
-    {
-        if (nextGuard != null)
-        {
-            Globals.DestroyGuard(nextGuard);            
-            guardSelectedImage.gameObject.SetActive(false);
-            nextGuard = null;            
-        }
-    }
-
     public void ShowBtns()
     {
+        gameObject.SetActive(true);
         StartCoroutine(_scaleCanvasOut());
     }
 
@@ -91,6 +61,13 @@ public class SelectGuard : UnityEngine.MonoBehaviour
     {
         StopCoroutine(_scaleCanvasOut());
         transform.localScale = UnityEngine.Vector3.zero;
+        gameObject.SetActive(false);
+        foreach (GuardBtn btn in btns)
+        {
+            btn.dragging = false;
+            btn.inside = false;
+            btn.guardSelectedImage.gameObject.SetActive(false);
+        }
     }
 
     float currentScaleTime = 1.0f;
@@ -106,7 +83,7 @@ public class SelectGuard : UnityEngine.MonoBehaviour
             transform.localScale = new UnityEngine.Vector3(scale, scale, scale);
 
             yield return null;
-        }
+        }        
         yield return null;
     }
 }

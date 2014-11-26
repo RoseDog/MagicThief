@@ -15,19 +15,8 @@ public class BeginPatrolBtn : UnityEngine.MonoBehaviour
 
     public void btnClicked()
     {
-        // 开始巡逻了，允许收回
-        if (guard == Globals.selectGuardUI.nextGuard)
-        {
-            guard.takeGuardBackBtn.gameObject.SetActive(true);
-        }
-        // 这是一个已经在巡逻的guard，再次显示出选择按钮
-        else
-        {
-            Globals.selectGuardUI.ShowBtns();
-        }
-        
+        Globals.selectGuardUI.ShowBtns();
         guard.Unchoose();
-        Globals.selectGuardUI.ShowNextGuard();    
     }
 	// Use this for initialization
 	void Start () {

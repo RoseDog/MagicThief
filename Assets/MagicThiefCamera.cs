@@ -4,6 +4,8 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
     public float dragSpeed = 0.3f;
     public UnityEngine.Vector3 lookAt;
     public UnityEngine.Vector3 disOffset;
+    [UnityEngine.HideInInspector]
+    public float disScale = 1.0f;
 
     public UnityEngine.Vector3 GetHorForward()
     {
@@ -19,11 +21,16 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
         return cameraHorRight.normalized;
     }
 
+    public void SetDisScale(float scale)
+    {
+       disScale = UnityEngine.Mathf.Clamp(camera.fieldOfView, 0.3f, 2.0f);
+    }
+
     public virtual void Update()
     {
         lookAt.x = UnityEngine.Mathf.Clamp(lookAt.x, Globals.map.WestPosInPixel(), Globals.map.EastPosInPixel());
         lookAt.z = UnityEngine.Mathf.Clamp(lookAt.z, Globals.map.SouthPosInPixel(), Globals.map.NorthPosInPixel());        
-        transform.position = lookAt + disOffset;
+        transform.position = lookAt + disOffset * disScale;
         transform.LookAt(lookAt);
     }
 }

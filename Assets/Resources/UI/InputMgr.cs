@@ -76,6 +76,11 @@ public class Finger
 
     public void Down(Vector2 pos)
     {
+        if (IsPositionOnCanvas(pos))
+        {
+            return;
+        }
+
         enabled = true;
         touchBegin = touchStaying = touchMoving = touchEnd = hovering = false;
 
@@ -94,42 +99,73 @@ public class Finger
 
     public void Staying(Vector2 pos)
     {
+        touchBegin = touchStaying = touchMoving = touchEnd = hovering = false;
+
+        touchStaying = true;
+
+        holdingPosition = lastPosition = nowPosition;
+
+        timeSinceTouchBegin += Time.deltaTime;
         if (enabled)
         {
-            touchBegin = touchStaying = touchMoving = touchEnd = hovering = false;
-
-            touchStaying = true;
-
-            holdingPosition = lastPosition = nowPosition;
-
-            timeSinceTouchBegin += Time.deltaTime;
-
             if (Evt_Staying != null)
             {
                 Evt_Staying(this);
             }
-        }        
+        }
+    }
+
+    public bool IsPositionOnCanvas(Vector3 position)
+    {
+        UnityEngine.Canvas[] canvases = GameObject.FindObjectsOfType<UnityEngine.Canvas>();
+        foreach (UnityEngine.Canvas canvas in canvases)
+        {
+            UnityEngine.EventSystems.PointerEventData event_data = new UnityEngine.EventSystems.PointerEventData(GameObject.FindObjectOfType<UnityEngine.Canvas>().GetComponent<UnityEngine.EventSystems.EventSystem>());
+            event_data.position = position;
+            System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult> results = new System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult>();
+            canvas.GetComponent<UnityEngine.UI.GraphicRaycaster>().Raycast(event_data, results);
+            if (results.Count != 0)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void Moving(Vector2 pos)
     {
+        if (IsPositionOnCanvas(pos))
+        {
+            if (enabled)
+            {
+                Up(pos);
+            }
+            return;
+        }
+        else
+        {
+            if (!enabled)
+            {
+                Down(pos);
+            }
+        }
+
+        touchBegin = touchStaying = touchMoving = touchEnd = hovering = false;
+
+        touchMoving = true;
+
+        lastPosition = nowPosition;
+        nowPosition = pos;
+
+        timeSinceMoving += Time.deltaTime;
+        movingLength += (nowPosition - lastPosition).magnitude;
         if (enabled)
         {
-            touchBegin = touchStaying = touchMoving = touchEnd = hovering = false;
-
-            touchMoving = true;
-
-            lastPosition = nowPosition;
-            nowPosition = pos;
-
-            timeSinceMoving += Time.deltaTime;
-            movingLength += (nowPosition - lastPosition).magnitude;
-
             if (Evt_Moving != null)
             {
                 Evt_Moving(this);
             }
-        }        
+        }
     }
 
     public Vector2 MovmentDelta()
@@ -139,21 +175,21 @@ public class Finger
 
     public void Up(Vector2 pos)
     {
+
+        touchBegin = touchStaying = touchMoving = touchEnd = hovering = false;
+
+        touchEnd = true;
+
+        lastPosition = nowPosition;
+        nowPosition = pos;
         if (enabled)
         {
-            touchBegin = touchStaying = touchMoving = touchEnd = hovering = false;
-
-            touchEnd = true;
-
-            lastPosition = nowPosition;
-            nowPosition = pos;
-
             if (Evt_Up != null)
             {
                 Evt_Up(this);
             }
         }
-        
+
 
         enabled = false;
     }
@@ -223,7 +259,7 @@ public class Finger
                 _SetCurrentState(FINGER_STATE_HOVERING);
             }
         }
-        
+
         return currentState;
     }
 
@@ -316,6 +352,8 @@ public class InputMgr : MonoBehaviour
     public MouseEvent Evt_MouseLeftUp;
     public MouseEvent Evt_MouseRightUp;
 
+    public float cameraPinchZoomSpeed = 0.05f;
+
     void Awake()
     {
         Globals.input = this;
@@ -351,26 +389,9 @@ public class InputMgr : MonoBehaviour
         bBlock = false;
     }
 
-    public bool IsPositionOnCanvas(Vector3 position)
-    {        
-        UnityEngine.Canvas[] canvases = GameObject.FindObjectsOfType<UnityEngine.Canvas>();
-        foreach (UnityEngine.Canvas canvas in canvases)
-        {
-            UnityEngine.EventSystems.PointerEventData event_data = new UnityEngine.EventSystems.PointerEventData(GameObject.FindObjectOfType<UnityEngine.Canvas>().GetComponent<UnityEngine.EventSystems.EventSystem>());
-            event_data.position = position;
-            System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult> results = new System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult>();
-            canvas.GetComponent<UnityEngine.UI.GraphicRaycaster>().Raycast(event_data, results);
-            if (results.Count != 0)
-            {
-                return true;
-            }
-        }        
-        return false;
-    }
-
     // Update is called once per frame
     public void Update()
-    {        
+    {
         //UnityEngine.Physics2D.Raycast();
 
         // 分别针对iphone和PC查询输入
@@ -414,27 +435,20 @@ public class InputMgr : MonoBehaviour
 #else
             for (int idx = 0; idx < 3; ++idx)
             {
-                
+
                 Finger finger = GetFingerByID(idx);
 
                 // 下面的代码检测手指是否放在了UI上，如果是的话，就不发送finger消息了
                 // 现在还有个问题。如果手指按下的时候在UI上，稍后移动手指，移出了ui范围，还是会继续发送FingerMoving这样的消息
                 // 解决方法：手指在没接触到屏幕的时候应该删除，接收到down的消息才创建，这样，落到Ui上的touch就不会创建finger，就没有后面的消息了
                 Vector2 mousePos = Input.mousePosition;
-                if (IsPositionOnCanvas(mousePos))
-                {
-                    if (finger.enabled)
-                    {
-                        finger.Up(mousePos);
-                    }
-                    continue;
-                }
-                
+
+
                 string fingerName = "Finger" + idx.ToString();
                 if (Input.GetButtonDown(fingerName) || Input.GetButtonUp(fingerName) || Input.GetButton(fingerName))
-                {                    
+                {
                     if (Input.GetButtonDown(fingerName))
-                    {                        
+                    {
                         finger.Down(mousePos);
                     }
                     else if (Input.GetButtonUp(fingerName))
@@ -462,6 +476,34 @@ public class InputMgr : MonoBehaviour
                 finger.ResolveState();
             }
 
+            Finger finger0 = GetFingerByID(0);
+            Finger finger1 = GetFingerByID(1);
+            if (finger0.enabled && finger1.enabled)
+            {
+                UnityEngine.Debug.Log("two fingers down");
+
+                // Find the position in the previous frame of each touch.
+                UnityEngine.Vector2 touchZeroPrevPos = finger0.lastPosition;
+                UnityEngine.Vector2 touchOnePrevPos = finger1.lastPosition;
+
+                // Find the magnitude of the vector (the distance) between the touches in each frame.
+                float prevTouchDeltaMag = (finger0.lastPosition - finger1.lastPosition).magnitude;
+                float touchDeltaMag = (finger0.nowPosition - finger1.nowPosition).magnitude;
+
+                // Find the difference in the distances between each frame.
+                float deltaMagnitudeDiff = touchDeltaMag - prevTouchDeltaMag;
+                MagicThiefCamera camera_now = null;
+                if (Globals.cameraFollowMagician != null)
+                {
+                    camera_now = Globals.cameraFollowMagician;
+                }
+                if (Globals.cameraForDefender != null)
+                {
+                    camera_now = Globals.cameraForDefender;
+                }
+                camera_now.SetDisScale(deltaMagnitudeDiff * cameraPinchZoomSpeed);
+            }
+
 
             // 键盘
             if (Input.GetKeyUp(KeyCode.Alpha1))
@@ -479,14 +521,14 @@ public class InputMgr : MonoBehaviour
                     Evt_KeyAlpha1Up("1");
                 }
             }
-            
-//             if (Input.GetButtonDown("Space"))
-//             {
-//                 if (Evt_SpaceDown != null)
-//                 {
-//                     Evt_SpaceDown("");
-//                 }
-//             }
+
+            //             if (Input.GetButtonDown("Space"))
+            //             {
+            //                 if (Evt_SpaceDown != null)
+            //                 {
+            //                     Evt_SpaceDown("");
+            //                 }
+            //             }
 
             if (Input.GetButtonDown("Horizontal") || Input.GetButton("Horizontal"))
             {

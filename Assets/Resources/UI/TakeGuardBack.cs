@@ -12,10 +12,7 @@ public class TakeGuardBack : MonoBehaviour
 
     public void btnClicked()
     {
-        Globals.selectGuardUI.birthCell = Globals.map.GetCellByPos(guard.transform.position);
         Globals.selectGuardUI.ShowBtns();
-        Globals.selectGuardUI.ShowNextGuard();
-
         Globals.DestroyGuard(guard);        
     }
 }

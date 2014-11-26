@@ -2,6 +2,15 @@ using UnityEngine;
 using System.Collections;
 public class StickPad : Button
 {
+    public override void Prepare()
+    {
+        UnityEngine.Debug.Log(guiTexture.pixelInset.ToString());
+        float scale_factor = UnityEngine.Screen.width / 640.0f;
+        guiTexture.pixelInset = new UnityEngine.Rect(0.0f, 0.0f, 200.0f * scale_factor,
+            200.0f * scale_factor);
+        base.Prepare();
+    }
+
 	public void Active(Rect rect, Color color)
 	{
 		guiTexture.color = color;

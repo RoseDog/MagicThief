@@ -2,7 +2,7 @@
 
 public class Guard : Actor 
 {
-    public Cell birthCell;
+    public Pathfinding.Node birthNode;
     public GuardMoving moving;
     public Patrol patrol;
     public Chase chase;
@@ -31,9 +31,7 @@ public class Guard : Actor
         beginPatrolBtn.guard = this;
         beginPatrolBtn.patrol = patrol;
 
-        // 最开始不允许收回，因为是直接由SelectGuardUI替换的
         takeGuardBackBtn = obj.GetComponentInChildren<TakeGuardBack>();
-        takeGuardBackBtn.gameObject.SetActive(false);
         takeGuardBackBtn.guard = this;
         base.Awake();
     }
@@ -41,7 +39,15 @@ public class Guard : Actor
     public void Choosen()
     {
         UnityEngine.Debug.Log("Choosen");
-        ShowBtns();
+        if (birthNode.walkable)
+        {
+            ShowBtns();
+        }
+        else
+        {
+            HideBtns();
+        }
+        
         Tint();
         patrol.SetRouteNodesVisible(true);
         if (currentAction != null)

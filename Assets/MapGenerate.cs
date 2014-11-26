@@ -674,8 +674,8 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         }
 
         // 调试代码，在入口处创建一个宝箱
-        UnityEngine.GameObject test_chest = UnityEngine.GameObject.Instantiate(chest_prefab) as UnityEngine.GameObject;
-        test_chest.transform.position = entryOfMaze.GetFloorPos();
+//         UnityEngine.GameObject test_chest = UnityEngine.GameObject.Instantiate(chest_prefab) as UnityEngine.GameObject;
+//         test_chest.transform.position = entryOfMaze.GetFloorPos();
     }
 
     IEnumerator PlaceRooms(float waitTime)
@@ -718,20 +718,26 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 
         // 宝箱
         PlaceChests();
-        
-        pathfinder.GenerateGridGraph();
 
-        // 显示出选择守卫的界面
-        Globals.selectGuardUI.gameObject.SetActive(true);
-        Globals.selectGuardUI.birthCell = GetCorridorCloseToCameraLookAt();
-        // 默认选择最左边的守卫
-        Globals.selectGuardUI.btnClicked(Globals.selectGuardUI.btns[Globals.selectGuardUI.btns.Length - 1]);
+        pathfinder.GenerateGridGraph();
 
         // 开始用点击布置守卫
         RegistDefenderEvent();
 
 
         yield return new UnityEngine.WaitForSeconds(waitTime);
+    }
+
+    public Pathfinding.Node GetNodeFromScreenRay(UnityEngine.Vector3 screenPos)
+    {
+        UnityEngine.RaycastHit hitInfo;
+        int layermask = 1 << 9;
+        UnityEngine.Ray ray = Globals.cameraForDefender.GetComponent<UnityEngine.Camera>().ScreenPointToRay(screenPos);
+        if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
+        {
+            return Globals.pathFinder.GetSingleNode(hitInfo.point, false);
+        }
+        return null;
     }
 
     public Cell GetCorridorCloseToCameraLookAt()
@@ -802,11 +808,9 @@ public class MapGenerate : UnityEngine.MonoBehaviour
     {
         UnityEngine.RaycastHit hitInfo;
         int layermask = 1 << 13;
-		UnityEngine.Debug.Log("ray");
         UnityEngine.Ray ray = Globals.cameraForDefender.GetComponent<UnityEngine.Camera>().ScreenPointToRay(fingerDownOnMap.nowPosition);
         if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
         {
-			UnityEngine.Debug.Log("hitted");
             return hitInfo.collider.gameObject.GetComponent<Guard>();
         }
         return null;
@@ -851,21 +855,30 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 
     public bool OnDragFingerDown(object sender)
     {
-        if (Globals.choosenGuard == null)
-        {
-            return false;
-        }
         fingerDownOnMap = sender as Finger;
-
-        Guard guard = FingerRayToGuard();
-        // fov , weapon之类的都是Guard(13)这个layer的
-        if (guard != null && Globals.choosenGuard == guard)
+        Guard guard = FingerRayToGuard();        
+        if (guard != null)
         {
-            draggingGuard = guard;
-            draggingGuard.HideBtns();
+            _DragGuard(guard);
         }
 
         return true;
+    }
+
+    public void _DragGuard(Guard guard)
+    {
+        draggingGuard = guard;        
+
+        Globals.selectGuardUI.HideBtns();
+        if (guard != Globals.choosenGuard)
+        {
+            if (Globals.choosenGuard != null)
+            {
+                Globals.choosenGuard.Unchoose();
+            }
+            guard.Choosen();
+        }
+        guard.HideBtns();
     }
 
     public bool OnDragFingerMoving(object sender)
@@ -877,14 +890,13 @@ public class MapGenerate : UnityEngine.MonoBehaviour
             UnityEngine.Ray ray = Globals.cameraForDefender.GetComponent<UnityEngine.Camera>().ScreenPointToRay(fingerDownOnMap.nowPosition);
             if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
             {
-                Pathfinding.Node node = Globals.pathFinder.GetSingleWalkableNode(hitInfo.point);
+                Pathfinding.Node node = Globals.pathFinder.GetSingleNode(hitInfo.point, false);
                 if (node != null)
                 {
                     Globals.selectGuardUI.HideBtns();
-                    draggingGuard.transform.position = new UnityEngine.Vector3(node.position.x / 1000.0f, node.position.y / 1000.0f, node.position.z / 1000.0f);
+                    draggingGuard.transform.position = new UnityEngine.Vector3(node.position.x / 1000.0f, node.position.y / 1000.0f, node.position.z / 1000.0f);                    
+                    draggingGuard.birthNode = node;
                     draggingGuard.patrol.InitPatrolRoute();
-                    draggingGuard.birthCell = GetCellByPos(draggingGuard.transform.position);
-                    Globals.selectGuardUI.birthCell = GetCellByPos(draggingGuard.transform.position);
                 }
             }
         }
@@ -907,63 +919,29 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 
     public bool OnDragFingerUp(object sender)
     {
-		UnityEngine.Debug.Log("OnDragFingerUp:" + fingerDownOnMap.timeSinceTouchBegin.ToString("f4")+"," 
-		                      + UnityEngine.Vector2.Distance (fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition).ToString("f4"));
+//		UnityEngine.Debug.Log("OnDragFingerUp:" + fingerDownOnMap.timeSinceTouchBegin.ToString("f4")+"," 
+//		                      + UnityEngine.Vector2.Distance (fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition).ToString("f4"));
         if (draggingGuard != null)
         {
-            draggingGuard.ShowBtns();
-            if (draggingGuard == Globals.selectGuardUI.nextGuard)
+            Pathfinding.Node node = Globals.pathFinder.GetSingleNode(draggingGuard.transform.position, false);
+            if (node.walkable)
             {
-                Globals.selectGuardUI.ShowBtns();
-            }            
+                draggingGuard.ShowBtns();
+            }
+            
             draggingGuard = null;
         }
         // 判断点击
         else if (fingerDownOnMap.timeSinceTouchBegin < 0.1f &&             
             UnityEngine.Vector2.Distance(fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition) < 5.0f)
         {
-			UnityEngine.Debug.Log("click on map");
             // 如果点击到guard身上
-            Guard guard = FingerRayToGuard();
-            if (guard != null)
-            {
-                // 如果有当前正在布置的guard
-                if (Globals.selectGuardUI.nextGuard != null && Globals.selectGuardUI.nextGuard != guard)
-                {                    
-                    Globals.selectGuardUI.CancelNextGuard();
-                    Globals.selectGuardUI.HideBtns();
-                    Globals.choosenGuard = guard;
-                    Globals.choosenGuard.Choosen();
-                }
-                else if (guard != Globals.choosenGuard)
-                {
-                    if (Globals.choosenGuard != null)
-                    {
-                        Globals.choosenGuard.Unchoose();
-                    }
-
-                    Globals.choosenGuard = guard;
-                    Globals.choosenGuard.Choosen();                                        
-                }
-            }
+            
             // 点击空地
-            else
-            {                                
-//                 // 如果有待放置的守卫
-//                 if (Globals.selectGuardUI.nextGuard != null)
-//                 {
-//                     //Globals.selectGuardUI.nextGuard.Unchoose();
-//                     //Globals.choosenGuard = null;
-//                     //Globals.selectGuardUI.CancelNextGuard();
-//                 }
-//                 // 如果当前有选择的守卫，而且不是待放置的守卫，取消选择
-//                 else 
-                    if (Globals.choosenGuard != null && Globals.selectGuardUI.nextGuard != Globals.choosenGuard)
-                {
-                    Globals.choosenGuard.Unchoose();
-                    Globals.selectGuardUI.ShowNextGuard();
-                    Globals.selectGuardUI.ShowBtns();
-                }
+            if (Globals.choosenGuard != null)
+            {
+                Globals.choosenGuard.Unchoose();
+                Globals.selectGuardUI.ShowBtns();
             }
         }
         return true;
