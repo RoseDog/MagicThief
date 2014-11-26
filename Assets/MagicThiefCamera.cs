@@ -23,7 +23,8 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
 
     public void SetDisScale(float scale)
     {
-       disScale = UnityEngine.Mathf.Clamp(camera.fieldOfView, 0.3f, 2.0f);
+		disScale = UnityEngine.Mathf.Clamp(disScale + scale, 0.3f, 2.0f);
+		dragSpeed = 0.05f * disScale;
     }
 
     public virtual void Update()

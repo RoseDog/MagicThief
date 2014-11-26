@@ -902,7 +902,13 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         }
         else
         {
-            MoveCamera(Globals.cameraForDefender);
+			// two fingers touch , drag camaera not allowed
+			Finger finger0 = Globals.input.GetFingerByID(0);
+			Finger finger1 = Globals.input.GetFingerByID(1);
+			if (!(finger0.enabled && finger1.enabled))
+			{
+				MoveCamera(Globals.cameraForDefender);
+			}
         }
         
         return true;
@@ -932,8 +938,8 @@ public class MapGenerate : UnityEngine.MonoBehaviour
             draggingGuard = null;
         }
         // 判断点击
-        else if (fingerDownOnMap.timeSinceTouchBegin < 0.1f &&             
-            UnityEngine.Vector2.Distance(fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition) < 5.0f)
+        else if (fingerDownOnMap.timeSinceTouchBegin < 0.5f &&             
+            UnityEngine.Vector2.Distance(fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition) < 10.0f)
         {
             // 如果点击到guard身上
             

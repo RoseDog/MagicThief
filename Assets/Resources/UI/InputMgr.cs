@@ -476,34 +476,6 @@ public class InputMgr : MonoBehaviour
                 finger.ResolveState();
             }
 
-            Finger finger0 = GetFingerByID(0);
-            Finger finger1 = GetFingerByID(1);
-            if (finger0.enabled && finger1.enabled)
-            {
-                UnityEngine.Debug.Log("two fingers down");
-
-                // Find the position in the previous frame of each touch.
-                UnityEngine.Vector2 touchZeroPrevPos = finger0.lastPosition;
-                UnityEngine.Vector2 touchOnePrevPos = finger1.lastPosition;
-
-                // Find the magnitude of the vector (the distance) between the touches in each frame.
-                float prevTouchDeltaMag = (finger0.lastPosition - finger1.lastPosition).magnitude;
-                float touchDeltaMag = (finger0.nowPosition - finger1.nowPosition).magnitude;
-
-                // Find the difference in the distances between each frame.
-                float deltaMagnitudeDiff = touchDeltaMag - prevTouchDeltaMag;
-                MagicThiefCamera camera_now = null;
-                if (Globals.cameraFollowMagician != null)
-                {
-                    camera_now = Globals.cameraFollowMagician;
-                }
-                if (Globals.cameraForDefender != null)
-                {
-                    camera_now = Globals.cameraForDefender;
-                }
-                camera_now.SetDisScale(deltaMagnitudeDiff * cameraPinchZoomSpeed);
-            }
-
 
             // ¼üÅÌ
             if (Input.GetKeyUp(KeyCode.Alpha1))
@@ -574,21 +546,43 @@ public class InputMgr : MonoBehaviour
                 }
             }
 #endif
-        }
-    }
-
-    public void Prepare()
-    {
-        for (int idx = 0; idx < 3; ++idx)
-        {
-            Finger finger = new Finger(idx, this);
-            fingers.Add(finger);
-        }
-    }
-
-    void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
-    {
-        // Send data to server
+			Finger finger0 = GetFingerByID(0);
+			Finger finger1 = GetFingerByID(1);
+			if (finger0.enabled && finger1.enabled && (finger0.IsMoving()||finger1.IsMoving()))
+			{
+				// Find the magnitude of the vector (the distance) between the touches in each frame.
+				float prevTouchDeltaMag = (finger0.lastPosition - finger1.lastPosition).magnitude;
+				float touchDeltaMag = (finger0.nowPosition - finger1.nowPosition).magnitude;
+				
+				// Find the difference in the distances between each frame.
+				float deltaMagnitudeDiff = touchDeltaMag - prevTouchDeltaMag;
+				MagicThiefCamera camera_now = null;
+				if (Globals.cameraFollowMagician != null)
+				{
+					camera_now = Globals.cameraFollowMagician;
+				}
+				if (Globals.cameraForDefender != null)
+				{
+					camera_now = Globals.cameraForDefender;
+					UnityEngine.Debug.Log(deltaMagnitudeDiff.ToString("f4"));
+				}
+				camera_now.SetDisScale(-deltaMagnitudeDiff * cameraPinchZoomSpeed);
+			}
+		}
+	}
+	
+	public void Prepare()
+	{
+		for (int idx = 0; idx < 3; ++idx)
+		{
+			Finger finger = new Finger(idx, this);
+			fingers.Add(finger);
+		}
+	}
+	
+	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
+	{
+		// Send data to server
         if (stream.isWriting)
         {
             Vector3 pos = rigidbody.position;
