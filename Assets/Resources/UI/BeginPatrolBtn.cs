@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-public class BeginPatrolBtn : UnityEngine.MonoBehaviour 
+﻿public class BeginPatrolBtn : UnityEngine.MonoBehaviour 
 {
     public Guard guard;
     public Patrol patrol;
@@ -15,8 +13,15 @@ public class BeginPatrolBtn : UnityEngine.MonoBehaviour
 
     public void btnClicked()
     {
-        Globals.selectGuardUI.ShowBtns();
-        guard.Unchoose();
+        if (guard.birthNode.walkable)
+        {
+            Globals.selectGuardUI.ShowBtns();
+            guard.Unchoose();
+        }
+        else
+        {
+            Globals.tipDisplay.Msg("守卫不能放在这里");
+        }
     }
 	// Use this for initialization
 	void Start () {

@@ -55,7 +55,7 @@ public class BeginGame : MonoBehaviour
         }
         else
         {
-            AsyncLoad.Load("Game");
+            Globals.asyncLoad.ToLoadSceneAsync("Game");
         }
     }
 }

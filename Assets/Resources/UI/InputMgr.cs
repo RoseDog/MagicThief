@@ -356,8 +356,23 @@ public class InputMgr : MonoBehaviour
 
     void Awake()
     {
+        DontDestroyOnLoad(this);
         Globals.input = this;
         Prepare();
+    }
+
+    void OnLevelWasLoaded(int scene_id)
+    {
+        foreach (Finger f in fingers)
+        {
+            f.Evt_Down = null;
+            f.Evt_FastMoving = null;
+            f.Evt_Hovering = null;
+            f.Evt_SlowMoving = null;
+            f.Evt_Moving = null;
+            f.Evt_Staying = null;
+            f.Evt_Up = null;
+        }
     }
 
     bool GetTouchByID(int id)
