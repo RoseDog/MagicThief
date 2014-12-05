@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class Patrol : GuardAction 
 {
     int currentTargetIdx;
-    public List<UnityEngine.Vector3> targetPoses = new List<UnityEngine.Vector3>();
-    List<UnityEngine.GameObject> patrolNodes = new List<UnityEngine.GameObject>();
+    public List<UnityEngine.Vector3> routePoses = new List<UnityEngine.Vector3>();
+    List<UnityEngine.GameObject> patrolCubes = new List<UnityEngine.GameObject>();
     public override void Awake()
     {
         base.Awake();
@@ -15,8 +15,8 @@ public class Patrol : GuardAction
 	// Use this for initialization
 	public void InitPatrolRoute() 
     {
-        DestroyRouteNodes();
-        targetPoses.Clear();
+        DestroyRouteCubes();
+        routePoses.Clear();
 
         if (guard.birthNode.walkable)
         {
@@ -29,13 +29,13 @@ public class Patrol : GuardAction
         }
         
 
-        System.Diagnostics.Debug.Assert(targetPoses.Count == 4);
+        System.Diagnostics.Debug.Assert(routePoses.Count == 4);
 	}
 
     void AddTargetPosInDirection(String direction, int patrolCellsCount)
     {
-        Pathfinding.Node node = Globals.pathFinder.GetSingleNode(transform.position,true);
-        float nodeSize = Globals.pathFinder.graph.nodeSize;
+        Pathfinding.Node node = Globals.map.pathFinder.GetSingleNode(transform.position, true);
+        float nodeSize = Globals.map.pathFinder.graph.nodeSize;
         for (int i = 0; i < patrolCellsCount; ++i)
         {
             // 生成表示行走区域的方块
@@ -44,7 +44,7 @@ public class Patrol : GuardAction
             cube.transform.position = Globals.GetPathNodePos(node) + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f);
             cube.transform.parent = transform;
 
-            patrolNodes.Add(cube);
+            patrolCubes.Add(cube);
 
             UnityEngine.MeshRenderer meshRenderer = cube.GetComponentInChildren<UnityEngine.MeshRenderer>();
             meshRenderer.material.SetColor("_Color", UnityEngine.Color.green);
@@ -69,49 +69,49 @@ public class Patrol : GuardAction
             }
 
             // 如果没有可以行走的node了
-            Pathfinding.Node nextNode = Globals.pathFinder.GetSingleNode(nextNodePos, true);
+            Pathfinding.Node nextNode = Globals.map.pathFinder.GetSingleNode(nextNodePos, true);
             if (nextNode == null)
             {
-                targetPoses.Add(Globals.GetPathNodePos(node));
+                routePoses.Add(Globals.GetPathNodePos(node));
                 return;
             }
 
             node = nextNode;
         }
 
-        targetPoses.Add(Globals.GetPathNodePos(node));
+        routePoses.Add(Globals.GetPathNodePos(node));
     }
 
     public void RouteConfirmed()
     {
-        foreach (UnityEngine.GameObject node in patrolNodes)
+        foreach (UnityEngine.GameObject cube in patrolCubes)
         {
-            node.transform.parent = null;
+            cube.transform.parent = null;
         }        
     }
 
-    public void SetRouteNodesVisible(bool visible)
+    public void SetRouteCubesVisible(bool visible)
     {
-        foreach (UnityEngine.GameObject node in patrolNodes)
+        foreach (UnityEngine.GameObject cube in patrolCubes)
         {
-            node.SetActive(visible);
+            cube.SetActive(visible);
         }
     }
 
-    public void DestroyRouteNodes()
+    public void DestroyRouteCubes()
     {
-        foreach (UnityEngine.GameObject node in patrolNodes)
+        foreach (UnityEngine.GameObject cube in patrolCubes)
         {
-            DestroyImmediate(node);
+            DestroyImmediate(cube);
         }
-        patrolNodes.Clear();
+        patrolCubes.Clear();
     }
 
     public void RouteRemoving()
     {
-        foreach (UnityEngine.GameObject node in patrolNodes)
+        foreach (UnityEngine.GameObject cube in patrolCubes)
         {
-            node.transform.parent = transform;
+            cube.transform.parent = transform;
         }
     }
 
@@ -124,7 +124,7 @@ public class Patrol : GuardAction
         UnityEngine.Debug.Log("patrol");
     }
 
-    public void NextPatrol()
+    public void NextPatrolTargetPos()
     {
         currentTargetIdx = (currentTargetIdx + 1) % 4;
         this.Invoke("_beginPatrol", 2.0f);
@@ -132,7 +132,7 @@ public class Patrol : GuardAction
 
     void _beginPatrol()
     {
-        guard.moving.GetSeeker().StartPath(guard.moving.GetFeetPosition(), targetPoses[currentTargetIdx]);
+        guard.moving.GetSeeker().StartPath(guard.moving.GetFeetPosition(), routePoses[currentTargetIdx]);
     }
 
     public override void Stop()

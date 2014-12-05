@@ -8,6 +8,8 @@
     System.Collections.Generic.List<UnityEngine.Renderer> goldMeshes = new System.Collections.Generic.List<UnityEngine.Renderer>();
     UnityEngine.SkinnedMeshRenderer chestMesh;
 
+    Cell locate;
+
     public override void Awake()
     {
         base.Awake();
@@ -31,10 +33,14 @@
         goldPoper.transform.localScale = new UnityEngine.Vector3(2.0f, 2.0f, 2.0f);
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+	public void PlaceOnCell(Cell cell, float rotate_angle)
+    {
+        locate = cell;
+        locate.chest = this;
+        cell.CreateTorchLight();
+        transform.position = cell.GetFloorPos();
+        transform.localEulerAngles = new UnityEngine.Vector3(0.0f, rotate_angle, 0.0f);
+    }
 
     void OnTriggerEnter(UnityEngine.Collider other)
     {

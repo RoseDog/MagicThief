@@ -14,7 +14,7 @@ public class TipDisplayManager : UnityEngine.MonoBehaviour
     {
         Tip tip = (Instantiate(tipPrefab) as UnityEngine.GameObject).GetComponent<Tip>();
         UnityEngine.RectTransform tipTransform = tip.GetComponent<UnityEngine.RectTransform>();
-        tipTransform.SetParent(Globals.canvasForScreen.transform);
+        tipTransform.SetParent(Globals.canvasForMagician.transform);
         tipTransform.localScale = new UnityEngine.Vector3(1.0f, 1.0f, 1.0f);
         
         // left

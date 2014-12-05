@@ -12,15 +12,21 @@ public class Magician : Actor
     public float speed = 3.0f;
     public BattleUI battleUI;
 
+    public bool isInAir = false;
+
+    public LifeOver lifeOver;
+
     public override void Awake()
     {
         base.Awake();
+        lifeOver = GetComponent<LifeOver>();
         UnityEngine.GameObject uiPrefab = UnityEngine.Resources.Load("UI/UI") as UnityEngine.GameObject;
         UnityEngine.GameObject ui = Instantiate(uiPrefab) as UnityEngine.GameObject;
         battleUI = ui.GetComponent<BattleUI>();
         battleUI.magician = this;
         battleUI.Prepare();
         RegistEvent();
+        Globals.magician = this;
     }
 
     public void RegistEvent()
@@ -51,13 +57,18 @@ public class Magician : Actor
         isMoving = false;
         return true;
     }
-
-    void Update()
+    public override void Update()
     {
-        if (currentAction == hitted)
+        base.Update();
+        if (currentAction == hitted || currentAction == lifeOver)
         {
             return;
         }
+        if(isInAir)
+        {
+            return;
+        }
+
         //Get velocity in world-space
         UnityEngine.Vector3 velocity;
         
@@ -118,5 +129,10 @@ public class Magician : Actor
     void OnTriggerEnter(UnityEngine.Collider other)
     {
         //Debug.Log("magician trigger : 碰撞到的物体的名字是：" + other.gameObject.name);
-    }   
+    }
+
+    public void JumpLandingOver()
+    {
+        anim.CrossFade("idle");
+    }
 }

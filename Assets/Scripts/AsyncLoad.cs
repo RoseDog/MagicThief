@@ -15,16 +15,15 @@ public class AsyncLoad : UnityEngine.MonoBehaviour
     {
         if (UnityEngine.Application.loadedLevelName == "loading")
         {
-            gui_bar_script = Globals.canvasForScreen.GetComponentInChildren<GUIBarScript>();
-            ui_text = Globals.canvasForScreen.GetComponentInChildren<UnityEngine.UI.Text>();
+            gui_bar_script = Globals.canvasForLoading.GetComponentInChildren<GUIBarScript>();
+            ui_text = Globals.canvasForLoading.GetComponentInChildren<UnityEngine.UI.Text>();
             FromLoadingSceneToNextScene();            
         }
     }   
 
     public void ToLoadSceneAsync(string nextLevelName)
     {
-        Globals.canvasForScreen.gameObject.SetActive(false);
-        Globals.input.enabled = false;
+        Globals.EnableAllInput(false);        
         next = nextLevelName;
         Globals.transition.BlackOut(this, "_ToLoadingScene");                
     }
@@ -55,15 +54,16 @@ public class AsyncLoad : UnityEngine.MonoBehaviour
         yield return new UnityEngine.WaitForSeconds(1.0f);
         if (next != "")
         {
-            loadingHangarOperation = UnityEngine.Application.LoadLevelAsync(next);
+            loadingHangarOperation = UnityEngine.Application.LoadLevelAsync(next);            
         }        
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        if (loadingHangarOperation != null && !loadingHangarOperation.isDone)
+        if (loadingHangarOperation != null && loadingHangarOperation.isDone)
         {
-            
+            // 这一行无效。。为什么呢？
+            //Globals.input.enabled = true;
         }
         else
         {

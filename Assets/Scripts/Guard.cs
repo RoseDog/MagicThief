@@ -22,7 +22,12 @@ public class Guard : Actor
         atk = GetComponent<GuardAttack>();
         wandering = GetComponent<WanderingLostTarget>();
         backing = GetComponent<BackToBirthCell>();
+        
+        base.Awake();
+    }
 
+    public void InitArrangeUI()
+    {
         UnityEngine.GameObject prefab = UnityEngine.Resources.Load("Avatar/CanvasOnGuard") as UnityEngine.GameObject;
         UnityEngine.GameObject obj = UnityEngine.GameObject.Instantiate(prefab) as UnityEngine.GameObject;
         canvasForCommandBtns = obj.GetComponent<UnityEngine.Canvas>();
@@ -33,7 +38,6 @@ public class Guard : Actor
 
         takeGuardBackBtn = obj.GetComponentInChildren<TakeGuardBack>();
         takeGuardBackBtn.guard = this;
-        base.Awake();
     }
 
     public void Choosen()
@@ -41,12 +45,12 @@ public class Guard : Actor
         UnityEngine.Debug.Log("Choosen");
         ShowBtns();        
         Tint();
-        patrol.SetRouteNodesVisible(true);
+        patrol.SetRouteCubesVisible(true);
         if (currentAction != null)
         {
             currentAction.Stop();
         }        
-        Globals.choosenGuard = this;
+        Globals.map.choosenGuard = this;
     }
 
     public void Unchoose()
@@ -55,9 +59,9 @@ public class Guard : Actor
         StopTint();
         HideBtns();
         patrol.RouteConfirmed();
-        patrol.SetRouteNodesVisible(false);
+        patrol.SetRouteCubesVisible(false);
         patrol.Excute();
-        Globals.choosenGuard = null;
+        Globals.map.choosenGuard = null;
     }
 
     public override void Start()
@@ -119,7 +123,7 @@ public class Guard : Actor
     {
         if (currentAction == patrol)
         {
-            patrol.NextPatrol();
+            patrol.NextPatrolTargetPos();
         }
         else if (currentAction == backing)
         {
@@ -233,7 +237,12 @@ public class Guard : Actor
 
 
 	// Update is called once per frame
-	void Update () {
-	    canvasForCommandBtns.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 1.0f, 0.0f);
+	public override void Update () 
+    {
+        base.Update();
+        if (canvasForCommandBtns != null)
+        {
+            canvasForCommandBtns.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 1.0f, 0.0f);
+        }	    
 	}
 }

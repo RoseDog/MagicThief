@@ -54,13 +54,8 @@ public class GuardBtn : UnityEngine.MonoBehaviour
                 new UnityEngine.Vector3(UnityEngine.Input.mousePosition.x, UnityEngine.Input.mousePosition.y, 0));
             if (birthNode != null)
             {
-                UnityEngine.GameObject guard_prefab = UnityEngine.Resources.Load("Avatar/" + gameObject.name) as UnityEngine.GameObject;
-                UnityEngine.GameObject guardObject = UnityEngine.GameObject.Instantiate(guard_prefab) as UnityEngine.GameObject;
-                Guard guard = guardObject.GetComponent<Guard>();
-                guardObject.transform.position = Globals.GetPathNodePos(birthNode);
-                guard.birthNode = birthNode;
-                guard.patrol.InitPatrolRoute();
-
+                Guard guard = Globals.CreateGuard(gameObject.name, birthNode);
+                guard.InitArrangeUI();
                 Globals.map._DragGuard(guard);
             }
         }        

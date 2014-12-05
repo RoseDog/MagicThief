@@ -12,7 +12,9 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
     public float enemyOutVisionTime = 1.0f;
     public UnityEngine.LayerMask cullingMask;
     public List<UnityEngine.RaycastHit> hits = new List<UnityEngine.RaycastHit>();
-	
+
+    FOV2DVisionCone visionCone;
+
 	int numRays;
 	float currentAngle;
     UnityEngine.Vector3 direction;
@@ -46,6 +48,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
 	{
 		//InvokeRepeating("CastRays", 0, updateRate);
         guard = GetComponentInParent<Guard>();
+        visionCone = GetComponent<FOV2DVisionCone>();
 	}
 	
 	void CastRays()
@@ -88,6 +91,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
     void OnTriggerEnter(UnityEngine.Collider other)
     {        
         guard.spot.SpotMagician(other.gameObject);
+        visionCone.status = FOV2DVisionCone.Status.Alert;
 
         if (this.IsInvoking("EnemyOutVision"))
         {
@@ -107,6 +111,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
     void EnemyOutVision()
     {
         UnityEngine.Debug.Log("magician out vision");
+        visionCone.status = FOV2DVisionCone.Status.Idle;
         guard.wandering.Excute();
     }    
 }

@@ -21,7 +21,7 @@ public class CameraFollow : MagicThiefCamera
         {
             if (target != null)
             {
-                lookAt = target.position;                
+                lookAt = target.position;
             }
         }        
 

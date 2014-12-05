@@ -8,6 +8,7 @@ public class Cell : UnityEngine.MonoBehaviour
     public int z;
     public int x;
     public MapGenerate map;
+    public Chest chest;
     public bool Visited
     {
         get { return visited; }

@@ -6,8 +6,8 @@ public class PathFinder : UnityEngine.MonoBehaviour
     MapGenerate map;
     public Pathfinding.GridGraph graph;
 	// Use this for initialization
-	void Awake () {
-        Globals.pathFinder = this;
+	void Awake () 
+    {
         path = GetComponent<AstarPath>();
         path.logPathResults = PathLog.OnlyErrors;
 	}

@@ -3,9 +3,8 @@
     UnityEngine.Animator anim;
 	// Use this for initialization
 	void Start () 
-    {
-        Globals.canvasForScreen.SetActive(false);
-        Globals.input.enabled = false;
+    {        
+        Globals.EnableAllInput(false);
         anim = GetComponent<UnityEngine.Animator>();
         anim.Play("CamMovingUp");        
 	}
@@ -32,7 +31,6 @@
 
     void ShowUI()
     {
-        Globals.canvasForScreen.SetActive(true);        
-        Globals.input.enabled = true;
+        Globals.EnableAllInput(true);
     }
 }

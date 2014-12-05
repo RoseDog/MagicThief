@@ -15,7 +15,7 @@
     {
         if (guard.birthNode.walkable)
         {
-            Globals.selectGuardUI.ShowBtns();
+            Globals.canvasForMagician.selectGuard.ShowBtns();
             guard.Unchoose();
         }
         else

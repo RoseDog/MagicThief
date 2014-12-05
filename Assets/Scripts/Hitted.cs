@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-public class Hitted : Action 
+﻿public class Hitted : Action 
 {
 	public override void Excute()
     {
@@ -10,6 +8,8 @@ public class Hitted : Action
         (actor as Magician).UnRegistEvent();
         actor.anim.Play("repel");
         UnityEngine.Debug.Log("hitted");
+
+        Globals.canvasForMagician.lifeNumber.ChangeLife(-60);
     }
 
     public void hitteAnimEnd()

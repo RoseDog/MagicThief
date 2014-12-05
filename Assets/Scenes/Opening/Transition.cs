@@ -16,21 +16,13 @@ public class Transition : UnityEngine.MonoBehaviour
 	{
         Globals.transition = this;
         cookShadersCover = Instantiate(cookShadersCover) as UnityEngine.Material;
-		cookShadersCover.SetColor("_TintColor", fadeColor);		
+		cookShadersCover.SetColor("_TintColor", fadeColor);        
 	}
-
-
-    void Start()
-    {
-        CreateCameraCoverPlane();
-        Location();
-        Visible(false);
-    }
 
     UnityEngine.GameObject CreateCameraCoverPlane()
 	{
         cookShadersObject = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
-		cookShadersObject.renderer.material = cookShadersCover;
+		cookShadersObject.renderer.material = cookShadersCover;        
 		return cookShadersObject;
 	}
 
@@ -52,9 +44,7 @@ public class Transition : UnityEngine.MonoBehaviour
 	IEnumerator FadeOut()
 	{
 		Location();
-
-		yield return null;
-
+        fadeColor.a = 0.0f;
 		while (fadeColor.a < 1.0f)
 		{
 			current = current + UnityEngine.Time.deltaTime;
@@ -73,9 +63,7 @@ public class Transition : UnityEngine.MonoBehaviour
 	IEnumerator FadeIn()
 	{
 		Location();
-
-		yield return null;
-
+        fadeColor.a = 1.0f;
 		while (fadeColor.a > 0.0f)
 		{
             current = current - UnityEngine.Time.deltaTime;
@@ -84,10 +72,16 @@ public class Transition : UnityEngine.MonoBehaviour
 			yield return null;
 		}
         Visible(false);
+        if (callBackObj != null)
+        {
+            callBackObj.Invoke(method, 0.0f);
+            callBackObj = null;
+        }
 	}
 
 	void DestroyCameraCoverPlane()
 	{
+        UnityEngine.Debug.Log("destroy plane");
 		if (cookShadersObject)
 		{
 			DestroyImmediate(cookShadersObject);
@@ -98,6 +92,10 @@ public class Transition : UnityEngine.MonoBehaviour
 
     public void BlackOut(UnityEngine.MonoBehaviour callback = null, System.String methodName = "")
 	{
+        if (cookShadersObject == null)
+        {
+            CreateCameraCoverPlane();
+        }
         Visible(true);
         current = 0.0f;
         StopCoroutine("FadeIn");
@@ -107,7 +105,11 @@ public class Transition : UnityEngine.MonoBehaviour
 	}
 
     public void BlackIn(UnityEngine.MonoBehaviour callback = null, System.String methodName = "")
-	{        
+	{
+        if (cookShadersObject == null)
+        {
+            CreateCameraCoverPlane();
+        }
         Visible(true);
 		current = fadingTime;
 		StopCoroutine("FadeOut");

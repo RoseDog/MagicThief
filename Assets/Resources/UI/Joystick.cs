@@ -104,4 +104,13 @@ public class Joystick : Button
 		position = Vector2.zero;
 		guiTexture.pixelInset = originalRect;
 	}
+
+    public void MannullyActive(bool active)
+    {
+        if (!active && touchingFinger != null)
+        {
+            OnTouchingFingerUp(touchingFinger);
+        }
+        gameObject.SetActive(active);
+    }
 }

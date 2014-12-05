@@ -6,8 +6,9 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 {
     [UnityEngine.HideInInspector]
     public int cell_side_length = 5;
-    UnityEngine.Vector3 left_up_corner_pos;
-   
+    [UnityEngine.HideInInspector]
+    public int randSeedCacheWhenEditLevel;    
+
     [UnityEngine.Range(0, 30)]
     public int Z_CELLS_COUNT;
     [UnityEngine.Range(0, 30)]
@@ -15,29 +16,36 @@ public class MapGenerate : UnityEngine.MonoBehaviour
     [UnityEngine.Range(0, 100)]
     public int CHANGE_DIRECTION_MODIFIER;
     [UnityEngine.Range(0, 100)]
-    public int sparsenessModifier;
-    [UnityEngine.Range(0, 100)]
+    public int sparsenessModifier = 100;
+    [UnityEngine.HideInInspector]
     public int deadEndRemovalModifier;
 
     [UnityEngine.Range(0, 8)]
     public int noOfRoomsToPlace;
-    [UnityEngine.Range(0, 4)]
+    // 最小要2x2才能放下一个宝箱
+    [UnityEngine.Range(2, 4)]
     public int minRoomXCellsCount;
-    [UnityEngine.Range(0, 10)]
+    [UnityEngine.Range(2, 10)]
     public int maxRoomXCellsCount;
-    [UnityEngine.Range(0, 4)]
+    [UnityEngine.Range(2, 4)]
     public int minRoomZCellsCount;
-    [UnityEngine.Range(0, 10)]
+    [UnityEngine.Range(2, 10)]
     public int maxRoomZCellsCount;
 
+    public int GEMS_COUNT = 3;
+
+    
+
+    UnityEngine.GameObject maze;
+
+    UnityEngine.Vector3 left_up_corner_pos;
     Cell EastNorthCornerCell;
     Cell EastSouthCornerCell;
     Cell WestSouthCornerCell;
     Cell WestNorthCornerCell;
 
-    UnityEngine.GameObject maze;
-
-    PathFinder pathfinder;
+    public PathFinder pathFinder;
+    public Guard choosenGuard;
 
     // 每一次挖走廊，都会重新创建这个类型的对象来选择方向
     public class DirectionPicker
@@ -306,8 +314,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
    
 
     IEnumerator CreateDenseMaze(float waitTime)
-    {        
-
+    {
         // 挖墙，一直到所有Cell都Visited
         // 一定不会出现有Cell四面都是墙
         Cell currentLocation = PickRandomCellAndMarkItVisited();
@@ -656,26 +663,36 @@ public class MapGenerate : UnityEngine.MonoBehaviour
                     }
                 }                
             }
-            cell.CreateTorchLight();
-            chest.transform.position = cell.GetFloorPos();
-            chest.transform.localEulerAngles = new UnityEngine.Vector3(0.0f, rotate_angle, 0.0f);
-
-//             UnityEngine.Vector3 pos = room.upper_left.GetFloorPos();
-//             // 左上角的坐标
-//             pos.x -= cell_side_length * 0.5f;
-//             pos.z += cell_side_length * 0.5f;
-// 
-//             UnityEngine.BoxCollider box_collider = (chest.collider as UnityEngine.BoxCollider);
-// 
-//             pos.x += box_collider.size.x * box_collider.transform.localScale.x * 0.5f + 0.5f;
-//             pos.z -= box_collider.size.z * box_collider.transform.localScale.z * 0.5f + 0.5f;
-// 
-//             chest.transform.position = pos;
+            chest.GetComponent<Chest>().PlaceOnCell(cell, rotate_angle);
         }
 
         // 调试代码，在入口处创建一个宝箱
 //         UnityEngine.GameObject test_chest = UnityEngine.GameObject.Instantiate(chest_prefab) as UnityEngine.GameObject;
 //         test_chest.transform.position = entryOfMaze.GetFloorPos();
+    }    
+
+    void PlaceGems()
+    {        
+        int gemsToPlace = GEMS_COUNT;
+        while (gemsToPlace > 0)
+        {
+            foreach (Cell corrido in CorridorCellLocations)
+            {
+                if (UnityEngine.Random.Range(0.0f, 1.0f) < 1.0f / (X_CELLS_COUNT * Z_CELLS_COUNT))
+                {
+                    UnityEngine.GameObject gem_prefab = UnityEngine.Resources.Load("Props/purple diamond base") as UnityEngine.GameObject;
+                    UnityEngine.GameObject gem = UnityEngine.GameObject.Instantiate(gem_prefab) as UnityEngine.GameObject;
+                    UnityEngine.Vector3 gem_pos = corrido.GetFloorPos() + 
+                        new UnityEngine.Vector3(UnityEngine.Random.Range(-cell_side_length / 3.0f, cell_side_length / 3.0f), 0.9f, UnityEngine.Random.Range(-cell_side_length / 3.0f, cell_side_length / 3.0f));
+                    gem.transform.position = gem_pos;                    
+                    --gemsToPlace;
+                    if (gemsToPlace == 0)
+                    {
+                        break;
+                    }
+                }
+            }
+        }        
     }
 
     IEnumerator PlaceRooms(float waitTime)
@@ -708,7 +725,18 @@ public class MapGenerate : UnityEngine.MonoBehaviour
                 }
             }
         }
+        MazeProcessOver();       
+        yield return new UnityEngine.WaitForSeconds(waitTime);
+    }
 
+    void MazeProcessOver()
+    {
+        if (Globals.canvasForMagician == null)
+        {
+            UnityEngine.GameObject canvas_prefab = UnityEngine.Resources.Load("CanvasForMagician") as UnityEngine.GameObject;
+            UnityEngine.GameObject canvas = UnityEngine.GameObject.Instantiate(canvas_prefab) as UnityEngine.GameObject;
+        }        
+        
         // 创造一个入口，找到地图最靠近东南角的走廊作为入口
         foreach (Cell corrido in CorridorCellLocations)
         {
@@ -719,13 +747,22 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         // 宝箱
         PlaceChests();
 
-        Globals.pathFinder.GenerateGridGraph();
+        // 宝石
+        PlaceGems();
 
-        // 开始用点击布置守卫
-        RegistDefenderEvent();
+        pathFinder.GenerateGridGraph();
 
-
-        yield return new UnityEngine.WaitForSeconds(waitTime);
+        if (Globals.pveLevelController != null)
+        {
+            Globals.canvasForMagician.selectGuard.gameObject.SetActive(false);
+            Globals.pveLevelController.MazeFinished();
+        }
+        else
+        {
+            Globals.canvasForMagician.selectGuard.gameObject.SetActive(true);
+            Globals.canvasForMagician.tutorialText.gameObject.SetActive(false);
+            RegistGuardArrangeEvent();
+        }
     }
 
     public Pathfinding.Node GetNodeFromScreenRay(UnityEngine.Vector3 screenPos)
@@ -735,7 +772,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         UnityEngine.Ray ray = Globals.cameraForDefender.GetComponent<UnityEngine.Camera>().ScreenPointToRay(screenPos);
         if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
         {
-            return Globals.pathFinder.GetSingleNode(hitInfo.point, false);
+            return pathFinder.GetSingleNode(hitInfo.point, false);
         }
         return null;
     }
@@ -758,7 +795,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 
     
 
-    public void RegistDefenderEvent()
+    public void RegistGuardArrangeEvent()
     {
         for (int idx = 0; idx < 1; ++idx)
         {
@@ -824,7 +861,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         {
             fingerDownOnMap = finger;
             Globals.cameraFollowMagician.pauseFollowing = true;
-            Globals.joystick.gameObject.SetActive(false);
+            Globals.joystick.MannullyActive(false);
         }
         else
         {
@@ -847,8 +884,8 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         Finger finger = sender as Finger;
         if (finger == fingerDownOnMap)
         {
-            fingerDownOnMap = null;            
-            Globals.joystick.gameObject.SetActive(true);
+            fingerDownOnMap = null;
+            Globals.joystick.MannullyActive(true);
         }
         return true;
     }
@@ -860,9 +897,9 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         if (guard != null)
         {
             // 如果上一个守卫在墙面上，那么不能拖拽新的
-            if (guard != Globals.choosenGuard && 
-                Globals.choosenGuard != null && 
-                !Globals.choosenGuard.birthNode.walkable)
+            if (guard != choosenGuard && 
+                choosenGuard != null && 
+                !choosenGuard.birthNode.walkable)
             {
                 return false;
             }
@@ -874,14 +911,14 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 
     public void _DragGuard(Guard guard)
     {
-        draggingGuard = guard;        
+        draggingGuard = guard;
 
-        Globals.selectGuardUI.HideBtns();
-        if (guard != Globals.choosenGuard)
+        Globals.canvasForMagician.selectGuard.HideBtns();
+        if (guard != choosenGuard)
         {
-            if (Globals.choosenGuard != null)
+            if (choosenGuard != null)
             {
-                Globals.choosenGuard.Unchoose();
+                choosenGuard.Unchoose();
             }
             guard.Choosen();
         }
@@ -897,10 +934,10 @@ public class MapGenerate : UnityEngine.MonoBehaviour
             UnityEngine.Ray ray = Globals.cameraForDefender.GetComponent<UnityEngine.Camera>().ScreenPointToRay(fingerDownOnMap.nowPosition);
             if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
             {
-                Pathfinding.Node node = Globals.pathFinder.GetSingleNode(hitInfo.point, false);
+                Pathfinding.Node node = pathFinder.GetSingleNode(hitInfo.point, false);
                 if (node != null)
                 {
-                    Globals.selectGuardUI.HideBtns();
+                    Globals.canvasForMagician.selectGuard.HideBtns();
                     draggingGuard.transform.position = new UnityEngine.Vector3(node.position.x / 1000.0f, node.position.y / 1000.0f, node.position.z / 1000.0f);                    
                     draggingGuard.birthNode = node;
                     draggingGuard.patrol.InitPatrolRoute();
@@ -936,7 +973,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 //		                      + UnityEngine.Vector2.Distance (fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition).ToString("f4"));
         if (draggingGuard != null)
         {
-            Pathfinding.Node node = Globals.pathFinder.GetSingleNode(draggingGuard.transform.position, false);
+            Pathfinding.Node node = pathFinder.GetSingleNode(draggingGuard.transform.position, false);
             draggingGuard.ShowBtns();            
             draggingGuard = null;
         }
@@ -947,12 +984,12 @@ public class MapGenerate : UnityEngine.MonoBehaviour
             // 如果点击到guard身上
             
             // 点击空地
-            if (Globals.choosenGuard != null)
+            if (choosenGuard != null)
             {
-                if (Globals.choosenGuard.birthNode.walkable)
+                if (choosenGuard.birthNode.walkable)
                 {
-                    Globals.choosenGuard.Unchoose();
-                    Globals.selectGuardUI.ShowBtns();
+                    choosenGuard.Unchoose();
+                    Globals.canvasForMagician.selectGuard.ShowBtns();
                 }
                 else
                 {
@@ -1026,14 +1063,36 @@ public class MapGenerate : UnityEngine.MonoBehaviour
    */
 
     void Awake()
-    {        
+    {
         Globals.map = this;        
+        pathFinder = GetComponent<PathFinder>();
     }
 
 
     // Use this for initialization
     void Start()
-    {        
+    {
+        if (Globals.pveLevelController == null)
+        {
+            randSeedCacheWhenEditLevel = UnityEngine.Random.seed;
+            UnityEngine.Random.seed = randSeedCacheWhenEditLevel;
+        }
+        else
+        {
+            IniFile ini = new IniFile(UnityEngine.Application.loadedLevelName);
+            UnityEngine.Random.seed = ini.get("randSeedCacheWhenEditLevel", 0);
+            Globals.map.Z_CELLS_COUNT = ini.get("Z_CELLS_COUNT", 0);
+            Globals.map.X_CELLS_COUNT = ini.get("X_CELLS_COUNT", 0);
+            Globals.map.CHANGE_DIRECTION_MODIFIER = ini.get("CHANGE_DIRECTION_MODIFIER", 0);
+            Globals.map.sparsenessModifier = ini.get("sparsenessModifier", 0);
+            Globals.map.deadEndRemovalModifier = ini.get("deadEndRemovalModifier", 0);
+            Globals.map.noOfRoomsToPlace = ini.get("noOfRoomsToPlace", 0);
+            Globals.map.minRoomXCellsCount = ini.get("minRoomXCellsCount", 0);
+            Globals.map.maxRoomXCellsCount = ini.get("maxRoomXCellsCount", 0);
+            Globals.map.minRoomZCellsCount = ini.get("minRoomZCellsCount", 0);
+            Globals.map.maxRoomZCellsCount = ini.get("maxRoomZCellsCount", 0);
+            Globals.map.GEMS_COUNT = ini.get("GEMS_COUNT", 0);
+        }
         cells = new Cell[Z_CELLS_COUNT, X_CELLS_COUNT];
         bounds = new UnityEngine.Rect(0, 0, X_CELLS_COUNT, Z_CELLS_COUNT);
 

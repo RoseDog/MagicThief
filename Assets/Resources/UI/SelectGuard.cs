@@ -8,7 +8,6 @@ public class SelectGuard : UnityEngine.MonoBehaviour
     
     void Awake()
     {
-        Globals.selectGuardUI = this;
         btns = GetComponentsInChildren<GuardBtn>();
         UnityEngine.GameObject selectedImage = getChildGameObject(gameObject, "guardSelectedImage");
         foreach (GuardBtn btn in btns)
