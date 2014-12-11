@@ -12,7 +12,6 @@ public class TakeGuardBack : MonoBehaviour
 
     public void btnClicked()
     {
-        Globals.canvasForMagician.selectGuard.ShowBtns();
         Globals.DestroyGuard(guard);        
     }
 }

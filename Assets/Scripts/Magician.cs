@@ -13,13 +13,10 @@ public class Magician : Actor
     public BattleUI battleUI;
 
     public bool isInAir = false;
-
-    public LifeOver lifeOver;
-
+   
     public override void Awake()
     {
-        base.Awake();
-        lifeOver = GetComponent<LifeOver>();
+        base.Awake();        
         UnityEngine.GameObject uiPrefab = UnityEngine.Resources.Load("UI/UI") as UnityEngine.GameObject;
         UnityEngine.GameObject ui = Instantiate(uiPrefab) as UnityEngine.GameObject;
         battleUI = ui.GetComponent<BattleUI>();
@@ -131,8 +128,29 @@ public class Magician : Actor
         //Debug.Log("magician trigger : 碰撞到的物体的名字是：" + other.gameObject.name);
     }
 
+    public void Falling(UnityEngine.Vector3 from, UnityEngine.Vector3 to, float time)
+    {
+        transform.position = from;
+        AddAction(new MoveTo(transform, to, time));
+        anim.Play("A_Falling_1");
+        isInAir = true;
+        Invoke("FallingOver", time);
+    }
+
+    void FallingOver()
+    {
+        anim.Play("A_JumpLanding_1");
+    }
+
     public void JumpLandingOver()
     {
         anim.CrossFade("idle");
+    }
+
+    public override void Dead()
+    {
+        base.Dead();
+        isMoving = false;
+        UnRegistEvent();
     }
 }

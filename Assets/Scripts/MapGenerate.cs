@@ -593,6 +593,18 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         }
     }
 
+    public IEnumerable<Cell> EveryCells
+    {
+        get
+        {
+            for (int x = 0; x < X_CELLS_COUNT; x++)
+                for (int z = 0; z < Z_CELLS_COUNT; z++)
+                {
+                    yield return GetCell(z, x);
+                }
+        }
+    }
+
     void PlaceChests()
     {
         UnityEngine.GameObject chest_prefab = UnityEngine.Resources.Load("Props/Chest") as UnityEngine.GameObject;
@@ -730,13 +742,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
     }
 
     void MazeProcessOver()
-    {
-        if (Globals.canvasForMagician == null)
-        {
-            UnityEngine.GameObject canvas_prefab = UnityEngine.Resources.Load("CanvasForMagician") as UnityEngine.GameObject;
-            UnityEngine.GameObject canvas = UnityEngine.GameObject.Instantiate(canvas_prefab) as UnityEngine.GameObject;
-        }        
-        
+    {                
         // 创造一个入口，找到地图最靠近东南角的走廊作为入口
         foreach (Cell corrido in CorridorCellLocations)
         {
@@ -752,17 +758,20 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 
         pathFinder.GenerateGridGraph();
 
-        if (Globals.pveLevelController != null)
-        {
-            Globals.canvasForMagician.selectGuard.gameObject.SetActive(false);
-            Globals.pveLevelController.MazeFinished();
-        }
-        else
-        {
-            Globals.canvasForMagician.selectGuard.gameObject.SetActive(true);
-            Globals.canvasForMagician.tutorialText.gameObject.SetActive(false);
-            RegistGuardArrangeEvent();
-        }
+        UnityEngine.GameObject plane = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
+        plane.transform.localScale = new UnityEngine.Vector3(1000, 1, 1000);
+        plane.renderer.enabled = false;
+        plane.layer = 9;
+
+        // pve关卡
+        Globals.LevelController.MazeFinished();        
+    }
+
+    public void SetRestrictToCamera(MagicThiefCamera camera)
+    {
+        float half_cell_length = cell_side_length / 2.0f;
+        camera.restriction_x = new UnityEngine.Vector2(WestPosInPixel() + half_cell_length, EastPosInPixel() - half_cell_length);
+        camera.restriction_z = new UnityEngine.Vector2(SouthPosInPixel() + cell_side_length, NorthPosInPixel() - cell_side_length);        
     }
 
     public Pathfinding.Node GetNodeFromScreenRay(UnityEngine.Vector3 screenPos)
@@ -840,33 +849,26 @@ public class MapGenerate : UnityEngine.MonoBehaviour
     }
 
     Finger fingerDownOnMap;
-    Guard draggingGuard;
-    Guard FingerRayToGuard(UnityEngine.Camera camera)
-    {
-        UnityEngine.RaycastHit hitInfo;
-        int layermask = 1 << 13;
-        UnityEngine.Ray ray = camera.ScreenPointToRay(fingerDownOnMap.nowPosition);
-        if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
-        {
-            return hitInfo.collider.gameObject.GetComponent<Guard>();
-        }
-        return null;
-    }
+    public Guard draggingGuard;
 
     public bool OnChallengerFingerDown(object sender)
     {
         Finger finger = sender as Finger;
-        if (!Globals.joystick.guiTexture.HitTest(
+        if (Globals.magician != null)
+        {
+            if (!Globals.joystick.guiTexture.HitTest(
             new UnityEngine.Vector3(finger.nowPosition.x, finger.nowPosition.y)))
-        {
-            fingerDownOnMap = finger;
-            Globals.cameraFollowMagician.pauseFollowing = true;
-            Globals.joystick.MannullyActive(false);
+            {
+                fingerDownOnMap = finger;
+                Globals.cameraFollowMagician.pauseFollowing = true;
+                Globals.joystick.MannullyActive(false);
+            }
+            else
+            {
+                Globals.cameraFollowMagician.pauseFollowing = false;
+            }
         }
-        else
-        {
-            Globals.cameraFollowMagician.pauseFollowing = false;
-        }
+        
         return true;
     }
 
@@ -874,7 +876,12 @@ public class MapGenerate : UnityEngine.MonoBehaviour
     {
         if (fingerDownOnMap != null)
         {
-            MoveCamera(Globals.cameraFollowMagician);
+            Globals.cameraFollowMagician.DragToMove(fingerDownOnMap);
+        }
+
+        if (Globals.magician == null)
+        {
+            Globals.cameraFollowMagician.DragToMove(sender as Finger);
         }
         return true;
     }
@@ -885,7 +892,10 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         if (finger == fingerDownOnMap)
         {
             fingerDownOnMap = null;
-            Globals.joystick.MannullyActive(true);
+            if (Globals.magician != null)
+            {
+                Globals.joystick.MannullyActive(true);
+            }            
         }
         return true;
     }
@@ -893,7 +903,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
     public bool OnDragFingerDown(object sender)
     {        
         fingerDownOnMap = sender as Finger;
-        Guard guard = FingerRayToGuard(Globals.cameraForDefender.GetComponent<UnityEngine.Camera>());
+        Guard guard = Globals.FingerRayToObj<Guard>(Globals.cameraForDefender.GetComponent<UnityEngine.Camera>(), 13, fingerDownOnMap);
         if (guard != null)
         {
             // 如果上一个守卫在墙面上，那么不能拖拽新的
@@ -911,9 +921,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 
     public void _DragGuard(Guard guard)
     {
-        draggingGuard = guard;
-
-        Globals.canvasForMagician.selectGuard.HideBtns();
+        draggingGuard = guard;        
         if (guard != choosenGuard)
         {
             if (choosenGuard != null)
@@ -934,13 +942,17 @@ public class MapGenerate : UnityEngine.MonoBehaviour
             UnityEngine.Ray ray = Globals.cameraForDefender.GetComponent<UnityEngine.Camera>().ScreenPointToRay(fingerDownOnMap.nowPosition);
             if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
             {
-                Pathfinding.Node node = pathFinder.GetSingleNode(hitInfo.point, false);
-                if (node != null)
+                Pathfinding.Node node = pathFinder.GetSingleNode(hitInfo.point, false);                
+                if (node != null && node.walkable)
                 {
-                    Globals.canvasForMagician.selectGuard.HideBtns();
-                    draggingGuard.transform.position = new UnityEngine.Vector3(node.position.x / 1000.0f, node.position.y / 1000.0f, node.position.z / 1000.0f);                    
-                    draggingGuard.birthNode = node;
+                    choosenGuard.birthNode = node;
+                    draggingGuard.transform.position = new UnityEngine.Vector3(node.position.x / 1000.0f, node.position.y / 1000.0f, node.position.z / 1000.0f);
                     draggingGuard.patrol.InitPatrolRoute();
+                }
+                else
+                {
+                    draggingGuard.birthNode = null;
+                    draggingGuard.transform.position = hitInfo.point;
                 }
             }
         }
@@ -949,23 +961,14 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 			// two fingers touch , drag camaera not allowed
 			Finger finger0 = Globals.input.GetFingerByID(0);
 			Finger finger1 = Globals.input.GetFingerByID(1);
-			if (!(finger0.enabled && finger1.enabled))
-			{
-				MoveCamera(Globals.cameraForDefender);
-			}
+            if (!(finger0.enabled && finger1.enabled))
+            {
+                Globals.cameraForDefender.DragToMove(fingerDownOnMap);
+            }
         }
         
         return true;
-    }
-
-    public void MoveCamera(MagicThiefCamera camera) 
-    {
-        UnityEngine.Vector2 finger_move_delta = fingerDownOnMap.MovmentDelta();
-        UnityEngine.Vector3 cameraHorForward = camera.GetHorForward();
-        UnityEngine.Vector3 cameraHorRight = camera.GetHorRight();
-        UnityEngine.Vector3 movementDirection = -cameraHorForward * finger_move_delta.y - cameraHorRight * finger_move_delta.x;
-        camera.lookAt += movementDirection * camera.dragSpeed;
-    }
+    }    
 
     public bool OnDragFingerUp(object sender)
     {
@@ -986,10 +989,13 @@ public class MapGenerate : UnityEngine.MonoBehaviour
             // 点击空地
             if (choosenGuard != null)
             {
-                if (choosenGuard.birthNode.walkable)
+                if (choosenGuard.birthNode != null && choosenGuard.birthNode.walkable)
                 {
-                    choosenGuard.Unchoose();
-                    Globals.canvasForMagician.selectGuard.ShowBtns();
+                    if (Globals.LevelController != null)
+                    {
+                        Globals.LevelController.GuardDropped(choosenGuard);
+                    }
+                    choosenGuard.Unchoose();                    
                 }
                 else
                 {
@@ -1065,34 +1071,15 @@ public class MapGenerate : UnityEngine.MonoBehaviour
     void Awake()
     {
         Globals.map = this;        
-        pathFinder = GetComponent<PathFinder>();
+        pathFinder = GetComponent<PathFinder>();        
     }
 
 
     // Use this for initialization
     void Start()
     {
-        if (Globals.pveLevelController == null)
-        {
-            randSeedCacheWhenEditLevel = UnityEngine.Random.seed;
-            UnityEngine.Random.seed = randSeedCacheWhenEditLevel;
-        }
-        else
-        {
-            IniFile ini = new IniFile(UnityEngine.Application.loadedLevelName);
-            UnityEngine.Random.seed = ini.get("randSeedCacheWhenEditLevel", 0);
-            Globals.map.Z_CELLS_COUNT = ini.get("Z_CELLS_COUNT", 0);
-            Globals.map.X_CELLS_COUNT = ini.get("X_CELLS_COUNT", 0);
-            Globals.map.CHANGE_DIRECTION_MODIFIER = ini.get("CHANGE_DIRECTION_MODIFIER", 0);
-            Globals.map.sparsenessModifier = ini.get("sparsenessModifier", 0);
-            Globals.map.deadEndRemovalModifier = ini.get("deadEndRemovalModifier", 0);
-            Globals.map.noOfRoomsToPlace = ini.get("noOfRoomsToPlace", 0);
-            Globals.map.minRoomXCellsCount = ini.get("minRoomXCellsCount", 0);
-            Globals.map.maxRoomXCellsCount = ini.get("maxRoomXCellsCount", 0);
-            Globals.map.minRoomZCellsCount = ini.get("minRoomZCellsCount", 0);
-            Globals.map.maxRoomZCellsCount = ini.get("maxRoomZCellsCount", 0);
-            Globals.map.GEMS_COUNT = ini.get("GEMS_COUNT", 0);
-        }
+        Globals.LevelController.BeforeGenerateMaze();
+                
         cells = new Cell[Z_CELLS_COUNT, X_CELLS_COUNT];
         bounds = new UnityEngine.Rect(0, 0, X_CELLS_COUNT, Z_CELLS_COUNT);
 

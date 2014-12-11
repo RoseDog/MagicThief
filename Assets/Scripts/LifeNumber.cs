@@ -25,14 +25,14 @@
     public void ChangeLife(int delta)
     {
         AddAction(new Sequence(
-                    new ScaleTo(new UnityEngine.Vector3(scaleTo, scaleTo, scaleTo), scaleTotalTime / 2.0f),
-                    new ScaleTo(new UnityEngine.Vector3(1f, 1f, 1f), scaleTotalTime / 2.0f)));
+                    new ScaleTo(transform, new UnityEngine.Vector3(scaleTo, scaleTo, scaleTo), scaleTotalTime / 2.0f),
+                    new ScaleTo(transform, new UnityEngine.Vector3(1f, 1f, 1f), scaleTotalTime / 2.0f)));
         LifeCurrent += delta;
         LifeCurrent = UnityEngine.Mathf.Clamp(LifeCurrent, 0, LifeAmount);
         UpdateText();
         if (LifeCurrent == 0)
         {
-            Globals.pveLevelController.MagicianLifeOver();
+            Globals.LevelController.MagicianLifeOver();
         }
     }
 }

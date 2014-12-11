@@ -4,6 +4,8 @@
     public UnityEngine.CharacterController controller;
     public Action currentAction;
     public Hitted hitted;
+    public LifeOver lifeOver;
+    public GuardMoving moving;
 
     [UnityEngine.HideInInspector]
     public UnityEngine.MeshRenderer[] meshRenderers;
@@ -12,11 +14,15 @@
     [UnityEngine.HideInInspector]
     public UnityEngine.Renderer[] renderers;
 
+    public bool bVisible = false;
+
     public virtual void Awake()
     {
         anim = GetComponent<UnityEngine.Animation>();
         controller = GetComponent<UnityEngine.CharacterController>();
         hitted = GetComponent<Hitted>();
+        lifeOver = GetComponent<LifeOver>();
+        moving = GetComponent<GuardMoving>();
 
         meshRenderers = GetComponentsInChildren<UnityEngine.MeshRenderer>();
         skinnedMeshRenderers = GetComponentsInChildren<UnityEngine.SkinnedMeshRenderer>();
@@ -82,4 +88,30 @@
     {
         actions.Clear();
     }
+
+    public virtual void Visible(bool visibility)
+    {
+        foreach (UnityEngine.Renderer renderer in renderers)
+        {
+            renderer.enabled = visibility;
+        }
+
+        bVisible = visibility;
+    }
+
+    public bool IsLifeOver()
+    {
+        return currentAction == lifeOver;
+    }
+
+    public virtual void Dead()
+    {
+
+    }
+
+    public virtual void OnTargetReached()
+    {
+        
+    }
+
 }

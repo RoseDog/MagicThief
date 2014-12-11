@@ -19,6 +19,6 @@ public class Action : UnityEngine.MonoBehaviour
 
     public virtual void Stop()
     {
-
+        actor.currentAction = null;
     }
 }

@@ -13,9 +13,12 @@
 
     public void btnClicked()
     {
-        if (guard.birthNode.walkable)
+        if (guard.birthNode != null && guard.birthNode.walkable)
         {
-            Globals.canvasForMagician.selectGuard.ShowBtns();
+            if (Globals.LevelController != null)
+            {
+                Globals.LevelController.GuardDropped(guard);
+            }
             guard.Unchoose();
         }
         else

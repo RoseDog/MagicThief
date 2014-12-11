@@ -15,23 +15,35 @@ public class MoveTo : Cocos2dAction
 	// parent transformer
 	private Transform _transform;
 
+    private bool _isUI = false;
+
 	// Constructor
-	public MoveTo(Vector3 position, float duration = 1f)
+    public MoveTo(Transform target, Vector3 to, float duration = 1f, bool isUI = false)
 	{
+        _transform = target;
 		// define destination point
-		_end = position;
+		_end = to;
 		// define movement duration
 		_duration = duration;
+
+        _isUI = isUI;
 	}
 	
 	// Init
-	public override void Init () {
-		// get transformer instance
-		_transform = parent.transform;
+	public override void Init () 
+    {		
 		// get start time
 		_start_time = Time.time;
 		// get starting position
-        _start = _transform.localPosition;
+        if (!_isUI)
+        {
+            _start = _transform.localPosition;
+        }
+        else
+        {
+            _start = (_transform as UnityEngine.RectTransform).anchoredPosition;
+        }
+        
 		
 		initialized = true;
 	}
@@ -42,11 +54,20 @@ public class MoveTo : Cocos2dAction
 		// Not completed
 		if(!completed)
 		{
+            UnityEngine.Vector3 tempResult = UnityEngine.Vector3.zero;
+            tempResult = Vector3.Lerp(_start, _end, (Time.time - _start_time) / _duration);
 			/// Update position
-			_transform.localPosition = Vector3.Lerp(_start, _end, (Time.time - _start_time) / _duration);
+            if (!_isUI)
+            {
+                _transform.localPosition = tempResult;
+            }
+            else
+            {
+                (_transform as UnityEngine.RectTransform).anchoredPosition = tempResult;
+            }			
 			
 			// Reached target position
-            if (_transform.localPosition == _end) EndAction();
+            if (tempResult == _end) EndAction();
 		}
 		
 	}

@@ -1,7 +1,7 @@
 ﻿[UnityEditor.CustomEditor(typeof(MapGenerate))]
 public class MapSaver : UnityEditor.Editor 
 {
-    System.String levelfile = "Tutorial_Level_1";
+    System.String levelfile = "MagicianHome";
     public override void OnInspectorGUI () 
     {
         base.OnInspectorGUI();

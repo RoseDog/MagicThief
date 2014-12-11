@@ -3,7 +3,6 @@ using System.Collections;
 
 public class ScaleTo : Cocos2dAction
 {
-
 	// duration
 	private float _duration = 1f;
 	// start time
@@ -16,8 +15,9 @@ public class ScaleTo : Cocos2dAction
 	private Transform _transform;
 	
 	// Constructor
-	public ScaleTo(Vector3 size, float duration = 1f)
+	public ScaleTo(Transform target, Vector3 size, float duration = 1f)
 	{
+        _transform = target;
 		// define destination scale
 		_end = size;
 		// define scale duration
@@ -26,8 +26,7 @@ public class ScaleTo : Cocos2dAction
 	
 	// Init
 	public override void Init () {
-		// get transformer instance
-		_transform = parent.transform;
+        
 		// get start time
 		_start_time = Time.time;
 		// get starting scale

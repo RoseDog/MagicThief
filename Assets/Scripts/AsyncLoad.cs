@@ -1,5 +1,6 @@
 public class AsyncLoad : UnityEngine.MonoBehaviour 
 {
+    UnityEngine.GameObject canvasForLoading;
     public string next;
     private UnityEngine.AsyncOperation loadingHangarOperation;
     int progress = 0;
@@ -15,8 +16,9 @@ public class AsyncLoad : UnityEngine.MonoBehaviour
     {
         if (UnityEngine.Application.loadedLevelName == "loading")
         {
-            gui_bar_script = Globals.canvasForLoading.GetComponentInChildren<GUIBarScript>();
-            ui_text = Globals.canvasForLoading.GetComponentInChildren<UnityEngine.UI.Text>();
+            canvasForLoading = UnityEngine.GameObject.Find("CanvasForLoading");
+            gui_bar_script = canvasForLoading.GetComponentInChildren<GUIBarScript>();
+            ui_text = canvasForLoading.GetComponentInChildren<UnityEngine.UI.Text>();
             FromLoadingSceneToNextScene();            
         }
     }   
@@ -46,12 +48,12 @@ public class AsyncLoad : UnityEngine.MonoBehaviour
             float val = (float)progress / 100.0f;
             gui_bar_script.Value = val;
             System.String text = "≥°æ∞º”‘ÿ" + progress.ToString() + "%";
-            ++progress;
+            progress += 2;
             ui_text.text = text;
-            yield return new UnityEngine.WaitForSeconds(0.01f);
+            yield return new UnityEngine.WaitForSeconds(0.0f);
         }
         progress = 0;
-        yield return new UnityEngine.WaitForSeconds(1.0f);
+        yield return new UnityEngine.WaitForSeconds(0.3f);
         if (next != "")
         {
             loadingHangarOperation = UnityEngine.Application.LoadLevelAsync(next);            

@@ -1,4 +1,3 @@
-using System.Collections;
 public class CameraFollow : MagicThiefCamera
 {
     UnityEngine.Transform target;        
@@ -16,15 +15,14 @@ public class CameraFollow : MagicThiefCamera
 
 	// Update is called once per frame
 	public override void Update()
-	{
-        if (!pauseFollowing)
+	{        
+        if (target != null)
         {
-            if (target != null)
+            if (!pauseFollowing)
             {
                 lookAt = target.position;
-            }
-        }        
-
+            }            
+        }
         base.Update();
 	}
 }

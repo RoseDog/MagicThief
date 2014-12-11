@@ -1,14 +1,28 @@
-﻿public class LevelController : UnityEngine.MonoBehaviour
+﻿public class LevelController : Actor
 {
     public int randomSeed;
-    public virtual void Awake()
+    public Chest[] chests;
+    public override void Awake()
     {
-        Globals.pveLevelController = this;
+        base.Awake();
+        Globals.LevelController = this;
     }
 
-    public virtual void Start()
+    public virtual void BeforeGenerateMaze()
     {
-
+        IniFile ini = new IniFile(UnityEngine.Application.loadedLevelName);
+        UnityEngine.Random.seed = ini.get("randSeedCacheWhenEditLevel", 0);
+        Globals.map.Z_CELLS_COUNT = ini.get("Z_CELLS_COUNT", 0);
+        Globals.map.X_CELLS_COUNT = ini.get("X_CELLS_COUNT", 0);
+        Globals.map.CHANGE_DIRECTION_MODIFIER = ini.get("CHANGE_DIRECTION_MODIFIER", 0);
+        Globals.map.sparsenessModifier = ini.get("sparsenessModifier", 0);
+        Globals.map.deadEndRemovalModifier = ini.get("deadEndRemovalModifier", 0);
+        Globals.map.noOfRoomsToPlace = ini.get("noOfRoomsToPlace", 0);
+        Globals.map.minRoomXCellsCount = ini.get("minRoomXCellsCount", 0);
+        Globals.map.maxRoomXCellsCount = ini.get("maxRoomXCellsCount", 0);
+        Globals.map.minRoomZCellsCount = ini.get("minRoomZCellsCount", 0);
+        Globals.map.maxRoomZCellsCount = ini.get("maxRoomZCellsCount", 0);
+        Globals.map.GEMS_COUNT = ini.get("GEMS_COUNT", 0);
     }
 
     public virtual void MazeFinished()
@@ -17,7 +31,7 @@
         
         int guard_count = ini.get("GuardCount",0);
         System.String[] keys = ini.keys();
-        for (int i = 1; i <= guard_count; ++i )
+        for (int i = 1; i <= guard_count; ++i)
         {
             UnityEngine.Vector3 pos = Globals.StringToVector3(keys[i]);
             Pathfinding.Node birthNode = Globals.map.pathFinder.GetSingleNode(pos, false);
@@ -28,18 +42,41 @@
             Guard guard = Globals.CreateGuard(ini.get(keys[i]), birthNode);
             guard.patrol.DestroyRouteCubes();
             guard.patrol.Excute();
-        }        
+        }
 
-        // 魔术师出场
-        UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/Mage_Girl") as UnityEngine.GameObject;
-        UnityEngine.GameObject magician = UnityEngine.GameObject.Instantiate(magician_prefab) as UnityEngine.GameObject;
+        if (Globals.canvasForMagician == null)
+        {
+            UnityEngine.GameObject canvas_prefab = UnityEngine.Resources.Load("CanvasForMagician") as UnityEngine.GameObject;
+            UnityEngine.GameObject canvas = UnityEngine.GameObject.Instantiate(canvas_prefab) as UnityEngine.GameObject;
+        }
 
-        Cell magician_birth = Globals.map.entryOfMaze;
-        magician.name = "Mage_Girl";
-        magician.transform.position = magician_birth.GetFloorPos();        
+        chests = UnityEngine.GameObject.FindObjectsOfType<Chest>();
 	}
 
-    public virtual void GotGem(int value)
+    bool levelPassed = false;
+    public virtual void GotGem(float value)
+    {
+        if (levelPassed)
+        {
+            return;
+        }
+
+        Gem[] gems = UnityEngine.GameObject.FindObjectsOfType<Gem>();        
+        if (gems.Length == 0)
+        {            
+            foreach(Chest chest in chests)
+            {
+                if (chest.goldAmount > 0)
+                {
+                    return;
+                }
+            }
+            levelPassed = true;
+            Invoke("LevelPassed", 0.5f);
+        }
+    }
+
+    public virtual void LevelPassed()
     {
 
     }
@@ -47,5 +84,15 @@
     public virtual void MagicianLifeOver()
     {
         Globals.magician.lifeOver.Excute();
+    }
+
+    public virtual void GuardDropped(Guard guard)
+    {
+
+    }
+
+    public virtual void GoldAllLost(Chest chest)
+    {
+
     }
 }

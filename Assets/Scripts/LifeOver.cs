@@ -3,9 +3,9 @@
     public override void Excute()
     {
         base.Excute();
-        (actor as Magician).isMoving = false;
-        (actor as Magician).UnRegistEvent();
-        actor.anim.Play("A_Die_1");
+        actor.Dead();        
+        actor.anim.Play("die");
+        actor.collider.enabled = false;
         UnityEngine.Debug.Log("magician life over");
     }
 }

@@ -2,8 +2,7 @@
 
 public class Guard : Actor 
 {
-    public Pathfinding.Node birthNode;
-    public GuardMoving moving;
+    public Pathfinding.Node birthNode;    
     public Patrol patrol;
     public Chase chase;
     public Spot spot;
@@ -13,15 +12,16 @@ public class Guard : Actor
     public UnityEngine.Canvas canvasForCommandBtns;
     public BeginPatrolBtn beginPatrolBtn;
     public TakeGuardBack takeGuardBackBtn;
+    public FOV2DEyes eyes;
     public override void Awake()
-    {
-        moving = GetComponent<GuardMoving>();
+    {        
         patrol = GetComponent<Patrol>();
         chase = GetComponent<Chase>();
         spot = GetComponent<Spot>();
         atk = GetComponent<GuardAttack>();
         wandering = GetComponent<WanderingLostTarget>();
         backing = GetComponent<BackToBirthCell>();
+        eyes = GetComponentInChildren<FOV2DEyes>();
         
         base.Awake();
     }
@@ -43,6 +43,13 @@ public class Guard : Actor
     public void Choosen()
     {
         UnityEngine.Debug.Log("Choosen");
+        ClearAllActions();
+        AddAction(
+                new Cocos2dParallel(
+                    new Sequence(new ScaleTo(transform, new UnityEngine.Vector3(1.6f, 1.6f, 1.6f), 0.1f),
+                        new ScaleTo(transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), 0.1f))
+                        )
+                        );
         ShowBtns();        
         Tint();
         patrol.SetRouteCubesVisible(true);
@@ -58,9 +65,7 @@ public class Guard : Actor
         UnityEngine.Debug.Log("unchoose");
         StopTint();
         HideBtns();
-        patrol.RouteConfirmed();
-        patrol.SetRouteCubesVisible(false);
-        patrol.Excute();
+        BeginPatrol();
         Globals.map.choosenGuard = null;
     }
 
@@ -73,54 +78,37 @@ public class Guard : Actor
     public void ShowBtns()
     {
         if (!isShownBtns)
-        {
-            StartCoroutine(_scaleCanvasOut());
-            isShownBtns = true;
+        {            
+            isShownBtns = true;            
+            canvasForCommandBtns.GetComponent<Actor>().AddAction(
+                new ScaleTo(canvasForCommandBtns.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), 0.2f));            
         }        
     }
 
     public void HideBtns()
     {
-        StopCoroutine(_scaleCanvasOut());
         isShownBtns = false;
         canvasForCommandBtns.transform.localScale = UnityEngine.Vector3.zero;
     }
 
-    float currentScaleTime = 1.0f;
-    float scaleCanvasForCommandTime = 0.2f;
-    IEnumerator _scaleCanvasOut()
+    public void BeginPatrol()
     {
-        float scale = 0.0f;
-        currentScaleTime = 0.0f;
-        while (scale < 1.0f)
-        {
-            currentScaleTime = currentScaleTime + UnityEngine.Time.deltaTime;
-            scale = currentScaleTime / scaleCanvasForCommandTime;
-            canvasForCommandBtns.transform.localScale = new UnityEngine.Vector3(scale, scale, scale);
-
-            yield return null;
-        }
-        yield return null;
+        eyes.gameObject.SetActive(true);
+        patrol.RouteConfirmed();
+        patrol.SetRouteCubesVisible(false);
+        patrol.Excute();
     }
-//     IEnumerator _scaleCanvasToZero()
-//     {
-//         float scale = 1.0f;
-//         currentScaleTime = scaleCanvasForCommandTime;
-//         while (scale > 0.0f)
-//         {
-//             currentScaleTime = currentScaleTime - UnityEngine.Time.deltaTime;
-//             scale = currentScaleTime / scaleCanvasForCommandTime;
-//             canvasForCommandBtns.transform.localScale = new UnityEngine.Vector3(scale, scale, scale);
-//          
-//             yield return null;
-//         }        
-//         yield return null;
-//     }
 
-    
-
-    public void OnTargetReached()
+    public void StopAttacking()
     {
+        eyes.gameObject.SetActive(false);
+        currentAction.Stop();
+        anim.CrossFade("idle");
+    }
+
+    public override void OnTargetReached()
+    {
+        base.OnTargetReached();
         if (currentAction == patrol)
         {
             patrol.NextPatrolTargetPos();
@@ -170,7 +158,7 @@ public class Guard : Actor
         {
             tintCurrentTime = tintCurrentTime - UnityEngine.Time.deltaTime;
             color.r = tintCurrentTime / tintFadeTime;
-            if(birthNode.walkable)
+            if (birthNode != null && birthNode.walkable)
             {                
                 color.g = tintCurrentTime / tintFadeTime;
                 color.b = tintCurrentTime / tintFadeTime;

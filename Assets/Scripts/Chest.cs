@@ -4,11 +4,14 @@
     bool isPlayingBack = false;
     GoldPoper goldPoper = null;
     public int goldAmount = 100;
-    public int goldLostPersecond = 10;
+    public int goldLast;
+    public int goldLostPersecond = 500;
     System.Collections.Generic.List<UnityEngine.Renderer> goldMeshes = new System.Collections.Generic.List<UnityEngine.Renderer>();
     UnityEngine.SkinnedMeshRenderer chestMesh;
 
     Cell locate;
+
+    UnityEngine.GameObject coinPrefab = UnityEngine.Resources.Load("Props/GoldCoin") as UnityEngine.GameObject;
 
     public override void Awake()
     {
@@ -21,16 +24,18 @@
             {
                 goldMeshes.Add(renderer);
             }
-        }
+        }        
     }
 
-	void Start () 
+	public override void Start () 
     {
-        UnityEngine.GameObject effectPrefab = (UnityEngine.GameObject)UnityEngine.Resources.Load("Effects/GoldPoper/GoldPoper", typeof(UnityEngine.GameObject));
+        base.Start();
+        UnityEngine.GameObject effectPrefab = (UnityEngine.GameObject)UnityEngine.Resources.Load("Props/Chest/GoldPoper/GoldPoper", typeof(UnityEngine.GameObject));
         goldPoper = (Instantiate(effectPrefab, transform.position + UnityEngine.Vector3.up * 0.5f, UnityEngine.Quaternion.identity) as UnityEngine.GameObject).GetComponent<GoldPoper>();
         goldPoper.InitParticleTex(goldLostPersecond);
         goldPoper.chest = this;
         goldPoper.transform.localScale = new UnityEngine.Vector3(2.0f, 2.0f, 2.0f);
+        ResetGold();
 	}
 	
 	public void PlaceOnCell(Cell cell, float rotate_angle)
@@ -58,7 +63,7 @@
     {
         UnityEngine.Debug.Log("leave chest");
         isMagicianNear = false;
-        if (goldAmount > 0 && animation["ChestAnim"].speed < UnityEngine.Mathf.Epsilon)
+        if (goldLast > 0 && animation["ChestAnim"].speed < UnityEngine.Mathf.Epsilon)
         {
             animation["ChestAnim"].speed = 2.0f;
         }
@@ -81,14 +86,55 @@
 
     public void LostGold()
     {
-        goldAmount -= goldLostPersecond;
-        if (goldAmount <= 0)
+        goldLast -= goldLostPersecond;
+        if (goldLast <= 0)
         {
             foreach (UnityEngine.Renderer renderer in goldMeshes)
             {
                 renderer.gameObject.SetActive(false);
             }
             goldPoper.StopPop();
+            Globals.LevelController.GoldAllLost(this);
+        }
+
+        if (Globals.cameraFollowMagician != null)
+        {
+            StartCoroutine(Coins());        
+        }
+    }
+
+    public void ResetGold()
+    {
+        goldLast = goldAmount;
+        foreach (UnityEngine.Renderer renderer in goldMeshes)
+        {
+            renderer.gameObject.SetActive(true);
+        }
+        OnTriggerExit(null);
+    }
+
+    System.Collections.IEnumerator Coins()
+    {
+        int time = 3;
+        float gold_every_time = (float)goldLostPersecond / time;
+        while (time > 0)
+        {
+            int count = UnityEngine.Random.Range(1,3);
+            float gold_every_coint = gold_every_time / count;
+            for (int i = 0; i < count; ++i)
+            {
+                UnityEngine.GameObject coin = UnityEngine.GameObject.Instantiate(coinPrefab) as UnityEngine.GameObject;
+                coin.transform.position = new UnityEngine.Vector3(transform.position.x + UnityEngine.Random.Range(-Globals.map.cell_side_length / 2, Globals.map.cell_side_length / 2),
+                    transform.position.y,
+                    transform.position.z + UnityEngine.Random.Range(-Globals.map.cell_side_length / 2, Globals.map.cell_side_length / 2));
+
+                FlyToScreenCashNumber coin_fly = coin.GetComponent<FlyToScreenCashNumber>();
+                coin_fly.cashDelta = gold_every_coint;
+                coin_fly.rotate = true;
+                coin_fly.FloatUp();
+            }
+            --time;
+            yield return new UnityEngine.WaitForSeconds(0.1f); 
         }
     }
 
@@ -135,5 +181,21 @@
 //         }
 
         chestMesh.material.shader = UnityEngine.Shader.Find("Mobile/Unlit (Supports Lightmap)");
+    }
+    
+    public void Falling(float fallingDuration)
+    {
+        UnityEngine.Vector3 to = transform.position;
+        UnityEngine.Vector3 from = transform.position + new UnityEngine.Vector3(0, 20, 0);
+        transform.position = from;
+        AddAction(new Cocos2dParallel(new MoveTo(transform, to, fallingDuration),
+            new RotateTo(UnityEngine.Vector3.zero, new UnityEngine.Vector3(0.0f, 360.0f, 0.0f), UnityEngine.Random.Range(2.0f, 3.0f), true)) 
+            );
+        Invoke("FallingOver", fallingDuration);
+    }
+
+    void FallingOver()
+    {
+        ClearAllActions();
     }
 }

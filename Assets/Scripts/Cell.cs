@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Cell : UnityEngine.MonoBehaviour
+public class Cell : Actor
 {
     private bool visited;
     public int z;
@@ -312,6 +312,19 @@ public class Cell : UnityEngine.MonoBehaviour
     {
         UnityEngine.GameObject floor = GetFloor();
         return floor.transform.position + new UnityEngine.Vector3(0.0f, 0.2f, 0.0f);
+    }
+
+    public void HideEverythingExceptFloor()
+    {
+        UnityEngine.GameObject floor = GetFloor();
+        UnityEngine.MeshRenderer[] renderers = GetComponentsInChildren<UnityEngine.MeshRenderer>();
+        foreach (UnityEngine.MeshRenderer renderer in renderers)
+        {
+            if (renderer.gameObject != floor)
+            {
+                renderer.enabled = false;
+            }            
+        }
     }
     
 

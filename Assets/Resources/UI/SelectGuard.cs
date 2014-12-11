@@ -8,8 +8,9 @@ public class SelectGuard : UnityEngine.MonoBehaviour
     
     void Awake()
     {
+        Globals.selectGuard = this;
         btns = GetComponentsInChildren<GuardBtn>();
-        UnityEngine.GameObject selectedImage = getChildGameObject(gameObject, "guardSelectedImage");
+        UnityEngine.GameObject selectedImage = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "guardSelectedImage").gameObject;
         foreach (GuardBtn btn in btns)
         {
             UnityEngine.UI.Button temp = btn.GetComponent<UnityEngine.UI.Button>();
@@ -18,19 +19,7 @@ public class SelectGuard : UnityEngine.MonoBehaviour
             btn.guardSelectedImage.gameObject.SetActive(false);
         }
     }
-
-    public UnityEngine.GameObject getChildGameObject(UnityEngine.GameObject fromGameObject, String withName)
-    {
-        //Author: Isaac Dart, June-13.
-        UnityEngine.RectTransform[] ts = fromGameObject.GetComponentsInChildren<UnityEngine.RectTransform>();
-        foreach (UnityEngine.RectTransform child in ts)
-        {
-            if (child.gameObject.name == withName)
-                return child.gameObject;
-        }
-
-        return null;
-    }
+    
 	// Use this for initialization
 	void Start () 
     {
@@ -48,6 +37,17 @@ public class SelectGuard : UnityEngine.MonoBehaviour
 
         // 选择南北方向最远10个格子，然后来回走        
         //guard.GetComponent<Patrol>().Excute();
+    }
+
+    public void EnableBtns(bool enable)
+    {
+        foreach (GuardBtn btn in btns)
+        {
+            // 这个可以禁掉输入消息
+            btn.eventTrigger.enabled = enable;
+            // 这一行只是让颜色变化
+            btn.GetComponent<UnityEngine.UI.Button>().interactable = enable;
+        }
     }
 
     public void ShowBtns()

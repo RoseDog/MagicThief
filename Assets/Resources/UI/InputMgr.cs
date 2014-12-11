@@ -124,10 +124,14 @@ public class Finger
             event_data.position = position;
             System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult> results = new System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult>();
             canvas.GetComponent<UnityEngine.UI.GraphicRaycaster>().Raycast(event_data, results);
-            if (results.Count != 0)
+            foreach(UnityEngine.EventSystems.RaycastResult result in results)
             {
-                return true;
-            }
+                // 17 : UIWontBloackFinger
+                if (result.gameObject.layer != 17)
+                {
+                    return true;
+                }
+            }            
         }
         return false;
     }
@@ -579,7 +583,6 @@ public class InputMgr : MonoBehaviour
 				if (Globals.cameraForDefender != null)
 				{
 					camera_now = Globals.cameraForDefender;
-					UnityEngine.Debug.Log(deltaMagnitudeDiff.ToString("f4"));
 				}
 				camera_now.SetDisScale(-deltaMagnitudeDiff * cameraPinchZoomSpeed);
 			}

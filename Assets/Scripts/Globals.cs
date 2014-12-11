@@ -8,9 +8,8 @@ public class Globals
     public static bool SHOW_MACE_GENERATING_PROCESS = false;
     public static bool SHOW_ROOMS = false;
     public static float CREATE_MAZE_TIME_STEP = 0.1f;
+    public static SelectGuard selectGuard;
     public static CanvasForMagician canvasForMagician;
-    public static CanvasForLoading canvasForLoading;
-    public static CanvasForLogin canvasForLogin;
     public static PathFinder pathFinder;
     public static InputMgr input;
     public static CameraFollow cameraFollowMagician;
@@ -20,7 +19,7 @@ public class Globals
     public static AsyncLoad asyncLoad;
     public static TipDisplayManager tipDisplay;
     public static Transition transition;
-    public static LevelController pveLevelController;
+    public static LevelController LevelController;
     public static Magician magician;
 
     public static Guard CreateGuard(System.String name, Pathfinding.Node birthNode)
@@ -29,11 +28,28 @@ public class Globals
         UnityEngine.GameObject guardObject = UnityEngine.GameObject.Instantiate(guard_prefab) as UnityEngine.GameObject;
         guardObject.name = name;
         Guard guard = guardObject.GetComponent<Guard>();
-        guardObject.transform.position = Globals.GetPathNodePos(birthNode);
-        guard.birthNode = birthNode;
-        guard.patrol.InitPatrolRoute();
+        if (birthNode != null)
+        {
+            guardObject.transform.position = Globals.GetPathNodePos(birthNode);
+            guard.birthNode = birthNode;
+            guard.patrol.InitPatrolRoute();
+        }        
         return guard;
     }
+
+    public static T FingerRayToObj<T>(UnityEngine.Camera camera, int layer, Finger finger) 
+        where T : UnityEngine.Component
+    {
+        UnityEngine.RaycastHit hitInfo;
+        int layermask = 1 << layer;
+        UnityEngine.Ray ray = camera.ScreenPointToRay(finger.nowPosition);
+        if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
+        {
+            return hitInfo.collider.gameObject.GetComponent<T>();
+        }
+        return null;
+    }
+
     public static void ReadGlobalInfo()
     {
 //         string path = Path.Combine(Application.persistentDataPath, "GlobalInfo.txt");
@@ -75,6 +91,20 @@ public class Globals
         return null;
     }
 
+    static public T getChildGameObject<T>(UnityEngine.GameObject fromGameObject, System.String withName)
+        where T : UnityEngine.Component
+    {
+        //Author: Isaac Dart, June-13.
+        T[] ts = fromGameObject.GetComponentsInChildren<T>();
+        foreach (T child in ts)
+        {
+            if (child.gameObject.name == withName)
+                return child;
+        }
+
+        return null;
+    }
+
     static public UnityEngine.Vector3 GetPathNodePos(Pathfinding.Node node)
     {
         return new UnityEngine.Vector3(node.position.x / 1000.0f,
@@ -88,16 +118,6 @@ public class Globals
             canvasForMagician.gameObject.SetActive(enabled);
         }
 
-        if (canvasForLoading != null)
-        {
-            canvasForLoading.gameObject.SetActive(enabled);
-        }
-
-        if (canvasForLogin != null)
-        {
-            canvasForLogin.gameObject.SetActive(enabled);
-        }
-        
         if (joystick != null)
         {
             joystick.MannullyActive(enabled);
@@ -113,5 +133,14 @@ public class Globals
             float y = float.Parse(temp[1]);
             float z = float.Parse(temp[2]);
         return new UnityEngine.Vector3(x, y, z);    
+    }
+
+    public static bool Vector3AlmostEqual(UnityEngine.Vector3 v1, UnityEngine.Vector3 v2, float precision)
+    {
+        bool equal = true;
+        if (UnityEngine.Mathf.Abs(v1.x - v2.x) > precision) equal = false;
+        if (UnityEngine.Mathf.Abs(v1.y - v2.y) > precision) equal = false;
+        if (UnityEngine.Mathf.Abs(v1.z - v2.z) > precision) equal = false;
+        return equal;
     }
 }

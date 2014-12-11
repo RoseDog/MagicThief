@@ -1,9 +1,17 @@
 ﻿public class OpeningCamera : UnityEngine.MonoBehaviour 
 {
     UnityEngine.Animator anim;
+    public UnityEngine.GameObject canvasForLogin;
+    void Awake()
+    {
+        UnityEngine.GameObject mgrs_prefab = UnityEngine.Resources.Load("GlobalMgrs") as UnityEngine.GameObject;
+        UnityEngine.GameObject mgrs = UnityEngine.GameObject.Instantiate(mgrs_prefab) as UnityEngine.GameObject;
+    }
 	// Use this for initialization
 	void Start () 
-    {        
+    {
+        canvasForLogin = UnityEngine.GameObject.Find("CanvasForLogin");
+        canvasForLogin.SetActive(false);
         Globals.EnableAllInput(false);
         anim = GetComponent<UnityEngine.Animator>();
         anim.Play("CamMovingUp");        
@@ -31,6 +39,12 @@
 
     void ShowUI()
     {
+        canvasForLogin.SetActive(true);
         Globals.EnableAllInput(true);
+    }
+
+    public void GameBegin()
+    {
+        Globals.asyncLoad.ToLoadSceneAsync("Tutorial_Level_0");
     }
 }

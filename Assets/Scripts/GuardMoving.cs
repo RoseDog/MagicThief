@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Pathfinding.RVO;
@@ -24,7 +24,7 @@ using Pathfinding.RVO;
 public class GuardMoving : AIPath
 {
 
-    Guard guard;
+    Actor actor;
     /** Minimum velocity for moving */
     public float sleepVelocity = 0.4f;
 
@@ -33,7 +33,7 @@ public class GuardMoving : AIPath
 
     public new void Awake()
     {
-        guard = GetComponent<Guard>();
+        actor = GetComponent<Actor>();
         base.Awake();
     }
 
@@ -58,7 +58,7 @@ public class GuardMoving : AIPath
     */
     public override void OnTargetReached()
     {
-        guard.OnTargetReached();
+        actor.OnTargetReached();
     }
 
     public override UnityEngine.Vector3 GetFeetPosition()
@@ -66,58 +66,24 @@ public class GuardMoving : AIPath
         return tr.position;
     }
 
-    protected new void Update()
+    public override void Update()
     {
-
         //Get velocity in world-space
-        UnityEngine.Vector3 velocity;
+        UnityEngine.Vector3 velocity = UnityEngine.Vector3.zero;
         if (canMove)
-        {
-
+        {         
             //Calculate desired velocity
             UnityEngine.Vector3 dir = CalculateVelocity(GetFeetPosition());
 
             //Rotate towards targetDirection (filled in by CalculateVelocity)
             RotateTowards(targetDirection);
 
-            dir.y = 0;
-            if (dir.sqrMagnitude > sleepVelocity * sleepVelocity)
-            {
-                //If the velocity is large enough, move
-            }
-            else
-            {
-                //Otherwise, just stand still (this ensures gravity is applied)
-                //dir = Vector3.zero;
-            }
 
-            if (this.rvoController != null)
+            if (controller != null)
             {
-                rvoController.Move(dir);
-                velocity = rvoController.velocity;
-            }
-            else
-                if (navController != null)
-                {
-#if FALSE
-					navController.SimpleMove (GetFeetPosition(), dir);
-#endif
-                    velocity = UnityEngine.Vector3.zero;
-                }
-                else if (controller != null)
-                {
-                    controller.SimpleMove(dir);
-                    velocity = controller.velocity;
-                }
-                else
-                {
-                    UnityEngine.Debug.LogWarning("No NavmeshController or CharacterController attached to GameObject");
-                    velocity = UnityEngine.Vector3.zero;
-                }
-        }
-        else
-        {
-            velocity = UnityEngine.Vector3.zero;
+                controller.SimpleMove(dir);
+                velocity = controller.velocity;
+            }                        
         }
 
         if (canMove)
@@ -128,27 +94,35 @@ public class GuardMoving : AIPath
             relVelocity.y = 0;
             if (velocity.sqrMagnitude <= sleepVelocity * sleepVelocity)
             {
+                // 轻微的颤抖，玩家看不出来，但是这样FOV trigger才会触发
+                controller.SimpleMove(new UnityEngine.Vector3(0.001f, 0.0f, 0.001f));
+                controller.SimpleMove(new UnityEngine.Vector3(-0.001f, 0.0f, -0.001f));
                 //Fade out walking animation
                 if (target == null)
                 {
-                    guard.anim.CrossFade("idle");
+                    actor.anim.CrossFade("idle");
                 }
                 else
                 {
-                    guard.anim.CrossFade("atkReady");
+                    // 太奇怪了。。。如果不把动画和移动拆分开，canMove == false的时候这里也会执行
+                    if (!canMove)
+                    {
+                        throw new InvalidOperationException("guard moving error");
+                    }
+                    actor.anim.CrossFade("atkReady");
                 }
             }
             else
             {
                 //Fade in walking animation
-                guard.anim.CrossFade("moving");
+                actor.anim.CrossFade("moving");
 
                 //Modify animation speed to match velocity
-                UnityEngine.AnimationState state = guard.anim["moving"];
+                UnityEngine.AnimationState state = actor.anim["moving"];
 
                 float speed = relVelocity.z;
                 state.speed = speed * animationSpeed;
-            }       
+            }
         }
     }    
 }

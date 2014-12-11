@@ -89,15 +89,17 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
 	}
 
     void OnTriggerEnter(UnityEngine.Collider other)
-    {        
-        guard.spot.SpotMagician(other.gameObject);
-        visionCone.status = FOV2DVisionCone.Status.Alert;
-
-        if (this.IsInvoking("EnemyOutVision"))
+    {
+        if (other.enabled)
         {
-            this.CancelInvoke("EnemyOutVision");            
-        }
-        this.Invoke("EnemyOutVision", enemyOutVisionTime);
+            guard.spot.SpotMagician(other.gameObject);
+            visionCone.status = FOV2DVisionCone.Status.Alert;
+
+            if (this.IsInvoking("EnemyOutVision"))
+            {
+                this.CancelInvoke("EnemyOutVision");
+            }        
+        }                
     }
 
     void OnTriggerStay(UnityEngine.Collider other)
@@ -108,7 +110,12 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
         }
     }
 
-    void EnemyOutVision()
+    void OnTriggerExit(UnityEngine.Collider other)
+    {
+        this.Invoke("EnemyOutVision", enemyOutVisionTime);
+    }
+
+    public void EnemyOutVision()
     {
         UnityEngine.Debug.Log("magician out vision");
         visionCone.status = FOV2DVisionCone.Status.Idle;

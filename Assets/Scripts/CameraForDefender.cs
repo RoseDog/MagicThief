@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-public class CameraForDefender : MagicThiefCamera
+﻿public class CameraForDefender : MagicThiefCamera
 {
     public Finger touchingFinger;
     public void Awake()
@@ -18,5 +16,5 @@ public class CameraForDefender : MagicThiefCamera
 	public override void Update () 
     {       
         base.Update();
-	}
+	}    
 }

@@ -2,26 +2,30 @@ using UnityEngine;
 using System.Collections;
 
 public class RotateTo : Cocos2dAction
-{
-	
+{	
 	// duration
 	private float _duration = 1f;
 	// start time
 	private float _start_time = 0f;
 	// start rotation
-	private Quaternion _start;
+    private Vector3 _start;
 	// end rotation
-	private Quaternion _end;
+    private Vector3 _end;
 	// parent transformer
 	private Transform _transform;
 
+    private bool _loop = false;
+
 	// Constructor
-	public RotateTo(Vector3 rotation, float duration = 1f)
+    public RotateTo(Vector3 from, Vector3 to, float duration = 1f, bool loop = false)
 	{
-		// define destination rotation
-		_end = Quaternion.Euler(rotation.x,rotation.y,rotation.z);
-		// define rotation duration
+        _start = from;
+
+        _end = to;
+
 		_duration = duration;
+        
+        _loop = loop;
 	}
 	
 	// Init
@@ -30,10 +34,9 @@ public class RotateTo : Cocos2dAction
 		_transform = parent.transform;
 		// get start time
 		_start_time = Time.time;
-		// get starting rotation
-		_start = _transform.rotation;
-		
-		initialized = true;
+        _transform.rotation = Quaternion.Euler(_start);
+
+		initialized = true;        
 	}
 
 	// Update
@@ -43,10 +46,22 @@ public class RotateTo : Cocos2dAction
 		if(!completed)
 		{
 			// Update rotation
-			_transform.rotation = Quaternion.Lerp(_start, _end, (Time.time - _start_time) / _duration);
-			
+            _transform.rotation = Quaternion.Euler(Vector3.Lerp(_start, _end, (Time.time - _start_time) / _duration));
+            Vector3 euler = _transform.rotation.eulerAngles;
 			// Reached target position
-			if(_transform.rotation == _end) EndAction();
+            if (Time.time - _start_time >= _duration)
+            {
+                _transform.rotation = Quaternion.Euler(_end);
+                if(!_loop)
+                {
+                    EndAction();
+                }
+                else
+                {
+                    _start_time = Time.time;                    
+                    _transform.rotation = Quaternion.Euler(_start);
+                }
+            }
 
 		}
 		

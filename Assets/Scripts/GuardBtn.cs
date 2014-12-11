@@ -1,18 +1,8 @@
-﻿[System.Serializable]
-public class Entry
-{
-    public UnityEngine.EventSystems.EventTrigger.TriggerEvent callback;
-    public UnityEngine.EventSystems.EventTriggerType eventID;
-    public Entry()
-    {
-
-    }
-}
-[UnityEngine.RequireComponent(typeof(UnityEngine.EventSystems.EventTrigger))]
+﻿[UnityEngine.RequireComponent(typeof(UnityEngine.EventSystems.EventTrigger))]
 public class GuardBtn : UnityEngine.MonoBehaviour 
 {
     public UnityEngine.GameObject guardSelectedImage;
-    UnityEngine.EventSystems.EventTrigger eventTrigger = null;
+    public UnityEngine.EventSystems.EventTrigger eventTrigger = null;
     public bool dragging = false;
     public bool inside = false;
     void Awake()
@@ -41,6 +31,12 @@ public class GuardBtn : UnityEngine.MonoBehaviour
 
     public void OnPointerEnter(UnityEngine.EventSystems.PointerEventData data)
     {
+        UnityEngine.Debug.Log("Put Guard Back");
+
+        if (Globals.map.draggingGuard != null)
+        {
+            Globals.DestroyGuard(Globals.map.draggingGuard);
+        }            
         inside = true;        
     }
 
@@ -49,15 +45,29 @@ public class GuardBtn : UnityEngine.MonoBehaviour
         inside = false;
         if (dragging)
         {
-            UnityEngine.Debug.Log("CreateGuard");            
-            Pathfinding.Node birthNode = Globals.map.GetNodeFromScreenRay(
-                new UnityEngine.Vector3(UnityEngine.Input.mousePosition.x, UnityEngine.Input.mousePosition.y, 0));
+            UnityEngine.Debug.Log("CreateGuard");
+            Guard guard = null;
+            UnityEngine.Vector3 screenPos = new UnityEngine.Vector3(UnityEngine.Input.mousePosition.x, UnityEngine.Input.mousePosition.y, 0);
+            Pathfinding.Node birthNode = Globals.map.GetNodeFromScreenRay(screenPos);
             if (birthNode != null)
-            {
-                Guard guard = Globals.CreateGuard(gameObject.name, birthNode);
-                guard.InitArrangeUI();
-                Globals.map._DragGuard(guard);
+            {                
+                guard = Globals.CreateGuard(gameObject.name, birthNode);
+                
             }
+            else
+            {                                
+                UnityEngine.RaycastHit hitInfo;
+                int layermask = 1 << 9;
+                UnityEngine.Ray ray = Globals.cameraForDefender.GetComponent<UnityEngine.Camera>().ScreenPointToRay(screenPos);
+                if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
+                {
+                    guard = Globals.CreateGuard(gameObject.name, null);
+                    guard.transform.position = hitInfo.point;
+                }                
+            }
+
+            guard.InitArrangeUI();
+            Globals.map._DragGuard(guard);
         }        
     }
 

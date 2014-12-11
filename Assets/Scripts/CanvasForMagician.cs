@@ -1,7 +1,6 @@
 ﻿
 public class CanvasForMagician : UnityEngine.MonoBehaviour 
 {
-    public SelectGuard selectGuard;
     public UnityEngine.UI.Text tutorialText;
     public UnityEngine.GameObject CashNumerBg;
     public Cash cashNumber;
@@ -12,8 +11,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
 	void Awake () 
     {
         DontDestroyOnLoad(this);
-        Globals.canvasForMagician = this;
-        selectGuard = GetComponentInChildren<SelectGuard>();
+        Globals.canvasForMagician = this;        
         tutorialText = UnityEngine.GameObject.Find("TutorialText").GetComponent<UnityEngine.UI.Text>();
         CashNumerBg = UnityEngine.GameObject.Find("CashNumerBg");
         cashNumber = GetComponentInChildren<Cash>();

@@ -7,7 +7,7 @@ public class GuardAttack : GuardAction
 
     public override void Excute()
     {
-        base.Excute();
+        base.Excute();        
         Attack();
     }
 
@@ -23,14 +23,15 @@ public class GuardAttack : GuardAction
         CancelInvoke("DuringAtkIdle");
         if (!isAtkCDing)
         {
+            UnityEngine.Debug.Log("Guard Attacking");
             guard.FaceTarget(guard.spot.target);
-            guard.anim.Stop();
-            guard.anim.Play("A");
+            guard.anim.CrossFade("A");
             isAtkCDing = true;
             Invoke("AtkCDOver", atkCd);
         }
         else
         {
+            UnityEngine.Debug.Log("Guard Attacking Gap");
             guard.anim.CrossFade("atkReady");
         }
     }
@@ -47,7 +48,7 @@ public class GuardAttack : GuardAction
 
     void DuringAtkIdle()
     {
-        //guard.FaceTarget(guard.spot.target);
+        checkTargetStillAlive();
         checkTargetStillClose();
     }
 
@@ -56,11 +57,21 @@ public class GuardAttack : GuardAction
         isAtkCDing = false;
         if (guard.currentAction == this)
         {
-            if (checkTargetStillClose())
+            if (checkTargetStillClose() && checkTargetStillAlive())
             {
                 Attack();
             }
         }
+    }
+
+    bool checkTargetStillAlive()
+    {
+        if (guard.spot.target.GetComponent<Actor>().IsLifeOver())
+        {
+            guard.eyes.EnemyOutVision();
+            return false;
+        }
+        return true;
     }
 
     bool checkTargetStillClose()
