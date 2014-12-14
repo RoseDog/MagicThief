@@ -29,7 +29,7 @@ public class MapSaver : UnityEditor.Editor
             ini.set("LevelTipText", Globals.map.LevelTipText);
 
             ini.save(Globals.map.IniFileNameForEditor);
-            UnityEngine.Debug.Log("save level data to " + Globals.map.IniFileNameForEditor + ".ini");
+            UnityEngine.Debug.Log("save level data to " + Globals.map.IniFileNameForEditor + ".txt");
         }
     }    
 }

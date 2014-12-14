@@ -381,11 +381,11 @@ public class IniFile
 #else
     public void save(string fileName)
     {
-        // Debug.Log("Save properties to file: "+Application.persistentDataPath+"/"+fileName+".ini");
+        // Debug.Log("Save properties to file: "+Application.persistentDataPath+"/"+fileName+".txt");
 
         try
         {                        
-            StreamWriter stream = new StreamWriter(Application.dataPath + "/Scenes/" + fileName + ".ini", 
+            StreamWriter stream = new StreamWriter(Application.dataPath + "/Resources/" + fileName + ".txt", 
                 false, System.Text.Encoding.UTF8);
 
             for (int i=0; i<mKeysList.Count; ++i)
@@ -402,7 +402,7 @@ public class IniFile
         }
         catch(IOException e)
         {
-            Debug.Log("Impossible to save file: "+fileName+".ini");
+            Debug.Log("Impossible to save file: " + fileName + ".txt");
             Debug.LogWarning(e);
         }
     }
@@ -432,7 +432,6 @@ public class IniFile
 #else
     public void load(string fileName)
     {
-        if (File.Exists(Application.dataPath + "/Scenes/" + fileName + ".ini"))
         {
             mKeysMap.Clear();
             mKeysList.Clear();
@@ -442,7 +441,8 @@ public class IniFile
 
             try
             {
-                StreamReader stream = new StreamReader(Application.dataPath + "/Scenes/" + fileName + ".ini");
+                UnityEngine.TextAsset textAssets = UnityEngine.Resources.Load(fileName) as UnityEngine.TextAsset;
+                StringReader stream = new StringReader(textAssets.text);
 
                 while ((line=stream.ReadLine())!=null)
                 {
@@ -466,10 +466,14 @@ public class IniFile
             }
             catch(IOException e)
             {
-                Debug.Log("Impossible to open file: "+fileName+".ini");
+                Debug.Log("Impossible to open file: " + fileName + ".txt");
                 Debug.LogWarning(e);
             }
         }
+		//else
+		{
+			//UnityEngine.Debug.Log("path error: cant find file");
+		}
     }
 #endif
 
