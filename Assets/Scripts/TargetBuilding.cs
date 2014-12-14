@@ -46,6 +46,6 @@
 
     void InToBuilding()
     {
-        Globals.asyncLoad.ToLoadSceneAsync("Tutorial_Level_1");
+        Globals.asyncLoad.ToLoadSceneAsync("Tutorial_Levels");
     }
 }

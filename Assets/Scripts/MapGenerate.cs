@@ -34,6 +34,8 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 
     public int GEMS_COUNT = 3;
 
+    public System.String IniFileNameForEditor;
+    public System.String LevelTipText;
     
 
     UnityEngine.GameObject maze;
@@ -46,7 +48,10 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 
     public PathFinder pathFinder;
     public Guard choosenGuard;
-
+    public System.Collections.Generic.List<Guard> guardsOnMap = new System.Collections.Generic.List<Guard>();
+    public System.Collections.Generic.List<Chest> chests = new System.Collections.Generic.List<Chest>();
+    public System.Collections.Generic.List<UnityEngine.GameObject> gemHolders = new System.Collections.Generic.List<UnityEngine.GameObject>();
+    
     // 每一次挖走廊，都会重新创建这个类型的对象来选择方向
     public class DirectionPicker
     {
@@ -696,7 +701,8 @@ public class MapGenerate : UnityEngine.MonoBehaviour
                     UnityEngine.GameObject gem = UnityEngine.GameObject.Instantiate(gem_prefab) as UnityEngine.GameObject;
                     UnityEngine.Vector3 gem_pos = corrido.GetFloorPos() + 
                         new UnityEngine.Vector3(UnityEngine.Random.Range(-cell_side_length / 3.0f, cell_side_length / 3.0f), 0.9f, UnityEngine.Random.Range(-cell_side_length / 3.0f, cell_side_length / 3.0f));
-                    gem.transform.position = gem_pos;                    
+                    gem.transform.position = gem_pos;
+                    gemHolders.Add(gem);
                     --gemsToPlace;
                     if (gemsToPlace == 0)
                     {
@@ -740,7 +746,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         MazeProcessOver();       
         yield return new UnityEngine.WaitForSeconds(waitTime);
     }
-
+    UnityEngine.GameObject rayCastPlane;
     void MazeProcessOver()
     {                
         // 创造一个入口，找到地图最靠近东南角的走廊作为入口
@@ -756,15 +762,21 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         // 宝石
         PlaceGems();
 
+        // 要等一下生成路径，不然会出问题。
+        Invoke("finished", 0.3f);        
+    }
+
+    void finished()
+    {
         pathFinder.GenerateGridGraph();
 
-        UnityEngine.GameObject plane = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
-        plane.transform.localScale = new UnityEngine.Vector3(1000, 1, 1000);
-        plane.renderer.enabled = false;
-        plane.layer = 9;
+        rayCastPlane = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
+        rayCastPlane.transform.localScale = new UnityEngine.Vector3(1000, 1, 1000);
+        rayCastPlane.renderer.enabled = false;
+        rayCastPlane.layer = 9;
 
         // pve关卡
-        Globals.LevelController.MazeFinished();        
+        Globals.LevelController.MazeFinished();
     }
 
     public void SetRestrictToCamera(MagicThiefCamera camera)
@@ -778,7 +790,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
     {
         UnityEngine.RaycastHit hitInfo;
         int layermask = 1 << 9;
-        UnityEngine.Ray ray = Globals.cameraForDefender.GetComponent<UnityEngine.Camera>().ScreenPointToRay(screenPos);
+        UnityEngine.Ray ray = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().ScreenPointToRay(screenPos);
         if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
         {
             return pathFinder.GetSingleNode(hitInfo.point, false);
@@ -792,7 +804,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         Cell guard_birth = null;
         foreach (Cell corridor in allCorridorsAfterMazeCompleted)
         {
-            float dis = UnityEngine.Vector3.Distance(corridor.GetFloorPos(), Globals.cameraForDefender.lookAt);
+            float dis = UnityEngine.Vector3.Distance(corridor.GetFloorPos(), Globals.cameraFollowMagician.lookAt);
             if (dis < min_dis)
             {
                 min_dis = dis;
@@ -854,7 +866,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
     public bool OnChallengerFingerDown(object sender)
     {
         Finger finger = sender as Finger;
-        if (Globals.magician != null)
+        if (Globals.magician.gameObject.active)
         {
             if (!Globals.joystick.guiTexture.HitTest(
             new UnityEngine.Vector3(finger.nowPosition.x, finger.nowPosition.y)))
@@ -879,7 +891,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
             Globals.cameraFollowMagician.DragToMove(fingerDownOnMap);
         }
 
-        if (Globals.magician == null)
+        if (!Globals.magician.gameObject.active)
         {
             Globals.cameraFollowMagician.DragToMove(sender as Finger);
         }
@@ -892,7 +904,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         if (finger == fingerDownOnMap)
         {
             fingerDownOnMap = null;
-            if (Globals.magician != null)
+            if (Globals.magician.gameObject.active)
             {
                 Globals.joystick.MannullyActive(true);
             }            
@@ -903,7 +915,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
     public bool OnDragFingerDown(object sender)
     {        
         fingerDownOnMap = sender as Finger;
-        Guard guard = Globals.FingerRayToObj<Guard>(Globals.cameraForDefender.GetComponent<UnityEngine.Camera>(), 13, fingerDownOnMap);
+        Guard guard = Globals.FingerRayToObj<Guard>(Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), 13, fingerDownOnMap);
         if (guard != null)
         {
             // 如果上一个守卫在墙面上，那么不能拖拽新的
@@ -939,7 +951,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         {            
             UnityEngine.RaycastHit hitInfo;
             int layermask = 1 << 9;
-            UnityEngine.Ray ray = Globals.cameraForDefender.GetComponent<UnityEngine.Camera>().ScreenPointToRay(fingerDownOnMap.nowPosition);
+            UnityEngine.Ray ray = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().ScreenPointToRay(fingerDownOnMap.nowPosition);
             if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
             {
                 Pathfinding.Node node = pathFinder.GetSingleNode(hitInfo.point, false);                
@@ -963,7 +975,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 			Finger finger1 = Globals.input.GetFingerByID(1);
             if (!(finger0.enabled && finger1.enabled))
             {
-                Globals.cameraForDefender.DragToMove(fingerDownOnMap);
+                Globals.cameraFollowMagician.DragToMove(fingerDownOnMap);
             }
         }
         
@@ -1076,7 +1088,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 
 
     // Use this for initialization
-    void Start()
+    public void Start()
     {
         Globals.LevelController.BeforeGenerateMaze();
                 
@@ -1117,6 +1129,29 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         WestNorthCornerCell = GetCell(0, 0);
 
         StartCoroutine(CreateDenseMaze(Globals.CREATE_MAZE_TIME_STEP));
+    }
+
+    public void ClearMaze()
+    {
+        foreach(Chest chest in chests)
+        {
+            DestroyObject(chest.gameObject);
+        }
+        foreach(UnityEngine.GameObject holder in gemHolders)
+        {
+            DestroyObject(holder);
+        }
+        gemHolders.Clear();
+        foreach(Guard guard in guardsOnMap)
+        {
+            DestroyObject(guard.gameObject);
+        }
+        DestroyObject(maze);
+        DestroyObject(rayCastPlane);        
+        allCorridorsAfterMazeCompleted.Clear();
+        rooms.Clear();
+        visitedCells.Clear();
+        UnRegistChallengerEvent();
     }
 
     // Update is called once per frame

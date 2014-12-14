@@ -1,13 +1,13 @@
 ﻿[UnityEditor.CustomEditor(typeof(MapGenerate))]
 public class MapSaver : UnityEditor.Editor 
 {
-    System.String levelfile = "MagicianHome";
     public override void OnInspectorGUI () 
     {
         base.OnInspectorGUI();
         if (UnityEngine.GUILayout.Button("Save"))
         {
-            IniFile ini = new IniFile(levelfile);
+            IniFile ini = new IniFile(Globals.map.IniFileNameForEditor);
+            ini.clear();
             Guard[] guards = UnityEngine.GameObject.FindObjectsOfType<Guard>();
             ini.set("GuardCount", guards.Length);
             foreach (Guard guard in guards)
@@ -26,8 +26,10 @@ public class MapSaver : UnityEditor.Editor
             ini.set("minRoomZCellsCount", Globals.map.minRoomZCellsCount);
             ini.set("maxRoomZCellsCount", Globals.map.maxRoomZCellsCount);
             ini.set("GEMS_COUNT", Globals.map.GEMS_COUNT);
-            ini.save(levelfile);
-            UnityEngine.Debug.Log("save level data to " + levelfile + ".ini");
+            ini.set("LevelTipText", Globals.map.LevelTipText);
+
+            ini.save(Globals.map.IniFileNameForEditor);
+            UnityEngine.Debug.Log("save level data to " + Globals.map.IniFileNameForEditor + ".ini");
         }
     }    
 }

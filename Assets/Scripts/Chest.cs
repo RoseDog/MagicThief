@@ -24,6 +24,15 @@
             {
                 goldMeshes.Add(renderer);
             }
+        }
+        Globals.map.chests.Add(this);
+    }
+
+    public void OnDestroy()
+    {
+        if (Globals.map != null)
+        {
+            Globals.map.chests.Remove(this);
         }        
     }
 
@@ -35,6 +44,7 @@
         goldPoper.InitParticleTex(goldLostPersecond);
         goldPoper.chest = this;
         goldPoper.transform.localScale = new UnityEngine.Vector3(2.0f, 2.0f, 2.0f);
+        goldPoper.transform.parent = transform;
         ResetGold();
 	}
 	
@@ -57,6 +67,14 @@
         }
         
         EnhanceEdge();
+    }
+
+    void OnTriggerStay(UnityEngine.Collider other)
+    {
+        if (other.GetComponent<Actor>().IsLifeOver())
+        {
+            OnTriggerExit(other);
+        }
     }
 
     void OnTriggerExit(UnityEngine.Collider other)

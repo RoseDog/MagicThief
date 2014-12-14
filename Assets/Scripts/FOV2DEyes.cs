@@ -88,6 +88,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
 		}
 	}
 
+
     void OnTriggerEnter(UnityEngine.Collider other)
     {
         if (other.enabled)
@@ -95,24 +96,13 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
             guard.spot.SpotMagician(other.gameObject);
             visionCone.status = FOV2DVisionCone.Status.Alert;
 
+            // OnTriggerEnter会反复触发，OnTriggerStay和OnTriggerExit不会触发。所以才这样写
             if (this.IsInvoking("EnemyOutVision"))
             {
                 this.CancelInvoke("EnemyOutVision");
-            }        
+            }
+            this.Invoke("EnemyOutVision", enemyOutVisionTime);
         }                
-    }
-
-    void OnTriggerStay(UnityEngine.Collider other)
-    {
-        if (this.IsInvoking("EnemyOutVision"))
-        {
-            //this.CancelInvoke("EnemyOutVision");
-        }
-    }
-
-    void OnTriggerExit(UnityEngine.Collider other)
-    {
-        this.Invoke("EnemyOutVision", enemyOutVisionTime);
     }
 
     public void EnemyOutVision()

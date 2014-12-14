@@ -16,7 +16,8 @@ public class Magician : Actor
    
     public override void Awake()
     {
-        base.Awake();        
+        base.Awake();
+        gameObject.name = "Mage_Girl";
         UnityEngine.GameObject uiPrefab = UnityEngine.Resources.Load("UI/UI") as UnityEngine.GameObject;
         UnityEngine.GameObject ui = Instantiate(uiPrefab) as UnityEngine.GameObject;
         battleUI = ui.GetComponent<BattleUI>();
@@ -152,5 +153,13 @@ public class Magician : Actor
         base.Dead();
         isMoving = false;
         UnRegistEvent();
+    }
+
+    public void CoverInMoonlight()
+    {
+        for (int idx = 0; idx < skinnedMeshRenderers.Length; ++idx)
+        {
+            skinnedMeshRenderers[idx].material.shader = UnityEngine.Shader.Find("Diffuse");            
+        }
     }
 }

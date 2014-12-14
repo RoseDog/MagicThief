@@ -1,7 +1,8 @@
 public class AsyncLoad : UnityEngine.MonoBehaviour 
 {
     UnityEngine.GameObject canvasForLoading;
-    public string next;
+    public System.String Next;
+    public System.String LastLevelName;
     private UnityEngine.AsyncOperation loadingHangarOperation;
     int progress = 0;
     GUIBarScript gui_bar_script;
@@ -25,8 +26,9 @@ public class AsyncLoad : UnityEngine.MonoBehaviour
 
     public void ToLoadSceneAsync(string nextLevelName)
     {
-        Globals.EnableAllInput(false);        
-        next = nextLevelName;
+        Globals.EnableAllInput(false);
+        LastLevelName = UnityEngine.Application.loadedLevelName;
+        Next = nextLevelName;
         Globals.transition.BlackOut(this, "_ToLoadingScene");                
     }
 
@@ -54,9 +56,9 @@ public class AsyncLoad : UnityEngine.MonoBehaviour
         }
         progress = 0;
         yield return new UnityEngine.WaitForSeconds(0.3f);
-        if (next != "")
+        if (Next != "")
         {
-            loadingHangarOperation = UnityEngine.Application.LoadLevelAsync(next);            
+            loadingHangarOperation = UnityEngine.Application.LoadLevelAsync(Next);            
         }        
     }
 

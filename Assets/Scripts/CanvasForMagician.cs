@@ -1,7 +1,6 @@
 ﻿
 public class CanvasForMagician : UnityEngine.MonoBehaviour 
 {
-    public UnityEngine.UI.Text tutorialText;
     public UnityEngine.GameObject CashNumerBg;
     public Cash cashNumber;
     public LifeNumber lifeNumber;
@@ -12,7 +11,6 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
     {
         DontDestroyOnLoad(this);
         Globals.canvasForMagician = this;        
-        tutorialText = UnityEngine.GameObject.Find("TutorialText").GetComponent<UnityEngine.UI.Text>();
         CashNumerBg = UnityEngine.GameObject.Find("CashNumerBg");
         cashNumber = GetComponentInChildren<Cash>();
 

@@ -22,8 +22,13 @@ public class Guard : Actor
         wandering = GetComponent<WanderingLostTarget>();
         backing = GetComponent<BackToBirthCell>();
         eyes = GetComponentInChildren<FOV2DEyes>();
-        
+        Globals.map.guardsOnMap.Add(this);
         base.Awake();
+    }
+
+    public void OnDestroy()
+    {
+        Globals.map.guardsOnMap.Remove(this);
     }
 
     public void InitArrangeUI()
@@ -31,13 +36,14 @@ public class Guard : Actor
         UnityEngine.GameObject prefab = UnityEngine.Resources.Load("Avatar/CanvasOnGuard") as UnityEngine.GameObject;
         UnityEngine.GameObject obj = UnityEngine.GameObject.Instantiate(prefab) as UnityEngine.GameObject;
         canvasForCommandBtns = obj.GetComponent<UnityEngine.Canvas>();
-        canvasForCommandBtns.worldCamera = Globals.cameraForDefender.camera;
+        canvasForCommandBtns.worldCamera = Globals.cameraFollowMagician.camera;
         beginPatrolBtn = obj.GetComponentInChildren<BeginPatrolBtn>();
         beginPatrolBtn.guard = this;
         beginPatrolBtn.patrol = patrol;
 
         takeGuardBackBtn = obj.GetComponentInChildren<TakeGuardBack>();
         takeGuardBackBtn.guard = this;
+        HideBtns();
     }
 
     public void Choosen()
@@ -67,11 +73,6 @@ public class Guard : Actor
         HideBtns();
         BeginPatrol();
         Globals.map.choosenGuard = null;
-    }
-
-    public override void Start()
-    {        
-        base.Start();
     }
 
     public bool isShownBtns = true;

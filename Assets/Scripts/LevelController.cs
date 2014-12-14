@@ -1,34 +1,31 @@
 ﻿public class LevelController : Actor
 {
     public int randomSeed;
-    public Chest[] chests;
+    protected System.String mapIniFileName;    
     public override void Awake()
     {
         base.Awake();
-        Globals.LevelController = this;
+        Globals.LevelController = this;        
     }
 
     public virtual void BeforeGenerateMaze()
     {
-        IniFile ini = new IniFile(UnityEngine.Application.loadedLevelName);
-        UnityEngine.Random.seed = ini.get("randSeedCacheWhenEditLevel", 0);
-        Globals.map.Z_CELLS_COUNT = ini.get("Z_CELLS_COUNT", 0);
-        Globals.map.X_CELLS_COUNT = ini.get("X_CELLS_COUNT", 0);
-        Globals.map.CHANGE_DIRECTION_MODIFIER = ini.get("CHANGE_DIRECTION_MODIFIER", 0);
-        Globals.map.sparsenessModifier = ini.get("sparsenessModifier", 0);
-        Globals.map.deadEndRemovalModifier = ini.get("deadEndRemovalModifier", 0);
-        Globals.map.noOfRoomsToPlace = ini.get("noOfRoomsToPlace", 0);
-        Globals.map.minRoomXCellsCount = ini.get("minRoomXCellsCount", 0);
-        Globals.map.maxRoomXCellsCount = ini.get("maxRoomXCellsCount", 0);
-        Globals.map.minRoomZCellsCount = ini.get("minRoomZCellsCount", 0);
-        Globals.map.maxRoomZCellsCount = ini.get("maxRoomZCellsCount", 0);
-        Globals.map.GEMS_COUNT = ini.get("GEMS_COUNT", 0);
+        Globals.ReadIniFile(mapIniFileName);        
     }
 
     public virtual void MazeFinished()
     {
-        IniFile ini = new IniFile(UnityEngine.Application.loadedLevelName);
-        
+        IniFile ini = new IniFile(mapIniFileName);
+
+        // 创建相机，不允许跟随
+        if (Globals.cameraFollowMagician == null)
+        {
+            UnityEngine.GameObject camera_follow_prefab = UnityEngine.Resources.Load("CameraFollowMagician") as UnityEngine.GameObject;
+            UnityEngine.GameObject camera_follow = UnityEngine.GameObject.Instantiate(camera_follow_prefab) as UnityEngine.GameObject;
+        }
+        Globals.map.SetRestrictToCamera(Globals.cameraFollowMagician);
+
+        // 关卡守卫
         int guard_count = ini.get("GuardCount",0);
         System.String[] keys = ini.keys();
         for (int i = 1; i <= guard_count; ++i)
@@ -44,18 +41,18 @@
             guard.patrol.Excute();
         }
 
+        // 魔术师
         if (Globals.canvasForMagician == null)
         {
             UnityEngine.GameObject canvas_prefab = UnityEngine.Resources.Load("CanvasForMagician") as UnityEngine.GameObject;
             UnityEngine.GameObject canvas = UnityEngine.GameObject.Instantiate(canvas_prefab) as UnityEngine.GameObject;
-        }
-
-        chests = UnityEngine.GameObject.FindObjectsOfType<Chest>();
+        }        
 	}
 
     bool levelPassed = false;
-    public virtual void GotGem(float value)
+    public virtual void MagicianGotCash(float value)
     {
+        Invoke("LevelPassed", 0.5f);
         if (levelPassed)
         {
             return;
@@ -64,9 +61,9 @@
         Gem[] gems = UnityEngine.GameObject.FindObjectsOfType<Gem>();        
         if (gems.Length == 0)
         {            
-            foreach(Chest chest in chests)
+            foreach(Chest chest in Globals.map.chests)
             {
-                if (chest.goldAmount > 0)
+                if (chest.goldLast > 0)
                 {
                     return;
                 }
@@ -78,12 +75,16 @@
 
     public virtual void LevelPassed()
     {
-
+        
     }
 
     public virtual void MagicianLifeOver()
     {
         Globals.magician.lifeOver.Excute();
+    }
+
+    public virtual void GuardCreated(Guard guard)
+    {        
     }
 
     public virtual void GuardDropped(Guard guard)

@@ -127,7 +127,8 @@ public class Finger
             foreach(UnityEngine.EventSystems.RaycastResult result in results)
             {
                 // 17 : UIWontBloackFinger
-                if (result.gameObject.layer != 17)
+                UnityEngine.UI.Selectable selectable = result.gameObject.GetComponent<UnityEngine.UI.Selectable>();
+                if (result.gameObject.layer != 17 && selectable != null)
                 {
                     return true;
                 }
@@ -575,16 +576,8 @@ public class InputMgr : MonoBehaviour
 				
 				// Find the difference in the distances between each frame.
 				float deltaMagnitudeDiff = touchDeltaMag - prevTouchDeltaMag;
-				MagicThiefCamera camera_now = null;
-				if (Globals.cameraFollowMagician != null)
-				{
-					camera_now = Globals.cameraFollowMagician;
-				}
-				if (Globals.cameraForDefender != null)
-				{
-					camera_now = Globals.cameraForDefender;
-				}
-				camera_now.SetDisScale(-deltaMagnitudeDiff * cameraPinchZoomSpeed);
+				MagicThiefCamera camera_now = null;				
+				Globals.cameraFollowMagician.SetDisScale(-deltaMagnitudeDiff * cameraPinchZoomSpeed);
 			}
 		}
 	}

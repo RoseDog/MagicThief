@@ -51,22 +51,20 @@ public class GuardBtn : UnityEngine.MonoBehaviour
             Pathfinding.Node birthNode = Globals.map.GetNodeFromScreenRay(screenPos);
             if (birthNode != null)
             {                
-                guard = Globals.CreateGuard(gameObject.name, birthNode);
-                
+                guard = Globals.CreateGuard(gameObject.name, birthNode);                
             }
             else
             {                                
                 UnityEngine.RaycastHit hitInfo;
                 int layermask = 1 << 9;
-                UnityEngine.Ray ray = Globals.cameraForDefender.GetComponent<UnityEngine.Camera>().ScreenPointToRay(screenPos);
+                UnityEngine.Ray ray = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().ScreenPointToRay(screenPos);
                 if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
                 {
                     guard = Globals.CreateGuard(gameObject.name, null);
                     guard.transform.position = hitInfo.point;
                 }                
             }
-
-            guard.InitArrangeUI();
+           
             Globals.map._DragGuard(guard);
         }        
     }

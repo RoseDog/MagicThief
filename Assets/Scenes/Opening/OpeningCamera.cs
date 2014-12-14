@@ -45,6 +45,6 @@
 
     public void GameBegin()
     {
-        Globals.asyncLoad.ToLoadSceneAsync("Tutorial_Level_0");
+        Globals.asyncLoad.ToLoadSceneAsync("Tutorial_Levels");
     }
 }

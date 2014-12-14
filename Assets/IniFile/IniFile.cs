@@ -356,6 +356,12 @@ public class IniFile
         }
     }
 
+    public void clear()
+    {
+        mKeysMap.Clear();
+        mKeysList.Clear();
+    }
+
     /// <summary>
     /// Save properties to file.
     /// </summary>
@@ -379,7 +385,8 @@ public class IniFile
 
         try
         {                        
-            StreamWriter stream = new StreamWriter(Application.dataPath + "/Scenes/" + fileName + ".ini");
+            StreamWriter stream = new StreamWriter(Application.dataPath + "/Scenes/" + fileName + ".ini", 
+                false, System.Text.Encoding.UTF8);
 
             for (int i=0; i<mKeysList.Count; ++i)
             {

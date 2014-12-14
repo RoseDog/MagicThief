@@ -33,6 +33,6 @@
 	
 	// Update is called once per frame
 	void Update () {
-        canvasTrans.localEulerAngles = new UnityEngine.Vector3(0.0f, Globals.cameraForDefender.transform.localEulerAngles.y, 0.0f);
+        canvasTrans.localEulerAngles = new UnityEngine.Vector3(0.0f, Globals.cameraFollowMagician.transform.localEulerAngles.y, 0.0f);
 	}
 }

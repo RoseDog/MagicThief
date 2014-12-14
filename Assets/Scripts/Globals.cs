@@ -8,12 +8,13 @@ public class Globals
     public static bool SHOW_MACE_GENERATING_PROCESS = false;
     public static bool SHOW_ROOMS = false;
     public static float CREATE_MAZE_TIME_STEP = 0.1f;
+    public static float cameraMoveDuration = 0.3f;
+    public static float uiMoveAndScaleDuration = 0.5f;
     public static SelectGuard selectGuard;
     public static CanvasForMagician canvasForMagician;
     public static PathFinder pathFinder;
     public static InputMgr input;
     public static CameraFollow cameraFollowMagician;
-    public static CameraForDefender cameraForDefender;
     public static MapGenerate map;    
     public static Joystick joystick;
     public static AsyncLoad asyncLoad;
@@ -21,6 +22,7 @@ public class Globals
     public static Transition transition;
     public static LevelController LevelController;
     public static Magician magician;
+    public static int LevelIdx = 3;
 
     public static Guard CreateGuard(System.String name, Pathfinding.Node birthNode)
     {
@@ -33,7 +35,8 @@ public class Globals
             guardObject.transform.position = Globals.GetPathNodePos(birthNode);
             guard.birthNode = birthNode;
             guard.patrol.InitPatrolRoute();
-        }        
+        }
+        LevelController.GuardCreated(guard);
         return guard;
     }
 
@@ -142,5 +145,24 @@ public class Globals
         if (UnityEngine.Mathf.Abs(v1.y - v2.y) > precision) equal = false;
         if (UnityEngine.Mathf.Abs(v1.z - v2.z) > precision) equal = false;
         return equal;
+    }
+
+    public static void ReadIniFile(System.String mapIniFileName)
+    {
+        IniFile ini = new IniFile(mapIniFileName);
+        UnityEngine.Random.seed = ini.get("randSeedCacheWhenEditLevel", 0);
+        Globals.map.randSeedCacheWhenEditLevel = UnityEngine.Random.seed;
+        Globals.map.Z_CELLS_COUNT = ini.get("Z_CELLS_COUNT", 0);
+        Globals.map.X_CELLS_COUNT = ini.get("X_CELLS_COUNT", 0);
+        Globals.map.CHANGE_DIRECTION_MODIFIER = ini.get("CHANGE_DIRECTION_MODIFIER", 0);
+        Globals.map.sparsenessModifier = ini.get("sparsenessModifier", 0);
+        Globals.map.deadEndRemovalModifier = ini.get("deadEndRemovalModifier", 0);
+        Globals.map.noOfRoomsToPlace = ini.get("noOfRoomsToPlace", 0);
+        Globals.map.minRoomXCellsCount = ini.get("minRoomXCellsCount", 0);
+        Globals.map.maxRoomXCellsCount = ini.get("maxRoomXCellsCount", 0);
+        Globals.map.minRoomZCellsCount = ini.get("minRoomZCellsCount", 0);
+        Globals.map.maxRoomZCellsCount = ini.get("maxRoomZCellsCount", 0);
+        Globals.map.GEMS_COUNT = ini.get("GEMS_COUNT", 0);
+        Globals.map.LevelTipText = ini.get("LevelTipText");        
     }
 }

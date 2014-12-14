@@ -48,7 +48,7 @@
             {
                 Globals.canvasForMagician.cashNumber.Add(cashDelta);
                 DestroyImmediate(gameObject);
-                Globals.LevelController.GotGem(cashDelta);
+                Globals.LevelController.MagicianGotCash(cashDelta);
                 break;
             }
             else

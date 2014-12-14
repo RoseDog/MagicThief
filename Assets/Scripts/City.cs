@@ -34,7 +34,7 @@
 
     public bool OnDragFingerMoving(object sender)
     {
-        Globals.cameraForDefender.DragToMove(fingerDownOnMap);
+        Globals.cameraFollowMagician.DragToMove(fingerDownOnMap);
 
         return true;
     }
@@ -45,7 +45,7 @@
             UnityEngine.Vector2.Distance(fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition) < 10.0f)
         {
             TargetBuilding building = Globals.FingerRayToObj<TargetBuilding>(
-                Globals.cameraForDefender.GetComponent<UnityEngine.Camera>(), 16, fingerDownOnMap);
+                Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), 16, fingerDownOnMap);
 
             if (building != null)
             {
