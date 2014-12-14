@@ -432,7 +432,7 @@ public class IniFile
 #else
     public void load(string fileName)
     {
-        if (File.Exists(Application.dataPath + "/Scenes/" + fileName + ".ini"))
+        //if (File.Exists(Application.dataPath + "/Resources/" + fileName + ".ini"))
         {
             mKeysMap.Clear();
             mKeysList.Clear();
@@ -442,7 +442,7 @@ public class IniFile
 
             try
             {
-                StreamReader stream = new StreamReader(Application.dataPath + "/Scenes/" + fileName + ".ini");
+				StreamReader stream = new StreamReader(fileName + ".ini");
 
                 while ((line=stream.ReadLine())!=null)
                 {
@@ -470,6 +470,10 @@ public class IniFile
                 Debug.LogWarning(e);
             }
         }
+		//else
+		{
+			//UnityEngine.Debug.Log("path error: cant find file");
+		}
     }
 #endif
 
