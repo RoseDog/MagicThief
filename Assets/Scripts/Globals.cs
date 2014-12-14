@@ -22,7 +22,7 @@ public class Globals
     public static Transition transition;
     public static LevelController LevelController;
     public static Magician magician;
-    public static int LevelIdx = 3;
+    public static int LevelIdx = 0;
 
     public static Guard CreateGuard(System.String name, Pathfinding.Node birthNode)
     {

@@ -200,6 +200,6 @@
             yield return new UnityEngine.WaitForSeconds(paper.movingDuration);
         }
 
-        //Globals.asyncLoad.ToLoadSceneAsync("MagicianHome");
+        Globals.asyncLoad.ToLoadSceneAsync("MagicianHome");
     }
 }
