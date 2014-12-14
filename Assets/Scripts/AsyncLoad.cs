@@ -1,4 +1,4 @@
-public class AsyncLoad : UnityEngine.MonoBehaviour 
+ï»¿public class AsyncLoad : UnityEngine.MonoBehaviour 
 {
     UnityEngine.GameObject canvasForLoading;
     public System.String Next;
@@ -44,12 +44,12 @@ public class AsyncLoad : UnityEngine.MonoBehaviour
 
     System.Collections.IEnumerator _LoadSceneAsync()
     {
-        // ÏÈ×ö¸ö¼ÙµÄ£¬ÈÃÈË¿´µ½¼ÓÔØ¹ı³Ì¡£ÒÔºóÓĞĞèÇóÁËÓÃloadingHangarOperation.progressÒÔ¼°ÎÄ¼şÏÂÔØÆ÷×öÕæµÄ
+        // å…ˆåšä¸ªå‡çš„ï¼Œè®©äººçœ‹åˆ°åŠ è½½è¿‡ç¨‹ã€‚ä»¥åæœ‰éœ€æ±‚äº†ç”¨loadingHangarOperation.progressä»¥åŠæ–‡ä»¶ä¸‹è½½å™¨åšçœŸçš„
         while (progress < 100 || progress == 100)
         {
             float val = (float)progress / 100.0f;
             gui_bar_script.Value = val;
-            System.String text = "³¡¾°¼ÓÔØ" + progress.ToString() + "%";
+            System.String text = "åœºæ™¯åŠ è½½" + progress.ToString() + "%";
             progress += 2;
             ui_text.text = text;
             yield return new UnityEngine.WaitForSeconds(0.0f);
@@ -66,7 +66,7 @@ public class AsyncLoad : UnityEngine.MonoBehaviour
     {
         if (loadingHangarOperation != null && loadingHangarOperation.isDone)
         {
-            // ÕâÒ»ĞĞÎŞĞ§¡£¡£ÎªÊ²Ã´ÄØ£¿
+            // è¿™ä¸€è¡Œæ— æ•ˆã€‚ã€‚ä¸ºä»€ä¹ˆå‘¢ï¼Ÿ
             //Globals.input.enabled = true;
         }
         else
