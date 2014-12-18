@@ -25,14 +25,14 @@
                 goldMeshes.Add(renderer);
             }
         }
-        Globals.map.chests.Add(this);
+        Globals.maze.chests.Add(this);
     }
 
     public void OnDestroy()
     {
-        if (Globals.map != null)
+        if (Globals.maze != null)
         {
-            Globals.map.chests.Remove(this);
+            Globals.maze.chests.Remove(this);
         }        
     }
 
@@ -142,9 +142,10 @@
             for (int i = 0; i < count; ++i)
             {
                 UnityEngine.GameObject coin = UnityEngine.GameObject.Instantiate(coinPrefab) as UnityEngine.GameObject;
-                coin.transform.position = new UnityEngine.Vector3(transform.position.x + UnityEngine.Random.Range(-Globals.map.cell_side_length / 2, Globals.map.cell_side_length / 2),
+                coin.transform.position = new UnityEngine.Vector3(
+                    transform.position.x + UnityEngine.Random.Range(-Globals.maze.cell_side_length / 2, Globals.maze.cell_side_length / 2),
                     transform.position.y,
-                    transform.position.z + UnityEngine.Random.Range(-Globals.map.cell_side_length / 2, Globals.map.cell_side_length / 2));
+                    transform.position.z + UnityEngine.Random.Range(-Globals.maze.cell_side_length / 2, Globals.maze.cell_side_length / 2));
 
                 FlyToScreenCashNumber coin_fly = coin.GetComponent<FlyToScreenCashNumber>();
                 coin_fly.cashDelta = gold_every_coint;

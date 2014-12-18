@@ -5,11 +5,12 @@ public class SelectGuard : UnityEngine.MonoBehaviour
 {    
     [UnityEngine.HideInInspector]
     public GuardBtn[] btns;
-    
+    public UIMover mover;
     void Awake()
     {
         Globals.selectGuard = this;
         btns = GetComponentsInChildren<GuardBtn>();
+        mover = GetComponent<UIMover>();
         UnityEngine.GameObject selectedImage = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "guardSelectedImage").gameObject;
         foreach (GuardBtn btn in btns)
         {

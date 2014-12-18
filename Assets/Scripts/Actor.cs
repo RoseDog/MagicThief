@@ -16,6 +16,8 @@
 
     public bool bVisible = false;
 
+    public bool Stealing = false;
+
     public virtual void Awake()
     {
         anim = GetComponent<UnityEngine.Animation>();
@@ -104,9 +106,16 @@
         return currentAction == lifeOver;
     }
 
-    public virtual void Dead()
+    public virtual void InStealing()
     {
+        Stealing = true;
+        gameObject.layer = 11;
+    }
 
+    public virtual void OutStealing()
+    {
+        Stealing = false;
+        gameObject.layer = 0;
     }
 
     public virtual void OnTargetReached()

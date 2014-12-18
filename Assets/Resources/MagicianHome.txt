@@ -1,4 +1,5 @@
-GuardCount=0
+﻿GuardCount=1
+(2.5000, 0.1000, -6.5000)=gargoyle
 randSeedCacheWhenEditLevel=-1471226901
 Z_CELLS_COUNT=6
 X_CELLS_COUNT=4
@@ -11,3 +12,4 @@ maxRoomXCellsCount=2
 minRoomZCellsCount=2
 maxRoomZCellsCount=2
 GEMS_COUNT=0
+LevelTipText=

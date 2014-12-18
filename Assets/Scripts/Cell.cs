@@ -7,7 +7,7 @@ public class Cell : Actor
     private bool visited;
     public int z;
     public int x;
-    public MapGenerate map;
+    public MazeGenerate maze;
     public Chest chest;
     public bool Visited
     {
@@ -61,19 +61,19 @@ public class Cell : Actor
 
         if (direction == Globals.EAST)
         {
-            return map.GetCell(z, x + 1);
+            return maze.GetCell(z, x + 1);
         }
         else if (direction == Globals.SOUTH)
         {
-            return map.GetCell(z + 1, x);
+            return maze.GetCell(z + 1, x);
         }
         else if (direction == Globals.WEST)
         {
-            return map.GetCell(z, x - 1);
+            return maze.GetCell(z, x - 1);
         }
         else if (direction == Globals.NORTH)
         {
-            return map.GetCell(z - 1, x);
+            return maze.GetCell(z - 1, x);
         }
         else
         {
@@ -111,7 +111,7 @@ public class Cell : Actor
     public bool HasAdjacentCellInDirection(String direction)
     {
         // Check that the location falls within the bounds of the map
-        if (map.LocationIsOutsideBounds(this))
+        if (maze.LocationIsOutsideBounds(this))
         {
             return false;
         }
@@ -119,11 +119,11 @@ public class Cell : Actor
         // Check if there is an adjacent cell in the direction
         if (direction == Globals.EAST)
         {
-            return x < (map.X_CELLS_COUNT - 1);
+            return x < (maze.X_CELLS_COUNT - 1);
         }
         else if (direction == Globals.SOUTH)
         {
-            return z < (map.Z_CELLS_COUNT - 1);
+            return z < (maze.Z_CELLS_COUNT - 1);
         }
         else if (direction == Globals.WEST)
         {

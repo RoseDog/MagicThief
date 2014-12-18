@@ -3,8 +3,7 @@
     public override void Excute()
     {
         base.Excute();
-        actor.Dead();        
+        actor.OutStealing();        
         actor.anim.Play("die");
-        UnityEngine.Debug.Log("magician life over");
     }
 }

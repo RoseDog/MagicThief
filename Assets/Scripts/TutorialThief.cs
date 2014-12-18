@@ -67,7 +67,7 @@
 
         moving.canMove = false;
         System.Collections.Generic.List<UnityEngine.Vector3> path = moving.GetSeeker().GetCurrentPath().vectorPath;
-        float nodeSize = Globals.map.pathFinder.graph.nodeSize;
+        float nodeSize = Globals.maze.pathFinder.graph.nodeSize;
         UnityEngine.Debug.Log(path.Count);
         foreach (UnityEngine.Vector3 pos in path)
         {
@@ -92,12 +92,17 @@
         cubes.Clear();
     }
 
-    public override void Dead()
+    public override void InStealing()
+    {
+        base.InStealing();
+        moving.canMove = true;
+    }
+
+    public override void OutStealing()
     {
         ClearRouteCubes();
         moving.canMove = false;
-        gameObject.layer = 0;
         (Globals.LevelController as MagicianHomeLevel).GuardTakeThiefDown();
-        base.Dead();
+        base.OutStealing();
     }
 }

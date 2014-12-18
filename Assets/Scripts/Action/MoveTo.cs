@@ -110,14 +110,7 @@ public class EaseOut : Cocos2dAction
 		// get start time
 		_start_time = Time.time;
 		// get starting position
-        if (!_isUI)
-        {
-            _start = _transform.localPosition;
-        }
-        else
-        {
-            _start = (_transform as UnityEngine.RectTransform).anchoredPosition;
-        }
+        _start = (_transform as UnityEngine.RectTransform).anchoredPosition;
         
 		
 		initialized = true;
@@ -140,14 +133,8 @@ public class EaseOut : Cocos2dAction
             float temp = time * time * time * time * time + 1;
             tempResult = Vector3.Lerp(_start, _end, temp);
 			/// Update position
-            if (!_isUI)
-            {
-                _transform.localPosition = tempResult;
-            }
-            else
-            {
-                (_transform as UnityEngine.RectTransform).anchoredPosition = tempResult;
-            }
+            (_transform as UnityEngine.RectTransform).anchoredPosition = tempResult;
+
             if (Time.time - _start_time >= _duration)
             {
                 EndAction();

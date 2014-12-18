@@ -34,8 +34,8 @@ public class Patrol : GuardAction
 
     void AddTargetPosInDirection(String direction, int patrolCellsCount)
     {
-        Pathfinding.Node node = Globals.map.pathFinder.GetSingleNode(transform.position, true);
-        float nodeSize = Globals.map.pathFinder.graph.nodeSize;
+        Pathfinding.Node node = Globals.maze.pathFinder.GetSingleNode(transform.position, true);
+        float nodeSize = Globals.maze.pathFinder.graph.nodeSize;
         for (int i = 0; i < patrolCellsCount; ++i)
         {
             // 生成表示行走区域的方块
@@ -69,7 +69,7 @@ public class Patrol : GuardAction
             }
 
             // 如果没有可以行走的node了
-            Pathfinding.Node nextNode = Globals.map.pathFinder.GetSingleNode(nextNodePos, true);
+            Pathfinding.Node nextNode = Globals.maze.pathFinder.GetSingleNode(nextNodePos, true);
             if (nextNode == null)
             {
                 routePoses.Add(Globals.GetPathNodePos(node));

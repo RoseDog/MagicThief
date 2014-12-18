@@ -4,11 +4,19 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
     public float dragSpeed = 0.3f;
     public UnityEngine.Vector3 lookAt;
     public UnityEngine.Vector3 disOffset;
+    public UnityEngine.Vector3 lookAtCache;
+    public UnityEngine.Vector3 disOffsetCache;
     [UnityEngine.HideInInspector]
     public float disScale = 1.0f;
 
     public UnityEngine.Vector2 restriction_x = new UnityEngine.Vector2(-5, 5);
     public UnityEngine.Vector2 restriction_z = new UnityEngine.Vector2(-5, 5);
+
+    public virtual void Awake()
+    {
+        lookAtCache = lookAt;
+        disOffsetCache = disOffset;
+    }
 
     public UnityEngine.Vector3 GetHorForward()
     {
@@ -51,7 +59,7 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
     bool moving = false;
     System.Collections.IEnumerator Moving()
     {
-        while (moving && !Globals.Vector3AlmostEqual(lookAt ,EndLookAt, 0.1f))
+        while (moving && !Globals.Vector3AlmostEqual(disOffset, EndOffset, 0.1f))
         {
             lookAt = UnityEngine.Vector3.Lerp(StartMove, EndLookAt,(UnityEngine.Time.time - startTime) / durationTime);
             disOffset = UnityEngine.Vector3.Lerp(StartOffset, EndOffset, (UnityEngine.Time.time - startTime) / durationTime);
@@ -62,29 +70,47 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
         moving = false;
     }
 
+    bool bStaring = false;
+    public void StaringMagician(float duration)
+    {
+        bStaring = true;
+        Invoke("EndStaring", duration);
+    }
+
+    void EndStaring()
+    {
+        UnityEngine.Debug.Log("EndStaring");
+        bStaring = false;
+        enabled = false;
+    }
+
     public void DragToMove(Finger finger)
     {
         UnityEngine.Vector2 finger_move_delta = finger.MovmentDelta();
         UnityEngine.Vector3 cameraHorForward = GetHorForward();
         UnityEngine.Vector3 cameraHorRight = GetHorRight();
         UnityEngine.Vector3 movementDirection = -cameraHorForward * finger_move_delta.y - cameraHorRight * finger_move_delta.x;
-        lookAt += movementDirection * dragSpeed;      
+        lookAt += movementDirection * dragSpeed;
+        lookAt = RestrictPosition(lookAt);
     }
 
     public virtual void Update()
     {
-        lookAt = RestrictPosition(lookAt);
-        transform.position = lookAt + disOffset * disScale;
-        transform.LookAt(lookAt);                
+        if (bStaring)
+        {
+            transform.LookAt(Globals.magician.transform.position + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f));           
+        }
+        else
+        {            
+            transform.position = lookAt + disOffset * disScale;
+            transform.LookAt(lookAt);
+        }        
     }
 
-    UnityEngine.Vector3 RestrictPosition(UnityEngine.Vector3 pos)
+    public UnityEngine.Vector3 RestrictPosition(UnityEngine.Vector3 pos)
     {
-        if (!moving)
-        {
-            pos.x = UnityEngine.Mathf.Clamp(pos.x, restriction_x.x, restriction_x.y);
-            pos.z = UnityEngine.Mathf.Clamp(pos.z, restriction_z.x, restriction_z.y);
-        }
+        pos.x = UnityEngine.Mathf.Clamp(pos.x, restriction_x.x, restriction_x.y);
+        pos.z = UnityEngine.Mathf.Clamp(pos.z, restriction_z.x, restriction_z.y);
         return pos;
     }
 }

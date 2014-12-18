@@ -81,7 +81,7 @@ public class GuardMoving : AIPath
 
             if (controller != null)
             {
-                controller.SimpleMove(dir);
+                controller.Move(dir);
                 velocity = controller.velocity;
             }                        
         }
@@ -95,8 +95,8 @@ public class GuardMoving : AIPath
             if (velocity.sqrMagnitude <= sleepVelocity * sleepVelocity)
             {
                 // 轻微的颤抖，玩家看不出来，但是这样FOV trigger才会触发
-                controller.SimpleMove(new UnityEngine.Vector3(0.001f, 0.0f, 0.001f));
-                controller.SimpleMove(new UnityEngine.Vector3(-0.001f, 0.0f, -0.001f));
+                controller.Move(new UnityEngine.Vector3(0.001f, 0.0f, 0.001f));
+                controller.Move(new UnityEngine.Vector3(-0.001f, 0.0f, -0.001f));
                 //Fade out walking animation
                 if (target == null)
                 {

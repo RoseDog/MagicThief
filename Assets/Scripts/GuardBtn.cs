@@ -33,9 +33,9 @@ public class GuardBtn : UnityEngine.MonoBehaviour
     {
         UnityEngine.Debug.Log("Put Guard Back");
 
-        if (Globals.map.draggingGuard != null)
+        if (Globals.maze.draggingGuard != null)
         {
-            Globals.DestroyGuard(Globals.map.draggingGuard);
+            Globals.DestroyGuard(Globals.maze.draggingGuard);
         }            
         inside = true;        
     }
@@ -48,7 +48,7 @@ public class GuardBtn : UnityEngine.MonoBehaviour
             UnityEngine.Debug.Log("CreateGuard");
             Guard guard = null;
             UnityEngine.Vector3 screenPos = new UnityEngine.Vector3(UnityEngine.Input.mousePosition.x, UnityEngine.Input.mousePosition.y, 0);
-            Pathfinding.Node birthNode = Globals.map.GetNodeFromScreenRay(screenPos);
+            Pathfinding.Node birthNode = Globals.maze.GetNodeFromScreenRay(screenPos);
             if (birthNode != null)
             {                
                 guard = Globals.CreateGuard(gameObject.name, birthNode);                
@@ -65,7 +65,7 @@ public class GuardBtn : UnityEngine.MonoBehaviour
                 }                
             }
            
-            Globals.map._DragGuard(guard);
+            Globals.maze._DragGuard(guard);
         }        
     }
 

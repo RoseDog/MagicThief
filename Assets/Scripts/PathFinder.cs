@@ -3,7 +3,7 @@
 public class PathFinder : UnityEngine.MonoBehaviour
 {
     AstarPath path;
-    MapGenerate map;
+    MazeGenerate map;
     public Pathfinding.GridGraph graph;
 	// Use this for initialization
 	void Awake () 
@@ -24,9 +24,9 @@ public class PathFinder : UnityEngine.MonoBehaviour
     public void GenerateGridGraph()
     {
         graph = path.astarData.graphs[0] as Pathfinding.GridGraph;
-        graph.width = Globals.map.X_CELLS_COUNT * Globals.map.cell_side_length;
-        graph.depth = Globals.map.Z_CELLS_COUNT * Globals.map.cell_side_length;
-        graph.center = new UnityEngine.Vector3(-Globals.map.cell_side_length, -Globals.map.cell_side_length * 0.5f, 0);
+        graph.width = Globals.maze.X_CELLS_COUNT * Globals.maze.cell_side_length;
+        graph.depth = Globals.maze.Z_CELLS_COUNT * Globals.maze.cell_side_length;
+        graph.center = new UnityEngine.Vector3(-Globals.maze.cell_side_length, -Globals.maze.cell_side_length * 0.5f, 0);
         //graph.nodeSize = map.cell_side_length / 2.0f;
         graph.nodeSize = 1.0f;
         graph.UpdateSizeFromWidthDepth();

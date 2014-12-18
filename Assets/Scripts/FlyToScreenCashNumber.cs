@@ -9,8 +9,13 @@
     UnityEngine.Vector3 scaleWhenFlyBegin;
     public void FloatUp()
     {
+        TutorialLevelController controller= Globals.LevelController as TutorialLevelController;
+        if (controller == null)
+        {
+            return;
+        }
         // 钱图标的位置
-        UnityEngine.RectTransform rect_transform = Globals.canvasForMagician.cashNumber.GetComponent<UnityEngine.RectTransform>();
+        UnityEngine.RectTransform rect_transform = controller.StealingCash.GetComponent<UnityEngine.RectTransform>();
         cashScreenPos = new UnityEngine.Vector3(rect_transform.position.x, rect_transform.position.y, Globals.cameraFollowMagician.camera.nearClipPlane);
 
         transform.parent = Globals.cameraFollowMagician.transform;
@@ -45,8 +50,7 @@
             transform.localPosition += (destination - transform.localPosition) * 0.2f;
 
             if (disNow < 0.01f)
-            {
-                Globals.canvasForMagician.cashNumber.Add(cashDelta);
+            {                
                 DestroyImmediate(gameObject);
                 Globals.LevelController.MagicianGotCash(cashDelta);
                 break;

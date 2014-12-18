@@ -1,7 +1,7 @@
 ﻿public class LevelController : Actor
 {
     public int randomSeed;
-    protected System.String mapIniFileName;    
+    protected System.String mazeIniFileName;    
     public override void Awake()
     {
         base.Awake();
@@ -10,12 +10,12 @@
 
     public virtual void BeforeGenerateMaze()
     {
-        Globals.ReadIniFile(mapIniFileName);        
+        Globals.ReadMazeIniFile(mazeIniFileName);        
     }
 
     public virtual void MazeFinished()
     {
-        IniFile ini = new IniFile(mapIniFileName);
+        IniFile ini = new IniFile(mazeIniFileName);
 
         // 创建相机，不允许跟随
         if (Globals.cameraFollowMagician == null)
@@ -23,7 +23,7 @@
             UnityEngine.GameObject camera_follow_prefab = UnityEngine.Resources.Load("CameraFollowMagician") as UnityEngine.GameObject;
             UnityEngine.GameObject camera_follow = UnityEngine.GameObject.Instantiate(camera_follow_prefab) as UnityEngine.GameObject;
         }
-        Globals.map.SetRestrictToCamera(Globals.cameraFollowMagician);
+        Globals.maze.SetRestrictToCamera(Globals.cameraFollowMagician);
 
         // 关卡守卫
         int guard_count = ini.get("GuardCount",0);
@@ -31,7 +31,7 @@
         for (int i = 1; i <= guard_count; ++i)
         {
             UnityEngine.Vector3 pos = Globals.StringToVector3(keys[i]);
-            Pathfinding.Node birthNode = Globals.map.pathFinder.GetSingleNode(pos, false);
+            Pathfinding.Node birthNode = Globals.maze.pathFinder.GetSingleNode(pos, false);
             if (!birthNode.walkable)
             {
                 throw new System.InvalidOperationException("guard read from file should on walkable node");
@@ -51,8 +51,7 @@
 
     bool levelPassed = false;
     public virtual void MagicianGotCash(float value)
-    {
-        Invoke("LevelPassed", 0.5f);
+    {        
         if (levelPassed)
         {
             return;
@@ -61,7 +60,7 @@
         Gem[] gems = UnityEngine.GameObject.FindObjectsOfType<Gem>();        
         if (gems.Length == 0)
         {            
-            foreach(Chest chest in Globals.map.chests)
+            foreach(Chest chest in Globals.maze.chests)
             {
                 if (chest.goldLast > 0)
                 {
@@ -75,7 +74,18 @@
 
     public virtual void LevelPassed()
     {
-        
+        // 这个是防止LevelPassed重复调用的，
+        levelPassed = false;
+    }
+
+    public virtual void AfterMagicianFalling()
+    {
+
+    }
+
+    public virtual void AfterMagicianSuccessedEscaped()
+    {
+
     }
 
     public virtual void MagicianLifeOver()
@@ -87,6 +97,10 @@
     {        
     }
 
+    public virtual void GuardDestroyed(Guard guard)
+    {        
+    }    
+
     public virtual void GuardDropped(Guard guard)
     {
 
@@ -94,6 +108,14 @@
 
     public virtual void GoldAllLost(Chest chest)
     {
+        StopAllGuards();
+    }
 
+    void StopAllGuards()
+    {
+        foreach (Guard guard in Globals.maze.guards)
+        {
+            guard.StopAttacking();
+        }
     }
 }

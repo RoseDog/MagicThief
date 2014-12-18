@@ -2,14 +2,14 @@
 {
     public override void BeforeGenerateMaze()
     {
-        if (Globals.map.IniFileNameForEditor == "")
+        if (Globals.maze.IniFileNameForEditor == "")
         {
-            Globals.map.randSeedCacheWhenEditLevel = UnityEngine.Random.seed;
-            UnityEngine.Random.seed = Globals.map.randSeedCacheWhenEditLevel;
+            Globals.maze.randSeedCacheWhenEditLevel = UnityEngine.Random.seed;
+            UnityEngine.Random.seed = Globals.maze.randSeedCacheWhenEditLevel;
         }
         else
         {
-            mapIniFileName = Globals.map.IniFileNameForEditor;
+            mazeIniFileName = Globals.maze.IniFileNameForEditor;
             base.BeforeGenerateMaze();
         }        
     }
@@ -18,8 +18,8 @@
     {
         base.MazeFinished();
         Globals.selectGuard.gameObject.SetActive(true);
-        Globals.map.SetRestrictToCamera(Globals.cameraFollowMagician);
-        Globals.map.RegistGuardArrangeEvent();
+        Globals.maze.SetRestrictToCamera(Globals.cameraFollowMagician);
+        Globals.maze.RegistGuardArrangeEvent();
     }
 
     public override void GuardCreated(Guard guard)

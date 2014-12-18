@@ -1,21 +1,26 @@
-﻿public class LevelTip : Actor
+﻿public class LevelTip : AlphaFadeUI 
 {
-    UnityEngine.RectTransform LevelTipCanvas;
-    void Start()
+    public float fadeDuration = 1;
+    public float waitDuration = 1.5f;
+    UnityEngine.UI.Text tip;
+    
+    public override void Awake()
     {
-        LevelTipCanvas = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "LevelTipCanvas");
-        LevelTipCanvas.transform.localScale = UnityEngine.Vector3.zero;
+        base.Awake();
+        tip = GetComponentInChildren<UnityEngine.UI.Text>();        
+        UpdateAlpha(0);
     }
 
-    void OnTriggerEnter(UnityEngine.Collider other)
+    public void Show(System.String text)
     {
-        LevelTipCanvas.transform.localScale = UnityEngine.Vector3.zero;
-        AddAction(new ScaleTo(LevelTipCanvas.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), Globals.uiMoveAndScaleDuration));
+        gameObject.SetActive(true);
+        tip.text = text;
+        AddAction(new Sequence(new FadeUI(this, 0, 1, fadeDuration), new SleepFor(waitDuration),
+            new FadeUI(this, 1, 0, fadeDuration), new FunctionCall(this, "FadeOver")));
     }
 
-    void OnTriggerExit(UnityEngine.Collider other)
+    void FadeOver()
     {
-        LevelTipCanvas.transform.localScale = new UnityEngine.Vector3(1,1,1);
-        AddAction(new ScaleTo(LevelTipCanvas.transform, UnityEngine.Vector3.zero, Globals.uiMoveAndScaleDuration));
+        gameObject.SetActive(false);
     }
 }

@@ -2,32 +2,35 @@
 {
     UnityEngine.GameObject CanvasForHome;
     UIMover TipBuyHereAsHome;
-    UnityEngine.GameObject btnCreateMaze;
+    UIMover btnCreateMaze;
     UnityEngine.GameObject TipToClickCreateMaze;
     UnityEngine.GameObject SelectGuardPanelTip;
     UnityEngine.UI.Button FingerImageToDragGuard;
+    UIMover ExitHomeMazeBtn;
     UnityEngine.GameObject thief_prefab;
     UnityEngine.Vector3 cameraOffsetOnThief = new UnityEngine.Vector3(0, 17, -8);
     TutorialThief currentThief;    
-    float dropPieceTimeGap = 0.03f;
-    float fallingDuration = 0.03f;
-    bool ShowDroppingProcess = false;
+    UnityEngine.Vector2 piecesDropDuration = new UnityEngine.Vector2(1, 2);
+    float chestFallingDuration = 0.3f;
+    float piecesFarDis = 20;
+    bool ShowDroppingProcess = true;
     int thiefIdx = 0;
     UnityEngine.Vector2 fingerImagePosCache;
     UnityEngine.GameObject GuardFullFillHisDutyTipPrefab;
     UnityEngine.GameObject GuardFullFillHisDutyTip;
     public override void Awake()
-    {
-        mapIniFileName = "MagicianHome";
+    {        
+        mazeIniFileName = "MagicianHome";        
         CanvasForHome = UnityEngine.GameObject.Find("CanvasForHome");
         TipBuyHereAsHome = Globals.getChildGameObject<UIMover>(CanvasForHome, "TipBuyHereAsHome");
-        btnCreateMaze = Globals.getChildGameObject(CanvasForHome, "CreateMaze");
+        btnCreateMaze = Globals.getChildGameObject<UIMover>(CanvasForHome, "CreateMaze");
         TipToClickCreateMaze = Globals.getChildGameObject<UnityEngine.RectTransform>(CanvasForHome, "TipToClickCreateMaze").gameObject;
         TipToClickCreateMaze.SetActive(false);
         SelectGuardPanelTip = Globals.getChildGameObject<UnityEngine.RectTransform>(CanvasForHome, "SelectGuardPanelTip").gameObject;
         SelectGuardPanelTip.gameObject.SetActive(false);
         FingerImageToDragGuard = Globals.getChildGameObject<UnityEngine.UI.Button>(CanvasForHome, "FingerImageToDragGuard");
         FingerImageToDragGuard.gameObject.SetActive(false);
+        ExitHomeMazeBtn = Globals.getChildGameObject<UIMover>(CanvasForHome, "ExitHomeMaze");
         fingerImagePosCache = FingerImageToDragGuard.GetComponent<UnityEngine.RectTransform>().anchoredPosition;
         GuardFullFillHisDutyTipPrefab = UnityEngine.Resources.Load("UI/GuardFullFillHisDuty") as UnityEngine.GameObject;
         base.Awake();
@@ -36,56 +39,58 @@
     {
         base.MazeFinished();
         Globals.EnableAllInput(true);
-        thief_prefab = UnityEngine.Resources.Load("Avatar/Tutorial_Thief") as UnityEngine.GameObject;
-
-        Globals.canvasForMagician.gameObject.SetActive(true);
-        Globals.canvasForMagician.SetLifeVisible(false);
-        HideUI(Globals.selectGuard.gameObject);
-        Globals.selectGuard.EnableBtns(false);
-        HideUI(btnCreateMaze);                
-        Globals.map.SetRestrictToCamera(Globals.cameraFollowMagician);
-        Globals.map.RegistGuardArrangeEvent();
-
-        foreach(Cell cell in Globals.map.EveryCells)
+        Globals.maze.SetRestrictToCamera(Globals.cameraFollowMagician);
+        Globals.maze.RegistGuardArrangeEvent();
+        if (Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
         {
-            UnityEngine.GameObject floor = cell.GetFloor();            
-            if(cell.chest != null)
+            thief_prefab = UnityEngine.Resources.Load("Avatar/Tutorial_Thief") as UnityEngine.GameObject;
+            Globals.selectGuard.EnableBtns(false);            
+            foreach (Cell cell in Globals.maze.EveryCells)
             {
-                cell.HideEverythingExceptFloor();
-            }
-            else
-            {
-                UnityEngine.MeshRenderer[] renderers = cell.GetComponentsInChildren<UnityEngine.MeshRenderer>();
-                foreach (UnityEngine.MeshRenderer renderer in renderers)
+                UnityEngine.GameObject floor = cell.GetFloor();
+                if (cell.chest != null || cell == Globals.maze.entryOfMaze)
                 {
-                    renderer.enabled = false;
+                    cell.HideEverythingExceptFloor();
+                }
+                else
+                {
+                    UnityEngine.MeshRenderer[] renderers = cell.GetComponentsInChildren<UnityEngine.MeshRenderer>();
+                    foreach (UnityEngine.MeshRenderer renderer in renderers)
+                    {
+                        renderer.enabled = false;
+                    }
                 }
             }
-        }
-        foreach (Chest chest in Globals.map.chests)
-        {
-            chest.Visible(false);
-        }
+            foreach (Chest chest in Globals.maze.chests)
+            {
+                chest.Visible(false);
+            }
 
-        TipBuyHereAsHome.BeginMove();
+            TipBuyHereAsHome.BeginMove(Globals.uiMoveAndScaleDuration);
+        }
+        else
+        {
+            Globals.Assert(Globals.TutorialLevelIdx == Globals.TutorialLevel.Over);
+            TutorialEnd();
+        }
     }
 
     public void ChestFallingStart()
     {        
         StartCoroutine(ChestsFalling());
-        TipBuyHereAsHome.Goback();
+        TipBuyHereAsHome.Goback(Globals.uiMoveAndScaleDuration);
     }
     
 
     System.Collections.IEnumerator ChestsFalling()
     {
-        foreach (Chest chest in Globals.map.chests)
+        foreach (Chest chest in Globals.maze.chests)
         {
             chest.Visible(true);
             if (ShowDroppingProcess)
             {
-                chest.Falling(fallingDuration);
-                yield return new UnityEngine.WaitForSeconds(fallingDuration);
+                chest.Falling(chestFallingDuration);
+                yield return new UnityEngine.WaitForSeconds(chestFallingDuration);
             }                        
         }
 
@@ -98,9 +103,9 @@
         // 出现窃贼
         UnityEngine.GameObject thief = UnityEngine.GameObject.Instantiate(thief_prefab) as UnityEngine.GameObject;
         currentThief = thief.GetComponent<TutorialThief>();
-        currentThief.gameObject.layer = 0;
+        
         // 窃贼的目标
-        currentThief.transform.position = Globals.map.entryOfMaze.GetFloorPos();
+        currentThief.transform.position = Globals.maze.entryOfMaze.GetFloorPos();
         // 绑定提示信息按钮的响应事件
         currentThief.BtnToShowMazeBtn.onClick.AddListener(() => ShowCreateMazeBtn());
         currentThief.RetryBtn.onClick.AddListener(() => Retry());
@@ -113,7 +118,7 @@
     {
         currentThief.HideTip();
 
-        ShowUI(btnCreateMaze);
+        btnCreateMaze.BeginMove(Globals.uiMoveAndScaleDuration);
         Invoke("ShowTipToClickCreateMaze", Globals.uiMoveAndScaleDuration);        
     }
 
@@ -126,7 +131,7 @@
 
     public void CreateMazeBtnClicked()
     {
-        HideUI(btnCreateMaze.gameObject);
+        btnCreateMaze.Goback(Globals.uiMoveAndScaleDuration);
         TipToClickCreateMaze.SetActive(false);
         Globals.cameraFollowMagician.MoveToPoint(UnityEngine.Vector3.zero,
             Globals.cameraFollowMagician.disOffset + new UnityEngine.Vector3(0.0f, 15.0f, -7.0f),
@@ -141,50 +146,58 @@
 
     System.Collections.IEnumerator MazePieces()
     {
-        foreach (Cell cell in Globals.map.EveryCells)
+        System.Collections.Generic.List<Cocos2dAction> action_list = new System.Collections.Generic.List<Cocos2dAction>();
+        foreach (Cell cell in Globals.maze.EveryCells)
         {
             UnityEngine.MeshRenderer[] renderers = cell.GetComponentsInChildren<UnityEngine.MeshRenderer>();
             foreach (UnityEngine.MeshRenderer renderer in renderers)
             {
                 if (!renderer.enabled)
                 {
-                    UnityEngine.Vector3 dir = UnityEngine.Vector3.zero;
-                    float directionRatio = UnityEngine.Random.Range(0.0f, 1.0f);
-                    if(directionRatio < 0.33f)
-                    {
-                        dir.x = 10;
-                    }
-                    else if (directionRatio > 0.33f && directionRatio < 0.66f)
-                    {
-                        dir.y = 10;
-                    }
-                    else
-                    {
-                        dir.z = 10;
-                    }
-
-                    if(UnityEngine.Random.Range(0.0f, 1.0f) < 0.5f)
-                    {
-                        dir *= -1.0f;
-                    }
                     if (ShowDroppingProcess)
-                    {
-                        Globals.map.chests[0].AddAction(new MoveTo(renderer.transform, renderer.transform.localPosition, dropPieceTimeGap));
+                    {                        
+                        UnityEngine.Vector3 dir = UnityEngine.Vector3.zero;
+                        float directionRatio = UnityEngine.Random.Range(0.0f, 1.0f);
+                        if (directionRatio < 0.33f)
+                        {
+                            dir.x = piecesFarDis;
+                        }
+                        else if (directionRatio > 0.33f && directionRatio < 0.66f)
+                        {
+                            dir.y = piecesFarDis;
+                        }
+                        else
+                        {
+                            dir.z = piecesFarDis;
+                        }
+
+                        if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.5f)
+                        {
+                            dir *= -1.0f;
+                        }
+
+                        float droppingDuration = UnityEngine.Random.Range(piecesDropDuration.x, piecesDropDuration.y);
+                        float waitingDuration = UnityEngine.Random.Range(piecesDropDuration.x, piecesDropDuration.y);
+                        action_list.Add(new Sequence(
+                            new SleepFor(waitingDuration),
+                            new MoveTo(renderer.transform, renderer.transform.localPosition, droppingDuration)));
                         renderer.transform.localPosition += dir;
                     }                    
                     
                     renderer.enabled = true;
                     if(ShowDroppingProcess)
                     {
-                        yield return new UnityEngine.WaitForSeconds(dropPieceTimeGap * 1.5f); 
+                        //yield return new UnityEngine.WaitForSeconds(dropPieceTimeGap * 1.5f); 
                     }                    
                 }                    
             }
         }
 
+        Globals.maze.chests[0].AddAction(new Cocos2dParallel(action_list.ToArray()));
+
         if (ShowDroppingProcess)
         {
-            yield return new UnityEngine.WaitForSeconds(dropPieceTimeGap * 1.5f);
+            yield return new UnityEngine.WaitForSeconds(piecesDropDuration.y * 2);
         }
 
         ThiefAboutToMove();
@@ -193,52 +206,10 @@
 
     public void ThiefAboutToMove()
     {        
-        currentThief.transform.position = Globals.map.entryOfMaze.GetFloorPos();
-        currentThief.AimAtTargetChest(Globals.map.chests[thiefIdx]);        
-        ShowUI(Globals.selectGuard.gameObject);        
+        currentThief.transform.position = Globals.maze.entryOfMaze.GetFloorPos();
+        currentThief.AimAtTargetChest(Globals.maze.chests[thiefIdx]);
+        Globals.selectGuard.mover.BeginMove(Globals.uiMoveAndScaleDuration);
     }
-
-    public void ShowUI(UnityEngine.GameObject ui)
-    {
-        ui.SetActive(true);
-        UnityEngine.RectTransform uiTransform = ui.transform as UnityEngine.RectTransform;
-        UnityEngine.Vector3 to = uiTransform.anchoredPosition;
-        if (uiTransform.pivot.x < UnityEngine.Mathf.Epsilon)
-        {
-            to = new UnityEngine.Vector3(UnityEngine.Mathf.Abs(to.x) - uiTransform.sizeDelta.x, to.y, to.z);
-        }
-        else if (uiTransform.pivot.y < UnityEngine.Mathf.Epsilon)
-        {
-            to = new UnityEngine.Vector3(to.x, UnityEngine.Mathf.Abs(to.y) - uiTransform.sizeDelta.y, to.z);
-        }
-        AddAction(new EaseOut(uiTransform, to, Globals.uiMoveAndScaleDuration, true));
-    }
-
-    public void HideUI(UnityEngine.GameObject ui)
-    {
-        ui.SetActive(true);
-        UnityEngine.RectTransform uiTransform = ui.transform as UnityEngine.RectTransform;
-        UnityEngine.Vector3 to = uiTransform.anchoredPosition;
-        if (uiTransform.pivot.x < UnityEngine.Mathf.Epsilon)
-        {
-            to = new UnityEngine.Vector3(-uiTransform.sizeDelta.x - to.x, to.y, to.z);
-        }
-        else if (uiTransform.pivot.x > 0.999f)
-        {
-
-        }
-        else if (uiTransform.pivot.y < UnityEngine.Mathf.Epsilon)
-        {
-            to = new UnityEngine.Vector3(to.x, -uiTransform.sizeDelta.y - to.y, to.z);
-        }
-        else if (uiTransform.pivot.y > 0.999f)
-        {
-
-        }
-
-        AddAction(new MoveTo(uiTransform, to, Globals.uiMoveAndScaleDuration, true));
-    }
-
 
     public void ShowSelectGuardPanelTip()
     {
@@ -271,19 +242,24 @@
     {
         base.GuardCreated(guard);
         guard.InitArrangeUI();
+        CancelInvoke("FingerDraggingAnimation");
+        FingerImageToDragGuard.gameObject.SetActive(false);
     }
 
-    public override void GuardDropped(Guard guard)
+    public override void GuardDestroyed(Guard guard)
     {
-        
-        lastGuard = guard;
+        InvokeRepeating("FingerDraggingAnimation", 0, 2.5f);
+        FingerImageToDragGuard.gameObject.SetActive(true);
+        base.GuardDestroyed(guard);
+    }    
 
-        CancelInvoke("FingerDraggingAnimation");
+    public override void GuardDropped(Guard guard)
+    {        
+        lastGuard = guard;
+        
         Globals.cameraFollowMagician.MoveToPoint(currentThief.transform.position, cameraOffsetOnThief, Globals.cameraMoveDuration);
-        FingerImageToDragGuard.gameObject.SetActive(false);
-        HideUI(Globals.selectGuard.gameObject);
-        currentThief.moving.canMove = true;
-        currentThief.gameObject.layer = 11;
+        Globals.selectGuard.mover.Goback(Globals.uiMoveAndScaleDuration);
+        currentThief.InStealing();        
         base.GuardDropped(guard);
     }
 
@@ -292,14 +268,13 @@
         Globals.cameraFollowMagician.MoveToPoint(currentThief.transform.position, cameraOffsetOnThief, Globals.cameraMoveDuration);
         currentThief.ShowTipRetry();
         currentThief.moving.canMove = false;
-        currentThief.transform.localEulerAngles = UnityEngine.Vector3.zero;
-        StopAllGuards();
+        currentThief.transform.localEulerAngles = UnityEngine.Vector3.zero;        
         base.GoldAllLost(chest);
     }
 
     public void Retry()
     {
-        foreach(Guard guard in Globals.map.guardsOnMap)
+        foreach(Guard guard in Globals.maze.guards)
         {
             if (lastGuard != guard)
             {
@@ -318,14 +293,18 @@
     public void GuardTakeThiefDown()
     {
         ++thiefIdx;
-        if (thiefIdx != 3)
+        if (thiefIdx != 1)
         {
             GuardFullFillHisDutyTip = UnityEngine.GameObject.Instantiate(GuardFullFillHisDutyTipPrefab) as UnityEngine.GameObject;
             GuardFullFillHisDutyTip.transform.position = currentThief.transform.position;
             UnityEngine.UI.Button btn = GuardFullFillHisDutyTip.GetComponentInChildren<UnityEngine.UI.Button>();            
             btn.onClick.AddListener(() => NextThief());                       
-        }        
-    }
+        }
+        else
+        {
+            Invoke("ShowTutorialEndMsgBox", 1.0f);
+        }
+    }    
 
     public void NextThief()
     {
@@ -341,11 +320,26 @@
         HowToUseGuardBtnClicked();
     }
 
-    void StopAllGuards()
+    void ShowTutorialEndMsgBox()
     {
-        foreach (Guard guard in Globals.map.guardsOnMap)
-        {
-            guard.StopAttacking();
-        }
+        Globals.canvasForMagician.MessageBox("你的财产暂时安全了", () => TutorialEnd());
+        Globals.SazeMazeIniFile(mazeIniFileName);
+        ++Globals.TutorialLevelIdx;
+    }
+
+    void TutorialEnd()
+    {
+        Globals.selectGuard.mover.BeginMove(Globals.uiMoveAndScaleDuration);
+        btnCreateMaze.BeginMove(Globals.uiMoveAndScaleDuration);
+        ExitHomeMazeBtn.BeginMove(Globals.uiMoveAndScaleDuration);
+    }
+
+    public void ExitHomeMaze()
+    {
+        Globals.asyncLoad.ToLoadSceneAsync("City");
+
+        Globals.selectGuard.mover.Goback(Globals.uiMoveAndScaleDuration);
+        btnCreateMaze.Goback(Globals.uiMoveAndScaleDuration);
+        ExitHomeMazeBtn.Goback(Globals.uiMoveAndScaleDuration);
     }
 }

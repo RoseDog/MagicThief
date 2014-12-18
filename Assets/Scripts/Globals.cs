@@ -8,21 +8,39 @@ public class Globals
     public static bool SHOW_MACE_GENERATING_PROCESS = false;
     public static bool SHOW_ROOMS = false;
     public static float CREATE_MAZE_TIME_STEP = 0.1f;
-    public static float cameraMoveDuration = 0.3f;
+    public static float cameraMoveDuration = 0.2f;
     public static float uiMoveAndScaleDuration = 0.5f;
     public static SelectGuard selectGuard;
     public static CanvasForMagician canvasForMagician;
     public static PathFinder pathFinder;
     public static InputMgr input;
     public static CameraFollow cameraFollowMagician;
-    public static MapGenerate map;    
+    public static MazeGenerate maze;    
     public static Joystick joystick;
     public static AsyncLoad asyncLoad;
     public static TipDisplayManager tipDisplay;
     public static Transition transition;
     public static LevelController LevelController;
     public static Magician magician;
-    public static int LevelIdx = 3;
+    public enum TutorialLevel
+    {
+        FirstFalling = 0,
+        Chest,
+        Guard,
+        MagicianBorn,
+        InitMaze,
+        Over
+    }
+    public static TutorialLevel TutorialLevelIdx = TutorialLevel.FirstFalling;
+    public static float cashAmount;
+
+    public static void Assert(bool boolean)
+    {
+        if (!boolean)
+        {
+            UnityEngine.Debug.LogError(UnityEngine.StackTraceUtility.ExtractStackTrace());
+        }
+    }
 
     public static Guard CreateGuard(System.String name, Pathfinding.Node birthNode)
     {
@@ -79,6 +97,7 @@ public class Globals
     static public void DestroyGuard(Guard guard)
     {
         guard.patrol.DestroyRouteCubes();
+        LevelController.GuardDestroyed(guard);        
         UnityEngine.Object.DestroyImmediate(guard.canvasForCommandBtns.gameObject);
         UnityEngine.Object.DestroyImmediate(guard.gameObject);
     }
@@ -147,22 +166,49 @@ public class Globals
         return equal;
     }
 
-    public static void ReadIniFile(System.String mapIniFileName)
+    public static void ReadMazeIniFile(System.String mazeIniFileName)
     {
-        IniFile ini = new IniFile(mapIniFileName);
+        IniFile ini = new IniFile(mazeIniFileName);
         UnityEngine.Random.seed = ini.get("randSeedCacheWhenEditLevel", 0);
-        Globals.map.randSeedCacheWhenEditLevel = UnityEngine.Random.seed;
-        Globals.map.Z_CELLS_COUNT = ini.get("Z_CELLS_COUNT", 0);
-        Globals.map.X_CELLS_COUNT = ini.get("X_CELLS_COUNT", 0);
-        Globals.map.CHANGE_DIRECTION_MODIFIER = ini.get("CHANGE_DIRECTION_MODIFIER", 0);
-        Globals.map.sparsenessModifier = ini.get("sparsenessModifier", 0);
-        Globals.map.deadEndRemovalModifier = ini.get("deadEndRemovalModifier", 0);
-        Globals.map.noOfRoomsToPlace = ini.get("noOfRoomsToPlace", 0);
-        Globals.map.minRoomXCellsCount = ini.get("minRoomXCellsCount", 0);
-        Globals.map.maxRoomXCellsCount = ini.get("maxRoomXCellsCount", 0);
-        Globals.map.minRoomZCellsCount = ini.get("minRoomZCellsCount", 0);
-        Globals.map.maxRoomZCellsCount = ini.get("maxRoomZCellsCount", 0);
-        Globals.map.GEMS_COUNT = ini.get("GEMS_COUNT", 0);
-        Globals.map.LevelTipText = ini.get("LevelTipText");        
+        Globals.maze.randSeedCacheWhenEditLevel = UnityEngine.Random.seed;
+        Globals.maze.Z_CELLS_COUNT = ini.get("Z_CELLS_COUNT", 0);
+        Globals.maze.X_CELLS_COUNT = ini.get("X_CELLS_COUNT", 0);
+        Globals.maze.CHANGE_DIRECTION_MODIFIER = ini.get("CHANGE_DIRECTION_MODIFIER", 0);
+        Globals.maze.sparsenessModifier = ini.get("sparsenessModifier", 0);
+        Globals.maze.deadEndRemovalModifier = ini.get("deadEndRemovalModifier", 0);
+        Globals.maze.noOfRoomsToPlace = ini.get("noOfRoomsToPlace", 0);
+        Globals.maze.minRoomXCellsCount = ini.get("minRoomXCellsCount", 0);
+        Globals.maze.maxRoomXCellsCount = ini.get("maxRoomXCellsCount", 0);
+        Globals.maze.minRoomZCellsCount = ini.get("minRoomZCellsCount", 0);
+        Globals.maze.maxRoomZCellsCount = ini.get("maxRoomZCellsCount", 0);
+        Globals.maze.GEMS_COUNT = ini.get("GEMS_COUNT", 0);
+        Globals.maze.LevelTipText = ini.get("LevelTipText");        
+    }
+
+    public static void SazeMazeIniFile(System.String mazeIniFileName)
+    {
+        IniFile ini = new IniFile(mazeIniFileName);
+        ini.clear();
+        Guard[] guards = Globals.maze.guards.ToArray();
+        ini.set("GuardCount", guards.Length);
+        foreach (Guard guard in guards)
+        {
+            ini.set(Globals.GetPathNodePos(guard.birthNode).ToString("F4"), guard.gameObject.name);
+        }
+        ini.set("randSeedCacheWhenEditLevel", Globals.maze.randSeedCacheWhenEditLevel);
+        ini.set("Z_CELLS_COUNT", Globals.maze.Z_CELLS_COUNT);
+        ini.set("X_CELLS_COUNT", Globals.maze.X_CELLS_COUNT);
+        ini.set("CHANGE_DIRECTION_MODIFIER", Globals.maze.CHANGE_DIRECTION_MODIFIER);
+        ini.set("sparsenessModifier", Globals.maze.sparsenessModifier);
+        ini.set("deadEndRemovalModifier", Globals.maze.deadEndRemovalModifier);
+        ini.set("noOfRoomsToPlace", Globals.maze.noOfRoomsToPlace);
+        ini.set("minRoomXCellsCount", Globals.maze.minRoomXCellsCount);
+        ini.set("maxRoomXCellsCount", Globals.maze.maxRoomXCellsCount);
+        ini.set("minRoomZCellsCount", Globals.maze.minRoomZCellsCount);
+        ini.set("maxRoomZCellsCount", Globals.maze.maxRoomZCellsCount);
+        ini.set("GEMS_COUNT", Globals.maze.GEMS_COUNT);
+        ini.set("LevelTipText", Globals.maze.LevelTipText);
+
+        ini.save(mazeIniFileName);
     }
 }

@@ -3,7 +3,6 @@
     public override void Excute()
     {
         base.Excute();
-        (actor as Magician).isMoving = false;
         (actor as Magician).UnRegistEvent();
         Globals.canvasForMagician.lifeNumber.ChangeLife(-60);
     }

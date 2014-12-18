@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class MapGenerate : UnityEngine.MonoBehaviour
+public class MazeGenerate : UnityEngine.MonoBehaviour
 {
     [UnityEngine.HideInInspector]
     public int cell_side_length = 5;
@@ -48,7 +48,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 
     public PathFinder pathFinder;
     public Guard choosenGuard;
-    public System.Collections.Generic.List<Guard> guardsOnMap = new System.Collections.Generic.List<Guard>();
+    public System.Collections.Generic.List<Guard> guards = new System.Collections.Generic.List<Guard>();
     public System.Collections.Generic.List<Chest> chests = new System.Collections.Generic.List<Chest>();
     public System.Collections.Generic.List<UnityEngine.GameObject> gemHolders = new System.Collections.Generic.List<UnityEngine.GameObject>();
     
@@ -309,7 +309,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
             {
                 for (int z = 0; z < Z_CELLS_COUNT; ++z)
                 {
-                    Cell cell = Globals.map.GetCell(upper_left.z + z, upper_left.x + x);
+                    Cell cell = Globals.maze.GetCell(upper_left.z + z, upper_left.x + x);
                     cell.FloorTurnToWhile();
                 }
             }
@@ -771,7 +771,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         pathFinder.GenerateGridGraph();
 
         rayCastPlane = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
-        rayCastPlane.transform.localScale = new UnityEngine.Vector3(1000, 1, 1000);
+        rayCastPlane.transform.localScale = new UnityEngine.Vector3(1000, 0, 1000);
         rayCastPlane.renderer.enabled = false;
         rayCastPlane.layer = 9;
 
@@ -866,19 +866,20 @@ public class MapGenerate : UnityEngine.MonoBehaviour
     public bool OnChallengerFingerDown(object sender)
     {
         Finger finger = sender as Finger;
-        if (Globals.magician.gameObject.active)
+        // 如果魔术师死亡，没有出场，或者手指没有按到joystick上面
+        if (!Globals.magician.gameObject.active ||
+            (Globals.magician.currentAction == null &&
+            !Globals.joystick.guiTexture.HitTest(new UnityEngine.Vector3(finger.nowPosition.x, finger.nowPosition.y)))
+            )
         {
-            if (!Globals.joystick.guiTexture.HitTest(
-            new UnityEngine.Vector3(finger.nowPosition.x, finger.nowPosition.y)))
-            {
-                fingerDownOnMap = finger;
-                Globals.cameraFollowMagician.pauseFollowing = true;
-                Globals.joystick.MannullyActive(false);
-            }
-            else
-            {
-                Globals.cameraFollowMagician.pauseFollowing = false;
-            }
+            // 相机不跟随，允许拖动
+            fingerDownOnMap = finger;
+            Globals.cameraFollowMagician.pauseFollowing = true;
+            Globals.joystick.MannullyActive(false);
+        }
+        else
+        {
+            Globals.cameraFollowMagician.pauseFollowing = false;
         }
         
         return true;
@@ -890,11 +891,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         {
             Globals.cameraFollowMagician.DragToMove(fingerDownOnMap);
         }
-
-        if (!Globals.magician.gameObject.active)
-        {
-            Globals.cameraFollowMagician.DragToMove(sender as Finger);
-        }
+        
         return true;
     }
 
@@ -903,12 +900,13 @@ public class MapGenerate : UnityEngine.MonoBehaviour
         Finger finger = sender as Finger;
         if (finger == fingerDownOnMap)
         {
-            fingerDownOnMap = null;
-            if (Globals.magician.gameObject.active)
+            if (Globals.magician.Stealing)
             {
                 Globals.joystick.MannullyActive(true);
             }            
         }
+
+        fingerDownOnMap = null;
         return true;
     }
 
@@ -1082,7 +1080,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
 
     void Awake()
     {
-        Globals.map = this;        
+        Globals.maze = this;        
         pathFinder = GetComponent<PathFinder>();        
     }
 
@@ -1116,7 +1114,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
                 cell_gameobj.transform.position = cell_pos;
                 cells[z, x] = cell;
                 cell.name = z.ToString() + "," + x.ToString();
-                cell.map = this;
+                cell.maze = this;
                 cell.z = z;
                 cell.x = x;
             }
@@ -1142,7 +1140,7 @@ public class MapGenerate : UnityEngine.MonoBehaviour
             DestroyObject(holder);
         }
         gemHolders.Clear();
-        foreach(Guard guard in guardsOnMap)
+        foreach(Guard guard in guards)
         {
             DestroyObject(guard.gameObject);
         }

@@ -22,13 +22,13 @@ public class Guard : Actor
         wandering = GetComponent<WanderingLostTarget>();
         backing = GetComponent<BackToBirthCell>();
         eyes = GetComponentInChildren<FOV2DEyes>();
-        Globals.map.guardsOnMap.Add(this);
+        Globals.maze.guards.Add(this);
         base.Awake();
     }
 
     public void OnDestroy()
     {
-        Globals.map.guardsOnMap.Remove(this);
+        Globals.maze.guards.Remove(this);
     }
 
     public void InitArrangeUI()
@@ -63,7 +63,7 @@ public class Guard : Actor
         {
             currentAction.Stop();
         }        
-        Globals.map.choosenGuard = this;
+        Globals.maze.choosenGuard = this;
     }
 
     public void Unchoose()
@@ -72,7 +72,7 @@ public class Guard : Actor
         StopTint();
         HideBtns();
         BeginPatrol();
-        Globals.map.choosenGuard = null;
+        Globals.maze.choosenGuard = null;
     }
 
     public bool isShownBtns = true;

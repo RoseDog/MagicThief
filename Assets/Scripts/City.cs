@@ -1,7 +1,10 @@
 ﻿public class City : UnityEngine.MonoBehaviour 
 {
+    UnityEngine.GameObject FirstTarget;
+    UnityEngine.GameObject MyMazeBuilding;
+
     Finger fingerDownOnMap;
-    TargetBuilding target;
+    Building choosenBuilding;
     void Awake()
     {
         if (Globals.input == null)
@@ -10,6 +13,19 @@
             UnityEngine.GameObject mgrs = UnityEngine.GameObject.Instantiate(mgrs_prefab) as UnityEngine.GameObject;
         }
         Globals.input.enabled = true;
+
+        FirstTarget = UnityEngine.GameObject.Find("FirstTarget");
+        MyMazeBuilding = UnityEngine.GameObject.Find("MyMazeBuilding");
+        if(Globals.TutorialLevelIdx == Globals.TutorialLevel.Over)
+        {
+            FirstTarget.SetActive(false);
+            MyMazeBuilding.SetActive(true);
+        }
+        else
+        {
+            FirstTarget.SetActive(true);
+            MyMazeBuilding.SetActive(false);
+        }
     }
 	// Use this for initialization
 	void Start () 
@@ -44,18 +60,18 @@
         if (fingerDownOnMap.timeSinceTouchBegin < 0.5f &&
             UnityEngine.Vector2.Distance(fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition) < 10.0f)
         {
-            TargetBuilding building = Globals.FingerRayToObj<TargetBuilding>(
+            Building building = Globals.FingerRayToObj<Building>(
                 Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), 16, fingerDownOnMap);
 
             if (building != null)
             {
-                if (target != null && building != target)
+                if (choosenBuilding != null && building != choosenBuilding)
                 {
-                    target.Unchoose();
+                    choosenBuilding.Unchoose();
                 }
 
                 building.Choosen();
-                target = building;
+                choosenBuilding = building;
             }                        
         }
 

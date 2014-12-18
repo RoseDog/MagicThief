@@ -3,13 +3,23 @@ public class CameraFollow : MagicThiefCamera
     UnityEngine.Transform target;        
     public bool pauseFollowing = false;
 
-    public void Awake()
+    public override void Awake()
     {
+        base.Awake();
         Globals.cameraFollowMagician = this;
+    }
+
+    public void Reset()
+    {
+        enabled = true;
+        lookAt = lookAtCache;
+        disOffset = disOffsetCache;
     }
 
     public void beginFollow(UnityEngine.Transform tar)
 	{
+        enabled = true;
+        pauseFollowing = false;
         target = tar;
 	}
 
@@ -21,6 +31,7 @@ public class CameraFollow : MagicThiefCamera
             if (!pauseFollowing)
             {
                 lookAt = target.position;
+                lookAt = RestrictPosition(lookAt);
             }            
         }
         base.Update();

@@ -2,8 +2,7 @@ using System.Collections;
 
 public class Magician : Actor
 {
-    public bool isMoving;
-
+    public bool isMoving;    
     /** Minimum velocity for moving */
     public float sleepVelocity = 0.4F;
 
@@ -12,18 +11,21 @@ public class Magician : Actor
     public float speed = 3.0f;
     public BattleUI battleUI;
 
-    public bool isInAir = false;
-   
+    public Escape escape;
+    public Victory victory;
+    public Falling falling;
     public override void Awake()
     {
         base.Awake();
+        escape = GetComponent<Escape>();
+        victory = GetComponent<Victory>();
+        falling = GetComponent<Falling>();
         gameObject.name = "Mage_Girl";
         UnityEngine.GameObject uiPrefab = UnityEngine.Resources.Load("UI/UI") as UnityEngine.GameObject;
         UnityEngine.GameObject ui = Instantiate(uiPrefab) as UnityEngine.GameObject;
         battleUI = ui.GetComponent<BattleUI>();
         battleUI.magician = this;
-        battleUI.Prepare();
-        RegistEvent();
+        battleUI.Prepare();        
         Globals.magician = this;
     }
 
@@ -46,7 +48,7 @@ public class Magician : Actor
     public bool beginMoving(string value)
     {
         isMoving = true;
-        anim.CrossFade("moving");
+        //anim.CrossFade("moving");
         return true;
     }
 
@@ -58,11 +60,7 @@ public class Magician : Actor
     public override void Update()
     {
         base.Update();
-        if (currentAction == hitted || currentAction == lifeOver)
-        {
-            return;
-        }
-        if(isInAir)
+        if (currentAction != null)
         {
             return;
         }
@@ -80,7 +78,7 @@ public class Magician : Actor
             UnityEngine.Vector2 joystickPos = battleUI.joystick.position;
             
             UnityEngine.Vector3 movementDirection = cameraHorForward * joystickPos.y + cameraHorRight * joystickPos.x;
-            controller.SimpleMove(movementDirection * speed);
+            controller.Move(movementDirection * speed);
             velocity = controller.velocity;
 
             // 转向
@@ -99,8 +97,8 @@ public class Magician : Actor
         {
             velocity = UnityEngine.Vector3.zero;
             // 轻微的颤抖，玩家看不出来，但是这样FOV trigger才会触发
-            controller.SimpleMove(new UnityEngine.Vector3(0.001f, 0.0f, 0.001f));
-            controller.SimpleMove(new UnityEngine.Vector3(-0.001f, 0.0f, -0.001f));
+            controller.Move(new UnityEngine.Vector3(0.001f, 0.0f, 0.001f));
+            controller.Move(new UnityEngine.Vector3(-0.001f, 0.0f, -0.001f));
         }
 
         //Calculate the velocity relative to this transform's orientation
@@ -129,30 +127,25 @@ public class Magician : Actor
         //Debug.Log("magician trigger : 碰撞到的物体的名字是：" + other.gameObject.name);
     }
 
-    public void Falling(UnityEngine.Vector3 from, UnityEngine.Vector3 to, float time)
+    public override void InStealing()
     {
-        transform.position = from;
-        AddAction(new MoveTo(transform, to, time));
-        anim.Play("A_Falling_1");
-        isInAir = true;
-        Invoke("FallingOver", time);
+        base.InStealing();        
+        RegistEvent();
+        Globals.EnableAllInput(true);
+        Globals.cameraFollowMagician.beginFollow(Globals.magician.transform);
     }
 
-    void FallingOver()
+    public override void OutStealing()
     {
-        anim.Play("A_JumpLanding_1");
-    }
-
-    public void JumpLandingOver()
-    {
-        anim.CrossFade("idle");
-    }
-
-    public override void Dead()
-    {
-        base.Dead();
-        isMoving = false;
-        UnRegistEvent();
+        base.OutStealing();
+        UnRegistEvent();                
+        Globals.joystick.MannullyActive(false);
+        Globals.cameraFollowMagician.MoveToPoint(
+            transform.position + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f),
+            new UnityEngine.Vector3(Globals.cameraFollowMagician.disOffset.x * 0.7f,
+                Globals.cameraFollowMagician.disOffset.y * 0.1f,
+                Globals.cameraFollowMagician.disOffset.z * 0.5f), 0.7f);
+        isMoving = false;        
     }
 
     public void CoverInMoonlight()
