@@ -43,10 +43,12 @@ public class ScaleTo : Cocos2dAction
 		{
 			// Update scale
 			_transform.localScale = Vector3.Lerp(_start, _end, (Time.time - _start_time) / _duration);
-			
-			// Reached target size
-			if(_transform.localScale == _end) EndAction();
 
+            if (Time.time - _start_time >= _duration)
+            {
+                EndAction();
+                _transform.localScale = _end;
+            }
 		}
 		
 	}

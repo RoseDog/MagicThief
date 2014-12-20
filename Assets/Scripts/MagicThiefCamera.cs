@@ -44,6 +44,7 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
     UnityEngine.Vector3 StartMove;
     float startTime;
     float durationTime;
+    float currentTime;
     public void MoveToPoint(UnityEngine.Vector3 look, UnityEngine.Vector3 offset, float duration)
     {
         EndLookAt = RestrictPosition(look);
@@ -52,6 +53,7 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
         StartOffset = disOffset;
         startTime = UnityEngine.Time.time;
         durationTime = duration;
+        currentTime = durationTime;
         moving = true;
         StartCoroutine(Moving());
     }
@@ -59,10 +61,18 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
     bool moving = false;
     System.Collections.IEnumerator Moving()
     {
-        while (moving && !Globals.Vector3AlmostEqual(disOffset, EndOffset, 0.1f))
+        while (currentTime > 0)
         {
-            lookAt = UnityEngine.Vector3.Lerp(StartMove, EndLookAt,(UnityEngine.Time.time - startTime) / durationTime);
-            disOffset = UnityEngine.Vector3.Lerp(StartOffset, EndOffset, (UnityEngine.Time.time - startTime) / durationTime);
+            UnityEngine.Vector3 tempResult = UnityEngine.Vector3.zero;
+            float time = UnityEngine.Time.time - startTime;
+            
+            time -= 1;
+            float temp = time * time * time * time * time + 1;
+            
+            lookAt = UnityEngine.Vector3.Lerp(StartMove, EndLookAt, temp);
+            disOffset = UnityEngine.Vector3.Lerp(StartOffset, EndOffset, temp);
+
+            currentTime -= UnityEngine.Time.deltaTime;
             yield return null;
         }
         lookAt = EndLookAt;

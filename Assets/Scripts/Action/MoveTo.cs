@@ -138,6 +138,7 @@ public class EaseOut : Cocos2dAction
             if (Time.time - _start_time >= _duration)
             {
                 EndAction();
+                (_transform as UnityEngine.RectTransform).anchoredPosition = _end;
             }			
 		}
 		

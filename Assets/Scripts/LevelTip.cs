@@ -1,7 +1,9 @@
 ﻿public class LevelTip : AlphaFadeUI 
 {
-    public float fadeDuration = 1;
-    public float waitDuration = 1.5f;
+    [UnityEngine.HideInInspector]
+    float fade = 1.0f;
+    [UnityEngine.HideInInspector]
+    float wait = 1.0f;
     UnityEngine.UI.Text tip;
     
     public override void Awake()
@@ -15,12 +17,22 @@
     {
         gameObject.SetActive(true);
         tip.text = text;
-        AddAction(new Sequence(new FadeUI(this, 0, 1, fadeDuration), new SleepFor(waitDuration),
-            new FadeUI(this, 1, 0, fadeDuration), new FunctionCall(this, "FadeOver")));
+        AddAction(new Sequence(new FadeUI(this, 0, 1, fade), new SleepFor(wait),
+            new FadeUI(this, 1, 0, fade), new FunctionCall(this, "FadeOver")));
     }
 
     void FadeOver()
     {
         gameObject.SetActive(false);
+    }
+
+    public float GetFadeDuration()
+    {
+        return fade;
+    }
+
+    public float GetWaitingDuration()
+    {
+        return wait;
     }
 }

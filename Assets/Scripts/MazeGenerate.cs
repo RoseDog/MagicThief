@@ -1140,16 +1140,21 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             DestroyObject(holder);
         }
         gemHolders.Clear();
-        foreach(Guard guard in guards)
-        {
-            DestroyObject(guard.gameObject);
-        }
+        ClearGuards();
         DestroyObject(maze);
         DestroyObject(rayCastPlane);        
         allCorridorsAfterMazeCompleted.Clear();
         rooms.Clear();
         visitedCells.Clear();
         UnRegistChallengerEvent();
+    }
+
+    public void ClearGuards()
+    {
+        foreach (Guard guard in guards)
+        {
+            DestroyObject(guard.gameObject);
+        }
     }
 
     // Update is called once per frame

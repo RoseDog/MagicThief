@@ -25,14 +25,18 @@
         LevelTip.gameObject.SetActive(false);
         StealingBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(canvasForStealingBegin, "StealingBtn");
         LeaveBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(canvasForStealingBegin, "LeaveBtn");
-        StealingCash = Globals.getChildGameObject<Cash>(canvasForStealingBegin, "StealingCash");        
-    }
+        StealingCash = Globals.getChildGameObject<Cash>(canvasForStealingBegin, "StealingCash");
 
-    public override void Start()
-    {
-        mazeIniFileName = "Tutorial_Level_" + Globals.TutorialLevelIdx.ToString();
+        if (Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
+        {
+            mazeIniFileName = "Tutorial_Level_" + Globals.TutorialLevelIdx.ToString();
+        }
+        else
+        {
+            mazeIniFileName = "Tutorial_Level_" + Globals.TutorialLevel.Guard;
+        }
+        
         UnityEngine.Debug.Log("map file:" + mazeIniFileName);
-        base.Start();
     }
 
     public override void MazeFinished()
@@ -99,7 +103,7 @@
             {
                 LeaveBtn.gameObject.SetActive(false);
             }
-        }       
+        }        
     }
 
     public virtual void MagicianFallingDown()
@@ -124,7 +128,11 @@
 
     public override void AfterMagicianFalling()
     {
-        if (Globals.TutorialLevelIdx != Globals.TutorialLevel.FirstFalling)
+        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.Over)
+        {
+            OperateMagician();
+        }
+        else if (Globals.TutorialLevelIdx != Globals.TutorialLevel.FirstFalling)
         {
             ShowLevelTip();
         }
@@ -145,7 +153,7 @@
     public void ShowLevelTip()
     {
         // 关卡提示        
-        Invoke("OperateMagician", LevelTip.fadeDuration + LevelTip.waitDuration);
+        Invoke("OperateMagician", LevelTip.GetFadeDuration() + LevelTip.GetWaitingDuration());
         LevelTip.Show(Globals.maze.LevelTipText);        
     }
 
@@ -228,6 +236,8 @@
     {
         base.LevelPassed();
         ++Globals.TutorialLevelIdx;
+        mazeIniFileName = "Tutorial_Level_" + Globals.TutorialLevelIdx.ToString();
+        UnityEngine.Debug.Log("map file:" + mazeIniFileName);
         Globals.cashAmount += StealingCash.cashAmont;
         Globals.canvasForMagician.cashNumber.SetNumber(Globals.cashAmount);
         StealingCash.SetToZero();

@@ -1,7 +1,7 @@
 ﻿public class LevelController : Actor
 {
     public int randomSeed;
-    protected System.String mazeIniFileName;    
+    protected System.String mazeIniFileName = "";    
     public override void Awake()
     {
         base.Awake();
@@ -14,9 +14,7 @@
     }
 
     public virtual void MazeFinished()
-    {
-        IniFile ini = new IniFile(mazeIniFileName);
-
+    {        
         // 创建相机，不允许跟随
         if (Globals.cameraFollowMagician == null)
         {
@@ -25,22 +23,28 @@
         }
         Globals.maze.SetRestrictToCamera(Globals.cameraFollowMagician);
 
-        // 关卡守卫
-        int guard_count = ini.get("GuardCount",0);
-        System.String[] keys = ini.keys();
-        for (int i = 1; i <= guard_count; ++i)
+        if (mazeIniFileName != "")
         {
-            UnityEngine.Vector3 pos = Globals.StringToVector3(keys[i]);
-            Pathfinding.Node birthNode = Globals.maze.pathFinder.GetSingleNode(pos, false);
-            if (!birthNode.walkable)
+            UnityEngine.Debug.Log(mazeIniFileName);
+            IniFile ini = new IniFile(mazeIniFileName);
+            // 关卡守卫               
+            int guard_count = ini.get("GuardCount", 0);
+            System.String[] keys = ini.keys();
+            for (int i = 1; i <= guard_count; ++i)
             {
-                throw new System.InvalidOperationException("guard read from file should on walkable node");
+                UnityEngine.Vector3 pos = Globals.StringToVector3(keys[i]);
+                Pathfinding.Node birthNode = Globals.maze.pathFinder.GetSingleNode(pos, false);
+                if (!birthNode.walkable)
+                {
+                    throw new System.InvalidOperationException("guard read from file should on walkable node");
+                }
+                Guard guard = Globals.CreateGuard(ini.get(keys[i]), birthNode);
+                guard.patrol.DestroyRouteCubes();
+                guard.patrol.Excute();
             }
-            Guard guard = Globals.CreateGuard(ini.get(keys[i]), birthNode);
-            guard.patrol.DestroyRouteCubes();
-            guard.patrol.Excute();
         }
-
+        
+        
         // 魔术师
         if (Globals.canvasForMagician == null)
         {

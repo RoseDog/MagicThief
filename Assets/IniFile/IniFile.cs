@@ -442,6 +442,10 @@ public class IniFile
             try
             {
                 UnityEngine.TextAsset textAssets = UnityEngine.Resources.Load(fileName) as UnityEngine.TextAsset;
+                if (textAssets == null)
+                {
+                    Debug.Log("file asset dont exist: " + fileName + ".txt");
+                }
                 StringReader stream = new StringReader(textAssets.text);
 
                 while ((line=stream.ReadLine())!=null)

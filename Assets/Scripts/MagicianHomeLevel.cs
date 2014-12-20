@@ -18,6 +18,7 @@
     UnityEngine.Vector2 fingerImagePosCache;
     UnityEngine.GameObject GuardFullFillHisDutyTipPrefab;
     UnityEngine.GameObject GuardFullFillHisDutyTip;
+    public UnityEngine.UI.Text unclickedTargetCount;
     public override void Awake()
     {        
         mazeIniFileName = "MagicianHome";        
@@ -33,6 +34,7 @@
         ExitHomeMazeBtn = Globals.getChildGameObject<UIMover>(CanvasForHome, "ExitHomeMaze");
         fingerImagePosCache = FingerImageToDragGuard.GetComponent<UnityEngine.RectTransform>().anchoredPosition;
         GuardFullFillHisDutyTipPrefab = UnityEngine.Resources.Load("UI/GuardFullFillHisDuty") as UnityEngine.GameObject;
+        unclickedTargetCount = UnityEngine.GameObject.Find("UnclickedTargetCount").GetComponent<UnityEngine.UI.Text>();
         base.Awake();
     }
     public override void MazeFinished()
@@ -43,6 +45,9 @@
         Globals.maze.RegistGuardArrangeEvent();
         if (Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
         {
+            // 上次教程未完的时候放下来的守卫
+            Globals.maze.ClearGuards();
+
             thief_prefab = UnityEngine.Resources.Load("Avatar/Tutorial_Thief") as UnityEngine.GameObject;
             Globals.selectGuard.EnableBtns(false);            
             foreach (Cell cell in Globals.maze.EveryCells)
@@ -126,7 +131,9 @@
     {
         TipToClickCreateMaze.SetActive(true);
         TipToClickCreateMaze.transform.localScale = UnityEngine.Vector3.zero;
-        AddAction(new ScaleTo(TipToClickCreateMaze.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), Globals.uiMoveAndScaleDuration));
+        AddAction(new Sequence(
+            new ScaleTo(TipToClickCreateMaze.transform, new UnityEngine.Vector3(1.2f, 1.2f, 1.2f), Globals.uiMoveAndScaleDuration / 2),
+            new ScaleTo(TipToClickCreateMaze.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), Globals.uiMoveAndScaleDuration / 4)));
     }
 
     public void CreateMazeBtnClicked()
@@ -215,7 +222,10 @@
     {
         SelectGuardPanelTip.SetActive(true);
         SelectGuardPanelTip.transform.localScale = UnityEngine.Vector3.zero;
-        AddAction(new ScaleTo(SelectGuardPanelTip.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), Globals.uiMoveAndScaleDuration));
+
+        AddAction(new Sequence(
+            new ScaleTo(SelectGuardPanelTip.transform, new UnityEngine.Vector3(1.2f, 1.2f, 1.2f), Globals.uiMoveAndScaleDuration / 2),
+            new ScaleTo(SelectGuardPanelTip.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), Globals.uiMoveAndScaleDuration / 4)));
     }
 
     public void HowToUseGuardBtnClicked()
@@ -248,18 +258,24 @@
 
     public override void GuardDestroyed(Guard guard)
     {
-        InvokeRepeating("FingerDraggingAnimation", 0, 2.5f);
-        FingerImageToDragGuard.gameObject.SetActive(true);
+        if(Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
+        {
+            InvokeRepeating("FingerDraggingAnimation", 0, 2.5f);
+            FingerImageToDragGuard.gameObject.SetActive(true);
+        }        
         base.GuardDestroyed(guard);
     }    
 
     public override void GuardDropped(Guard guard)
     {        
         lastGuard = guard;
-        
-        Globals.cameraFollowMagician.MoveToPoint(currentThief.transform.position, cameraOffsetOnThief, Globals.cameraMoveDuration);
-        Globals.selectGuard.mover.Goback(Globals.uiMoveAndScaleDuration);
-        currentThief.InStealing();        
+
+        if (Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
+        {
+            Globals.cameraFollowMagician.MoveToPoint(currentThief.transform.position, cameraOffsetOnThief, Globals.cameraMoveDuration);
+            Globals.selectGuard.mover.Goback(Globals.uiMoveAndScaleDuration);
+            currentThief.InStealing();
+        }                        
         base.GuardDropped(guard);
     }
 
@@ -323,8 +339,10 @@
     void ShowTutorialEndMsgBox()
     {
         Globals.canvasForMagician.MessageBox("你的财产暂时安全了", () => TutorialEnd());
-        Globals.SazeMazeIniFile(mazeIniFileName);
+        Globals.SaveMazeIniFile(mazeIniFileName);
         ++Globals.TutorialLevelIdx;
+        System.Collections.Generic.List<System.String> newTargets = new System.Collections.Generic.List<System.String>() { "猫眼三姐妹", "扑克脸", "现金眼" };
+        Globals.AddNewTargets(newTargets);
     }
 
     void TutorialEnd()
@@ -332,6 +350,8 @@
         Globals.selectGuard.mover.BeginMove(Globals.uiMoveAndScaleDuration);
         btnCreateMaze.BeginMove(Globals.uiMoveAndScaleDuration);
         ExitHomeMazeBtn.BeginMove(Globals.uiMoveAndScaleDuration);
+        //进入MyMaze HomeExit上面的红点根据new targets来更新        
+        Globals.UpdateUnclickedRedPointsText(unclickedTargetCount);        
     }
 
     public void ExitHomeMaze()

@@ -34,8 +34,13 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
             UnityEngine.GameObject mgrs_prefab = UnityEngine.Resources.Load("GlobalMgrs") as UnityEngine.GameObject;
             UnityEngine.GameObject mgrs = UnityEngine.GameObject.Instantiate(mgrs_prefab) as UnityEngine.GameObject;
         }
-        InitUIStats();
+        
 	}
+
+    void Start()
+    {
+        InitUIStats();
+    }
 
     void InitUIStats()
     {

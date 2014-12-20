@@ -17,7 +17,7 @@
     public override void MazeFinished()
     {
         base.MazeFinished();
-        Globals.selectGuard.gameObject.SetActive(true);
+        Globals.selectGuard.mover.BeginMove(Globals.uiMoveAndScaleDuration);
         Globals.maze.SetRestrictToCamera(Globals.cameraFollowMagician);
         Globals.maze.RegistGuardArrangeEvent();
     }

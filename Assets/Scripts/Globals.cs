@@ -22,6 +22,8 @@ public class Globals
     public static Transition transition;
     public static LevelController LevelController;
     public static Magician magician;
+
+    // 以后要存到服务器上的
     public enum TutorialLevel
     {
         FirstFalling = 0,
@@ -31,8 +33,16 @@ public class Globals
         InitMaze,
         Over
     }
-    public static TutorialLevel TutorialLevelIdx = TutorialLevel.FirstFalling;
+    public static TutorialLevel TutorialLevelIdx = TutorialLevel.MagicianBorn;
     public static float cashAmount;
+    public static System.Collections.Generic.List<System.String> unclickedTargets = new System.Collections.Generic.List<System.String>();
+    public static System.Collections.Generic.List<System.String> targets = new System.Collections.Generic.List<System.String>();
+
+    public static void AddNewTargets(System.Collections.Generic.List<System.String> newTargets)
+    {
+        // 添加到现有NewTargets列表中
+        unclickedTargets.AddRange(newTargets);
+    }
 
     public static void Assert(bool boolean)
     {
@@ -185,9 +195,9 @@ public class Globals
         Globals.maze.LevelTipText = ini.get("LevelTipText");        
     }
 
-    public static void SazeMazeIniFile(System.String mazeIniFileName)
+    public static void SaveMazeIniFile(System.String mazeIniFileName)
     {
-        IniFile ini = new IniFile(mazeIniFileName);
+        IniFile ini = new IniFile();
         ini.clear();
         Guard[] guards = Globals.maze.guards.ToArray();
         ini.set("GuardCount", guards.Length);
@@ -210,5 +220,18 @@ public class Globals
         ini.set("LevelTipText", Globals.maze.LevelTipText);
 
         ini.save(mazeIniFileName);
+    }
+
+    public static void UpdateUnclickedRedPointsText(UnityEngine.UI.Text redPointsText)
+    {
+        redPointsText.text = Globals.unclickedTargets.Count.ToString();
+        if (Globals.unclickedTargets.Count == 0)
+        {
+            redPointsText.transform.parent.gameObject.SetActive(false);
+        }
+        else
+        {
+            redPointsText.transform.parent.gameObject.SetActive(true);
+        }
     }
 }
