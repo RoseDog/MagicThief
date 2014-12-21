@@ -1,5 +1,5 @@
 ﻿GuardCount=1
-(1.5000, 0.1000, -7.5000)=gargoyle
+(1.5000, 0.1000, -13.5000)=gargoyle
 randSeedCacheWhenEditLevel=-1471226901
 Z_CELLS_COUNT=6
 X_CELLS_COUNT=4

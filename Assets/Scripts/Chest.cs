@@ -210,7 +210,7 @@
         AddAction(new Cocos2dParallel(new MoveTo(transform, to, fallingDuration),
             new RotateTo(UnityEngine.Vector3.zero, new UnityEngine.Vector3(0.0f, 360.0f, 0.0f), UnityEngine.Random.Range(2.0f, 3.0f), true)) 
             );
-        Invoke("FallingOver", fallingDuration);
+        Invoke("FallingOver", fallingDuration + 0.3f);
     }
 
     void FallingOver()

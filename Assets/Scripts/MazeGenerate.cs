@@ -968,13 +968,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         }
         else
         {
-			// two fingers touch , drag camaera not allowed
-			Finger finger0 = Globals.input.GetFingerByID(0);
-			Finger finger1 = Globals.input.GetFingerByID(1);
-            if (!(finger0.enabled && finger1.enabled))
-            {
-                Globals.cameraFollowMagician.DragToMove(fingerDownOnMap);
-            }
+			Globals.cameraFollowMagician.DragToMove(fingerDownOnMap);
         }
         
         return true;
@@ -1001,11 +995,11 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             {
                 if (choosenGuard.birthNode != null && choosenGuard.birthNode.walkable)
                 {
+					choosenGuard.Unchoose();
                     if (Globals.LevelController != null)
                     {
                         Globals.LevelController.GuardDropped(choosenGuard);
                     }
-                    choosenGuard.Unchoose();                    
                 }
                 else
                 {

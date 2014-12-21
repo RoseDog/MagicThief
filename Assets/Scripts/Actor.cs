@@ -40,7 +40,7 @@
     private System.Collections.Generic.List<Cocos2dAction> actions = new System.Collections.Generic.List<Cocos2dAction>();
 
     // Update is called once per frame
-    public virtual void Update()
+    public virtual void FixedUpdate()
     {
 
         // Run actions

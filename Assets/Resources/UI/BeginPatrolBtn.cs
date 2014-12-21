@@ -15,11 +15,11 @@
     {
         if (guard.birthNode != null && guard.birthNode.walkable)
         {
+			guard.Unchoose();
             if (Globals.LevelController != null)
             {
                 Globals.LevelController.GuardDropped(guard);
             }
-            guard.Unchoose();
         }
         else
         {

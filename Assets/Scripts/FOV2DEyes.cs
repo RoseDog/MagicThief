@@ -109,6 +109,10 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
     {
         UnityEngine.Debug.Log("magician out vision");
         visionCone.status = FOV2DVisionCone.Status.Idle;
-        guard.wandering.Excute();
+		// bug, repeat invoking EnemyOutVision
+		if(guard.wandering != guard.currentAction)
+		{
+			guard.wandering.Excute();
+		}
     }    
 }

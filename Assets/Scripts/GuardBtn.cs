@@ -31,10 +31,9 @@ public class GuardBtn : UnityEngine.MonoBehaviour
 
     public void OnPointerEnter(UnityEngine.EventSystems.PointerEventData data)
     {
-        UnityEngine.Debug.Log("Put Guard Back");
-
         if (Globals.maze.draggingGuard != null)
         {
+			UnityEngine.Debug.Log("Put Guard Back");
             Globals.DestroyGuard(Globals.maze.draggingGuard);
         }            
         inside = true;        

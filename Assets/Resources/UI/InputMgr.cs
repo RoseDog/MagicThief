@@ -86,7 +86,7 @@ public class Finger
 
         touchBegin = true;
 
-        holdingPosition = beginPosition = nowPosition = pos;
+        holdingPosition = beginPosition = nowPosition = lastPosition = pos;
 
         timeSinceTouchBegin = 0.0f;
         timeSinceMoving = UnityEngine.Mathf.Infinity;
@@ -357,7 +357,7 @@ public class InputMgr : MonoBehaviour
     public MouseEvent Evt_MouseLeftUp;
     public MouseEvent Evt_MouseRightUp;
 
-    public float cameraPinchZoomSpeed = 0.05f;
+    float cameraPinchZoomingSpeed = 0.002f;
 
     void Awake()
     {
@@ -577,7 +577,7 @@ public class InputMgr : MonoBehaviour
 				// Find the difference in the distances between each frame.
 				float deltaMagnitudeDiff = touchDeltaMag - prevTouchDeltaMag;
 				MagicThiefCamera camera_now = null;				
-				Globals.cameraFollowMagician.SetDisScale(-deltaMagnitudeDiff * cameraPinchZoomSpeed);
+				Globals.cameraFollowMagician.SetDisScale(-deltaMagnitudeDiff * cameraPinchZoomingSpeed);
 			}
 		}
 	}

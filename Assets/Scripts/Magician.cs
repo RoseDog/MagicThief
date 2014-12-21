@@ -57,9 +57,9 @@ public class Magician : Actor
         isMoving = false;
         return true;
     }
-    public override void Update()
+	public override void FixedUpdate()
     {
-        base.Update();
+		base.FixedUpdate();
         if (currentAction != null)
         {
             return;

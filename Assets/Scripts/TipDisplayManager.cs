@@ -18,9 +18,9 @@ public class TipDisplayManager : UnityEngine.MonoBehaviour
         tipTransform.localScale = new UnityEngine.Vector3(1.0f, 1.0f, 1.0f);
         
         // left
-        tipTransform.position = new UnityEngine.Vector3(0.0f, 0.0f, 0.0f);
+        tipTransform.position = new UnityEngine.Vector3(0.0f, UnityEngine.Screen.height*0.3f, 0.0f);
         // right
-        tipTransform.sizeDelta = new UnityEngine.Vector2(0.0f, tipTransform.sizeDelta.y);
+        //tipTransform.sizeDelta = new UnityEngine.Vector2(0.0f, tipTransform.sizeDelta.y);
 
 
         tip.uiText.text = msg;

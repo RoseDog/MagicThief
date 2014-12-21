@@ -1,7 +1,7 @@
 ﻿
 public class MagicThiefCamera : UnityEngine.MonoBehaviour
 {
-    public float dragSpeed = 0.3f;
+    float dragCamSpeed = 0.02f;
     public UnityEngine.Vector3 lookAt;
     public UnityEngine.Vector3 disOffset;
     public UnityEngine.Vector3 lookAtCache;
@@ -35,7 +35,7 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
     public void SetDisScale(float scale)
     {
 		disScale = UnityEngine.Mathf.Clamp(disScale + scale, 0.3f, 2.0f);
-		dragSpeed = 0.05f * disScale;
+		//dragCamSpeed = 0.05f * disScale;
     }
 
     UnityEngine.Vector3 EndOffset;
@@ -96,12 +96,18 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
 
     public void DragToMove(Finger finger)
     {
-        UnityEngine.Vector2 finger_move_delta = finger.MovmentDelta();
-        UnityEngine.Vector3 cameraHorForward = GetHorForward();
-        UnityEngine.Vector3 cameraHorRight = GetHorRight();
-        UnityEngine.Vector3 movementDirection = -cameraHorForward * finger_move_delta.y - cameraHorRight * finger_move_delta.x;
-        lookAt += movementDirection * dragSpeed;
-        lookAt = RestrictPosition(lookAt);
+		// two fingers touch , drag camaera not allowed
+		Finger finger0 = Globals.input.GetFingerByID(0);
+		Finger finger1 = Globals.input.GetFingerByID(1);
+		if (!(finger0.enabled && finger1.enabled))
+		{
+			UnityEngine.Vector2 finger_move_delta = finger.MovmentDelta();
+			UnityEngine.Vector3 cameraHorForward = GetHorForward();
+			UnityEngine.Vector3 cameraHorRight = GetHorRight();
+			UnityEngine.Vector3 movementDirection = -cameraHorForward * finger_move_delta.y - cameraHorRight * finger_move_delta.x;
+			lookAt += movementDirection * dragCamSpeed;
+			lookAt = RestrictPosition(lookAt);
+		}
     }
 
     public virtual void Update()

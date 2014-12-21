@@ -226,10 +226,10 @@ public class Guard : Actor
 
 
 	// Update is called once per frame
-	public override void Update () 
+	public override void FixedUpdate () 
     {
-        base.Update();
-        if (canvasForCommandBtns != null)
+		base.FixedUpdate();
+		if (canvasForCommandBtns != null)
         {
             canvasForCommandBtns.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 1.0f, 0.0f);
         }	    

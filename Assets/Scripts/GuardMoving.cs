@@ -66,7 +66,12 @@ public class GuardMoving : AIPath
         return tr.position;
     }
 
-    public override void Update()
+	public override void Update () 
+	{
+
+	}
+
+    public void FixedUpdate()
     {
         //Get velocity in world-space
         UnityEngine.Vector3 velocity = UnityEngine.Vector3.zero;

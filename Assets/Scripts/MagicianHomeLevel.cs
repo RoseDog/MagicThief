@@ -27,9 +27,12 @@
         UnityEngine.UI.Button chestDownBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(TipBuyHereAsHome.gameObject, "ChestDown");
         chestDownBtn.onClick.AddListener(()=>ChestFallingStart());
         btnCreateMaze = Globals.getChildGameObject<UIMover>(CanvasForHome, "CreateMaze");
+		btnCreateMaze.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(()=>CreateMazeBtnClicked());
         TipToClickCreateMaze = Globals.getChildGameObject<UnityEngine.RectTransform>(CanvasForHome, "TipToClickCreateMaze").gameObject;
         TipToClickCreateMaze.SetActive(false);
         SelectGuardPanelTip = Globals.getChildGameObject<UnityEngine.RectTransform>(CanvasForHome, "SelectGuardPanelTip").gameObject;
+		UnityEngine.UI.Button howToUseBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(SelectGuardPanelTip.gameObject, "HowToUse");
+		howToUseBtn.onClick.AddListener(()=>HowToUseGuardBtnClicked());
         SelectGuardPanelTip.gameObject.SetActive(false);
         FingerImageToDragGuard = Globals.getChildGameObject<UnityEngine.UI.Button>(CanvasForHome, "FingerImageToDragGuard");
         FingerImageToDragGuard.gameObject.SetActive(false);
@@ -98,9 +101,11 @@
             if (ShowDroppingProcess)
             {
                 chest.Falling(chestFallingDuration);
-                yield return new UnityEngine.WaitForSeconds(chestFallingDuration);
-            }                        
+				yield return new UnityEngine.WaitForSeconds(chestFallingDuration + 0.5f);
+			}                        
         }
+
+		yield return new UnityEngine.WaitForSeconds(0.5f);
 
         CreateNextThief();
         currentThief.ShowTipToShowMazeBtn();
@@ -263,14 +268,18 @@
     {
         if(Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
         {
-            InvokeRepeating("FingerDraggingAnimation", 0, 2.5f);
-            FingerImageToDragGuard.gameObject.SetActive(true);
+			if(!IsInvoking("FingerDraggingAnimation"))
+			{
+				InvokeRepeating("FingerDraggingAnimation", 0, 2.5f);
+				FingerImageToDragGuard.gameObject.SetActive(true);
+			}
         }        
         base.GuardDestroyed(guard);
     }    
 
     public override void GuardDropped(Guard guard)
     {        
+		Globals.Assert (Globals.maze.draggingGuard == null);
         lastGuard = guard;
 
         if (Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
@@ -311,13 +320,18 @@
 
     public void GuardTakeThiefDown()
     {
-        ++thiefIdx;
-        if (thiefIdx != 1)
+		++thiefIdx;
+		UnityEngine.Debug.Log ("GuardTakeThiefDown:" + thiefIdx.ToString());
+        
+        if (thiefIdx != 2)
         {
             GuardFullFillHisDutyTip = UnityEngine.GameObject.Instantiate(GuardFullFillHisDutyTipPrefab) as UnityEngine.GameObject;
             GuardFullFillHisDutyTip.transform.position = currentThief.transform.position;
             UnityEngine.UI.Button btn = GuardFullFillHisDutyTip.GetComponentInChildren<UnityEngine.UI.Button>();            
-            btn.onClick.AddListener(() => NextThief());                       
+            btn.onClick.AddListener(() => NextThief());     
+			Globals.cameraFollowMagician.MoveToPoint(currentThief.transform.position,
+			                                         Globals.cameraFollowMagician.disOffset,
+			                                         0.7f);
         }
         else
         {
@@ -342,7 +356,11 @@
     void ShowTutorialEndMsgBox()
     {
         Globals.canvasForMagician.MessageBox("你的财产暂时安全了", () => TutorialEnd());
-        Globals.SaveMazeIniFile(mazeIniFileName);
+		if(UnityEngine.Application.isConsolePlatform)
+		{
+			Globals.SaveMazeIniFile(mazeIniFileName);
+		}
+        
         ++Globals.TutorialLevelIdx;
 
         System.Collections.Generic.List<IniFile> newAchives = new System.Collections.Generic.List<IniFile>() { 
