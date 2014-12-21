@@ -24,6 +24,8 @@
         mazeIniFileName = "MagicianHome";        
         CanvasForHome = UnityEngine.GameObject.Find("CanvasForHome");
         TipBuyHereAsHome = Globals.getChildGameObject<UIMover>(CanvasForHome, "TipBuyHereAsHome");
+        UnityEngine.UI.Button chestDownBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(TipBuyHereAsHome.gameObject, "ChestDown");
+        chestDownBtn.onClick.AddListener(()=>ChestFallingStart());
         btnCreateMaze = Globals.getChildGameObject<UIMover>(CanvasForHome, "CreateMaze");
         TipToClickCreateMaze = Globals.getChildGameObject<UnityEngine.RectTransform>(CanvasForHome, "TipToClickCreateMaze").gameObject;
         TipToClickCreateMaze.SetActive(false);

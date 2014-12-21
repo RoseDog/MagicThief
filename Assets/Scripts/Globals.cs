@@ -33,7 +33,7 @@ public class Globals
         InitMaze,
         Over
     }
-    public static TutorialLevel TutorialLevelIdx = TutorialLevel.Over;
+    public static TutorialLevel TutorialLevelIdx = TutorialLevel.InitMaze;
     public static float cashAmount;
     public static System.Collections.Generic.List<IniFile> unclickedBuildingAchives = new System.Collections.Generic.List<IniFile>();
     public static System.Collections.Generic.List<IniFile> buildingAchives = new System.Collections.Generic.List<IniFile>();
