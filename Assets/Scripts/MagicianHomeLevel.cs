@@ -32,9 +32,10 @@
         FingerImageToDragGuard = Globals.getChildGameObject<UnityEngine.UI.Button>(CanvasForHome, "FingerImageToDragGuard");
         FingerImageToDragGuard.gameObject.SetActive(false);
         ExitHomeMazeBtn = Globals.getChildGameObject<UIMover>(CanvasForHome, "ExitHomeMaze");
+        ExitHomeMazeBtn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => ExitHomeMaze());
         fingerImagePosCache = FingerImageToDragGuard.GetComponent<UnityEngine.RectTransform>().anchoredPosition;
         GuardFullFillHisDutyTipPrefab = UnityEngine.Resources.Load("UI/GuardFullFillHisDuty") as UnityEngine.GameObject;
-        unclickedTargetCount = UnityEngine.GameObject.Find("UnclickedTargetCount").GetComponent<UnityEngine.UI.Text>();
+        unclickedTargetCount = UnityEngine.GameObject.Find("UnclickedCount").GetComponent<UnityEngine.UI.Text>();
         base.Awake();
     }
     public override void MazeFinished()
@@ -341,8 +342,12 @@
         Globals.canvasForMagician.MessageBox("你的财产暂时安全了", () => TutorialEnd());
         Globals.SaveMazeIniFile(mazeIniFileName);
         ++Globals.TutorialLevelIdx;
-        System.Collections.Generic.List<System.String> newTargets = new System.Collections.Generic.List<System.String>() { "猫眼三姐妹", "扑克脸", "现金眼" };
-        Globals.AddNewTargets(newTargets);
+
+        System.Collections.Generic.List<IniFile> newAchives = new System.Collections.Generic.List<IniFile>() { 
+                    IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition1\n" + Globals.TargetBuildingDescriptionKey + "=猫眼三姐妹"), 
+                    IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition2\n" + Globals.TargetBuildingDescriptionKey + "=扑克脸"), 
+                    IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition3\n" + Globals.TargetBuildingDescriptionKey + "=现金眼" )};
+        Globals.AddNewTargetBuildingAchives(newAchives);
     }
 
     void TutorialEnd()

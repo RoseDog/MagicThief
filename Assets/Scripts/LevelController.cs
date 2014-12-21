@@ -92,6 +92,11 @@
 
     }
 
+    public virtual void AfterMagicianLifeOverEscaped()
+    {
+
+    }
+
     public virtual void MagicianLifeOver()
     {
         Globals.magician.lifeOver.Excute();

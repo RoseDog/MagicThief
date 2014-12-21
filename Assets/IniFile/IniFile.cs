@@ -31,14 +31,14 @@ public class IniFile
         /// <param name="comment">Comment for a key.</param>
         public KeyPair(string key, string value, string comment)
         {
-            this.key     = key;
-            this.value   = value;
+            this.key = key;
+            this.value = value;
             this.comment = comment;
         }
     }
 
     private Dictionary<string, KeyPair> mKeysMap;
-    private List<KeyPair>               mKeysList;
+    private List<KeyPair> mKeysList;
 
     /// <summary>
     /// Create a new instance of <see cref="IniFile"/>.
@@ -58,12 +58,19 @@ public class IniFile
         load(file);
     }
 
+    public static IniFile ReadIniText(System.String text)
+    {
+        IniFile ini = new IniFile();
+        ini.loadFromText(text);
+        return ini;
+    }
+
     /// <summary>
     /// Initialization.
     /// </summary>
     private void init()
     {
-        mKeysMap  = new Dictionary<string, KeyPair>();
+        mKeysMap = new Dictionary<string, KeyPair>();
         mKeysList = new List<KeyPair>();
     }
 
@@ -170,17 +177,17 @@ public class IniFile
     /// <param name="comment">Comment for property</param>
     public void set(string key, string value, string comment)
     {
-        KeyPair outKeyPair=null;
+        KeyPair outKeyPair = null;
 
         if (mKeysMap.TryGetValue(key, out outKeyPair))
         {
-            outKeyPair.value   = value;
+            outKeyPair.value = value;
             outKeyPair.comment = comment;
 
             return;
         }
 
-        outKeyPair=new KeyPair(key, value, comment);
+        outKeyPair = new KeyPair(key, value, comment);
 
         mKeysMap.Add(key, outKeyPair);
         mKeysList.Add(outKeyPair);
@@ -201,13 +208,13 @@ public class IniFile
     /// <param name="defaultValue">Default value if property absent</param>
     public int get(string key, int defaultValue)
     {
-        string value=get(key);
+        string value = get(key);
 
         try
         {
             return Convert.ToInt32(value);
         }
-        catch(Exception)
+        catch (Exception)
         {
             return defaultValue;
         }
@@ -221,13 +228,13 @@ public class IniFile
     /// <param name="defaultValue">Default value if property absent</param>
     public float get(string key, float defaultValue)
     {
-        string value=get(key);
+        string value = get(key);
 
         try
         {
             return Convert.ToSingle(value);
         }
-        catch(Exception)
+        catch (Exception)
         {
             return defaultValue;
         }
@@ -241,13 +248,13 @@ public class IniFile
     /// <param name="defaultValue">Default value if property absent</param>
     public double get(string key, double defaultValue)
     {
-        string value=get(key);
+        string value = get(key);
 
         try
         {
             return Convert.ToDouble(value);
         }
-        catch(Exception)
+        catch (Exception)
         {
             return defaultValue;
         }
@@ -261,13 +268,13 @@ public class IniFile
     /// <param name="defaultValue">Default value if property absent</param>
     public bool get(string key, bool defaultValue)
     {
-        string value=get(key);
+        string value = get(key);
 
         try
         {
             return Convert.ToBoolean(value);
         }
-        catch(Exception)
+        catch (Exception)
         {
             return defaultValue;
         }
@@ -291,7 +298,7 @@ public class IniFile
     /// <param name="defaultValue">Default value if property absent</param>
     public string get(string key, string defaultValue)
     {
-        KeyPair outKeyPair=null;
+        KeyPair outKeyPair = null;
 
         if (mKeysMap.TryGetValue(key, out outKeyPair))
         {
@@ -324,12 +331,12 @@ public class IniFile
     /// <param name="key">Name of property</param>
     public void remove(string key)
     {
-        KeyPair outKeyPair=null;
+        KeyPair outKeyPair = null;
 
         if (mKeysMap.TryGetValue(key, out outKeyPair))
         {
             mKeysList.Remove(outKeyPair);
-            mKeysMap.Remove (key);
+            mKeysMap.Remove(key);
         }
     }
 
@@ -345,14 +352,14 @@ public class IniFile
             return;
         }
 
-        KeyPair outKeyPair=null;
+        KeyPair outKeyPair = null;
 
         if (mKeysMap.TryGetValue(key, out outKeyPair))
         {
-            outKeyPair.key=newKey;
+            outKeyPair.key = newKey;
 
-            mKeysMap.Add    (newKey, outKeyPair);
-            mKeysMap.Remove (key);
+            mKeysMap.Add(newKey, outKeyPair);
+            mKeysMap.Remove(key);
         }
     }
 
@@ -384,23 +391,23 @@ public class IniFile
         // Debug.Log("Save properties to file: "+Application.persistentDataPath+"/"+fileName+".txt");
 
         try
-        {                        
-            StreamWriter stream = new StreamWriter(Application.dataPath + "/Resources/" + fileName + ".txt", 
+        {
+            StreamWriter stream = new StreamWriter(Application.dataPath + "/Resources/" + fileName + ".txt",
                 false, System.Text.Encoding.UTF8);
 
-            for (int i=0; i<mKeysList.Count; ++i)
+            for (int i = 0; i < mKeysList.Count; ++i)
             {
                 if (!mKeysList[i].comment.Equals(""))
                 {
-                    stream.WriteLine("; "+mKeysList[i].comment);
+                    stream.WriteLine("; " + mKeysList[i].comment);
                 }
 
-                stream.WriteLine(mKeysList[i].key+"="+mKeysList[i].value);
+                stream.WriteLine(mKeysList[i].key + "=" + mKeysList[i].value);
             }
 
             stream.Close();
         }
-        catch(IOException e)
+        catch (IOException e)
         {
             Debug.Log("Impossible to save file: " + fileName + ".txt");
             Debug.LogWarning(e);
@@ -432,52 +439,41 @@ public class IniFile
 #else
     public void load(string fileName)
     {
+        UnityEngine.TextAsset textAssets = UnityEngine.Resources.Load(fileName) as UnityEngine.TextAsset;
+        if (textAssets == null)
         {
-            mKeysMap.Clear();
-            mKeysList.Clear();
+            Debug.Log("file asset dont exist: " + fileName + ".txt");
+        }
+        loadFromText(textAssets.text);
+    }
 
-            string line="";
-            string currentComment="";
+    public void loadFromText(System.String text)
+    {
+        mKeysMap.Clear();
+        mKeysList.Clear();
 
-            try
+        string line = "";
+        string currentComment = "";
+        StringReader stream = new StringReader(text);
+        while ((line = stream.ReadLine()) != null)
+        {
+            if (line.StartsWith(";"))
             {
-                UnityEngine.TextAsset textAssets = UnityEngine.Resources.Load(fileName) as UnityEngine.TextAsset;
-                if (textAssets == null)
-                {
-                    Debug.Log("file asset dont exist: " + fileName + ".txt");
-                }
-                StringReader stream = new StringReader(textAssets.text);
-
-                while ((line=stream.ReadLine())!=null)
-                {
-                    if (line.StartsWith(";"))
-                    {
-                        currentComment=line.Substring(1).Trim();
-                    }
-                    else
-                    {
-                        int index=line.IndexOf("=");
-
-                        if (index>0)
-                        {
-                            set(line.Substring(0, index), line.Substring(index+1), currentComment);
-                            currentComment="";
-                        }
-                    }
-                }
-
-                stream.Close();
+                currentComment = line.Substring(1).Trim();
             }
-            catch(IOException e)
+            else
             {
-                Debug.Log("Impossible to open file: " + fileName + ".txt");
-                Debug.LogWarning(e);
+                int index = line.IndexOf("=");
+
+                if (index > 0)
+                {
+                    set(line.Substring(0, index), line.Substring(index + 1), currentComment);
+                    currentComment = "";
+                }
             }
         }
-		//else
-		{
-			//UnityEngine.Debug.Log("path error: cant find file");
-		}
+
+        stream.Close();
     }
 #endif
 
@@ -487,11 +483,11 @@ public class IniFile
     /// <returns>List of keys.</returns>
     public string[] keys()
     {
-        string[] res=new string[mKeysList.Count];
+        string[] res = new string[mKeysList.Count];
 
-        for (int i=0; i<mKeysList.Count; ++i)
+        for (int i = 0; i < mKeysList.Count; ++i)
         {
-            res[i]=mKeysList[i].key;
+            res[i] = mKeysList[i].key;
         }
 
         return res;

@@ -13,6 +13,7 @@
     {
         Globals.cameraFollowMagician.beginFollow(null);
         Globals.cameraFollowMagician.StaringMagician((actor as Magician).escape.duration - 0.8f);
+        Globals.LevelController.Invoke("AfterMagicianLifeOverEscaped", (actor as Magician).escape.duration + 0.1f);
         (actor as Magician).escape.Excute();
     }
 }

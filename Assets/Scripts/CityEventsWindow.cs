@@ -3,19 +3,18 @@
     public System.Collections.Generic.List<CityEvent> cityEvents = new System.Collections.Generic.List<CityEvent>();    
     UnityEngine.GameObject eventPrefab;
     public City city;
-    public UnityEngine.UI.Text unclickedTargetCount;
+    public UnityEngine.UI.Text unclickedCount;
     public override void Awake()
     {
         eventPrefab = UnityEngine.Resources.Load("UI/CityEvent") as UnityEngine.GameObject;
         UnityEngine.Debug.Log(eventPrefab);
-        unclickedTargetCount = UnityEngine.GameObject.Find("UnclickedTargetCount").GetComponent<UnityEngine.UI.Text>();
-        Globals.UpdateUnclickedRedPointsText(unclickedTargetCount);
+        unclickedCount = UnityEngine.GameObject.Find("UnclickedCount").GetComponent<UnityEngine.UI.Text>();       
         base.Awake();
     }
 
-    public void AddEvents(System.Collections.Generic.List<System.String> events, bool bNew)
+    public void AddEvents(System.Collections.Generic.List<IniFile> events, bool bNew)
     {
-        foreach (System.String eventText in events)
+        foreach (IniFile eventText in events)
         {
             AddEvent(eventText, bNew);
         }
@@ -30,14 +29,14 @@
         }
     }
 
-    public CityEvent AddEvent(System.String eventText, bool bNew)
+    public CityEvent AddEvent(IniFile eventText, bool bNew)
     {
         CityEvent ce = (Instantiate(eventPrefab) as UnityEngine.GameObject).GetComponent<CityEvent>();
         UnityEngine.RectTransform ceTransform = ce.GetComponent<UnityEngine.RectTransform>();
         ceTransform.SetParent(transform);
         ceTransform.localScale = new UnityEngine.Vector3(1,1,1);
-        ce.uiText.text = eventText;
-        ce.name = eventText;
+        ce.uiText.text = eventText.get(Globals.TargetBuildingDescriptionKey);
+        ce.name = eventText.get(Globals.TargetBuildingDescriptionKey);
         ce.newText.enabled = bNew;
         cityEvents.Add(ce);
         UnityEngine.UI.Button eventBtn = ce.GetComponent<UnityEngine.UI.Button>();
@@ -48,9 +47,9 @@
     public void EventBtnClicked(UnityEngine.UI.Button btn)
     {
         CityEvent ce = btn.GetComponentInParent<CityEvent>();
-        System.String clickedTarget = ce.uiText.text;
+        System.String clickedBuilding = ce.uiText.text;
 
-        EventClicked(clickedTarget);
+        EventClicked(clickedBuilding);
         // 相机移动
         Globals.cameraFollowMagician.MoveToPoint(
             city.GetTargetPosition(ce.uiText.text) + Globals.cameraFollowMagician.GetHorForward() * 15 + 
@@ -59,15 +58,12 @@
         // 选中建筑
         city.ChooseBuilding(city.GetTargetBuilding(ce.uiText.text));
         // 更新列表
-        if (Globals.unclickedTargets.Remove(clickedTarget))
-        {
-            Globals.targets.Add(clickedTarget);
-        }
-                
+        Globals.NewTargetBuildingClicked(clickedBuilding);
+        
         // 红字消失        
         ce.newText.enabled = false;
         // 红点提示未查看的目标个数
-        Globals.UpdateUnclickedRedPointsText(unclickedTargetCount);
+        Globals.UpdateUnclickedRedPointsText(unclickedCount);
     }
 
     public CityEvent EventClicked(System.String clickedTarget)

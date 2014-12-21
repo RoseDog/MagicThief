@@ -1,4 +1,4 @@
-﻿public class TargetBuilding : Building
+﻿public class TargetBuilding : BuildingCouldDivedIn
 {    
     public UnityEngine.UI.Text tip;
     public override void Awake()
@@ -35,7 +35,7 @@
         Globals.magician.falling.Excute();        
         magician.transform.Rotate(new UnityEngine.Vector3(0, 1, 0), 180.0f);
         Globals.EnableAllInput(false);
-
+        Globals.currentStealingTargetBuildingAchive = buildingAchive;
         Invoke("InToBuilding", fallingDuration + 0.5f);        
     }
 

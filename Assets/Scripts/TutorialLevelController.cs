@@ -204,7 +204,10 @@
 
         StealingCash.SetToZero();
         base.MagicianLifeOver();
-        InvokeRepeating("RestartCount", 4.0f, 1.0f);
+        if(Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
+        {
+            InvokeRepeating("RestartCount", 4.0f, 1.0f);
+        }        
     }
 
     void RestartCount()
@@ -235,7 +238,10 @@
     public override void LevelPassed()
     {
         base.LevelPassed();
-        ++Globals.TutorialLevelIdx;
+        if (Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
+        {
+            ++Globals.TutorialLevelIdx;
+        }        
         mazeIniFileName = "Tutorial_Level_" + Globals.TutorialLevelIdx.ToString();
         UnityEngine.Debug.Log("map file:" + mazeIniFileName);
         Globals.cashAmount += StealingCash.cashAmont;
@@ -247,8 +253,9 @@
 
     public override void AfterMagicianSuccessedEscaped()
     {
-        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.InitMaze)
+        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.InitMaze || Globals.TutorialLevelIdx == Globals.TutorialLevel.Over)
         {
+            canvasForStealingBegin.SetActive(false);
             Globals.transition.BlackOut(this, "Newsreport");
         }
         else if (Globals.TutorialLevelIdx == Globals.TutorialLevel.MagicianBorn)
@@ -266,9 +273,18 @@
         base.AfterMagicianSuccessedEscaped();
     }
 
+    public override void AfterMagicianLifeOverEscaped()
+    {
+        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.Over)
+        {
+            Leave();
+        }
+        base.AfterMagicianLifeOverEscaped();
+    }
+
     UIMover[] papers;
     void Newsreport()
-    {
+    {        
         UnityEngine.Debug.Log("Newsreport");
         // 禁止输入        
         Globals.EnableAllInput(false);
@@ -312,11 +328,19 @@
             paper.BeginMove(paperMovingDuration);
             yield return new UnityEngine.WaitForSeconds(paperMovingDuration);
         }
-
-        Globals.asyncLoad.ToLoadSceneAsync("MagicianHome");
+        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.InitMaze)
+        {
+            Globals.asyncLoad.ToLoadSceneAsync("MagicianHome");
+        }
+        else if (Globals.TutorialLevelIdx == Globals.TutorialLevel.Over)
+        {
+            Globals.asyncLoad.ToLoadSceneAsync("City");
+            //增加需要救助的穷人;
+            Globals.AddPoorBuildingAchives(Globals.currentStealingTargetBuildingAchive);            
+        }        
     }
 
-    public void LeaveBeforeStealing()
+    public void Leave()
     {
         canvasForStealingBegin.SetActive(false);
         Globals.asyncLoad.ToLoadSceneAsync("City");

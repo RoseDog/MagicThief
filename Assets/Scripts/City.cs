@@ -6,8 +6,9 @@
     Finger fingerDownOnMap;
     Building choosenBuilding;
 
-    System.Collections.Generic.List<UnityEngine.GameObject> targetPoses = new System.Collections.Generic.List<UnityEngine.GameObject>();
+    System.Collections.Generic.List<UnityEngine.GameObject> buildingPosHolders = new System.Collections.Generic.List<UnityEngine.GameObject>();
     System.Collections.Generic.List<TargetBuilding> targetBuildings = new System.Collections.Generic.List<TargetBuilding>();
+    System.Collections.Generic.List<PoorBuilding> poorBuildings = new System.Collections.Generic.List<PoorBuilding>();
     UnityEngine.GameObject canvasForCity;
     public UIMover cityEventsOpenBtn;
     public CityEventsWindow eventsWindow;    
@@ -27,13 +28,13 @@
 
         // 如果教程结束了，就显示自己的家，否则就显示第一个目标建筑
         firstTarget = UnityEngine.GameObject.Find("FirstTarget");
-        firstTarget.GetComponent<TargetBuilding>().city = this;
+        firstTarget.GetComponent<Building>().city = this;
         myMazeBuilding = UnityEngine.GameObject.Find("MyMazeBuilding");
         myMazeBuilding.GetComponent<MyMazeBuilding>().city = this;
 
         // 可以放置目标的点
-        targetPoses.AddRange(UnityEngine.GameObject.FindGameObjectsWithTag("TargetPosition"));
-        foreach (UnityEngine.GameObject pos in targetPoses)
+        buildingPosHolders.AddRange(UnityEngine.GameObject.FindGameObjectsWithTag("BuildingPosition"));
+        foreach (UnityEngine.GameObject pos in buildingPosHolders)
         {
             pos.renderer.enabled = false;
         }
@@ -44,13 +45,32 @@
         if (Globals.TutorialLevelIdx == Globals.TutorialLevel.Over)
         {
             firstTarget.SetActive(false);
-            myMazeBuilding.SetActive(true);            
+            myMazeBuilding.SetActive(true);
+
+            if (Globals.unclickedBuildingAchives.Count == 0 && Globals.buildingAchives.Count == 0)
+            {
+                System.Collections.Generic.List<IniFile> newAchives = new System.Collections.Generic.List<IniFile>() { 
+                    IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition1\n" + Globals.TargetBuildingDescriptionKey + "=猫眼三姐妹"), 
+                    IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition2\n" + Globals.TargetBuildingDescriptionKey + "=扑克脸")};
+                Globals.AddNewTargetBuildingAchives(newAchives);
+
+                IniFile poorAchive = new IniFile();
+                poorAchive.set(Globals.PosHolderKey, "BuildingPosition4");
+                Globals.AddPoorBuildingAchives(poorAchive);
+
+                IniFile roseAchive = new IniFile();
+                roseAchive.set(Globals.PosHolderKey, "BuildingPosition3");
+                Globals.AddRoseBuilding(roseAchive);
+            }
 
             // 生成周围的目标
-            BornTargetsBuilding(Globals.unclickedTargets);
-            BornTargetsBuilding(Globals.targets);
-            eventsWindow.AddEvents(Globals.unclickedTargets, true);
-            eventsWindow.AddEvents(Globals.targets, false);
+            Globals.UpdateUnclickedRedPointsText(eventsWindow.unclickedCount);
+            BornTargetsBuilding(Globals.unclickedBuildingAchives);
+            BornTargetsBuilding(Globals.buildingAchives);
+            BornRoseBuilding(Globals.roseBuildingAchives);
+            BornPoorsBuilding(Globals.poorsBuildingAchives);
+            eventsWindow.AddEvents(Globals.unclickedBuildingAchives, true);
+            eventsWindow.AddEvents(Globals.buildingAchives, false);
 
             // 显示出城市事件列表的按钮
             cityEventsOpenBtn.BeginMove(Globals.uiMoveAndScaleDuration);
@@ -69,48 +89,87 @@
             finger.Evt_Up += OnDragFingerUp;
         }
     }
-    
-    public void BornTargetsBuilding(System.Collections.Generic.List<System.String> targets)
+
+    public void BornRoseBuilding(System.Collections.Generic.List<IniFile> poorBuildingsAchives)
     {
         // 创建新的building, 删除TargetPos
-        for(int idx = 0; idx < targets.Count; ++idx)
+        for (int idx = 0; idx < poorBuildingsAchives.Count; ++idx)
         {
-            System.String tipText = targets[idx];
-            UnityEngine.GameObject targetPrefab = UnityEngine.Resources.Load("Props/Target") as UnityEngine.GameObject;
-            UnityEngine.GameObject targetObject = UnityEngine.GameObject.Instantiate(targetPrefab) as UnityEngine.GameObject;
-            targetObject.transform.position = GetAvailablePos();
-            TargetBuilding building = targetObject.GetComponent<TargetBuilding>();
+            BornBuilding(poorBuildingsAchives[idx], "Props/RoseBuilding");
+        }
+    }
+
+    public void BornPoorsBuilding(System.Collections.Generic.List<IniFile> poorBuildingsAchives)
+    {
+        // 创建新的building, 删除TargetPos
+        for (int idx = 0; idx < poorBuildingsAchives.Count; ++idx)
+        {
+           PoorBuilding poorBuilding = BornBuilding(poorBuildingsAchives[idx], "Props/PoorBuilding") as PoorBuilding;
+           poorBuildings.Add(poorBuilding);
+        }
+    }
+    
+    public void BornTargetsBuilding(System.Collections.Generic.List<IniFile> targetAchives)
+    {
+        // 创建新的building, 删除TargetPos
+        for(int idx = 0; idx < targetAchives.Count; ++idx)
+        {
+            TargetBuilding building = BornBuilding(targetAchives[idx], "Props/TargetBuilding") as TargetBuilding;            
+            System.String tipText = targetAchives[idx].get(Globals.TargetBuildingDescriptionKey);
             building.tip.text = tipText;
-            building.gameObject.name = tipText;
-            building.city = this;
+            building.gameObject.name = tipText;            
             targetBuildings.Add(building);
         }        
-    }    
+    }
+
+    public Building BornBuilding(IniFile achive, System.String prefabFile)
+    {
+        UnityEngine.GameObject posHolder = GetPosHolder(achive.get(Globals.PosHolderKey));
+        UnityEngine.GameObject buildingPrefab = UnityEngine.Resources.Load(prefabFile) as UnityEngine.GameObject;
+        UnityEngine.GameObject targetBuildingObject = UnityEngine.GameObject.Instantiate(buildingPrefab) as UnityEngine.GameObject;
+        Building building = targetBuildingObject.GetComponent<Building>();
+        building.transform.position = posHolder.transform.position;
+        building.buildingAchive = achive;
+        building.city = this;
+        return building;
+    }
+
+    public void DestroyPoorBuilding(IniFile achive)
+    {
+        foreach(PoorBuilding building in poorBuildings)
+        {
+            if (building.buildingAchive == achive)
+            {
+                poorBuildings.Remove(building);
+                DestroyObject(building.gameObject);
+                return;
+            }
+        }
+    }
 
     public void TargetClicked(System.String clickedTarget)
     {        
         eventsWindow.EventClicked(clickedTarget);
     }
 
-    UnityEngine.Vector3 GetAvailablePos()
+    UnityEngine.GameObject GetPosHolder(System.String idString)
     {
-        foreach(UnityEngine.GameObject pos in targetPoses)
+        foreach(UnityEngine.GameObject pos in buildingPosHolders)
         {
-            if (pos.active)
+            if (pos.name == idString)
             {
-                pos.SetActive(false);
-                return pos.transform.position;
+                return pos;
             }
         }
         // 没有可用的点了
         Globals.Assert(false);
 
-        return UnityEngine.Vector3.zero;
+        return null;
     }
 
     public UnityEngine.Vector3 GetTargetPosition(System.String targetName)
     {
-        foreach (TargetBuilding building in targetBuildings)
+        foreach (BuildingCouldDivedIn building in targetBuildings)
         {
             if(building.name == targetName)
             {
@@ -121,13 +180,13 @@
         return UnityEngine.Vector3.zero;
     }
 
-    public TargetBuilding GetTargetBuilding(System.String targetName)
+    public BuildingCouldDivedIn GetTargetBuilding(System.String targetName)
     {
-        foreach (TargetBuilding building in targetBuildings)
+        foreach (BuildingCouldDivedIn building in targetBuildings)
         {
             if (building.name == targetName)
             {
-                return building.GetComponent<TargetBuilding>();
+                return building.GetComponent<BuildingCouldDivedIn>();
             }
         }
         Globals.Assert(false);

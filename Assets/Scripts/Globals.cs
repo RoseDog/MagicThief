@@ -33,15 +33,56 @@ public class Globals
         InitMaze,
         Over
     }
-    public static TutorialLevel TutorialLevelIdx = TutorialLevel.MagicianBorn;
+    public static TutorialLevel TutorialLevelIdx = TutorialLevel.Over;
     public static float cashAmount;
-    public static System.Collections.Generic.List<System.String> unclickedTargets = new System.Collections.Generic.List<System.String>();
-    public static System.Collections.Generic.List<System.String> targets = new System.Collections.Generic.List<System.String>();
+    public static System.Collections.Generic.List<IniFile> unclickedBuildingAchives = new System.Collections.Generic.List<IniFile>();
+    public static System.Collections.Generic.List<IniFile> buildingAchives = new System.Collections.Generic.List<IniFile>();
+    public static System.Collections.Generic.List<IniFile> poorsBuildingAchives = new System.Collections.Generic.List<IniFile>();
+    public static System.Collections.Generic.List<IniFile> roseBuildingAchives = new System.Collections.Generic.List<IniFile>();
+    public static IniFile currentStealingTargetBuildingAchive;
 
-    public static void AddNewTargets(System.Collections.Generic.List<System.String> newTargets)
+    public static System.String PosHolderKey = "PosHolder";
+    public static System.String TargetBuildingDescriptionKey = "Description";
+
+    public static void AddNewTargetBuildingAchives(System.Collections.Generic.List<IniFile> newAchives)
     {
         // 添加到现有NewTargets列表中
-        unclickedTargets.AddRange(newTargets);
+        unclickedBuildingAchives.AddRange(newAchives);
+    }
+
+    public static void NewTargetBuildingClicked(System.String desc)
+    {
+        foreach (IniFile file in unclickedBuildingAchives)
+        {
+            if(file.get("Description") == desc)
+            {
+                unclickedBuildingAchives.Remove(file);
+                buildingAchives.Add(file);
+                return;
+            }            
+        }
+        Assert(false);
+    }
+
+    public static void AddPoorBuildingAchives(IniFile achive)
+    {
+        Assert(unclickedBuildingAchives.Contains(achive) || buildingAchives.Contains(achive));
+        Assert(!(unclickedBuildingAchives.Contains(achive) && buildingAchives.Contains(achive)));
+        Assert(!(!unclickedBuildingAchives.Contains(achive) && !buildingAchives.Contains(achive)));
+        Assert(!poorsBuildingAchives.Contains(achive));
+        buildingAchives.Remove(achive);
+        unclickedBuildingAchives.Remove(achive);
+        poorsBuildingAchives.Add(achive);
+    }
+
+    public static void AddRoseBuilding(IniFile achive)
+    {
+        Assert(!unclickedBuildingAchives.Contains(achive));
+        Assert(!buildingAchives.Contains(achive));
+        Assert(poorsBuildingAchives.Contains(achive));
+        Assert(!roseBuildingAchives.Contains(achive));
+        poorsBuildingAchives.Remove(achive);
+        roseBuildingAchives.Add(achive);
     }
 
     public static void Assert(bool boolean)
@@ -220,12 +261,12 @@ public class Globals
         ini.set("LevelTipText", Globals.maze.LevelTipText);
 
         ini.save(mazeIniFileName);
-    }
+    }    
 
     public static void UpdateUnclickedRedPointsText(UnityEngine.UI.Text redPointsText)
     {
-        redPointsText.text = Globals.unclickedTargets.Count.ToString();
-        if (Globals.unclickedTargets.Count == 0)
+        redPointsText.text = unclickedBuildingAchives.Count.ToString();
+        if (Globals.unclickedBuildingAchives.Count == 0)
         {
             redPointsText.transform.parent.gameObject.SetActive(false);
         }
