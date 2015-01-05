@@ -18,6 +18,13 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
         disOffsetCache = disOffset;
     }
 
+    public void Reset()
+    {
+        enabled = true;
+        lookAt = lookAtCache;
+        disOffset = disOffsetCache;
+    }
+
     public UnityEngine.Vector3 GetHorForward()
     {
         UnityEngine.Vector3 cameraHorForward = transform.forward;
@@ -54,16 +61,15 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
         startTime = UnityEngine.Time.time;
         durationTime = duration;
         currentTime = durationTime;
-        moving = true;
+        //moving = true;
         StartCoroutine(Moving());
     }
 
-    bool moving = false;
+    //bool moving = false;
     System.Collections.IEnumerator Moving()
     {
         while (currentTime > 0)
         {
-            UnityEngine.Vector3 tempResult = UnityEngine.Vector3.zero;
             float time = UnityEngine.Time.time - startTime;
             
             time -= 1;
@@ -77,7 +83,7 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
         }
         lookAt = EndLookAt;
         disOffset = EndOffset;
-        moving = false;
+        //moving = false;
     }
 
     bool bStaring = false;

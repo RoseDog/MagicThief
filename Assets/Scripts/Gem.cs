@@ -1,12 +1,12 @@
 ﻿public class Gem : Actor 
 {
-    FlyToScreenCashNumber fly;
+    FlyToScreenNumber fly;
     public int cashValue = 1000;
     
 	public override void Awake () 
     {
         base.Awake();
-        fly = GetComponent<FlyToScreenCashNumber>();
+        fly = GetComponent<FlyToScreenNumber>();
 
         UnityEngine.Vector3 from = UnityEngine.Vector3.zero;
         UnityEngine.Vector3 to = new UnityEngine.Vector3(0.0f, 360.0f, 0.0f);
@@ -24,7 +24,12 @@
         transform.parent = null;
         ClearAllActions();
         AddAction(new MoveTo(transform, transform.localPosition + new UnityEngine.Vector3(0.0f, 2.0f, 0.0f), floatDuration));
-        fly.cashDelta = cashValue;
-        fly.Invoke("FloatUp", floatDuration + 0.1f);
-    }    
+        fly.numberDelta = cashValue;
+        Invoke("FlyOff", floatDuration + 0.1f);
+    }
+
+    void FlyOff()
+    {
+        fly.ToCashNumber(false);
+    }
 }

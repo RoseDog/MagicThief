@@ -7,8 +7,18 @@ public class WanderingLostTarget : GuardAction
     {
         base.Excute();
         Debug.Log("WanderingLostTarget");
+        if (guard.heardAlert != null)
+        {
+            guard.heardAlert.alertTeammate = null;
+        }
         guard.anim.CrossFade("idle");
         Invoke("GoOnPatrol", 3.0f);
+    }
+
+    public override void Stop()
+    {
+        CancelInvoke("GoOnPatrol");
+        base.Stop();
     }
 
     void GoOnPatrol()

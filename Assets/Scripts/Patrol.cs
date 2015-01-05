@@ -132,8 +132,8 @@ public class Patrol : GuardAction
 
     void _beginPatrol()
     {
-        guard.moving.GetSeeker().StartPath(guard.moving.GetFeetPosition(), routePoses[currentTargetIdx]);
-    }
+       guard.moving.GetSeeker().StartPath(guard.moving.GetFeetPosition(),routePoses[currentTargetIdx]);
+    }    
 
     public override void Stop()
     {

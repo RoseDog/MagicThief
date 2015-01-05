@@ -1,38 +1,27 @@
 ﻿public class LifeNumber : Actor
-{
-    public int LifeAmount = 100;
-    public int LifeCurrent;
+{    
     UnityEngine.UI.Text lifeText;
+    UnityEngine.UI.RawImage LifeNumerBg;
     float scaleTo = 1.6f;
     float scaleTotalTime = 0.2f;
     public override void Awake()
     {
         base.Awake();
         lifeText = GetComponent<UnityEngine.UI.Text>();
-    }
-	
-    public void Reset()
-    {
-        LifeCurrent = LifeAmount;
-        UpdateText();
+        LifeNumerBg = GetComponentInParent<UnityEngine.UI.RawImage>();
+        LifeNumerBg.gameObject.SetActive(false);
     }
 
-    void UpdateText()
+    public void UpdateText(Hitted hitAction)
     {
-        lifeText.text = LifeCurrent.ToString() + "/" + LifeAmount.ToString();
+        lifeText.text = hitAction.LifeCurrent.ToString() + "/" + hitAction.LifeAmount.ToString();
     }
 
-    public void ChangeLife(int delta)
+    public void UpdateCurrentLife(Hitted hitAction)
     {
         AddAction(new Sequence(
                     new ScaleTo(transform, new UnityEngine.Vector3(scaleTo, scaleTo, scaleTo), scaleTotalTime / 2.0f),
                     new ScaleTo(transform, new UnityEngine.Vector3(1f, 1f, 1f), scaleTotalTime / 2.0f)));
-        LifeCurrent += delta;
-        LifeCurrent = UnityEngine.Mathf.Clamp(LifeCurrent, 0, LifeAmount);
-        UpdateText();
-        if (LifeCurrent == 0)
-        {
-            Globals.LevelController.MagicianLifeOver();
-        }
+        UpdateText(hitAction);        
     }
 }

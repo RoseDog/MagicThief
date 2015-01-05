@@ -5,7 +5,7 @@ public class Cocos2dParallel : Cocos2dAction
 {
 	
 	// Action list
-    private List<Cocos2dAction> actions = new List<Cocos2dAction>();
+    public List<Cocos2dAction> actions = new List<Cocos2dAction>();
 	
 	// Constructor
     public Cocos2dParallel(params Cocos2dAction[] action_list)

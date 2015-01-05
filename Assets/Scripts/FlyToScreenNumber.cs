@@ -1,22 +1,36 @@
-﻿public class FlyToScreenCashNumber : Actor
+﻿public class FlyToScreenNumber : Actor
 {
     // 这个是跟相机的projection matrix有关的。每次调整相机的距离可能需要调整这个参数
-    public float cashDelta;
-    public bool rotate = false;
+    public float numberDelta;
     float scaleOnScreen = 0.015f;
-    UnityEngine.Vector3 cashScreenPos;
+    UnityEngine.Vector3 numberScreenPos;
     UnityEngine.Vector3 posWhenFlyBegin;
     UnityEngine.Vector3 scaleWhenFlyBegin;
-    public void FloatUp()
+    Number numberFlyTo;
+
+    public void ToCashNumber(bool rotate)
     {
-        TutorialLevelController controller= Globals.LevelController as TutorialLevelController;
-        if (controller == null)
-        {
-            return;
-        }
-        // 钱图标的位置
-        UnityEngine.RectTransform rect_transform = controller.StealingCash.GetComponent<UnityEngine.RectTransform>();
-        cashScreenPos = new UnityEngine.Vector3(rect_transform.position.x, rect_transform.position.y, Globals.cameraFollowMagician.camera.nearClipPlane);
+        // 在教程中，TutorialThief偷东西的时候，不往界面上飞
+        TutorialLevelController controller = Globals.LevelController as TutorialLevelController;
+
+        // 金钱增量的位置
+        numberFlyTo = controller.StealingCash;
+        FlyOff(rotate);
+    }
+
+    public void ToRoseNumber(bool rotate)
+    {        
+        // 玫瑰数字的位置
+        scaleOnScreen = 0.002f;
+        numberFlyTo = Globals.canvasForMagician.RoseNumber;
+        numberDelta = 1;
+        FlyOff(rotate);
+    }
+
+    public void FlyOff(bool rotate)
+    {
+        UnityEngine.RectTransform rect_transform = numberFlyTo.GetComponent<UnityEngine.RectTransform>();
+        numberScreenPos = new UnityEngine.Vector3(rect_transform.position.x, rect_transform.position.y, Globals.cameraFollowMagician.camera.nearClipPlane);
 
         transform.parent = Globals.cameraFollowMagician.transform;
         posWhenFlyBegin = transform.localPosition;
@@ -38,8 +52,9 @@
     {
         while (true)
         {
-            UnityEngine.Vector3 destination = Globals.cameraFollowMagician.camera.ScreenToWorldPoint(cashScreenPos) - Globals.cameraFollowMagician.transform.position;
-            destination.y = -destination.y;
+            UnityEngine.Vector3 uiWorldPos = Globals.cameraFollowMagician.camera.ScreenToWorldPoint(numberScreenPos);
+            UnityEngine.Vector3 destination = Globals.cameraFollowMagician.transform.InverseTransformPoint(uiWorldPos);            
+            
             float disNow = UnityEngine.Vector3.Distance(destination, transform.localPosition);
             float dis = UnityEngine.Vector3.Distance(destination, posWhenFlyBegin);
             float disRatio = disNow / dis;
@@ -50,9 +65,13 @@
             transform.localPosition += (destination - transform.localPosition) * 0.2f;
 
             if (disNow < 0.01f)
-            {                
+            {
+                numberFlyTo.Add(numberDelta);
                 DestroyImmediate(gameObject);
-                Globals.LevelController.MagicianGotCash(cashDelta);
+                if (Globals.LevelController != null)
+                {
+                    Globals.LevelController.MagicianGotCash(numberDelta);
+                }                
                 break;
             }
             else

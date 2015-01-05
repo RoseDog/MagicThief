@@ -261,6 +261,10 @@ public class Seeker : MonoBehaviour {
 	 * \see OnPathComplete(Path,bool,bool) */
 	public void OnPathComplete (Path p) {
 		OnPathComplete (p,true,true);
+        if (this != null && GetComponent<Guard>())
+        {
+            GetComponent<Guard>().moving.PathComplete(p);
+        }        
 	}
 	
 	/** Called when a path has completed.
@@ -416,7 +420,9 @@ public class Seeker : MonoBehaviour {
 	 * 
 	 * \a callback will be called when the path has completed.
 	 * \a Callback will not be called if the path is canceled (e.g when a new path is requested before the previous one has completed) */
+    public UnityEngine.Vector3 endPositionCache;
 	public Path StartPath (Vector3 start, Vector3 end, OnPathDelegate callback, int graphMask) {
+        endPositionCache = end;
 		Path p = GetNewPath (start,end);
 		return StartPath (p, callback, graphMask);
 	}

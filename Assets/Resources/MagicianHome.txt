@@ -1,5 +1,6 @@
-﻿GuardCount=1
-(1.5000, 0.1000, -13.5000)=gargoyle
+﻿GuardCount=2
+(1.5000, 0.1000, -9.5000)=Tiger
+(-2.5000, 0.1000, -10.5000)=Guard
 randSeedCacheWhenEditLevel=-1471226901
 Z_CELLS_COUNT=6
 X_CELLS_COUNT=4

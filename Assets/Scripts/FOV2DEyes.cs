@@ -5,20 +5,13 @@ using System.Linq;
 public class FOV2DEyes : UnityEngine.MonoBehaviour
 {
 	public bool raysGizmosEnabled;
-	//public float updateRate = 0.02f;
-	public int quality = 4;
+	//public float updateRate = 0.02f;	
 	public int fovAngle = 90;
-	public float fovMaxDistance = 15;
-    public float enemyOutVisionTime = 1.0f;
+	public float fovMaxDistance = 15;    
     public UnityEngine.LayerMask cullingMask;
     public List<UnityEngine.RaycastHit> hits = new List<UnityEngine.RaycastHit>();
 
-    FOV2DVisionCone visionCone;
-
-	int numRays;
-	float currentAngle;
-    UnityEngine.Vector3 direction;
-    UnityEngine.RaycastHit hit;
+    public FOV2DVisionCone visionCone;	
 
     public Guard guard;
 	
@@ -53,7 +46,12 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
 	
 	void CastRays()
 	{
-		numRays = fovAngle * quality;
+        int numRays;
+        float currentAngle;
+        UnityEngine.Vector3 direction;
+        UnityEngine.RaycastHit hit;
+        float quality = 0.2f;
+        numRays = (int)(fovAngle * quality);
 		currentAngle = fovAngle / -2;
 		
 		hits.Clear();
@@ -70,7 +68,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
 			
 			hits.Add(hit);
 
-			currentAngle += 1f / quality;
+            currentAngle += 1f / quality;
 		}
 	}
 	
@@ -93,26 +91,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
     {
         if (other.enabled)
         {
-            guard.spot.SpotMagician(other.gameObject);
-            visionCone.status = FOV2DVisionCone.Status.Alert;
-
-            // OnTriggerEnter会反复触发，OnTriggerStay和OnTriggerExit不会触发。所以才这样写
-            if (this.IsInvoking("EnemyOutVision"))
-            {
-                this.CancelInvoke("EnemyOutVision");
-            }
-            this.Invoke("EnemyOutVision", enemyOutVisionTime);
+            guard.SpotEnemy(other.gameObject);            
         }                
-    }
-
-    public void EnemyOutVision()
-    {
-        UnityEngine.Debug.Log("magician out vision");
-        visionCone.status = FOV2DVisionCone.Status.Idle;
-		// bug, repeat invoking EnemyOutVision
-		if(guard.wandering != guard.currentAction)
-		{
-			guard.wandering.Excute();
-		}
     }    
 }

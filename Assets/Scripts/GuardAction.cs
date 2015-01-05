@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-public class GuardAction : Action 
+﻿public class GuardAction : Action 
 {
     protected Guard guard;
     public override void Awake()

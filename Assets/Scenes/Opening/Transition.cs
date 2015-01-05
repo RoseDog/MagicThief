@@ -57,7 +57,8 @@ public class Transition : UnityEngine.MonoBehaviour
         {
             callBackObj.Invoke(method, 0.0f);
             callBackObj = null;
-        }        
+        }
+        fadeOutCoroutine = null;
 	}
 
 	IEnumerator FadeIn()
@@ -77,6 +78,7 @@ public class Transition : UnityEngine.MonoBehaviour
             callBackObj.Invoke(method, 0.0f);
             callBackObj = null;
         }
+        fadeInCoroutine = null;
 	}
 
 	void DestroyCameraCoverPlane()
@@ -90,6 +92,9 @@ public class Transition : UnityEngine.MonoBehaviour
 		cookShadersObject = null;
 	}
 
+    UnityEngine.Coroutine fadeOutCoroutine;
+    UnityEngine.Coroutine fadeInCoroutine;
+
     public void BlackOut(UnityEngine.MonoBehaviour callback = null, System.String methodName = "")
 	{
         if (cookShadersObject == null)
@@ -98,10 +103,13 @@ public class Transition : UnityEngine.MonoBehaviour
         }
         Visible(true);
         current = 0.0f;
-        StopCoroutine("FadeIn");
-        StartCoroutine(FadeOut());
         callBackObj = callback;
         method = methodName;
+        if (fadeInCoroutine != null)
+        {
+            StopCoroutine(fadeInCoroutine);
+        }        
+        fadeOutCoroutine = StartCoroutine(FadeOut());        
 	}
 
     public void BlackIn(UnityEngine.MonoBehaviour callback = null, System.String methodName = "")
@@ -112,10 +120,13 @@ public class Transition : UnityEngine.MonoBehaviour
         }
         Visible(true);
 		current = fadingTime;
-		StopCoroutine("FadeOut");
-		StartCoroutine(FadeIn());
         callBackObj = callback;
         method = methodName;
+        if (fadeOutCoroutine != null)
+        {
+            StopCoroutine(fadeOutCoroutine);
+        }        
+        fadeInCoroutine = StartCoroutine(FadeIn());        
 	}
 
     public bool IsBackOutFinished()

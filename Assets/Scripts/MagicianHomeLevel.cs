@@ -21,7 +21,7 @@
     public UnityEngine.UI.Text unclickedTargetCount;
     public override void Awake()
     {        
-        mazeIniFileName = "MagicianHome";        
+        Globals.iniFileName = "MagicianHome";        
         CanvasForHome = UnityEngine.GameObject.Find("CanvasForHome");
         TipBuyHereAsHome = Globals.getChildGameObject<UIMover>(CanvasForHome, "TipBuyHereAsHome");
         UnityEngine.UI.Button chestDownBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(TipBuyHereAsHome.gameObject, "ChestDown");
@@ -41,12 +41,18 @@
         fingerImagePosCache = FingerImageToDragGuard.GetComponent<UnityEngine.RectTransform>().anchoredPosition;
         GuardFullFillHisDutyTipPrefab = UnityEngine.Resources.Load("UI/GuardFullFillHisDuty") as UnityEngine.GameObject;
         unclickedTargetCount = UnityEngine.GameObject.Find("UnclickedCount").GetComponent<UnityEngine.UI.Text>();
+        // 在TutorialLevel.InitMaze这个阶段，最开始“完整的迷宫”会闪一帧，
+        Globals.cameraFollowMagician.camera.enabled = false;
         base.Awake();
     }
     public override void MazeFinished()
     {
-        base.MazeFinished();
+        Globals.cameraFollowMagician.camera.enabled = true;
+        base.MazeFinished();        
+        cameraOffsetOnThief = Globals.cameraFollowMagician.disOffset * 0.5f;
         Globals.EnableAllInput(true);
+        Globals.canvasForMagician.RoseNumberBg.SetActive(true);
+        Globals.canvasForMagician.SetLifeVisible(false);
         Globals.maze.SetRestrictToCamera(Globals.cameraFollowMagician);
         Globals.maze.RegistGuardArrangeEvent();
         if (Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
@@ -57,8 +63,7 @@
             thief_prefab = UnityEngine.Resources.Load("Avatar/Tutorial_Thief") as UnityEngine.GameObject;
             Globals.selectGuard.EnableBtns(false);            
             foreach (Cell cell in Globals.maze.EveryCells)
-            {
-                UnityEngine.GameObject floor = cell.GetFloor();
+            {                
                 if (cell.chest != null || cell == Globals.maze.entryOfMaze)
                 {
                     cell.HideEverythingExceptFloor();
@@ -123,8 +128,8 @@
         currentThief.BtnToShowMazeBtn.onClick.AddListener(() => ShowCreateMazeBtn());
         currentThief.RetryBtn.onClick.AddListener(() => Retry());
         currentThief.MorGuardBtn.onClick.AddListener(() => MoreGuardBtnClicker());
-        // 相机聚焦到窃贼身上
-        Globals.cameraFollowMagician.MoveToPoint(thief.transform.position, cameraOffsetOnThief, Globals.cameraMoveDuration);        
+        // 相机聚焦到窃贼身上        
+        Globals.cameraFollowMagician.MoveToPoint(thief.transform.position, cameraOffsetOnThief, Globals.cameraMoveDuration);
     }    
 
     public void ShowCreateMazeBtn()
@@ -164,6 +169,10 @@
         System.Collections.Generic.List<Cocos2dAction> action_list = new System.Collections.Generic.List<Cocos2dAction>();
         foreach (Cell cell in Globals.maze.EveryCells)
         {
+            if (cell.GetFloor() == null)
+            {
+                continue;
+            }
             UnityEngine.MeshRenderer[] renderers = cell.GetComponentsInChildren<UnityEngine.MeshRenderer>();
             foreach (UnityEngine.MeshRenderer renderer in renderers)
             {
@@ -238,7 +247,7 @@
 
     public void HowToUseGuardBtnClicked()
     {
-        if (SelectGuardPanelTip.active)
+        if (SelectGuardPanelTip.activeSelf)
         {
             AddAction(new ScaleTo(SelectGuardPanelTip.transform, UnityEngine.Vector3.zero, Globals.uiMoveAndScaleDuration));
             Globals.selectGuard.EnableBtns(true);
@@ -291,13 +300,14 @@
         base.GuardDropped(guard);
     }
 
-    public override void GoldAllLost(Chest chest)
+    public override void OneChestGoldAllLost(Chest chest)
     {
         Globals.cameraFollowMagician.MoveToPoint(currentThief.transform.position, cameraOffsetOnThief, Globals.cameraMoveDuration);
         currentThief.ShowTipRetry();
         currentThief.moving.canMove = false;
-        currentThief.transform.localEulerAngles = UnityEngine.Vector3.zero;        
-        base.GoldAllLost(chest);
+        currentThief.transform.localEulerAngles = UnityEngine.Vector3.zero;
+        StopAllGuards();
+        base.OneChestGoldAllLost(chest);
     }
 
     public void Retry()
@@ -318,7 +328,7 @@
         HowToUseGuardBtnClicked();
     }
 
-    public void GuardTakeThiefDown()
+    public override void MagicianLifeOver()
     {
 		++thiefIdx;
 		UnityEngine.Debug.Log ("GuardTakeThiefDown:" + thiefIdx.ToString());
@@ -337,6 +347,7 @@
         {
             Invoke("ShowTutorialEndMsgBox", 1.0f);
         }
+        base.MagicianLifeOver();
     }    
 
     public void NextThief()
@@ -356,9 +367,9 @@
     void ShowTutorialEndMsgBox()
     {
         Globals.canvasForMagician.MessageBox("你的财产暂时安全了", () => TutorialEnd());
-		if(UnityEngine.Application.isConsolePlatform)
+		if(!UnityEngine.Application.isMobilePlatform)
 		{
-			Globals.SaveMazeIniFile(mazeIniFileName);
+			Globals.SaveMazeIniFile(Globals.iniFileName);
 		}
         
         ++Globals.TutorialLevelIdx;
@@ -374,6 +385,8 @@
     {
         Globals.selectGuard.mover.BeginMove(Globals.uiMoveAndScaleDuration);
         btnCreateMaze.BeginMove(Globals.uiMoveAndScaleDuration);
+        btnCreateMaze.GetComponent<UnityEngine.UI.Button>().onClick.RemoveAllListeners();
+        btnCreateMaze.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => ShowUpdateMazeInfo());
         ExitHomeMazeBtn.BeginMove(Globals.uiMoveAndScaleDuration);
         //进入MyMaze HomeExit上面的红点根据new targets来更新        
         Globals.UpdateUnclickedRedPointsText(unclickedTargetCount);        
@@ -384,7 +397,12 @@
         Globals.asyncLoad.ToLoadSceneAsync("City");
 
         Globals.selectGuard.mover.Goback(Globals.uiMoveAndScaleDuration);
-        btnCreateMaze.Goback(Globals.uiMoveAndScaleDuration);
+        btnCreateMaze.Goback(Globals.uiMoveAndScaleDuration);        
         ExitHomeMazeBtn.Goback(Globals.uiMoveAndScaleDuration);
+    }
+
+    public void ShowUpdateMazeInfo()
+    {
+        Globals.canvasForMagician.MessageBox("迷宫往后是可以升级的");
     }
 }

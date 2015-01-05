@@ -1,13 +1,28 @@
-﻿using System.Collections;
-
-public class GuardAttack : GuardAction 
-{
-    public float atkCd = 2.0f;
+﻿public class GuardAttack : GuardAction 
+{    
     bool isAtkCDing = false;
+
+    public override void Awake()
+    {
+        base.Awake();
+        if (!Globals.AvatarAnimationEventNameCache.Contains(guard.name + "-A"))
+        {
+            UnityEngine.AnimationEvent evt = new UnityEngine.AnimationEvent();
+            evt.functionName = "AtkEnd";
+            evt.time = guard.anim["A"].length;
+            guard.anim["A"].clip.AddEvent(evt);
+            Globals.AvatarAnimationEventNameCache.Add(guard.name + "-A");
+        }
+        Globals.Assert(guard.atkCd > guard.anim["A"].length / guard.attackSpeed);
+    }
 
     public override void Excute()
     {
         base.Excute();        
+        if (guard.alertSound)
+        {
+            guard.alertSound.AttackAlert();
+        }
         Attack();
     }
 
@@ -16,6 +31,10 @@ public class GuardAttack : GuardAction
         UnityEngine.Debug.Log("guard stop attack");
         base.Stop();
         CancelInvoke("DuringAtkIdle");
+        if (guard.alertSound)
+        {
+            guard.alertSound.StopAttackAlert();
+        }
     }
 
     void Attack()
@@ -27,7 +46,7 @@ public class GuardAttack : GuardAction
             guard.FaceTarget(guard.spot.target);
             guard.anim.CrossFade("A");
             isAtkCDing = true;
-            Invoke("AtkCDOver", atkCd);
+            Invoke("AtkCDOver", guard.atkCd);
         }
         else
         {
@@ -68,7 +87,7 @@ public class GuardAttack : GuardAction
     {
         if (guard.spot.target.GetComponent<Actor>().IsLifeOver())
         {
-            guard.eyes.EnemyOutVision();
+            guard.spot.EnemyOutVision();            
             return false;
         }
         return true;
@@ -77,7 +96,7 @@ public class GuardAttack : GuardAction
     bool checkTargetStillClose()
     {
         System.Diagnostics.Debug.Assert(guard.spot.target != null);
-        if (UnityEngine.Vector3.Distance(guard.spot.target.position, guard.transform.position) > 3)
+        if (UnityEngine.Vector3.Distance(guard.spot.target.position, guard.transform.position) > guard.atkShortestDistance)
         {
             guard.chase.Excute();
             return false;

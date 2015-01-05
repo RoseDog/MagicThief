@@ -8,7 +8,6 @@
     {        
         base.Awake();
         originPos = (transform as UnityEngine.RectTransform).anchoredPosition;
-        UnityEngine.Debug.Log(originPos);
     }
 
     public void BeginMove(float movingDuration)

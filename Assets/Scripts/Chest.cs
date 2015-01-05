@@ -112,9 +112,15 @@
                 renderer.gameObject.SetActive(false);
             }
             goldPoper.StopPop();
-            Globals.LevelController.GoldAllLost(this);
+            Globals.LevelController.OneChestGoldAllLost(this);
         }
 
+        // 在教程中，TutorialThief偷东西的时候，不生成往界面上飞的金币
+        TutorialLevelController controller = Globals.LevelController as TutorialLevelController;
+        if (controller == null)
+        {
+            return;
+        }
         if (Globals.cameraFollowMagician != null)
         {
             StartCoroutine(Coins());        
@@ -143,14 +149,13 @@
             {
                 UnityEngine.GameObject coin = UnityEngine.GameObject.Instantiate(coinPrefab) as UnityEngine.GameObject;
                 coin.transform.position = new UnityEngine.Vector3(
-                    transform.position.x + UnityEngine.Random.Range(-Globals.maze.cell_side_length / 2, Globals.maze.cell_side_length / 2),
+                    transform.position.x + UnityEngine.Random.Range(-Globals.maze.cell_side_length / 3, Globals.maze.cell_side_length / 3),
                     transform.position.y,
-                    transform.position.z + UnityEngine.Random.Range(-Globals.maze.cell_side_length / 2, Globals.maze.cell_side_length / 2));
+                    transform.position.z + UnityEngine.Random.Range(-Globals.maze.cell_side_length / 3, Globals.maze.cell_side_length / 3));
 
-                FlyToScreenCashNumber coin_fly = coin.GetComponent<FlyToScreenCashNumber>();
-                coin_fly.cashDelta = gold_every_coint;
-                coin_fly.rotate = true;
-                coin_fly.FloatUp();
+                FlyToScreenNumber coin_fly = coin.GetComponent<FlyToScreenNumber>();
+                coin_fly.numberDelta = gold_every_coint;
+                coin_fly.ToCashNumber(true);
             }
             --time;
             yield return new UnityEngine.WaitForSeconds(0.1f); 

@@ -40,7 +40,17 @@
     }
 
     void InToBuilding()
-    {        
+    {
+        // 这是FirstTarget，所以没有tip
+        if (tip == null)
+        {
+            Globals.Assert(Globals.TutorialLevelIdx == Globals.TutorialLevel.MagicianBorn);
+        }
+        else
+        {
+            Globals.iniFileName = tip.text;
+        }
+        
         Globals.asyncLoad.ToLoadSceneAsync("Tutorial_Levels");
     }
 }

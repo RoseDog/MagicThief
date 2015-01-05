@@ -270,6 +270,7 @@ namespace Pathfinding {
 				} else {
 					Error ();
 					LogError ("No open points, the start node didn't open any nodes");
+                    UnityEngine.Debug.LogError("fatal");
 					return;
 				}
 			}
@@ -324,6 +325,7 @@ while the end has not been found and no error has ocurred
 				if (runData.open.numberOfItems <= 1) {
 					Error ();
 					LogError ("No open points, whole area searched");
+                    UnityEngine.Debug.LogError("fatal");
 					return;
 				}
 				

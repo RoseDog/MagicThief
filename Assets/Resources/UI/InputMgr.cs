@@ -347,8 +347,6 @@ public class InputMgr : MonoBehaviour
     // ·§Öµ
     public float movingSpeedThreshold = 600.0f;
 
-    UnityEngine.Touch m_touch;
-
     public KeyEvent Evt_WASD;
     public KeyEvent Evt_WASD_Up;
     public KeyEvent Evt_SpaceDown;
@@ -386,7 +384,7 @@ public class InputMgr : MonoBehaviour
         {
             if (Input.touches[idx].fingerId == id)
             {
-                m_touch = Input.touches[idx];
+                //m_touch = Input.touches[idx];
                 return true;
             }
         }
@@ -576,7 +574,6 @@ public class InputMgr : MonoBehaviour
 				
 				// Find the difference in the distances between each frame.
 				float deltaMagnitudeDiff = touchDeltaMag - prevTouchDeltaMag;
-				MagicThiefCamera camera_now = null;				
 				Globals.cameraFollowMagician.SetDisScale(-deltaMagnitudeDiff * cameraPinchZoomingSpeed);
 			}
 		}

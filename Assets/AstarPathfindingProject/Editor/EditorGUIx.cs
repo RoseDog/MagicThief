@@ -569,8 +569,9 @@ public class EditorGUILayoutx {
 			Event.current.Use ();
 			//Debug.Log ("Post");
 		}
-		
-		EditorGUIUtility.LookLikeInspector();
+
+        EditorGUIUtility.labelWidth = 0;
+        EditorGUIUtility.fieldWidth = 0;
 		GUILayout.EndHorizontal ();
 		
 	}
@@ -613,8 +614,9 @@ public class EditorGUILayoutx {
 			Event.current.Use ();
 			//Debug.Log ("Post");
 		}
-		
-		EditorGUIUtility.LookLikeInspector();
+
+        EditorGUIUtility.labelWidth = 0;
+        EditorGUIUtility.fieldWidth = 0;
 		GUILayout.EndHorizontal ();
 		
 		
@@ -662,8 +664,9 @@ public class EditorGUILayoutx {
 			Event.current.Use ();
 			//Debug.Log ("Post");
 		}
-		
-		EditorGUIUtility.LookLikeInspector();
+
+        EditorGUIUtility.labelWidth = 0;
+        EditorGUIUtility.fieldWidth = 0;
 		GUILayout.EndHorizontal ();
 		
 		

@@ -45,6 +45,7 @@ public class AIPath : MonoBehaviour {
 	 * The AI will try to follow/move towards this target.
 	 * It can be a point on the ground where the player has clicked in an RTS for example, or it can be the player object in a zombie game.
 	 */
+    public UnityEngine.Vector3 targetOffset;
 	public Transform target;
 	
 	/** Enables or disables searching for paths.
@@ -225,13 +226,13 @@ public class AIPath : MonoBehaviour {
 	}
 	
 	/** Requests a path to the target */
-	public virtual void SearchPath () {
+	public virtual void SearchPath (OnPathDelegate callback = null) {
 		
-		if (target == null) { Debug.LogError ("Target is null, aborting all search"); canSearch = false; return; }
+		if (target == null) { Debug.LogWarning ("Target is null, aborting all search"); canSearch = false; return; }
 		
 		lastRepath = Time.time;
 		//This is where we should search to
-		Vector3 targetPosition = target.position;
+        Vector3 targetPosition = target.position + targetOffset;
 		
 		canSearchAgain = false;
 		
@@ -240,7 +241,7 @@ public class AIPath : MonoBehaviour {
 		//seeker.StartPath (p);
 		
 		//We should search from the current position
-		seeker.StartPath (GetFeetPosition(), targetPosition);
+        seeker.StartPath(GetFeetPosition(), targetPosition, callback);
 	}
 	
 	public virtual void OnTargetReached () {

@@ -29,12 +29,17 @@ public class GuardMoving : AIPath
     public float sleepVelocity = 0.4f;
 
     /** Speed relative to velocity with which to play animations */
-    public float animationSpeed = 0.2F;    
+    public float animationSpeed = 0.2F;
+
+    float heightOriginCache;
 
     public new void Awake()
     {
         actor = GetComponent<Actor>();
+        heightOriginCache = transform.position.y;
         base.Awake();
+
+        animation["moving"].speed = animationSpeed;
     }
 
     public new void Start()
@@ -46,7 +51,7 @@ public class GuardMoving : AIPath
     {
         return seeker;
     }
-    
+
     /** Point for the last spawn of #endOfPathEffect */
     protected UnityEngine.Vector3 lastTarget;
 
@@ -66,17 +71,17 @@ public class GuardMoving : AIPath
         return tr.position;
     }
 
-	public override void Update () 
-	{
+    public override void Update()
+    {
 
-	}
+    }
 
     public void FixedUpdate()
     {
         //Get velocity in world-space
         UnityEngine.Vector3 velocity = UnityEngine.Vector3.zero;
         if (canMove)
-        {         
+        {
             //Calculate desired velocity
             UnityEngine.Vector3 dir = CalculateVelocity(GetFeetPosition());
 
@@ -88,7 +93,7 @@ public class GuardMoving : AIPath
             {
                 controller.Move(dir);
                 velocity = controller.velocity;
-            }                        
+            }
         }
 
         if (canMove)
@@ -123,11 +128,71 @@ public class GuardMoving : AIPath
                 actor.anim.CrossFade("moving");
 
                 //Modify animation speed to match velocity
-                UnityEngine.AnimationState state = actor.anim["moving"];
+                //UnityEngine.AnimationState state = actor.anim["moving"];
+                //float speed = relVelocity.z;
+                //state.speed = speed * animationSpeed;
+            }
+                        
+//             foreach (Pathfinding.Node node in preStandNodes)
+//             {
+//                 node.walkable = true;
+//             }
+            transform.position = new UnityEngine.Vector3(transform.position.x, heightOriginCache, transform.position.z);
+        }
 
-                float speed = relVelocity.z;
-                state.speed = speed * animationSpeed;
+//         if (!bPathError)
+//         {
+//             System.Collections.Generic.List<Pathfinding.Node> nodes =
+//                 Globals.maze.pathFinder.graph.GetNodesInArea(new UnityEngine.Bounds(transform.position, new UnityEngine.Vector3(1.5f, 10.0f, 1.5f)));
+//             foreach (Pathfinding.Node node in nodes)
+//             {
+//                 node.walkable = false;
+//             }
+//             preStandNodes = nodes;
+//         }        
+    }
+    public System.Collections.Generic.List<Pathfinding.Node> preStandNodes = new System.Collections.Generic.List<Pathfinding.Node>();
+
+//    bool bPathError = false;
+    public void PathComplete(Pathfinding.Path path)
+    {
+        if (path.CompleteState == PathCompleteState.Error)
+        {
+            UnityEngine.Debug.Log("ReDoPath");
+            seeker.ReleaseClaimedPath();
+            System.Collections.Generic.List<Pathfinding.Node> nodes =
+                Globals.maze.pathFinder.graph.GetNodesInArea(new UnityEngine.Bounds(transform.position, new UnityEngine.Vector3(1.5f, 10.0f, 1.5f)));
+            foreach (Pathfinding.Node node in nodes)
+            {
+                if (node.walkable)
+                {
+                    transform.position = Globals.GetPathNodePos(node);
+                    break;
+                }
+            }
+            transform.position = GetNearestWalkableNodePosition();
+            seeker.StartPath(GetFeetPosition(), seeker.endPositionCache);
+//            bPathError = true;
+        }
+//         else
+//         {
+//             bPathError = false;
+//         }
+    }
+
+    public UnityEngine.Vector3 GetNearestWalkableNodePosition()
+    {
+        System.Collections.Generic.List<Pathfinding.Node> nodes =
+                Globals.maze.pathFinder.graph.GetNodesInArea(new UnityEngine.Bounds(transform.position, new UnityEngine.Vector3(1.5f, 10.0f, 1.5f)));
+        foreach (Pathfinding.Node node in nodes)
+        {
+            if (node.walkable)
+            {
+                return Globals.GetPathNodePos(node);
             }
         }
-    }    
+
+        Globals.Assert(false,"no walkable node nearby");
+        return transform.position;
+    }
 }

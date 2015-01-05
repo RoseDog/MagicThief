@@ -30,29 +30,7 @@ public class Cell : Actor
             
             return false; 
         }
-    }
-
-    public String GetOppositeDir(String direction)
-    {
-        if (direction == Globals.EAST)
-        {
-            return Globals.WEST;
-        }
-        else if (direction == Globals.SOUTH)
-        {
-            return Globals.NORTH;
-        }
-        else if (direction == Globals.WEST)
-        {
-            return Globals.EAST;
-        }
-        else if (direction == Globals.NORTH)
-        {
-            return Globals.SOUTH;
-        }
-
-        return "";
-    }
+    }    
 
     public Cell GetAdjacentCell(String direction)
     {
@@ -162,7 +140,7 @@ public class Cell : Actor
         if (HasAdjacentCellInDirection(direction))
         {
             Cell target = GetAdjacentCell(direction);
-            direction = GetOppositeDir(direction);
+            direction = Globals.GetOppositeDir(direction);
             UnityEngine.GameObject target_cell = target.gameObject;
             UnityEngine.GameObject wall_to_be_delete_2 = Globals.getChildGameObject(target_cell, direction);
             DestroyImmediate(wall_to_be_delete_2);
@@ -221,11 +199,11 @@ public class Cell : Actor
         if (HasAdjacentCellInDirection(direction))
         {
             Cell adjacent_cell = GetAdjacentCell(direction);
-            String adjacent_wall_dir = GetOppositeDir(direction);
+            String adjacent_wall_dir = Globals.GetOppositeDir(direction);
             CreateWall(adjacent_cell, adjacent_wall_dir);
         }
 
-        DestroyImmediate(GetFloor());
+        DestroyImmediate(GetFloor());        
     }
 
     public UnityEngine.GameObject CreateWall(Cell cell, String dir)
@@ -259,7 +237,7 @@ public class Cell : Actor
         return null;
     }
 
-    public void FloorTurnToWhile()
+    public void FloorTurnToWhite()
     {
         UnityEngine.GameObject floor = GetFloor();
         if (floor == null)
@@ -326,22 +304,24 @@ public class Cell : Actor
             }            
         }
     }
+
+    public void ShowEverythingExceptFloor()
+    {
+        UnityEngine.GameObject floor = GetFloor();
+        UnityEngine.MeshRenderer[] renderers = GetComponentsInChildren<UnityEngine.MeshRenderer>();
+        foreach (UnityEngine.MeshRenderer renderer in renderers)
+        {
+            if (renderer.gameObject != floor)
+            {
+                renderer.enabled = true;
+            }
+        }
+    }
     
 
-    void Awake()
+    public override void Awake()
     {
         visited = false;
-    }
-
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        base.Awake();
     }
 }

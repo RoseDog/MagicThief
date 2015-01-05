@@ -8,7 +8,7 @@ public class Globals
     public static bool SHOW_MACE_GENERATING_PROCESS = false;
     public static bool SHOW_ROOMS = false;
     public static float CREATE_MAZE_TIME_STEP = 0.1f;
-    public static float cameraMoveDuration = 0.2f;
+    public static float cameraMoveDuration = 1.2f;
     public static float uiMoveAndScaleDuration = 0.5f;
     public static SelectGuard selectGuard;
     public static CanvasForMagician canvasForMagician;
@@ -22,7 +22,7 @@ public class Globals
     public static Transition transition;
     public static LevelController LevelController;
     public static Magician magician;
-
+    public static System.String iniFileName = "";    
     // 以后要存到服务器上的
     public enum TutorialLevel
     {
@@ -33,7 +33,7 @@ public class Globals
         InitMaze,
         Over
     }
-	public static TutorialLevel TutorialLevelIdx = TutorialLevel.FirstFalling;
+    public static TutorialLevel TutorialLevelIdx = TutorialLevel.FirstFalling;
     public static float cashAmount;
     public static System.Collections.Generic.List<IniFile> unclickedBuildingAchives = new System.Collections.Generic.List<IniFile>();
     public static System.Collections.Generic.List<IniFile> buildingAchives = new System.Collections.Generic.List<IniFile>();
@@ -43,6 +43,7 @@ public class Globals
 
     public static System.String PosHolderKey = "PosHolder";
     public static System.String TargetBuildingDescriptionKey = "Description";
+    public static System.Collections.Generic.List<System.String> AvatarAnimationEventNameCache = new System.Collections.Generic.List<System.String>();
 
     public static void AddNewTargetBuildingAchives(System.Collections.Generic.List<IniFile> newAchives)
     {
@@ -85,11 +86,12 @@ public class Globals
         roseBuildingAchives.Add(achive);
     }
 
-    public static void Assert(bool boolean)
+    public static void Assert(bool boolean, System.String msg = "")
     {
         if (!boolean)
         {
             UnityEngine.Debug.LogError(UnityEngine.StackTraceUtility.ExtractStackTrace());
+            UnityEngine.Debug.LogError(msg);
         }
     }
 
@@ -149,7 +151,6 @@ public class Globals
     {
         guard.patrol.DestroyRouteCubes();
         LevelController.GuardDestroyed(guard);        
-        UnityEngine.Object.DestroyImmediate(guard.canvasForCommandBtns.gameObject);
         UnityEngine.Object.DestroyImmediate(guard.gameObject);
     }
 
@@ -274,5 +275,27 @@ public class Globals
         {
             redPointsText.transform.parent.gameObject.SetActive(true);
         }
+    }
+
+    public static System.String GetOppositeDir(System.String direction)
+    {
+        if (direction == Globals.EAST)
+        {
+            return Globals.WEST;
+        }
+        else if (direction == Globals.SOUTH)
+        {
+            return Globals.NORTH;
+        }
+        else if (direction == Globals.WEST)
+        {
+            return Globals.EAST;
+        }
+        else if (direction == Globals.NORTH)
+        {
+            return Globals.SOUTH;
+        }
+
+        return "";
     }
 }

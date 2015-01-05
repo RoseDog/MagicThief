@@ -418,8 +418,9 @@ public class AstarPathEditor : Editor {
 		AstarProfiler.StartProfile ("DrawMainArea");
 		
 		EditorGUI.indentLevel = 1;
-		
-		EditorGUIUtility.LookLikeInspector ();
+
+        EditorGUIUtility.labelWidth = 0;
+        EditorGUIUtility.fieldWidth = 0;
 		
 		EventType eT = Event.current.type;
 		
@@ -463,8 +464,9 @@ public class AstarPathEditor : Editor {
 		AstarProfiler.EndProfile ("Repaint");
 		
 		AstarProfiler.EndProfile ("OnInspectorGUI");
-		
-		EditorGUIUtility.LookLikeInspector ();
+
+        EditorGUIUtility.labelWidth = 0;
+        EditorGUIUtility.fieldWidth = 0;
 		//m_object.ApplyModifiedProperties ();
 	}
 	
@@ -1455,8 +1457,9 @@ public class AstarPathEditor : Editor {
 				RemoveConnection (conn);
 				return;
 			}
-			
-			EditorGUIUtility.LookLikeInspector ();
+
+            EditorGUIUtility.labelWidth = 0;
+            EditorGUIUtility.fieldWidth = 0;
 		}
 		
 		GUILayout.FlexibleSpace ();
@@ -2086,8 +2089,7 @@ public class AstarPathEditor : Editor {
 				//This flag is set to true so we can detect if the object has been reverted
 				script.astarData.hasBeenReverted = true;
 			
-				Undo.RegisterUndo (script,"A* inspector");
-				
+				Undo.RecordObject(script,"A* inspector");
 				//Assign the new data
 				script.astarData.SetData (bytes, checksum);
 				

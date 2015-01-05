@@ -1,5 +1,5 @@
 ﻿GuardCount=2
-(-6.5000, 0.1000, 0.0000)=Guard
+(-6.5000, 0.1000, 0.0000)=Tiger
 (-3.5000, 0.1000, 10.0000)=Guard
 randSeedCacheWhenEditLevel=-474763607
 Z_CELLS_COUNT=5

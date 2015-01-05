@@ -58,7 +58,8 @@
         yield return new UnityEngine.WaitForSeconds(0.3f);
         if (Next != "")
         {
-            loadingHangarOperation = UnityEngine.Application.LoadLevelAsync(Next);            
+            loadingHangarOperation = UnityEngine.Application.LoadLevelAsync(Next);
+            Globals.AvatarAnimationEventNameCache.Clear();
         }        
     }
 

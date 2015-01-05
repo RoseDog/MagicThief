@@ -300,7 +300,6 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             {
                 throw new InvalidOperationException("cell not contained in this room");
             }
-            return false;
         }
 
         public void TurnToWhite()
@@ -310,7 +309,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                 for (int z = 0; z < Z_CELLS_COUNT; ++z)
                 {
                     Cell cell = Globals.maze.GetCell(upper_left.z + z, upper_left.x + x);
-                    cell.FloorTurnToWhile();
+                    cell.FloorTurnToWhite();
                 }
             }
         }
@@ -627,7 +626,6 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                 {
                     // 放弃这个箱子
                     throw new InvalidOperationException("chest place error");
-                    continue;
                 }
                 UnityEngine.Vector2 range_x  =UnityEngine.Vector2.zero;
                 UnityEngine.Vector2 range_z = UnityEngine.Vector2.zero;
@@ -748,7 +746,15 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     }
     UnityEngine.GameObject rayCastPlane;
     void MazeProcessOver()
-    {                
+    {
+        // 如果没有地板，墙体也不需要显示出来
+        foreach (Cell cell in EveryCells)
+        {
+            if (cell.GetFloor() == null)
+            {
+                cell.HideEverythingExceptFloor();
+            }
+        }
         // 创造一个入口，找到地图最靠近东南角的走廊作为入口
         foreach (Cell corrido in CorridorCellLocations)
         {
@@ -861,13 +867,23 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     }
 
     Finger fingerDownOnMap;
-    public Guard draggingGuard;
-
+    Magician fingerDownMage;
     public bool OnChallengerFingerDown(object sender)
     {
         Finger finger = sender as Finger;
+        // 如果按到了魔术师身上，优先释放魔术
+        if (Globals.magician.Stealing && Globals.magician.currentAction == null)
+        {
+            fingerDownMage = Globals.FingerRayToObj<Magician>(Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), 11, finger);
+            if (fingerDownMage != null)
+            {
+                fingerDownMage.FingerDown(finger);
+                return true;
+            }
+        }
+
         // 如果魔术师死亡，没有出场，或者手指没有按到joystick上面
-        if (!Globals.magician.gameObject.active ||
+        if (!Globals.magician.gameObject.activeSelf ||
             (Globals.magician.currentAction == null &&
             !Globals.joystick.guiTexture.HitTest(new UnityEngine.Vector3(finger.nowPosition.x, finger.nowPosition.y)))
             )
@@ -887,6 +903,11 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 
     public bool OnChallengerFingerMoving(object sender)
     {
+        if (fingerDownMage != null)
+        {
+            fingerDownMage.FingerMoving(sender as Finger);
+        }
+
         if (fingerDownOnMap != null)
         {
             Globals.cameraFollowMagician.DragToMove(fingerDownOnMap);
@@ -898,6 +919,11 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     public bool OnChallengerFingerUp(object sender)
     {
         Finger finger = sender as Finger;
+        if (fingerDownMage != null)
+        {
+            fingerDownMage.FingerUp(finger);
+            fingerDownMage = null;
+        }
         if (finger == fingerDownOnMap)
         {
             if (Globals.magician.Stealing)
@@ -910,6 +936,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         return true;
     }
 
+    public Guard draggingGuard;
     public bool OnDragFingerDown(object sender)
     {        
         fingerDownOnMap = sender as Finger;
@@ -980,26 +1007,23 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 //		                      + UnityEngine.Vector2.Distance (fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition).ToString("f4"));
         if (draggingGuard != null)
         {
-            Pathfinding.Node node = pathFinder.GetSingleNode(draggingGuard.transform.position, false);
             draggingGuard.ShowBtns();            
             draggingGuard = null;
         }
         // 判断点击
         else if (fingerDownOnMap.timeSinceTouchBegin < 0.5f &&             
             UnityEngine.Vector2.Distance(fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition) < 10.0f)
-        {
-            // 如果点击到guard身上
-            
+        {            
             // 点击空地
             if (choosenGuard != null)
             {
                 if (choosenGuard.birthNode != null && choosenGuard.birthNode.walkable)
-                {
-					choosenGuard.Unchoose();
+                {					
                     if (Globals.LevelController != null)
                     {
                         Globals.LevelController.GuardDropped(choosenGuard);
                     }
+                    choosenGuard.Unchoose();
                 }
                 else
                 {

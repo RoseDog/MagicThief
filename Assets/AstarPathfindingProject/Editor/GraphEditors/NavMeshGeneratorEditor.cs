@@ -27,8 +27,9 @@ public class NavMeshGraphEditor : GraphEditor, ISerializableGraphEditor {
 		EditorGUILayoutx.BeginIndent ();
 		graph.rotation = EditorGUILayout.Vector3Field ("Rotation",graph.rotation);
 		EditorGUILayoutx.EndIndent ();
-		
-		EditorGUIUtility.LookLikeInspector ();
+
+        EditorGUIUtility.labelWidth = 0;
+        EditorGUIUtility.fieldWidth = 0;
 		
 		graph.scale = EditorGUILayout.FloatField (new GUIContent ("Scale","Scale of the mesh"),graph.scale);
 		graph.scale = (graph.scale < 0.01F && graph.scale > -0.01F) ? (graph.scale >= 0 ? 0.01F : -0.01F) : graph.scale;

@@ -10,7 +10,7 @@
     public LevelTip LevelTip;
     UnityEngine.UI.Button LeaveBtn;
     UnityEngine.UI.Button StealingBtn;
-    public Cash StealingCash;
+    public Number StealingCash;
     public System.Collections.Generic.List<UnityEngine.GameObject> coinsOnFloor = new System.Collections.Generic.List<UnityEngine.GameObject>();
 
     public float paperMovingDuration = 1.2f;
@@ -25,18 +25,24 @@
         LevelTip.gameObject.SetActive(false);
         StealingBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(canvasForStealingBegin, "StealingBtn");
         LeaveBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(canvasForStealingBegin, "LeaveBtn");
-        StealingCash = Globals.getChildGameObject<Cash>(canvasForStealingBegin, "StealingCash");
+        LeaveBtn.gameObject.SetActive(false);
+        StealingCash = Globals.getChildGameObject<Number>(canvasForStealingBegin, "StealingCash");
+        StealingCash.gameObject.SetActive(false);
 
         if (Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
         {
-            mazeIniFileName = "Tutorial_Level_" + Globals.TutorialLevelIdx.ToString();
+            Globals.iniFileName = "Tutorial_Level_" + Globals.TutorialLevelIdx.ToString();
         }
         else
         {
-            mazeIniFileName = "Tutorial_Level_" + Globals.TutorialLevel.Guard;
-        }
-        
-        UnityEngine.Debug.Log("map file:" + mazeIniFileName);
+            Globals.Assert(Globals.iniFileName != "");
+            if (Globals.iniFileName == "")
+            {
+                Globals.iniFileName = "扑克脸";
+            }            
+        }        
+                
+        UnityEngine.Debug.Log("map file:" + Globals.iniFileName);
     }
 
     public override void MazeFinished()
@@ -46,17 +52,15 @@
         {
             // 魔术师出场
             UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/Mage_Girl") as UnityEngine.GameObject;
-            UnityEngine.GameObject magician = UnityEngine.GameObject.Instantiate(magician_prefab) as UnityEngine.GameObject;
+            UnityEngine.GameObject.Instantiate(magician_prefab);
         }
        
         Globals.magician.transform.position = Globals.maze.entryOfMaze.GetFloorPos();
-        UnityEngine.Debug.Log(Globals.magician.transform.position.y.ToString("F4"));
         Globals.maze.RegistChallengerEvent();
 
-
         Globals.cameraFollowMagician.Reset();
-        Globals.transition.fadeColor.a = 1.0f;
-        Globals.transition.BlackIn();
+        
+        Globals.canvasForMagician.RoseNumberBg.SetActive(false);
 
         if (Globals.TutorialLevelIdx == Globals.TutorialLevel.FirstFalling)
         {
@@ -66,7 +70,8 @@
             // 禁止输入        
             Globals.EnableAllInput(false);
             // 相机就位
-            Globals.cameraFollowMagician.transform.position = Globals.magician.transform.position + Globals.magician.transform.forward * 3.0f;
+            Globals.cameraFollowMagician.transform.position = 
+                Globals.magician.transform.position + Globals.magician.transform.forward * 3.0f + new UnityEngine.Vector3(0, 0.2f, 0);
 
             // 角色落下
             MagicianFallingDown();
@@ -76,7 +81,7 @@
         {
             Globals.EnableAllInput(true);            
             Globals.canvasForMagician.RestartText.gameObject.SetActive(false);
-            Globals.canvasForMagician.lifeNumber.Reset();
+            Globals.magician.hitted.ResetLife();
 
             // 有守卫，要点了潜入才能开始
             if (Globals.maze.guards.Count != 0)
@@ -160,18 +165,17 @@
     public void OperateMagician()
     {
         if (Globals.TutorialLevelIdx == Globals.TutorialLevel.FirstFalling)
-        {
-            StealingCash.gameObject.SetActive(true);
+        {            
             Globals.transition.BlackIn();
         }
+        StealingCash.gameObject.SetActive(true);
         // 魔术师出场   
         Globals.magician.InStealing();                
     }
 
     public override void MagicianGotCash(float value)
     {
-        Invoke("LevelPassed", 0.5f);
-        StealingCash.Add(value);
+        //Invoke("LevelPassed", 0.5f);        
         base.MagicianGotCash(value);
     }
 
@@ -242,9 +246,9 @@
         {
             ++Globals.TutorialLevelIdx;
         }        
-        mazeIniFileName = "Tutorial_Level_" + Globals.TutorialLevelIdx.ToString();
-        UnityEngine.Debug.Log("map file:" + mazeIniFileName);
-        Globals.cashAmount += StealingCash.cashAmont;
+        Globals.iniFileName = "Tutorial_Level_" + Globals.TutorialLevelIdx.ToString();
+        UnityEngine.Debug.Log("map file:" + Globals.iniFileName);
+        Globals.cashAmount += StealingCash.numberAmont;
         Globals.canvasForMagician.cashNumber.SetNumber(Globals.cashAmount);
         StealingCash.SetToZero();
         UnityEngine.Debug.Log("level passed:" + Globals.cashAmount.ToString());
@@ -342,6 +346,7 @@
 
     public void Leave()
     {
+        UnityEngine.Debug.Log("back to city");
         canvasForStealingBegin.SetActive(false);
         Globals.asyncLoad.ToLoadSceneAsync("City");
     }

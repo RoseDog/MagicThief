@@ -11,19 +11,57 @@ public class Guard : Actor
     public BackToBirthCell backing;
     public UnityEngine.Canvas canvasForCommandBtns;
     public BeginPatrolBtn beginPatrolBtn;
-    public TakeGuardBack takeGuardBackBtn;
-    public FOV2DEyes eyes;
+    public TakeGuardBack takeGuardBackBtn;    
+    public FOV2DEyes[] eyes;
+    public GuardAlertSound alertSound;
+    public HeardAlert heardAlert;
+    public GoCoveringTeammate goCovering;
+    public Distraction distraction;
+    UnityEngine.Vector3 scaleCache;
+
+    [UnityEngine.HideInInspector]
+    public float magicianOutVisionTime;
+    [UnityEngine.HideInInspector]
+    public float atkCd = 2.0f;
+    [UnityEngine.HideInInspector]
+    public int attackValue = 60;
+    [UnityEngine.HideInInspector]
+    public float atkShortestDistance = 3.0f;
+    [UnityEngine.HideInInspector]
+    public float doveOutVisionTime = 1.0f;
+    [UnityEngine.HideInInspector]
+    public float attackSpeed;
+
+    UnityEngine.GameObject uiPrefab;
     public override void Awake()
     {        
+        scaleCache = transform.localScale;
         patrol = GetComponent<Patrol>();
         chase = GetComponent<Chase>();
         spot = GetComponent<Spot>();
         atk = GetComponent<GuardAttack>();
         wandering = GetComponent<WanderingLostTarget>();
-        backing = GetComponent<BackToBirthCell>();
-        eyes = GetComponentInChildren<FOV2DEyes>();
+        backing = GetComponent<BackToBirthCell>();        
+        eyes = GetComponentsInChildren<FOV2DEyes>();
+        alertSound = GetComponent<GuardAlertSound>();
+        heardAlert = GetComponent<HeardAlert>();
+        goCovering = GetComponent<GoCoveringTeammate>();
+        distraction = GetComponent<Distraction>();
         Globals.maze.guards.Add(this);
+
+        magicianOutVisionTime = 2.3f;
+        atkCd = 2.0f;
+        attackValue = 60;
+        atkShortestDistance = 3.0f;
+        doveOutVisionTime = 1.0f;
+        attackSpeed = 1.0f;
         base.Awake();
+    }
+
+    public override void Start()
+    {
+        anim["A"].speed = attackSpeed;
+        base.Start();
     }
 
     public void OnDestroy()
@@ -33,17 +71,7 @@ public class Guard : Actor
 
     public void InitArrangeUI()
     {
-        UnityEngine.GameObject prefab = UnityEngine.Resources.Load("Avatar/CanvasOnGuard") as UnityEngine.GameObject;
-        UnityEngine.GameObject obj = UnityEngine.GameObject.Instantiate(prefab) as UnityEngine.GameObject;
-        canvasForCommandBtns = obj.GetComponent<UnityEngine.Canvas>();
-        canvasForCommandBtns.worldCamera = Globals.cameraFollowMagician.camera;
-        beginPatrolBtn = obj.GetComponentInChildren<BeginPatrolBtn>();
-        beginPatrolBtn.guard = this;
-        beginPatrolBtn.patrol = patrol;
-
-        takeGuardBackBtn = obj.GetComponentInChildren<TakeGuardBack>();
-        takeGuardBackBtn.guard = this;
-        HideBtns();
+        uiPrefab = UnityEngine.Resources.Load("Avatar/CanvasOnGuard") as UnityEngine.GameObject;        
     }
 
     public void Choosen()
@@ -53,7 +81,7 @@ public class Guard : Actor
         AddAction(
                 new Cocos2dParallel(
                     new Sequence(new ScaleTo(transform, new UnityEngine.Vector3(1.6f, 1.6f, 1.6f), 0.1f),
-                        new ScaleTo(transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), 0.1f))
+                        new ScaleTo(transform, scaleCache, 0.1f))
                         )
                         );
         ShowBtns();        
@@ -79,7 +107,17 @@ public class Guard : Actor
     public void ShowBtns()
     {
         if (!isShownBtns)
-        {            
+        {
+            UnityEngine.GameObject obj = UnityEngine.GameObject.Instantiate(uiPrefab) as UnityEngine.GameObject;
+            canvasForCommandBtns = obj.GetComponent<UnityEngine.Canvas>();
+            canvasForCommandBtns.worldCamera = Globals.cameraFollowMagician.camera;
+            beginPatrolBtn = obj.GetComponentInChildren<BeginPatrolBtn>();
+            beginPatrolBtn.guard = this;
+            beginPatrolBtn.patrol = patrol;
+
+            takeGuardBackBtn = obj.GetComponentInChildren<TakeGuardBack>();
+            takeGuardBackBtn.guard = this;
+
             isShownBtns = true;            
             canvasForCommandBtns.GetComponent<Actor>().AddAction(
                 new ScaleTo(canvasForCommandBtns.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), 0.2f));            
@@ -89,12 +127,19 @@ public class Guard : Actor
     public void HideBtns()
     {
         isShownBtns = false;
-        canvasForCommandBtns.transform.localScale = UnityEngine.Vector3.zero;
+        if (canvasForCommandBtns != null)
+        {
+            Destroy(canvasForCommandBtns.gameObject);
+            canvasForCommandBtns = null;
+        }        
     }
 
     public void BeginPatrol()
     {
-        eyes.gameObject.SetActive(true);
+        foreach(FOV2DEyes eye in eyes)
+        {
+            eye.gameObject.SetActive(true);
+        }       
         patrol.RouteConfirmed();
         patrol.SetRouteCubesVisible(false);
         patrol.Excute();
@@ -102,7 +147,10 @@ public class Guard : Actor
 
     public void StopAttacking()
     {
-        eyes.gameObject.SetActive(false);
+        foreach (FOV2DEyes eye in eyes)
+        {
+            eye.gameObject.SetActive(false);
+        }
         currentAction.Stop();
         anim.CrossFade("idle");
     }
@@ -121,7 +169,11 @@ public class Guard : Actor
         else if(currentAction == chase)
         {
             atk.Excute();
-        }      
+        }
+        else if (currentAction == goCovering)
+        {
+            wandering.Excute();
+        }
     }
 
     public void FaceTarget(UnityEngine.Transform target)
@@ -223,8 +275,7 @@ public class Guard : Actor
             skinnedMeshRenderers[idx].material.SetColor("_Color", color);
         }
     }
-
-
+    
 	// Update is called once per frame
 	public override void FixedUpdate () 
     {
@@ -232,6 +283,18 @@ public class Guard : Actor
 		if (canvasForCommandBtns != null)
         {
             canvasForCommandBtns.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 1.0f, 0.0f);
-        }	    
+        }        
 	}
+
+    public virtual void SpotEnemy(UnityEngine.GameObject gameObj)
+    {
+        if (gameObj.layer == 11)
+        {
+            spot.SpotMagician(gameObj, magicianOutVisionTime, true);
+        }
+        else if (gameObj.layer == 20)
+        {
+            spot.SpotMagician(gameObj, doveOutVisionTime, true);
+        }
+    }
 }

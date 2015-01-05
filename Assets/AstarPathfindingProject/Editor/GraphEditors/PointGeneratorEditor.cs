@@ -43,7 +43,8 @@ public class PointGraphEditor : GraphEditor {
 		graph.limits = EditorGUILayout.Vector3Field ("Max Distance (axis aligned)",graph.limits);
 		EditorGUILayoutx.EndIndent ();
 #endif
-		EditorGUIUtility.LookLikeInspector ();
+        EditorGUIUtility.labelWidth = 0;
+        EditorGUIUtility.fieldWidth = 0;
 		
 		graph.raycast = EditorGUILayout.Toggle (new GUIContent ("Raycast","Use raycasting to check if connections are valid between each pair of nodes"),graph.raycast);
 		

@@ -2,9 +2,10 @@
 
 public class PathFinder : UnityEngine.MonoBehaviour
 {
-    AstarPath path;
+    public AstarPath path;
     MazeGenerate map;
     public Pathfinding.GridGraph graph;
+    public float grideNodeSize = 1.0f;
 	// Use this for initialization
 	void Awake () 
     {
@@ -24,11 +25,11 @@ public class PathFinder : UnityEngine.MonoBehaviour
     public void GenerateGridGraph()
     {
         graph = path.astarData.graphs[0] as Pathfinding.GridGraph;
-        graph.width = Globals.maze.X_CELLS_COUNT * Globals.maze.cell_side_length;
-        graph.depth = Globals.maze.Z_CELLS_COUNT * Globals.maze.cell_side_length;
+        graph.width = Globals.maze.X_CELLS_COUNT * Globals.maze.cell_side_length * (int)(1 / grideNodeSize);
+        graph.depth = Globals.maze.Z_CELLS_COUNT * Globals.maze.cell_side_length * (int)(1 / grideNodeSize);
         graph.center = new UnityEngine.Vector3(-Globals.maze.cell_side_length, -Globals.maze.cell_side_length * 0.5f, 0);
         //graph.nodeSize = map.cell_side_length / 2.0f;
-        graph.nodeSize = 1.0f;
+        graph.nodeSize = grideNodeSize;
         graph.UpdateSizeFromWidthDepth();
         path.Scan();        
     }
@@ -36,7 +37,7 @@ public class PathFinder : UnityEngine.MonoBehaviour
     public Pathfinding.Node GetSingleNode(UnityEngine.Vector3 pos, bool needWalkable)
     {
         System.Collections.Generic.List<Pathfinding.Node> nodes =
-            graph.GetNodesInArea(new UnityEngine.Bounds(pos, new UnityEngine.Vector3(1.0f, 10.0f, 1.0f)));
+            graph.GetNodesInArea(new UnityEngine.Bounds(pos, new UnityEngine.Vector3(grideNodeSize, 10.0f, grideNodeSize)));
 
         foreach (Pathfinding.Node node in nodes)
         {

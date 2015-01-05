@@ -17,9 +17,8 @@
         if (Globals.input == null)
         {
             UnityEngine.GameObject mgrs_prefab = UnityEngine.Resources.Load("GlobalMgrs") as UnityEngine.GameObject;
-            UnityEngine.GameObject mgrs = UnityEngine.GameObject.Instantiate(mgrs_prefab) as UnityEngine.GameObject;
-        }
-        Globals.input.enabled = true;
+            UnityEngine.GameObject.Instantiate(mgrs_prefab);
+        }                
 
         canvasForCity = UnityEngine.GameObject.Find("CanvasForCity");
         cityEventsOpenBtn = Globals.getChildGameObject<UIMover>(canvasForCity, "CityEventsOpenBtn");        
@@ -42,8 +41,17 @@
 
     void Start()
     {
-        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.Over)
+        // 魔术师
+        if (Globals.canvasForMagician == null)
         {
+            UnityEngine.GameObject canvas_prefab = UnityEngine.Resources.Load("CanvasForMagician") as UnityEngine.GameObject;
+            UnityEngine.GameObject.Instantiate(canvas_prefab);
+        }
+        Globals.EnableAllInput(true);
+        Globals.canvasForMagician.RoseNumberBg.SetActive(true);
+        Globals.canvasForMagician.SetLifeVisible(false);
+        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.Over)
+        {            
             firstTarget.SetActive(false);
             myMazeBuilding.SetActive(true);
 
@@ -51,16 +59,17 @@
             {
                 System.Collections.Generic.List<IniFile> newAchives = new System.Collections.Generic.List<IniFile>() { 
                     IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition1\n" + Globals.TargetBuildingDescriptionKey + "=猫眼三姐妹"), 
-                    IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition2\n" + Globals.TargetBuildingDescriptionKey + "=扑克脸")};
+                    IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition2\n" + Globals.TargetBuildingDescriptionKey + "=扑克脸"),
+                    IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition3\n" + Globals.TargetBuildingDescriptionKey + "=现金眼")};
                 Globals.AddNewTargetBuildingAchives(newAchives);
 
-                IniFile poorAchive = new IniFile();
-                poorAchive.set(Globals.PosHolderKey, "BuildingPosition4");
-                Globals.AddPoorBuildingAchives(poorAchive);
-
-                IniFile roseAchive = new IniFile();
-                roseAchive.set(Globals.PosHolderKey, "BuildingPosition3");
-                Globals.AddRoseBuilding(roseAchive);
+//                 IniFile poorAchive = new IniFile();
+//                 poorAchive.set(Globals.PosHolderKey, "BuildingPosition4");
+//                 Globals.AddPoorBuildingAchives(poorAchive);
+// 
+//                 IniFile roseAchive = new IniFile();
+//                 roseAchive.set(Globals.PosHolderKey, "BuildingPosition3");
+//                 Globals.AddRoseBuilding(roseAchive);
             }
 
             // 生成周围的目标
@@ -227,6 +236,7 @@
         if (choosenBuilding != null && building != choosenBuilding)
         {
             choosenBuilding.Unchoose();
+            choosenBuilding = null;
         }
 
         if (building != null)

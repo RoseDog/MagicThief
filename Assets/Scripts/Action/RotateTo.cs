@@ -47,7 +47,6 @@ public class RotateTo : Cocos2dAction
 		{
 			// Update rotation
             _transform.rotation = Quaternion.Euler(Vector3.Lerp(_start, _end, (Time.time - _start_time) / _duration));
-            Vector3 euler = _transform.rotation.eulerAngles;
 			// Reached target position
             if (Time.time - _start_time >= _duration)
             {

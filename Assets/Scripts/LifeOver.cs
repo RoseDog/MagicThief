@@ -5,5 +5,6 @@
         base.Excute();
         actor.OutStealing();        
         actor.anim.Play("die");
+        Globals.LevelController.MagicianLifeOver();
     }
 }

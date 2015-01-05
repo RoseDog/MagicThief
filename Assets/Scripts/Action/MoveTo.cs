@@ -90,18 +90,14 @@ public class EaseOut : Cocos2dAction
 	// parent transformer
 	private Transform _transform;
 
-    private bool _isUI = false;
-
 	// Constructor
-    public EaseOut(Transform target, Vector3 to, float duration = 1f, bool isUI = false)
+    public EaseOut(Transform target, Vector3 to, float duration = 1f)
 	{
         _transform = target;
 		// define destination point
 		_end = to;
 		// define movement duration
 		_duration = duration;
-
-        _isUI = isUI;
 	}
 	
 	// Init

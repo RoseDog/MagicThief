@@ -1,0 +1,17 @@
+﻿GuardCount=3
+(-6.5000, 0.1000, -9.0000)=Guard
+(8.5000, 0.1000, 15.0000)=Guard
+(2.5000, 0.1000, 0.0000)=Guard
+randSeedCacheWhenEditLevel=1129253511
+Z_CELLS_COUNT=7
+X_CELLS_COUNT=6
+CHANGE_DIRECTION_MODIFIER=50
+sparsenessModifier=40
+deadEndRemovalModifier=100
+noOfRoomsToPlace=3
+minRoomXCellsCount=3
+maxRoomXCellsCount=3
+minRoomZCellsCount=2
+maxRoomZCellsCount=3
+GEMS_COUNT=2
+LevelTipText=

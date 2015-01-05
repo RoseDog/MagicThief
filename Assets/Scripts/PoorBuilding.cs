@@ -19,17 +19,19 @@
 
     public override void Choosen()
     {
+        Cocos2dParallel actions = new Cocos2dParallel();
         if (helpMark.localScale.x < UnityEngine.Mathf.Epsilon)
         {
-            AddAction(new Sequence(
+            actions.actions.Add(new Sequence(
             new ScaleTo(helpMark.transform, new UnityEngine.Vector3(1.2f, 1.2f, 1.2f), Globals.uiMoveAndScaleDuration / 3),
             new ScaleTo(helpMark.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), Globals.uiMoveAndScaleDuration / 4)));
         }
 
         if (poorsNeedMoneyTip.localScale.x > UnityEngine.Mathf.Epsilon)
         {
-            AddAction(new ScaleTo(poorsNeedMoneyTip.transform, UnityEngine.Vector3.zero, Globals.uiMoveAndScaleDuration / 3));
+            actions.actions.Add(new ScaleTo(poorsNeedMoneyTip.transform, UnityEngine.Vector3.zero, Globals.uiMoveAndScaleDuration / 3));
         }
+        AddAction(actions);
         base.Choosen();
     }
 

@@ -1,5 +1,3 @@
-using System.Collections;
-
 public class Magician : Actor
 {
     public bool isMoving;    
@@ -14,12 +12,14 @@ public class Magician : Actor
     public Escape escape;
     public Victory victory;
     public Falling falling;
+    public Incant incant;
     public override void Awake()
     {
         base.Awake();
         escape = GetComponent<Escape>();
         victory = GetComponent<Victory>();
         falling = GetComponent<Falling>();
+        incant = GetComponent<Incant>();
         gameObject.name = "Mage_Girl";
         UnityEngine.GameObject uiPrefab = UnityEngine.Resources.Load("UI/UI") as UnityEngine.GameObject;
         UnityEngine.GameObject ui = Instantiate(uiPrefab) as UnityEngine.GameObject;
@@ -154,5 +154,29 @@ public class Magician : Actor
         {
             skinnedMeshRenderers[idx].material.shader = UnityEngine.Shader.Find("Diffuse");            
         }
+    }
+
+    public void FingerDown(Finger finger)
+    {
+        if (currentAction == null && incant.dove == null)
+        {
+            incant.FingerDown(finger);
+        }
+    }
+
+    public void FingerMoving(Finger finger)
+    {
+        if (currentAction == incant)
+        {
+            incant.FingerMoving(finger);
+        }        
+    }
+
+    public void FingerUp(Finger finger)
+    {
+        if (currentAction == incant)
+        {
+            incant.FingerUp(finger);
+        }       
     }
 }

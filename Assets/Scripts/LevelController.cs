@@ -1,7 +1,6 @@
 ﻿public class LevelController : Actor
 {
-    public int randomSeed;
-    protected System.String mazeIniFileName = "";    
+    public int randomSeed;    
     public override void Awake()
     {
         base.Awake();
@@ -10,7 +9,7 @@
 
     public virtual void BeforeGenerateMaze()
     {
-        Globals.ReadMazeIniFile(mazeIniFileName);        
+        Globals.ReadMazeIniFile(Globals.iniFileName);        
     }
 
     public virtual void MazeFinished()
@@ -19,14 +18,14 @@
         if (Globals.cameraFollowMagician == null)
         {
             UnityEngine.GameObject camera_follow_prefab = UnityEngine.Resources.Load("CameraFollowMagician") as UnityEngine.GameObject;
-            UnityEngine.GameObject camera_follow = UnityEngine.GameObject.Instantiate(camera_follow_prefab) as UnityEngine.GameObject;
+            UnityEngine.GameObject.Instantiate(camera_follow_prefab);
         }
         Globals.maze.SetRestrictToCamera(Globals.cameraFollowMagician);
 
-        if (mazeIniFileName != "")
+        if (Globals.iniFileName != "")
         {
-            UnityEngine.Debug.Log(mazeIniFileName);
-            IniFile ini = new IniFile(mazeIniFileName);
+            UnityEngine.Debug.Log(Globals.iniFileName);
+            IniFile ini = new IniFile(Globals.iniFileName);
             // 关卡守卫               
             int guard_count = ini.get("GuardCount", 0);
             System.String[] keys = ini.keys();
@@ -49,8 +48,11 @@
         if (Globals.canvasForMagician == null)
         {
             UnityEngine.GameObject canvas_prefab = UnityEngine.Resources.Load("CanvasForMagician") as UnityEngine.GameObject;
-            UnityEngine.GameObject canvas = UnityEngine.GameObject.Instantiate(canvas_prefab) as UnityEngine.GameObject;
-        }        
+            UnityEngine.GameObject.Instantiate(canvas_prefab);
+        }
+
+        Globals.transition.fadeColor.a = 1.0f;
+        Globals.transition.BlackIn();
 	}
 
     bool levelPassed = false;
@@ -99,7 +101,7 @@
 
     public virtual void MagicianLifeOver()
     {
-        Globals.magician.lifeOver.Excute();
+        
     }
 
     public virtual void GuardCreated(Guard guard)
@@ -115,12 +117,12 @@
 
     }
 
-    public virtual void GoldAllLost(Chest chest)
+    public virtual void OneChestGoldAllLost(Chest chest)
     {
-        StopAllGuards();
+        
     }
 
-    void StopAllGuards()
+    public void StopAllGuards()
     {
         foreach (Guard guard in Globals.maze.guards)
         {

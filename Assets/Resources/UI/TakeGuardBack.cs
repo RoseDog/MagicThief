@@ -12,6 +12,7 @@ public class TakeGuardBack : MonoBehaviour
 
     public void btnClicked()
     {
+        guard.HideBtns();
         Globals.DestroyGuard(guard);        
     }
 }

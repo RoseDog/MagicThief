@@ -2,13 +2,16 @@
 {
     UnityEngine.RectTransform peopleGivesYouRose;
     UnityEngine.RectTransform roseBtn;
+    UnityEngine.GameObject rose3d_prefab;
     public override void Awake()
     {
         base.Awake();
         peopleGivesYouRose = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "PeopleGivesYouRose");
         peopleGivesYouRose.localScale = UnityEngine.Vector3.zero;
         roseBtn = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "Rose");
-        roseBtn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => RoseClicked());        
+        roseBtn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => RoseClicked());
+
+        rose3d_prefab = UnityEngine.Resources.Load("Props/Rose3d") as UnityEngine.GameObject;
     }
 
     public override void Choosen()
@@ -30,6 +33,8 @@
 
     public void RoseClicked()
     {
-        Choosen();
+        UnityEngine.GameObject rose3d = UnityEngine.GameObject.Instantiate(rose3d_prefab) as UnityEngine.GameObject;
+        rose3d.transform.position = roseBtn.transform.position;
+        rose3d.GetComponent<FlyToScreenNumber>().ToRoseNumber(false);
     }
 }

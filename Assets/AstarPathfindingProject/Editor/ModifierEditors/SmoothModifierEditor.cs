@@ -12,8 +12,9 @@ public class SmoothModifierEditor : Editor {
 		SimpleSmoothModifier ob = target as SimpleSmoothModifier;
 		
 		ob.smoothType = (SimpleSmoothModifier.SmoothType)EditorGUILayout.EnumPopup (new GUIContent ("Smooth Type"),ob.smoothType);
-		
-		EditorGUIUtility.LookLikeInspector ();
+
+        EditorGUIUtility.labelWidth = 0;
+        EditorGUIUtility.fieldWidth = 0;
 		
 		if (ob.smoothType == SimpleSmoothModifier.SmoothType.Simple) {
 			

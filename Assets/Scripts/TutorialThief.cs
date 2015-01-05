@@ -62,25 +62,7 @@
     {
         ClearRouteCubes();
         targetChest = chest;
-        
-        moving.GetSeeker().StartPath(moving.GetFeetPosition(), targetChest.transform.position);
-
-        moving.canMove = false;
-        System.Collections.Generic.List<UnityEngine.Vector3> path = moving.GetSeeker().GetCurrentPath().vectorPath;
-        float nodeSize = Globals.maze.pathFinder.graph.nodeSize;
-        UnityEngine.Debug.Log(path.Count);
-        foreach (UnityEngine.Vector3 pos in path)
-        {
-            // 生成表示行走区域的方块
-            UnityEngine.GameObject cube = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
-            cube.transform.localScale = new UnityEngine.Vector3(nodeSize, 0.5f, nodeSize);
-            cube.transform.position = pos;
-
-            UnityEngine.MeshRenderer meshRenderer = cube.GetComponentInChildren<UnityEngine.MeshRenderer>();
-            meshRenderer.material.SetColor("_Color", UnityEngine.Color.red);
-
-            cubes.Add(cube);
-        }
+        ShowPathToPoint(targetChest.transform.position);               
     }
 
     void ClearRouteCubes()
@@ -95,14 +77,14 @@
     public override void InStealing()
     {
         base.InStealing();
+        HidePath();
         moving.canMove = true;
     }
 
     public override void OutStealing()
     {
         ClearRouteCubes();
-        moving.canMove = false;
-        (Globals.LevelController as MagicianHomeLevel).GuardTakeThiefDown();
+        moving.canMove = false;        
         base.OutStealing();
     }
 }

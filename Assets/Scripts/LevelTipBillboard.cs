@@ -1,10 +1,11 @@
 ﻿public class LevelTipBillboard : Actor
 {
     UnityEngine.RectTransform LevelTipCanvas;
-    void Start()
+    public override void Start()
     {
         LevelTipCanvas = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "LevelTipCanvas");
         LevelTipCanvas.transform.localScale = UnityEngine.Vector3.zero;
+        base.Start();
     }
 
     void OnTriggerEnter(UnityEngine.Collider other)

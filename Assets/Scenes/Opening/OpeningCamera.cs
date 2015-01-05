@@ -5,7 +5,8 @@
     void Awake()
     {
         UnityEngine.GameObject mgrs_prefab = UnityEngine.Resources.Load("GlobalMgrs") as UnityEngine.GameObject;
-        UnityEngine.GameObject mgrs = UnityEngine.GameObject.Instantiate(mgrs_prefab) as UnityEngine.GameObject;
+        UnityEngine.GameObject.Instantiate(mgrs_prefab);
+        //UnityEngine.Screen.SetResolution(332, 589, false);
     }
 	// Use this for initialization
 	void Start () 
@@ -45,6 +46,7 @@
 
     public void GameBegin()
     {
+        canvasForLogin.SetActive(false);
         Globals.asyncLoad.ToLoadSceneAsync("Tutorial_Levels");
     }
 }

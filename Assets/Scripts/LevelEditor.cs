@@ -2,14 +2,16 @@
 {
     public override void BeforeGenerateMaze()
     {
-        if (Globals.maze.IniFileNameForEditor == "")
+        // 如果没有iniFile，生成新的迷宫        
+        if (!System.IO.File.Exists(UnityEngine.Application.dataPath + "/Resources/" + Globals.maze.IniFileNameForEditor + ".txt"))
         {
             Globals.maze.randSeedCacheWhenEditLevel = UnityEngine.Random.seed;
             UnityEngine.Random.seed = Globals.maze.randSeedCacheWhenEditLevel;
         }
+        // 如果有，就读文件
         else
         {
-            mazeIniFileName = Globals.maze.IniFileNameForEditor;
+            Globals.iniFileName = Globals.maze.IniFileNameForEditor;
             base.BeforeGenerateMaze();
         }        
     }
