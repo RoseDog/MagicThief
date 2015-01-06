@@ -20,29 +20,18 @@ public class Magician : Actor
         victory = GetComponent<Victory>();
         falling = GetComponent<Falling>();
         incant = GetComponent<Incant>();
-        gameObject.name = "Mage_Girl";
-        UnityEngine.GameObject uiPrefab = UnityEngine.Resources.Load("UI/UI") as UnityEngine.GameObject;
-        UnityEngine.GameObject ui = Instantiate(uiPrefab) as UnityEngine.GameObject;
-        battleUI = ui.GetComponent<BattleUI>();
-        battleUI.magician = this;
-        battleUI.Prepare();        
+        gameObject.name = "Mage_Girl";              
         Globals.magician = this;
     }
 
     public void RegistEvent()
     {
-        battleUI.joystick.Evt_FirstMove += beginMoving;
-        battleUI.joystick.Evt_BtnDown += beginMoving;
-        battleUI.joystick.Evt_Moving += beginMoving;
-        battleUI.joystick.Evt_BtnUp += stopMoving;
+        
     }
 
     public void UnRegistEvent()
     {
-        battleUI.joystick.Evt_FirstMove -= beginMoving;
-        battleUI.joystick.Evt_BtnDown -= beginMoving;
-        battleUI.joystick.Evt_Moving -= beginMoving;
-        battleUI.joystick.Evt_BtnUp -= stopMoving;
+        
     }
 
     public bool beginMoving(string value)
@@ -139,7 +128,6 @@ public class Magician : Actor
     {
         base.OutStealing();
         UnRegistEvent();                
-        Globals.joystick.MannullyActive(false);
         Globals.cameraFollowMagician.MoveToPoint(
             transform.position + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f),
             new UnityEngine.Vector3(Globals.cameraFollowMagician.disOffset.x * 0.7f,

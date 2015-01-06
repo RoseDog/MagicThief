@@ -5,7 +5,11 @@ public class PathFinder : UnityEngine.MonoBehaviour
     public AstarPath path;
     MazeGenerate map;
     public Pathfinding.GridGraph graph;
-    public float grideNodeSize = 1.0f;
+    float grideNodeSize = 0.5f;
+    public float GetGrideNodeSize()
+    {
+        return grideNodeSize;
+    }
 	// Use this for initialization
 	void Awake () 
     {
@@ -25,9 +29,9 @@ public class PathFinder : UnityEngine.MonoBehaviour
     public void GenerateGridGraph()
     {
         graph = path.astarData.graphs[0] as Pathfinding.GridGraph;
-        graph.width = Globals.maze.X_CELLS_COUNT * Globals.maze.cell_side_length * (int)(1 / grideNodeSize);
-        graph.depth = Globals.maze.Z_CELLS_COUNT * Globals.maze.cell_side_length * (int)(1 / grideNodeSize);
-        graph.center = new UnityEngine.Vector3(-Globals.maze.cell_side_length, -Globals.maze.cell_side_length * 0.5f, 0);
+        graph.width = Globals.maze.X_CELLS_COUNT * Globals.maze.GetCellSideLength() * (int)(1 / grideNodeSize);
+        graph.depth = Globals.maze.Z_CELLS_COUNT * Globals.maze.GetCellSideLength() * (int)(1 / grideNodeSize);
+        graph.center = new UnityEngine.Vector3(-Globals.maze.GetCellSideLength(), -Globals.maze.GetCellSideLength() * 0.5f, 0);
         //graph.nodeSize = map.cell_side_length / 2.0f;
         graph.nodeSize = grideNodeSize;
         graph.UpdateSizeFromWidthDepth();

@@ -4,8 +4,11 @@ using System.Collections.Generic;
 
 public class MazeGenerate : UnityEngine.MonoBehaviour
 {
-    [UnityEngine.HideInInspector]
-    public int cell_side_length = 5;
+    int cell_side_length = 7;
+    public int GetCellSideLength()
+    {
+        return cell_side_length;
+    }
     [UnityEngine.HideInInspector]
     public int randSeedCacheWhenEditLevel;    
 
@@ -611,6 +614,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 
     void PlaceChests()
     {
+        return;
         UnityEngine.GameObject chest_prefab = UnityEngine.Resources.Load("Props/Chest") as UnityEngine.GameObject;
         for (int idx = 0; idx < rooms.Count;++idx)
         {
@@ -700,6 +704,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                     UnityEngine.Vector3 gem_pos = corrido.GetFloorPos() + 
                         new UnityEngine.Vector3(UnityEngine.Random.Range(-cell_side_length / 3.0f, cell_side_length / 3.0f), 0.9f, UnityEngine.Random.Range(-cell_side_length / 3.0f, cell_side_length / 3.0f));
                     gem.transform.position = gem_pos;
+                    gem.gameObject.name = "Gem" + gemHolders.Count.ToString();
                     gemHolders.Add(gem);
                     --gemsToPlace;
                     if (gemsToPlace == 0)
@@ -843,9 +848,9 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             finger.Evt_Up -= OnDragFingerUp;
         }        
     }
-
+    
     public void RegistChallengerEvent()
-    {
+    {                
         for (int idx = 0; idx < 1; ++idx)
         {
             Finger finger = Globals.input.GetFingerByID(idx);
@@ -882,16 +887,12 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             }
         }
 
-        // 如果魔术师死亡，没有出场，或者手指没有按到joystick上面
-        if (!Globals.magician.gameObject.activeSelf ||
-            (Globals.magician.currentAction == null &&
-            !Globals.joystick.guiTexture.HitTest(new UnityEngine.Vector3(finger.nowPosition.x, finger.nowPosition.y)))
-            )
+        // 如果魔术师死亡，没有出场
+        if (!Globals.magician.gameObject.activeSelf || Globals.magician.currentAction == null)
         {
             // 相机不跟随，允许拖动
             fingerDownOnMap = finger;
             Globals.cameraFollowMagician.pauseFollowing = true;
-            Globals.joystick.MannullyActive(false);
         }
         else
         {
@@ -926,14 +927,94 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         }
         if (finger == fingerDownOnMap)
         {
-            if (Globals.magician.Stealing)
+            if (!Globals.magician.Stealing)
             {
-                Globals.joystick.MannullyActive(true);
+                // 点击地板
+                if (fingerDownOnMap.timeSinceTouchBegin < 0.5f &&
+                    UnityEngine.Vector2.Distance(fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition) < 10.0f)
+                {
+                    UnityEngine.RaycastHit hitInfo;
+                    int layermask = 1 << 9;
+                    UnityEngine.Ray ray = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().ScreenPointToRay(fingerDownOnMap.nowPosition);
+                    if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
+                    {
+                        Pathfinding.Node node = pathFinder.GetSingleNode(hitInfo.point, true);
+                        if (node != null)
+                        {
+                            TutorialLevelController controller = (Globals.LevelController as TutorialLevelController);
+                            controller.landingMark.SetActive(true);
+                            controller.landingMark.transform.position = hitInfo.point;
+                            Globals.Assert(tempGems.Count == 0);
+                            tempGems.AddRange(gemHolders);
+                            gemsSequence.Clear();
+                            tempPathes.Clear();
+                            foreach(UnityEngine.GameObject number in sequenceNumbers)
+                            {
+                                DestroyObject(number);
+                            }
+                            sequenceNumbers.Clear();
+                            FindNearestGem(controller.landingMark.transform.position);                            
+                        }                        
+                    }
+                }
             }            
         }
 
         fingerDownOnMap = null;
         return true;
+    }
+
+    System.Collections.Generic.List<UnityEngine.GameObject> tempGems = new System.Collections.Generic.List<UnityEngine.GameObject>();
+    System.Collections.Generic.List<Pathfinding.Path> tempPathes = new System.Collections.Generic.List<Pathfinding.Path>();
+    System.Collections.Generic.List<UnityEngine.GameObject> gemsSequence = new System.Collections.Generic.List<UnityEngine.GameObject>();
+    System.Collections.Generic.List<UnityEngine.GameObject> sequenceNumbers = new System.Collections.Generic.List<UnityEngine.GameObject>();
+    void FindNearestGem(UnityEngine.Vector3 pathBeginPos)
+    {
+        for (ushort idx = 0; idx < tempGems.Count; ++idx)
+        {
+            UnityEngine.GameObject gem = tempGems[idx];
+            Pathfinding.Path p = Pathfinding.ABPath.Construct(pathBeginPos, gem.transform.position, null);
+            p.callback += OnPathToGemComplete;
+            p.gem = gem;
+            AstarPath.StartPath(p);
+        }
+    }
+
+    void OnPathToGemComplete(Pathfinding.Path p)
+    {
+        tempPathes.Add(p);
+        if (tempPathes.Count == tempGems.Count)
+        {
+            float shortest = UnityEngine.Mathf.Infinity;
+            UnityEngine.GameObject nearestGem = null;
+            for(int idx = 0; idx < tempPathes.Count; ++idx)
+            {
+                Pathfinding.Path path = tempPathes[idx];
+                float length = path.GetTotalLength();
+                if (length < shortest)
+                {
+                    shortest = length;
+                    nearestGem = path.gem;
+                }
+            }
+            tempGems.Remove(nearestGem);
+            gemsSequence.Add(nearestGem);
+            // 路径以全部生成，标记出数字
+            if (gemsSequence.Count == gemHolders.Count)
+            {
+                for (int idx = 0; idx < gemsSequence.Count; ++idx)
+                {
+                    UnityEngine.GameObject gem = gemsSequence[idx];
+                    UnityEngine.GameObject number_prefab = UnityEngine.Resources.Load("UI/TargetNumber") as UnityEngine.GameObject;
+                    UnityEngine.GameObject number = UnityEngine.GameObject.Instantiate(number_prefab) as UnityEngine.GameObject;
+                    number.transform.position = gem.transform.position + new UnityEngine.Vector3(0,1,0);
+                    number.GetComponentInChildren<UnityEngine.UI.Text>().text = idx.ToString();
+                    sequenceNumbers.Add(number);
+                }
+            }
+            tempPathes.Clear();
+            FindNearestGem(nearestGem.transform.position);
+        }
     }
 
     public Guard draggingGuard;

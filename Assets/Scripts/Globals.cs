@@ -14,9 +14,8 @@ public class Globals
     public static CanvasForMagician canvasForMagician;
     public static PathFinder pathFinder;
     public static InputMgr input;
-    public static CameraFollow cameraFollowMagician;
+    public static MagicThiefCamera cameraFollowMagician;
     public static MazeGenerate maze;    
-    public static Joystick joystick;
     public static AsyncLoad asyncLoad;
     public static TipDisplayManager tipDisplay;
     public static Transition transition;
@@ -33,7 +32,7 @@ public class Globals
         InitMaze,
         Over
     }
-    public static TutorialLevel TutorialLevelIdx = TutorialLevel.FirstFalling;
+    public static TutorialLevel TutorialLevelIdx = TutorialLevel.Over;
     public static float cashAmount;
     public static System.Collections.Generic.List<IniFile> unclickedBuildingAchives = new System.Collections.Generic.List<IniFile>();
     public static System.Collections.Generic.List<IniFile> buildingAchives = new System.Collections.Generic.List<IniFile>();
@@ -190,11 +189,6 @@ public class Globals
         if (canvasForMagician != null)
         {
             canvasForMagician.gameObject.SetActive(enabled);
-        }
-
-        if (joystick != null)
-        {
-            joystick.MannullyActive(enabled);
         }        
         input.enabled = enabled;
     }

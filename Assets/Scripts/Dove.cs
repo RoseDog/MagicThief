@@ -12,7 +12,7 @@
     System.String flyingDir;
     public void ShowFlyPath(UnityEngine.Vector3 dir, float flyDistance)
     {
-        float nodeSize = Globals.maze.pathFinder.grideNodeSize;
+        float nodeSize = Globals.maze.pathFinder.GetGrideNodeSize();
         dir.Normalize();
 
         // 如果魔术师站在一个unwalkable node上释放鸽子，需要找到一个最近的walkable node开始寻路

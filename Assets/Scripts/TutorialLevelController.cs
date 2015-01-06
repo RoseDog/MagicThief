@@ -9,11 +9,16 @@
     public UnityEngine.GameObject canvasForStealingBegin;
     public LevelTip LevelTip;
     UnityEngine.UI.Button LeaveBtn;
-    UnityEngine.UI.Button StealingBtn;
     public Number StealingCash;
     public System.Collections.Generic.List<UnityEngine.GameObject> coinsOnFloor = new System.Collections.Generic.List<UnityEngine.GameObject>();
 
     public float paperMovingDuration = 1.2f;
+
+    UnityEngine.Vector3 camOffsetInStealing = new UnityEngine.Vector3(6, 8, -7);
+    UnityEngine.Vector3 camOffsetInSpy = new UnityEngine.Vector3(6, 40, -7);
+
+    UnityEngine.GameObject mark_prefab;
+    public UnityEngine.GameObject landingMark;
 
     public override void Awake()
     {
@@ -23,7 +28,6 @@
         canvasForStealingBegin = UnityEngine.GameObject.Find("CanvasForStealingBegin") as UnityEngine.GameObject;
         LevelTip = Globals.getChildGameObject<LevelTip>(canvasForStealingBegin, "LevelTip");
         LevelTip.gameObject.SetActive(false);
-        StealingBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(canvasForStealingBegin, "StealingBtn");
         LeaveBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(canvasForStealingBegin, "LeaveBtn");
         LeaveBtn.gameObject.SetActive(false);
         StealingCash = Globals.getChildGameObject<Number>(canvasForStealingBegin, "StealingCash");
@@ -38,11 +42,22 @@
             Globals.Assert(Globals.iniFileName != "");
             if (Globals.iniFileName == "")
             {
-                Globals.iniFileName = "扑克脸";
+                Globals.iniFileName = "KaitoKid";
             }            
         }        
                 
         UnityEngine.Debug.Log("map file:" + Globals.iniFileName);
+
+
+        mark_prefab = UnityEngine.Resources.Load("UI/LandingPositionMark") as UnityEngine.GameObject;
+        landingMark = UnityEngine.GameObject.Instantiate(mark_prefab) as UnityEngine.GameObject;
+        UnityEngine.UI.Button markBtn = landingMark.GetComponentInChildren<UnityEngine.UI.Button>();
+        markBtn.onClick.AddListener(() => MagicianFallingDown());        
+        markBtn.GetComponent<Actor>().AddAction(
+            new RotateTo(
+                new UnityEngine.Vector3(90.0f, 0.0f, 0.0f), 
+                new UnityEngine.Vector3(90.0f, 360.0f, 0.0f), 3.0f, true));
+        landingMark.SetActive(false);
     }
 
     public override void MazeFinished()
@@ -64,6 +79,7 @@
 
         if (Globals.TutorialLevelIdx == Globals.TutorialLevel.FirstFalling)
         {
+            Globals.cameraFollowMagician.disOffset = camOffsetInStealing;
             // 隐藏界面            
             StealingCash.gameObject.SetActive(false);
 
@@ -83,19 +99,18 @@
             Globals.canvasForMagician.RestartText.gameObject.SetActive(false);
             Globals.magician.hitted.ResetLife();
 
+            Globals.cameraFollowMagician.disOffset = camOffsetInSpy;
+
             // 有守卫，要点了潜入才能开始
             if (Globals.maze.guards.Count != 0)
             {
                 Globals.canvasForMagician.SetLifeVisible(true);
-                StealingBtn.gameObject.SetActive(true);
                 Globals.magician.gameObject.SetActive(false);
-                Globals.joystick.MannullyActive(false);
             }
             // 没有守卫，不需要潜入按钮，直接开始
             else
             {
                 Globals.canvasForMagician.SetLifeVisible(false);
-                StealingBtn.gameObject.SetActive(false);
                 // 主角降下          
                 MagicianFallingDown();
             }
@@ -113,16 +128,18 @@
 
     public virtual void MagicianFallingDown()
     {
-        StealingBtn.gameObject.SetActive(false);
         LeaveBtn.gameObject.SetActive(false);
         Globals.magician.gameObject.SetActive(true);
+        if(landingMark.activeSelf)
+        {
+            Globals.magician.transform.position = landingMark.transform.position;
+        }        
         if (Globals.TutorialLevelIdx != Globals.TutorialLevel.FirstFalling)
         {
             // 相机跟随                    
-            Globals.cameraFollowMagician.beginFollow(Globals.magician.transform);            
+            Globals.cameraFollowMagician.beginFollow(Globals.magician.transform);
+            Globals.cameraFollowMagician.MoveToPoint(Globals.magician.transform.position, camOffsetInStealing, 1.0f);
         }
-
-        Globals.joystick.MannullyActive(false);
 
         // 主角降下     
         Globals.magician.falling.from = Globals.magician.transform.position + posOnSky;

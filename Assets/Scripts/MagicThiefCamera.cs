@@ -12,10 +12,14 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
     public UnityEngine.Vector2 restriction_x = new UnityEngine.Vector2(-5, 5);
     public UnityEngine.Vector2 restriction_z = new UnityEngine.Vector2(-5, 5);
 
+    public bool pauseFollowing = false;
+    UnityEngine.Transform target;            
+
     public virtual void Awake()
     {
         lookAtCache = lookAt;
         disOffsetCache = disOffset;
+        Globals.cameraFollowMagician = this;
     }
 
     public void Reset()
@@ -23,6 +27,15 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
         enabled = true;
         lookAt = lookAtCache;
         disOffset = disOffsetCache;
+        dragCamSpeed = 0.06f;
+    }
+
+    public void beginFollow(UnityEngine.Transform tar)
+    {
+        enabled = true;
+        pauseFollowing = false;
+        target = tar;
+        dragCamSpeed = 0.02f;
     }
 
     public UnityEngine.Vector3 GetHorForward()
@@ -118,6 +131,15 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
 
     public virtual void Update()
     {
+        if (target != null)
+        {
+            if (!pauseFollowing)
+            {
+                lookAt = target.position;
+                lookAt = RestrictPosition(lookAt);
+            }
+        }
+
         if (bStaring)
         {
             transform.LookAt(Globals.magician.transform.position + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f));           

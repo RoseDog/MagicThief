@@ -25,7 +25,6 @@ public class Joystick : Button
         pad = GetComponentInChildren<StickPad>();
         originalRect = guiTexture.pixelInset;
         ResetGUI();
-        Globals.joystick = this;
     }
 
 	void MoveStick()

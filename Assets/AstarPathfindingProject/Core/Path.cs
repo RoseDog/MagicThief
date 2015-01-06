@@ -9,6 +9,7 @@ using System.Collections.Generic;
 namespace Pathfinding {
 	/** Base class for all path types */
 	public abstract class Path {
+        public GameObject gem;
 	
 #if ASTAR_POOL_DEBUG
 		private string pathTraceInfo = "";

@@ -29,7 +29,6 @@
         actor.anim["A_Attack_2"].time = 0.0f;
         actor.anim["A_Attack_2"].speed = 0;
         actor.anim.Play("A_Attack_2");
-        Globals.joystick.MannullyActive(false);
 
         dove = (UnityEngine.GameObject.Instantiate(dovePrefab) as UnityEngine.GameObject).GetComponent<Dove>();
         dove.transform.position = new UnityEngine.Vector3(actor.transform.position.x, 
@@ -103,7 +102,6 @@
 
     public void IncantOver()
     {
-        Globals.joystick.MannullyActive(true);
         Stop();
     }
 }
