@@ -12,8 +12,7 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
     public UnityEngine.Vector2 restriction_x = new UnityEngine.Vector2(-5, 5);
     public UnityEngine.Vector2 restriction_z = new UnityEngine.Vector2(-5, 5);
 
-    public bool pauseFollowing = false;
-    UnityEngine.Transform target;            
+    public UnityEngine.Transform target;            
 
     public virtual void Awake()
     {
@@ -27,17 +26,14 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
         enabled = true;
         lookAt = lookAtCache;
         disOffset = disOffsetCache;
-        dragCamSpeed = 0.06f;
+        SetDragSpeed(0.06f);
     }
 
-    public void beginFollow(UnityEngine.Transform tar)
+    public void SetDragSpeed(float speed)
     {
-        enabled = true;
-        pauseFollowing = false;
-        target = tar;
-        dragCamSpeed = 0.02f;
+        dragCamSpeed = speed;
     }
-
+    
     public UnityEngine.Vector3 GetHorForward()
     {
         UnityEngine.Vector3 cameraHorForward = transform.forward;
@@ -130,22 +126,18 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
     }
 
     public virtual void Update()
-    {
-        if (target != null)
-        {
-            if (!pauseFollowing)
-            {
-                lookAt = target.position;
-                lookAt = RestrictPosition(lookAt);
-            }
-        }
-
+    {        
         if (bStaring)
         {
             transform.LookAt(Globals.magician.transform.position + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f));           
         }
         else
-        {            
+        {
+            if (target != null)
+            {
+                lookAt = target.position;
+                lookAt = RestrictPosition(lookAt);
+            }
             transform.position = lookAt + disOffset * disScale;
             transform.LookAt(lookAt);
         }        

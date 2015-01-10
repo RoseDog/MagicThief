@@ -10,12 +10,13 @@
     public LevelTip LevelTip;
     UnityEngine.UI.Button LeaveBtn;
     public Number StealingCash;
+    UIMover TricksPanel;
     public System.Collections.Generic.List<UnityEngine.GameObject> coinsOnFloor = new System.Collections.Generic.List<UnityEngine.GameObject>();
 
     public float paperMovingDuration = 1.2f;
-
-    UnityEngine.Vector3 camOffsetInStealing = new UnityEngine.Vector3(6, 8, -7);
-    UnityEngine.Vector3 camOffsetInSpy = new UnityEngine.Vector3(6, 40, -7);
+    
+    UnityEngine.Vector3 camOffsetInSpy = new UnityEngine.Vector3(0, 20, -7);
+    UnityEngine.Vector3 camOffsetInStealing = new UnityEngine.Vector3(0, 15, -9);
 
     UnityEngine.GameObject mark_prefab;
     public UnityEngine.GameObject landingMark;
@@ -32,6 +33,7 @@
         LeaveBtn.gameObject.SetActive(false);
         StealingCash = Globals.getChildGameObject<Number>(canvasForStealingBegin, "StealingCash");
         StealingCash.gameObject.SetActive(false);
+        TricksPanel = Globals.getChildGameObject<UIMover>(canvasForStealingBegin, "TricksPanel");
 
         if (Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
         {
@@ -95,22 +97,22 @@
         }
         else
         {
-            Globals.EnableAllInput(true);            
+            Globals.EnableAllInput(true);
+            Globals.canvasForMagician.SetLifeVisible(true);
             Globals.canvasForMagician.RestartText.gameObject.SetActive(false);
-            Globals.magician.hitted.ResetLife();
+            Globals.magician.ResetLifeAndPower();
 
-            Globals.cameraFollowMagician.disOffset = camOffsetInSpy;
+            Globals.cameraFollowMagician.disOffset = camOffsetInSpy;            
 
             // 有守卫，要点了潜入才能开始
             if (Globals.maze.guards.Count != 0)
             {
-                Globals.canvasForMagician.SetLifeVisible(true);
+                
                 Globals.magician.gameObject.SetActive(false);
             }
             // 没有守卫，不需要潜入按钮，直接开始
             else
             {
-                Globals.canvasForMagician.SetLifeVisible(false);
                 // 主角降下          
                 MagicianFallingDown();
             }
@@ -128,8 +130,10 @@
 
     public virtual void MagicianFallingDown()
     {
+        UnityEngine.UI.Button markBtn = landingMark.GetComponentInChildren<UnityEngine.UI.Button>();
+        markBtn.interactable = false;
         LeaveBtn.gameObject.SetActive(false);
-        Globals.magician.gameObject.SetActive(true);
+        Globals.magician.gameObject.SetActive(true);        
         if(landingMark.activeSelf)
         {
             Globals.magician.transform.position = landingMark.transform.position;
@@ -137,7 +141,6 @@
         if (Globals.TutorialLevelIdx != Globals.TutorialLevel.FirstFalling)
         {
             // 相机跟随                    
-            Globals.cameraFollowMagician.beginFollow(Globals.magician.transform);
             Globals.cameraFollowMagician.MoveToPoint(Globals.magician.transform.position, camOffsetInStealing, 1.0f);
         }
 
@@ -163,7 +166,7 @@
             // 妈比这个名字到底咋个取
             Invoke("TutorialOneMageGirlFallingOver", 1.5f);
         }
-        
+        landingMark.SetActive(false);
         base.AfterMagicianFalling();
     }
 
@@ -185,6 +188,15 @@
         {            
             Globals.transition.BlackIn();
         }
+        TricksPanel.BeginMove(Globals.uiMoveAndScaleDuration);
+
+        UnityEngine.UI.Button[] btns = TricksPanel.GetComponentsInChildren<UnityEngine.UI.Button>();
+        foreach (UnityEngine.UI.Button btn in btns)
+        {
+            UnityEngine.UI.Button temp = btn.GetComponent<UnityEngine.UI.Button>();
+            temp.onClick.AddListener(() => Globals.magician.TrickBtnClicked(temp));           
+        }
+
         StealingCash.gameObject.SetActive(true);
         // 魔术师出场   
         Globals.magician.InStealing();                

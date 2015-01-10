@@ -1,10 +1,7 @@
 ﻿public class Hitted : Action 
-{
-    public int LifeAmount = 100;
-    public int LifeCurrent;
+{    
     public override void Awake()
     {
-        LifeCurrent = LifeAmount;
         base.Awake();
         if (!Globals.AvatarAnimationEventNameCache.Contains(actor.name + "-repel"))
         {
@@ -21,31 +18,11 @@
         base.Excute();
         actor.anim.Play("repel");                
     }
-
-    public virtual void ChangeLife(int delta)
-    {
-        LifeCurrent += delta;
-        LifeCurrent = UnityEngine.Mathf.Clamp(LifeCurrent, 0, LifeAmount);
-        if (LifeCurrent < UnityEngine.Mathf.Epsilon)
-        {
-            actor.lifeOver.Excute();
-        }
-        else
-        {
-            Excute();
-        }
-    }
-    
-
+       
     public virtual void hitteAnimEnd()
     {
         UnityEngine.Debug.Log("hitteAnimEnd");
         Stop();
         actor.currentAction = null;
-    }
-
-    public virtual void ResetLife()
-    {
-        LifeCurrent = LifeAmount;        
-    }
+    }    
 }

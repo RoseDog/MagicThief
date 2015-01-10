@@ -29,9 +29,9 @@ public class PathFinder : UnityEngine.MonoBehaviour
     public void GenerateGridGraph()
     {
         graph = path.astarData.graphs[0] as Pathfinding.GridGraph;
-        graph.width = Globals.maze.X_CELLS_COUNT * Globals.maze.GetCellSideLength() * (int)(1 / grideNodeSize);
-        graph.depth = Globals.maze.Z_CELLS_COUNT * Globals.maze.GetCellSideLength() * (int)(1 / grideNodeSize);
-        graph.center = new UnityEngine.Vector3(-Globals.maze.GetCellSideLength(), -Globals.maze.GetCellSideLength() * 0.5f, 0);
+        graph.width = Globals.maze.X_CELLS_COUNT * Globals.maze.GetCellSideLength() * (int)(1 / grideNodeSize) * 2;
+        graph.depth = Globals.maze.Z_CELLS_COUNT * Globals.maze.GetCellSideLength() * (int)(1 / grideNodeSize) * 2;
+        graph.center = new UnityEngine.Vector3(-Globals.maze.GetCellSideLength(), 0, 0);
         //graph.nodeSize = map.cell_side_length / 2.0f;
         graph.nodeSize = grideNodeSize;
         graph.UpdateSizeFromWidthDepth();
@@ -51,5 +51,11 @@ public class PathFinder : UnityEngine.MonoBehaviour
             }
         }        
         return null;
+    }
+
+    public Pathfinding.Node GetNearestWalkableNode(UnityEngine.Vector3 pos)
+    {
+        Pathfinding.NNInfo nodeInfo = graph.GetNearestForce(pos, Pathfinding.NNConstraint.Default);
+        return nodeInfo.node;
     }
 }

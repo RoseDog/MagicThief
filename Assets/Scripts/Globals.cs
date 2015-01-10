@@ -21,7 +21,8 @@ public class Globals
     public static Transition transition;
     public static LevelController LevelController;
     public static Magician magician;
-    public static System.String iniFileName = "";    
+    public static System.String iniFileName = "";
+    public static float FLOOR_HEIGHT = 0.1f;
     // 以后要存到服务器上的
     public enum TutorialLevel
     {
@@ -98,13 +99,16 @@ public class Globals
     {
         UnityEngine.GameObject guard_prefab = UnityEngine.Resources.Load("Avatar/" + name) as UnityEngine.GameObject;
         UnityEngine.GameObject guardObject = UnityEngine.GameObject.Instantiate(guard_prefab) as UnityEngine.GameObject;
-        guardObject.name = name;
+        guardObject.name = name;        
         Guard guard = guardObject.GetComponent<Guard>();
         if (birthNode != null)
         {
             guardObject.transform.position = Globals.GetPathNodePos(birthNode);
             guard.birthNode = birthNode;
-            guard.patrol.InitPatrolRoute();
+            if (guard.patrol != null)
+            {
+                guard.patrol.InitPatrolRoute();
+            }            
         }
         LevelController.GuardCreated(guard);
         return guard;
@@ -148,7 +152,10 @@ public class Globals
 
     static public void DestroyGuard(Guard guard)
     {
-        guard.patrol.DestroyRouteCubes();
+        if (guard.patrol != null)
+        {
+            guard.patrol.DestroyRouteCubes();
+        }        
         LevelController.GuardDestroyed(guard);        
         UnityEngine.Object.DestroyImmediate(guard.gameObject);
     }
@@ -291,5 +298,21 @@ public class Globals
         }
 
         return "";
+    }
+
+    public static void AddEventTrigger(UnityEngine.EventSystems.EventTrigger eventTrigger,
+        UnityEngine.Events.UnityAction<UnityEngine.EventSystems.PointerEventData> action, 
+        UnityEngine.EventSystems.EventTriggerType triggerType)
+    {
+        // Create a nee TriggerEvent and add a listener
+        UnityEngine.EventSystems.EventTrigger.TriggerEvent trigger = new UnityEngine.EventSystems.EventTrigger.TriggerEvent();
+        UnityEngine.EventSystems.PointerEventData eventData =
+            new UnityEngine.EventSystems.PointerEventData(UnityEngine.GameObject.FindObjectOfType<UnityEngine.EventSystems.EventSystem>());
+        trigger.AddListener((data) => action(eventData)); // you can capture and pass the event data to the listener
+        // Create and initialise EventTrigger.Entry using the created TriggerEvent
+        UnityEngine.EventSystems.EventTrigger.Entry entry =
+            new UnityEngine.EventSystems.EventTrigger.Entry() { callback = trigger, eventID = triggerType };
+        // Add the EventTrigger.Entry to delegates list on the EventTrigger
+        eventTrigger.delegates.Add(entry);
     }
 }

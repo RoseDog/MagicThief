@@ -12,16 +12,16 @@
         LifeNumerBg.gameObject.SetActive(false);
     }
 
-    public void UpdateText(Hitted hitAction)
+    public void UpdateText(int current, int amount)
     {
-        lifeText.text = hitAction.LifeCurrent.ToString() + "/" + hitAction.LifeAmount.ToString();
+        lifeText.text = current.ToString() + "/" + amount.ToString();
     }
 
-    public void UpdateCurrentLife(Hitted hitAction)
+    public void UpdateCurrentLife(int current, int amount)
     {
         AddAction(new Sequence(
                     new ScaleTo(transform, new UnityEngine.Vector3(scaleTo, scaleTo, scaleTo), scaleTotalTime / 2.0f),
                     new ScaleTo(transform, new UnityEngine.Vector3(1f, 1f, 1f), scaleTotalTime / 2.0f)));
-        UpdateText(hitAction);        
+        UpdateText(current, amount);        
     }
 }

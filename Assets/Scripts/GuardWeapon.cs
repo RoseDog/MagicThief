@@ -8,6 +8,6 @@
 
     void OnTriggerEnter(UnityEngine.Collider other)
     {
-        other.GetComponent<Actor>().hitted.ChangeLife(-owner.attackValue);
+        other.GetComponent<Actor>().ChangeLife(-owner.attackValue);
     }
 }

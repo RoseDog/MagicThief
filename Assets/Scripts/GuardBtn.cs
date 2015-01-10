@@ -8,26 +8,12 @@ public class GuardBtn : UnityEngine.MonoBehaviour
     void Awake()
     {
         eventTrigger = gameObject.GetComponent<UnityEngine.EventSystems.EventTrigger>();
-        AddEventTrigger(OnBeginDrag, UnityEngine.EventSystems.EventTriggerType.BeginDrag);
-        AddEventTrigger(OnEndDrag, UnityEngine.EventSystems.EventTriggerType.EndDrag);
-        AddEventTrigger(OnDragging, UnityEngine.EventSystems.EventTriggerType.Drag);
-        AddEventTrigger(OnPointerEnter, UnityEngine.EventSystems.EventTriggerType.PointerEnter);
-        AddEventTrigger(OnPointerExit, UnityEngine.EventSystems.EventTriggerType.PointerExit);        
-    }
-
-    private void AddEventTrigger(UnityEngine.Events.UnityAction<UnityEngine.EventSystems.PointerEventData> action, UnityEngine.EventSystems.EventTriggerType triggerType)
-    {
-        // Create a nee TriggerEvent and add a listener
-        UnityEngine.EventSystems.EventTrigger.TriggerEvent trigger = new UnityEngine.EventSystems.EventTrigger.TriggerEvent();
-        UnityEngine.EventSystems.PointerEventData eventData =
-            new UnityEngine.EventSystems.PointerEventData(UnityEngine.GameObject.FindObjectOfType<UnityEngine.EventSystems.EventSystem>());
-        trigger.AddListener((data) => action(eventData)); // you can capture and pass the event data to the listener
-        // Create and initialise EventTrigger.Entry using the created TriggerEvent
-        UnityEngine.EventSystems.EventTrigger.Entry entry =
-            new UnityEngine.EventSystems.EventTrigger.Entry() { callback = trigger, eventID = triggerType };
-        // Add the EventTrigger.Entry to delegates list on the EventTrigger
-        eventTrigger.delegates.Add(entry);
-    }
+        Globals.AddEventTrigger(eventTrigger, OnBeginDrag, UnityEngine.EventSystems.EventTriggerType.BeginDrag);
+        Globals.AddEventTrigger(eventTrigger, OnEndDrag, UnityEngine.EventSystems.EventTriggerType.EndDrag);
+        Globals.AddEventTrigger(eventTrigger, OnDragging, UnityEngine.EventSystems.EventTriggerType.Drag);
+        Globals.AddEventTrigger(eventTrigger, OnPointerEnter, UnityEngine.EventSystems.EventTriggerType.PointerEnter);
+        Globals.AddEventTrigger(eventTrigger, OnPointerExit, UnityEngine.EventSystems.EventTriggerType.PointerExit);        
+    }    
 
     public void OnPointerEnter(UnityEngine.EventSystems.PointerEventData data)
     {

@@ -20,6 +20,9 @@ public class Guard : Actor
     UnityEngine.Vector3 scaleCache;
 
     [UnityEngine.HideInInspector]
+    public bool walkable;
+
+    [UnityEngine.HideInInspector]
     public float magicianOutVisionTime;
     [UnityEngine.HideInInspector]
     public float atkCd = 2.0f;
@@ -55,12 +58,16 @@ public class Guard : Actor
         atkShortestDistance = 3.0f;
         doveOutVisionTime = 1.0f;
         attackSpeed = 1.0f;
+        walkable = true;
         base.Awake();
     }
 
     public override void Start()
     {
-        anim["A"].speed = attackSpeed;
+        if (anim != null)
+        {
+            anim["A"].speed = attackSpeed;
+        }        
         base.Start();
     }
 
@@ -86,7 +93,11 @@ public class Guard : Actor
                         );
         ShowBtns();        
         Tint();
-        patrol.SetRouteCubesVisible(true);
+        if (patrol != null)
+        {
+            patrol.SetRouteCubesVisible(true);
+        }
+        
         if (currentAction != null)
         {
             currentAction.Stop();
@@ -136,13 +147,16 @@ public class Guard : Actor
 
     public void BeginPatrol()
     {
-        foreach(FOV2DEyes eye in eyes)
+        if (patrol != null)
         {
-            eye.gameObject.SetActive(true);
-        }       
-        patrol.RouteConfirmed();
-        patrol.SetRouteCubesVisible(false);
-        patrol.Excute();
+            foreach (FOV2DEyes eye in eyes)
+            {
+                eye.gameObject.SetActive(true);
+            }
+            patrol.RouteConfirmed();
+            patrol.SetRouteCubesVisible(false);
+            patrol.Excute();
+        }        
     }
 
     public void StopAttacking()

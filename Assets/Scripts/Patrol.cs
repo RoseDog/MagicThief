@@ -118,8 +118,7 @@ public class Patrol : GuardAction
     public override void Excute()
     {
         base.Excute();
-        guard.moving.canMove = true;
-        guard.moving.canSearch = false;
+        guard.moving.canMove = true;        
         _beginPatrol();
         UnityEngine.Debug.Log("patrol");
     }
@@ -132,7 +131,7 @@ public class Patrol : GuardAction
 
     void _beginPatrol()
     {
-       guard.moving.GetSeeker().StartPath(guard.moving.GetFeetPosition(),routePoses[currentTargetIdx]);
+        guard.MoveTo(routePoses[currentTargetIdx]);
     }    
 
     public override void Stop()

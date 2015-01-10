@@ -33,13 +33,13 @@
             {
                 UnityEngine.Vector3 pos = Globals.StringToVector3(keys[i]);
                 Pathfinding.Node birthNode = Globals.maze.pathFinder.GetSingleNode(pos, false);
-                if (!birthNode.walkable)
-                {
-                    throw new System.InvalidOperationException("guard read from file should on walkable node");
-                }
+                
                 Guard guard = Globals.CreateGuard(ini.get(keys[i]), birthNode);
-                guard.patrol.DestroyRouteCubes();
-                guard.patrol.Excute();
+                if (guard.patrol != null)
+                {
+                    guard.patrol.DestroyRouteCubes();
+                    guard.patrol.Excute();
+                }                
             }
         }
         

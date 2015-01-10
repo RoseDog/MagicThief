@@ -13,6 +13,10 @@ public class Magician : Actor
     public Victory victory;
     public Falling falling;
     public Incant incant;
+    public Disguise disguise;
+    public ShotLight shotLight;
+
+    
     public override void Awake()
     {
         base.Awake();
@@ -20,8 +24,15 @@ public class Magician : Actor
         victory = GetComponent<Victory>();
         falling = GetComponent<Falling>();
         incant = GetComponent<Incant>();
+        disguise = GetComponent<Disguise>();
+        shotLight = GetComponent<ShotLight>();
+        moving.canMove = false;  
         gameObject.name = "Mage_Girl";              
         Globals.magician = this;
+        LifeAmount = 100;
+        LifeCurrent = LifeAmount;
+        PowerAmount = 100;
+        PowerCurrent = PowerAmount;        
     }
 
     public void RegistEvent()
@@ -32,13 +43,6 @@ public class Magician : Actor
     public void UnRegistEvent()
     {
         
-    }
-
-    public bool beginMoving(string value)
-    {
-        isMoving = true;
-        //anim.CrossFade("moving");
-        return true;
     }
 
     public bool stopMoving(string value)
@@ -53,62 +57,6 @@ public class Magician : Actor
         {
             return;
         }
-
-        //Get velocity in world-space
-        UnityEngine.Vector3 velocity;
-        
-        if (isMoving)
-        {
-            UnityEngine.Vector3 cameraHorForward = Globals.cameraFollowMagician.GetHorForward();
-            UnityEngine.Vector3 cameraHorRight = Globals.cameraFollowMagician.GetHorRight();
-            //Vector3 cameraHorForward = new Vector3(0, 0, 1);
-            //Vector3 cameraHorRight = new Vector3(1, 0, 0);
-
-            UnityEngine.Vector2 joystickPos = battleUI.joystick.position;
-            
-            UnityEngine.Vector3 movementDirection = cameraHorForward * joystickPos.y + cameraHorRight * joystickPos.x;
-            controller.Move(movementDirection * speed);
-            velocity = controller.velocity;
-
-            // 转向
-            UnityEngine.Quaternion rot = transform.rotation;
-            UnityEngine.Quaternion toTarget = UnityEngine.Quaternion.LookRotation(movementDirection);
-            float turningSpeed = 6.0f;
-            rot = UnityEngine.Quaternion.Slerp(rot, toTarget, turningSpeed * UnityEngine.Time.deltaTime);
-            UnityEngine.Vector3 euler = rot.eulerAngles;
-            euler.z = 0;
-            euler.x = 0;
-            rot = UnityEngine.Quaternion.Euler(euler);
-
-            transform.rotation = rot;
-        }
-        else
-        {
-            velocity = UnityEngine.Vector3.zero;
-            // 轻微的颤抖，玩家看不出来，但是这样FOV trigger才会触发
-            controller.Move(new UnityEngine.Vector3(0.001f, 0.0f, 0.001f));
-            controller.Move(new UnityEngine.Vector3(-0.001f, 0.0f, -0.001f));
-        }
-
-        //Calculate the velocity relative to this transform's orientation
-        UnityEngine.Vector3 relVelocity = transform.InverseTransformDirection(velocity);
-        relVelocity.y = 0;
-        if (velocity.sqrMagnitude <= sleepVelocity * sleepVelocity)
-        {
-            //Fade out walking animation
-            anim.CrossFade("idle");
-        }
-        else
-        {
-            //Fade in walking animation
-            anim.CrossFade("moving");
-
-            //Modify animation speed to match velocity
-            UnityEngine.AnimationState state = anim["moving"];
-
-            float speed = relVelocity.z;
-            state.speed = speed * animationSpeed;
-        }      
     }
 
     void OnTriggerEnter(UnityEngine.Collider other)
@@ -120,14 +68,16 @@ public class Magician : Actor
     {
         base.InStealing();        
         RegistEvent();
+        moving.canMove = true;
         Globals.EnableAllInput(true);
-        Globals.cameraFollowMagician.beginFollow(Globals.magician.transform);
+        Globals.cameraFollowMagician.SetDragSpeed(0.02f);
     }
 
     public override void OutStealing()
     {
         base.OutStealing();
-        UnRegistEvent();                
+        UnRegistEvent();
+        moving.canMove = false;  
         Globals.cameraFollowMagician.MoveToPoint(
             transform.position + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f),
             new UnityEngine.Vector3(Globals.cameraFollowMagician.disOffset.x * 0.7f,
@@ -144,8 +94,37 @@ public class Magician : Actor
         }
     }
 
+    public void TrickBtnClicked(UnityEngine.UI.Button btn)
+    {
+        int powerDelta = System.Convert.ToInt32(btn.GetComponentInChildren<UnityEngine.UI.Text>().text);
+        FireTrick(btn.name, powerDelta);
+    }
+
+    public void FireTrick(System.String trickName, int powerDelta, UnityEngine.Object paramObj = null)
+    {
+        if (ChangePower(-powerDelta))
+        {
+            if (trickName == "Dove")
+            {
+            }
+            else if (trickName == "Disguise")
+            {
+                disguise.Excute();
+            }
+            else if (trickName == "ShotLight")
+            {
+                Globals.magician.shotLight.Shot(paramObj as UnityEngine.GameObject);
+            }
+        }
+        else
+        {
+            Globals.tipDisplay.Msg("魔力值不够了");
+        }
+    }
+
     public void FingerDown(Finger finger)
     {
+        return;
         if (currentAction == null && incant.dove == null)
         {
             incant.FingerDown(finger);
@@ -166,5 +145,31 @@ public class Magician : Actor
         {
             incant.FingerUp(finger);
         }       
+    }
+
+    public override bool ChangePower(int delta)
+    {
+        if (base.ChangePower(delta))
+        {
+            Globals.canvasForMagician.PowerNumber.UpdateCurrentLife(PowerCurrent, PowerAmount);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public override void ChangeLife(int delta)
+    {
+        base.ChangeLife(delta);
+        Globals.canvasForMagician.lifeNumber.UpdateCurrentLife(LifeCurrent, LifeAmount);
+    }
+
+    public override void ResetLifeAndPower()
+    {
+        base.ResetLifeAndPower();
+        Globals.canvasForMagician.lifeNumber.UpdateText(LifeCurrent, LifeAmount);
+        Globals.canvasForMagician.PowerNumber.UpdateText(PowerCurrent, PowerAmount);
     }
 }

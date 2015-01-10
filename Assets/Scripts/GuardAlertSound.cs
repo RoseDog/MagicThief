@@ -11,7 +11,7 @@
     {        
         base.Awake();
         owner = GetComponentInParent<Guard>();
-        UnityEngine.GameObject wave_prefab = UnityEngine.Resources.Load("Avatar/barkSoundWave") as UnityEngine.GameObject;
+        UnityEngine.GameObject wave_prefab = UnityEngine.Resources.Load("Avatar/Tiger/barkSoundWave") as UnityEngine.GameObject;
         wave = UnityEngine.GameObject.Instantiate(wave_prefab) as UnityEngine.GameObject;
         wave.GetComponent<BarkSoundWave>().owner = owner;
         wave.transform.SetParent(owner.transform);

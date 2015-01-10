@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class MazeGenerate : UnityEngine.MonoBehaviour
 {
-    int cell_side_length = 7;
+    int cell_side_length = 2;
     public int GetCellSideLength()
     {
         return cell_side_length;
@@ -782,7 +782,8 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         pathFinder.GenerateGridGraph();
 
         rayCastPlane = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
-        rayCastPlane.transform.localScale = new UnityEngine.Vector3(1000, 0, 1000);
+        rayCastPlane.transform.localPosition = new UnityEngine.Vector3(0, Globals.FLOOR_HEIGHT, 0);
+        rayCastPlane.transform.localScale = new UnityEngine.Vector3(1000, 0.2f, 1000);
         rayCastPlane.renderer.enabled = false;
         rayCastPlane.layer = 9;
 
@@ -876,44 +877,16 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     public bool OnChallengerFingerDown(object sender)
     {
         Finger finger = sender as Finger;
-        // 如果按到了魔术师身上，优先释放魔术
-        if (Globals.magician.Stealing && Globals.magician.currentAction == null)
-        {
-            fingerDownMage = Globals.FingerRayToObj<Magician>(Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), 11, finger);
-            if (fingerDownMage != null)
-            {
-                fingerDownMage.FingerDown(finger);
-                return true;
-            }
-        }
-
-        // 如果魔术师死亡，没有出场
-        if (!Globals.magician.gameObject.activeSelf || Globals.magician.currentAction == null)
-        {
-            // 相机不跟随，允许拖动
-            fingerDownOnMap = finger;
-            Globals.cameraFollowMagician.pauseFollowing = true;
-        }
-        else
-        {
-            Globals.cameraFollowMagician.pauseFollowing = false;
-        }
-        
+        fingerDownOnMap = finger;
         return true;
     }
 
     public bool OnChallengerFingerMoving(object sender)
     {
-        if (fingerDownMage != null)
-        {
-            fingerDownMage.FingerMoving(sender as Finger);
-        }
-
         if (fingerDownOnMap != null)
         {
             Globals.cameraFollowMagician.DragToMove(fingerDownOnMap);
-        }
-        
+        }        
         return true;
     }
 
@@ -927,37 +900,36 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         }
         if (finger == fingerDownOnMap)
         {
-            if (!Globals.magician.Stealing)
+            // 点击地板
+            if (fingerDownOnMap.timeSinceTouchBegin < 0.5f &&
+                UnityEngine.Vector2.Distance(fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition) < 10.0f)
             {
-                // 点击地板
-                if (fingerDownOnMap.timeSinceTouchBegin < 0.5f &&
-                    UnityEngine.Vector2.Distance(fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition) < 10.0f)
+                UnityEngine.RaycastHit hitInfo;
+                int layermask = 1 << 9 | 1 << 21;
+                UnityEngine.Ray ray = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().ScreenPointToRay(fingerDownOnMap.nowPosition);
+                if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
                 {
-                    UnityEngine.RaycastHit hitInfo;
-                    int layermask = 1 << 9;
-                    UnityEngine.Ray ray = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().ScreenPointToRay(fingerDownOnMap.nowPosition);
-                    if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
+                    Pathfinding.Node node = pathFinder.GetNearestWalkableNode(hitInfo.point);
+                    UnityEngine.Vector3 pos = Globals.GetPathNodePos(node);
+                    if (!Globals.magician.gameObject.activeSelf)
                     {
-                        Pathfinding.Node node = pathFinder.GetSingleNode(hitInfo.point, true);
-                        if (node != null)
-                        {
-                            TutorialLevelController controller = (Globals.LevelController as TutorialLevelController);
-                            controller.landingMark.SetActive(true);
-                            controller.landingMark.transform.position = hitInfo.point;
-                            Globals.Assert(tempGems.Count == 0);
-                            tempGems.AddRange(gemHolders);
-                            gemsSequence.Clear();
-                            tempPathes.Clear();
-                            foreach(UnityEngine.GameObject number in sequenceNumbers)
-                            {
-                                DestroyObject(number);
-                            }
-                            sequenceNumbers.Clear();
-                            FindNearestGem(controller.landingMark.transform.position);                            
-                        }                        
+                        TutorialLevelController controller = (Globals.LevelController as TutorialLevelController);
+                        controller.landingMark.SetActive(true);
+                        controller.landingMark.transform.position = pos;
                     }
+                    else
+                    {
+                        if (hitInfo.collider.gameObject.layer == 9)
+                        {
+                            Globals.magician.MoveTo(pos);
+                        }
+                        else
+                        {
+                            Globals.magician.FireTrick("ShotLight", 10, hitInfo.collider.gameObject);                            
+                        }                        
+                    }                                                                              
                 }
-            }            
+            }                     
         }
 
         fingerDownOnMap = null;
@@ -1060,12 +1032,15 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             UnityEngine.Ray ray = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().ScreenPointToRay(fingerDownOnMap.nowPosition);
             if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
             {
-                Pathfinding.Node node = pathFinder.GetSingleNode(hitInfo.point, false);                
-                if (node != null && node.walkable)
+                Pathfinding.Node node = pathFinder.GetSingleNode(hitInfo.point, false);
+                if (node != null && (node.walkable == draggingGuard.walkable))
                 {
                     choosenGuard.birthNode = node;
                     draggingGuard.transform.position = new UnityEngine.Vector3(node.position.x / 1000.0f, node.position.y / 1000.0f, node.position.z / 1000.0f);
-                    draggingGuard.patrol.InitPatrolRoute();
+                    if (draggingGuard.patrol != null)
+                    {
+                        draggingGuard.patrol.InitPatrolRoute();
+                    }                    
                 }
                 else
                 {
@@ -1098,7 +1073,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             // 点击空地
             if (choosenGuard != null)
             {
-                if (choosenGuard.birthNode != null && choosenGuard.birthNode.walkable)
+                if (choosenGuard.birthNode != null)
                 {					
                     if (Globals.LevelController != null)
                     {
@@ -1108,7 +1083,14 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                 }
                 else
                 {
-                    Globals.tipDisplay.Msg("守卫不能放在墙体上");
+                    if (choosenGuard.walkable)
+                    {
+                        Globals.tipDisplay.Msg("守卫不能放在墙体上");
+                    }
+                    else
+                    {
+                        Globals.tipDisplay.Msg("灯不能放在路上");
+                    }
                 }                
             }
         }

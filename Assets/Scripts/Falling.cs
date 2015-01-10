@@ -7,6 +7,7 @@
     {
         base.Excute();        
         transform.position = from;
+        actor.moving.canMove = false;
         actor.AddAction(new Sequence(new MoveTo(actor.transform, to, duration), new FunctionCall(this, "FallingOver")));
         actor.anim.Play("A_Falling_1");
     }
@@ -22,7 +23,8 @@
         if( UnityEngine.Application.loadedLevelName != "City")
         {
             Globals.LevelController.AfterMagicianFalling();
-        }        
+        }
+        actor.moving.canMove = true;
         Stop();
     }
 }

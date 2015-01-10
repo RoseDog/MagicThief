@@ -289,7 +289,7 @@ public class Cell : Actor
     public UnityEngine.Vector3 GetFloorPos()
     {
         UnityEngine.GameObject floor = GetFloor();
-        return floor.transform.position + new UnityEngine.Vector3(0.0f, 0.2f, 0.0f);
+        return floor.transform.position + new UnityEngine.Vector3(0.0f, Globals.FLOOR_HEIGHT, 0.0f);
     }
 
     public void HideEverythingExceptFloor()

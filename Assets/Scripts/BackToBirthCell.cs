@@ -14,8 +14,7 @@ public class BackToBirthCell : GuardAction
         guard.moving.target = null;
         guard.moving.canMove = true;
         guard.moving.canSearch = false;
-        guard.moving.GetSeeker().StartPath(guard.moving.GetFeetPosition(),
-            Globals.GetPathNodePos(guard.birthNode) + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f),guard.moving.PathComplete);
+        guard.MoveTo(Globals.GetPathNodePos(guard.birthNode) + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f),guard.moving.PathComplete);
     }
 
     public override void Stop()

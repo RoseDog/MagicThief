@@ -33,6 +33,8 @@ public class GuardMoving : AIPath
 
     float heightOriginCache;
 
+    public UnityEngine.Vector3 currentDir;
+
     public new void Awake()
     {
         actor = GetComponent<Actor>();
@@ -83,7 +85,7 @@ public class GuardMoving : AIPath
         if (canMove)
         {
             //Calculate desired velocity
-            UnityEngine.Vector3 dir = CalculateVelocity(GetFeetPosition());
+            currentDir = CalculateVelocity(GetFeetPosition());
 
             //Rotate towards targetDirection (filled in by CalculateVelocity)
             RotateTowards(targetDirection);
@@ -91,7 +93,7 @@ public class GuardMoving : AIPath
 
             if (controller != null)
             {
-                controller.Move(dir);
+                controller.Move(currentDir);
                 velocity = controller.velocity;
             }
         }

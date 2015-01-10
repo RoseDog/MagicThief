@@ -102,7 +102,7 @@
             }
         }
         flyingDir = farestDir;
-        moving.GetSeeker().StartPath(moving.GetFeetPosition(), destinationPosition);
+        MoveTo(destinationPosition);
         base.OnTargetReached();
     }
 

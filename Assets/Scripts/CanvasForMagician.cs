@@ -3,8 +3,10 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
 {
     public UnityEngine.GameObject CashNumerBg;
     public Number cashNumber;
-    public LifeNumber lifeNumber;
+    public LifeNumber lifeNumber;    
     public UnityEngine.GameObject LifeNumerBg;
+    public LifeNumber PowerNumber;
+    public UnityEngine.GameObject PowerNumerBg;
     public Number RoseNumber;
     public UnityEngine.GameObject RoseNumberBg;
     public UnityEngine.UI.Text RestartText;
@@ -22,6 +24,9 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
 
         LifeNumerBg = Globals.getChildGameObject(gameObject, "LifeNumerBg");
         lifeNumber = LifeNumerBg.GetComponentInChildren<LifeNumber>();
+
+        PowerNumerBg = Globals.getChildGameObject(gameObject, "PowerNumerBg");
+        PowerNumber = PowerNumerBg.GetComponentInChildren<LifeNumber>();
 
         RoseNumberBg = UnityEngine.GameObject.Find("RoseNumberBg");
         RoseNumber = RoseNumberBg.GetComponentInChildren<Number>();                      
@@ -57,6 +62,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
     public void SetLifeVisible(bool Visible)
     {
         LifeNumerBg.SetActive(Visible);
+        PowerNumerBg.SetActive(Visible);
     }
 
     public void SetCashVisible(bool Visible)

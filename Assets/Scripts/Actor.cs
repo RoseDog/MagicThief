@@ -21,6 +21,15 @@
 
     public bool Stealing = false;
 
+    [UnityEngine.HideInInspector]
+    public int LifeAmount;
+    [UnityEngine.HideInInspector]
+    public int LifeCurrent;
+    [UnityEngine.HideInInspector]
+    public int PowerAmount;
+    [UnityEngine.HideInInspector]
+    public int PowerCurrent;
+
     public virtual void Awake()
     {        
         anim = GetComponent<UnityEngine.Animation>();
@@ -123,6 +132,13 @@
         gameObject.layer = 0;
     }
 
+    public bool MoveTo(UnityEngine.Vector3 pos, OnPathDelegate callback = null)
+    {
+        moving.canSearch = false;
+        moving.GetSeeker().StartPath(moving.GetFeetPosition(), pos, callback);
+        return true;
+    }
+
     public virtual void OnTargetReached()
     {
         
@@ -185,12 +201,47 @@
 
     public void ShowPathToPoint(UnityEngine.Vector3 destination)
     {
-        moving.GetSeeker().StartPath(moving.GetFeetPosition(), destination, ShowPathComplete);
+        MoveTo(destination, ShowPathComplete);
         moving.canMove = false;
     }
 
     public void HidePath()
     {
         Destroy(pathMesh);
+    }
+
+    public virtual bool ChangePower(int delta)
+    {
+        int powerTemp = PowerCurrent;
+        powerTemp += delta;
+        if (powerTemp < 0)
+        {
+            return false;
+        }
+        else
+        {
+            PowerCurrent = powerTemp;
+            return true;
+        }
+    }
+
+    public virtual void ChangeLife(int delta)
+    {
+        LifeCurrent += delta;
+        LifeCurrent = UnityEngine.Mathf.Clamp(LifeCurrent, 0, LifeAmount);
+        if (LifeCurrent < UnityEngine.Mathf.Epsilon)
+        {
+            lifeOver.Excute();
+        }
+        else
+        {
+            hitted.Excute();
+        }
+    }
+
+    public virtual void ResetLifeAndPower()
+    {
+        LifeCurrent = LifeAmount;
+        PowerCurrent = PowerAmount;
     }
 }

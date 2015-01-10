@@ -7,21 +7,22 @@
     {
         base.Awake();
         dovePrefab = UnityEngine.Resources.Load("Avatar/Dove") as UnityEngine.GameObject;
-        if (!Globals.AvatarAnimationEventNameCache.Contains(actor.name + "-A_Attack_2"))
-        {
-            UnityEngine.AnimationEvent evt = new UnityEngine.AnimationEvent();
-            evt.functionName = "IncantOver";
-            evt.time = actor.anim["A_Attack_2"].length;
-            actor.anim["A_Attack_2"].clip.AddEvent(evt);
+//         if (!Globals.AvatarAnimationEventNameCache.Contains(actor.name + "-A_Attack_2"))
+//         {
+//             UnityEngine.AnimationEvent evt = new UnityEngine.AnimationEvent();
+//             evt.functionName = "IncantOver";
+//             evt.time = actor.anim["A_Attack_2"].length;
+//             actor.anim["A_Attack_2"].clip.AddEvent(evt);
+// 
+//             UnityEngine.AnimationEvent doveEvt = new UnityEngine.AnimationEvent();
+//             doveEvt.functionName = "ReleaseDove";
+//             doveEvt.time = actor.anim["A_Attack_2"].length*0.33f;
+//             actor.anim["A_Attack_2"].clip.AddEvent(doveEvt);
+// 
+//             Globals.AvatarAnimationEventNameCache.Add(actor.name + "-A_Attack_2");
+//         }               
+    }    
 
-            UnityEngine.AnimationEvent doveEvt = new UnityEngine.AnimationEvent();
-            doveEvt.functionName = "ReleaseDove";
-            doveEvt.time = actor.anim["A_Attack_2"].length*0.33f;
-            actor.anim["A_Attack_2"].clip.AddEvent(doveEvt);
-
-            Globals.AvatarAnimationEventNameCache.Add(actor.name + "-A_Attack_2");
-        }        
-    }
 
     public override void Excute()
     {        
