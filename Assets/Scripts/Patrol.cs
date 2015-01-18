@@ -34,23 +34,28 @@ public class Patrol : GuardAction
 
     void AddTargetPosInDirection(String direction, int patrolCellsCount)
     {
-        Pathfinding.Node node = Globals.maze.pathFinder.GetSingleNode(transform.position, true);
+        //Pathfinding.Node node = Globals.maze.pathFinder.GetSingleNode(transform.position, true);
+        Pathfinding.Node node = guard.birthNode;
         float nodeSize = Globals.maze.pathFinder.graph.nodeSize;
         for (int i = 0; i < patrolCellsCount; ++i)
         {
-            // 生成表示行走区域的方块
-            UnityEngine.GameObject cube = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
-            cube.transform.localScale = new UnityEngine.Vector3(nodeSize, 0.5f, nodeSize);
-            cube.transform.position = Globals.GetPathNodePos(node) + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f);
-            cube.transform.parent = transform;
+            // 如果是家里或者关卡编辑器，生成表示行走区域的方块
+            UnityEngine.Vector3 nextNodePos = Globals.GetPathNodePos(node) + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f);
+            TutorialLevelController battleLevel = Globals.LevelController as TutorialLevelController;
+            if (battleLevel == null)
+            {
+                UnityEngine.GameObject cube = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
+                cube.transform.localScale = new UnityEngine.Vector3(nodeSize, 0.5f, nodeSize);
+                cube.transform.position = nextNodePos;
+                cube.transform.parent = transform;
+                cube.layer = 0;
 
-            patrolCubes.Add(cube);
+                patrolCubes.Add(cube);
 
-            UnityEngine.MeshRenderer meshRenderer = cube.GetComponentInChildren<UnityEngine.MeshRenderer>();
-            meshRenderer.material.SetColor("_Color", UnityEngine.Color.green);
-
-            UnityEngine.Vector3 nextNodePos = cube.transform.position;
-           
+                UnityEngine.MeshRenderer meshRenderer = cube.GetComponentInChildren<UnityEngine.MeshRenderer>();
+                meshRenderer.material.SetColor("_Color", UnityEngine.Color.green);
+            }
+            
             if (direction == Globals.EAST)
             {
                 nextNodePos += new UnityEngine.Vector3(nodeSize, 0.0f, 0.0f);
@@ -131,7 +136,10 @@ public class Patrol : GuardAction
 
     void _beginPatrol()
     {
-        guard.MoveTo(routePoses[currentTargetIdx]);
+        if (routePoses.Count > currentTargetIdx)
+        {
+            guard.MoveTo(routePoses[currentTargetIdx]);
+        }        
     }    
 
     public override void Stop()

@@ -16,6 +16,7 @@
     {
         UnityEngine.Debug.Log("hitted");
         base.Excute();
+        actor.moving.canMove = false;
         actor.anim.Play("repel");                
     }
        
@@ -23,6 +24,7 @@
     {
         UnityEngine.Debug.Log("hitteAnimEnd");
         Stop();
+        actor.moving.canMove = true;
         actor.currentAction = null;
     }    
 }

@@ -16,10 +16,12 @@
     public float paperMovingDuration = 1.2f;
     
     UnityEngine.Vector3 camOffsetInSpy = new UnityEngine.Vector3(0, 20, -7);
-    UnityEngine.Vector3 camOffsetInStealing = new UnityEngine.Vector3(0, 15, -9);
+    UnityEngine.Vector3 camOffsetInStealing = new UnityEngine.Vector3(0, 21, -7);
 
     UnityEngine.GameObject mark_prefab;
     public UnityEngine.GameObject landingMark;
+
+    public System.Collections.Generic.List<UnityEngine.GameObject> unstolenGems = new System.Collections.Generic.List<UnityEngine.GameObject>();
 
     public override void Awake()
     {
@@ -44,7 +46,7 @@
             Globals.Assert(Globals.iniFileName != "");
             if (Globals.iniFileName == "")
             {
-                Globals.iniFileName = "KaitoKid";
+                Globals.iniFileName = "扑克脸";
             }            
         }        
                 
@@ -71,6 +73,16 @@
             UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/Mage_Girl") as UnityEngine.GameObject;
             UnityEngine.GameObject.Instantiate(magician_prefab);
         }
+
+        foreach(UnityEngine.GameObject gem in Globals.maze.gemHolders)
+        {
+            unstolenGems.Add(gem);
+        }
+
+        foreach(Guard guard in Globals.maze.guards)
+        {
+            guard.InitTricksUI();
+        }
        
         Globals.magician.transform.position = Globals.maze.entryOfMaze.GetFloorPos();
         Globals.maze.RegistChallengerEvent();
@@ -79,7 +91,7 @@
         
         Globals.canvasForMagician.RoseNumberBg.SetActive(false);
 
-        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.FirstFalling)
+        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.GetGem)
         {
             Globals.cameraFollowMagician.disOffset = camOffsetInStealing;
             // 隐藏界面            
@@ -138,7 +150,7 @@
         {
             Globals.magician.transform.position = landingMark.transform.position;
         }        
-        if (Globals.TutorialLevelIdx != Globals.TutorialLevel.FirstFalling)
+        if (Globals.TutorialLevelIdx != Globals.TutorialLevel.GetGem)
         {
             // 相机跟随                    
             Globals.cameraFollowMagician.MoveToPoint(Globals.magician.transform.position, camOffsetInStealing, 1.0f);
@@ -157,7 +169,7 @@
         {
             OperateMagician();
         }
-        else if (Globals.TutorialLevelIdx != Globals.TutorialLevel.FirstFalling)
+        else if (Globals.TutorialLevelIdx != Globals.TutorialLevel.GetGem)
         {
             ShowLevelTip();
         }
@@ -184,7 +196,7 @@
 
     public void OperateMagician()
     {
-        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.FirstFalling)
+        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.GetGem)
         {            
             Globals.transition.BlackIn();
         }
@@ -286,12 +298,12 @@
 
     public override void AfterMagicianSuccessedEscaped()
     {
-        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.InitMaze || Globals.TutorialLevelIdx == Globals.TutorialLevel.Over)
+        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.InitMyMaze || Globals.TutorialLevelIdx == Globals.TutorialLevel.Over)
         {
             canvasForStealingBegin.SetActive(false);
             Globals.transition.BlackOut(this, "Newsreport");
         }
-        else if (Globals.TutorialLevelIdx == Globals.TutorialLevel.MagicianBorn)
+        else if (Globals.TutorialLevelIdx == Globals.TutorialLevel.FirstTarget)
         {
             canvasForStealingBegin.SetActive(false);
             Globals.asyncLoad.ToLoadSceneAsync("City");
@@ -361,7 +373,7 @@
             paper.BeginMove(paperMovingDuration);
             yield return new UnityEngine.WaitForSeconds(paperMovingDuration);
         }
-        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.InitMaze)
+        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.InitMyMaze)
         {
             Globals.asyncLoad.ToLoadSceneAsync("MagicianHome");
         }
@@ -378,5 +390,23 @@
         UnityEngine.Debug.Log("back to city");
         canvasForStealingBegin.SetActive(false);
         Globals.asyncLoad.ToLoadSceneAsync("City");
+    }
+
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
+        foreach (Guard guard in Globals.maze.guards)
+        {
+            if (Globals.magician.Stealing  
+                && UnityEngine.Vector3.Distance(Globals.magician.transform.position, guard.transform.position) < 7.0f
+                && guard.currentAction != guard.beenHypnosised)
+            {
+                guard.ShowTrickBtns();                                         
+            }
+            else
+            {
+                guard.HideBtns();
+            }   
+        }               
     }
 }

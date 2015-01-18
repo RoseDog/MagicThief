@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class MazeGenerate : UnityEngine.MonoBehaviour
 {
-    int cell_side_length = 2;
+    int cell_side_length = 4;
     public int GetCellSideLength()
     {
         return cell_side_length;
@@ -925,7 +925,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                         }
                         else
                         {
-                            Globals.magician.FireTrick("ShotLight", 10, hitInfo.collider.gameObject);                            
+                            Globals.magician.ShotLight(hitInfo.collider.gameObject);
                         }                        
                     }                                                                              
                 }
@@ -1063,7 +1063,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 //		                      + UnityEngine.Vector2.Distance (fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition).ToString("f4"));
         if (draggingGuard != null)
         {
-            draggingGuard.ShowBtns();            
+            draggingGuard.ShowArrangeBtns();            
             draggingGuard = null;
         }
         // 判断点击
@@ -1241,6 +1241,10 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        foreach(UnityEngine.GameObject gem in gemHolders)
+        {
+            gem.GetComponent<UnityEngine.CharacterController>().Move(new UnityEngine.Vector3(0.001f, 0.0f, 0.001f));
+            gem.GetComponent<UnityEngine.CharacterController>().Move(new UnityEngine.Vector3(-0.001f, 0.0f, -0.001f));
+        }
     }
 }

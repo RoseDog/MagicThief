@@ -44,7 +44,7 @@
         // 这是FirstTarget，所以没有tip
         if (tip == null)
         {
-            Globals.Assert(Globals.TutorialLevelIdx == Globals.TutorialLevel.MagicianBorn);
+            Globals.Assert(Globals.TutorialLevelIdx == Globals.TutorialLevel.FirstTarget);
         }
         else
         {

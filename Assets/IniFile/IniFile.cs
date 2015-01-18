@@ -440,9 +440,10 @@ public class IniFile
     public void load(string fileName)
     {
         UnityEngine.TextAsset textAssets = UnityEngine.Resources.Load(fileName) as UnityEngine.TextAsset;
-        if (textAssets == null)
+        if (textAssets == null || textAssets.text.Length == 0)
         {
             Debug.LogError("file asset dont exist: " + fileName + ".txt");
+            return;
         }
         loadFromText(textAssets.text);
     }

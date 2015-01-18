@@ -33,14 +33,14 @@
             {
                 UnityEngine.Vector3 pos = Globals.StringToVector3(keys[i]);
                 Pathfinding.Node birthNode = Globals.maze.pathFinder.GetSingleNode(pos, false);
-                
+
                 Guard guard = Globals.CreateGuard(ini.get(keys[i]), birthNode);
                 if (guard.patrol != null)
                 {
                     guard.patrol.DestroyRouteCubes();
                     guard.patrol.Excute();
-                }                
-            }
+                }
+            }           
         }
         
         

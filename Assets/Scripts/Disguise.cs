@@ -1,6 +1,6 @@
 ﻿public class Disguise : Action 
 {
-    float duration = 5.0f;
+    float duration = 8.0f;
     float originSpeed;
     UnityEngine.GameObject FakeGuard_prefab;
     UnityEngine.GameObject FakeGuard;
@@ -34,8 +34,8 @@
             TrickTimer.GetComponent<TrickTimer>().BeginCountDown(FakeGuard, duration, new UnityEngine.Vector3(0, 2.8f, 0));
 
             originSpeed = actor.moving.speed;
-            actor.moving.speed = 0.04f;
-            gameObject.layer = 0;
+            actor.moving.speed = 0.03f;
+            gameObject.layer = 23;
         }
         
         Invoke("Stop", duration);

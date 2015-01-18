@@ -17,6 +17,9 @@ public class Guard : Actor
     public HeardAlert heardAlert;
     public GoCoveringTeammate goCovering;
     public Distraction distraction;
+    public BeenHypnosised beenHypnosised;
+    public WakeUp wakeFromHypnosised;
+    public RealiseGemLost realiseGemLost;
     UnityEngine.Vector3 scaleCache;
 
     [UnityEngine.HideInInspector]
@@ -35,7 +38,10 @@ public class Guard : Actor
     [UnityEngine.HideInInspector]
     public float attackSpeed;
 
-    UnityEngine.GameObject uiPrefab;
+    UnityEngine.GameObject defenderArrangeUIPrefab;
+    UnityEngine.GameObject challengerTricksUIPrefab;
+
+    public UnityEngine.GameObject guardedGemHolder = null;
     public override void Awake()
     {        
         scaleCache = transform.localScale;
@@ -44,12 +50,15 @@ public class Guard : Actor
         spot = GetComponent<Spot>();
         atk = GetComponent<GuardAttack>();
         wandering = GetComponent<WanderingLostTarget>();
+        realiseGemLost = GetComponent<RealiseGemLost>();
         backing = GetComponent<BackToBirthCell>();        
         eyes = GetComponentsInChildren<FOV2DEyes>();
         alertSound = GetComponent<GuardAlertSound>();
         heardAlert = GetComponent<HeardAlert>();
         goCovering = GetComponent<GoCoveringTeammate>();
         distraction = GetComponent<Distraction>();
+        beenHypnosised = GetComponent<BeenHypnosised>();
+        wakeFromHypnosised = GetComponent<WakeUp>();
         Globals.maze.guards.Add(this);
 
         magicianOutVisionTime = 2.3f;
@@ -67,7 +76,38 @@ public class Guard : Actor
         if (anim != null)
         {
             anim["A"].speed = attackSpeed;
-        }        
+        }       
+        // 找到自己在守护的那颗宝石
+        if(patrol != null)
+        {
+            // 找出最远的视野
+            float fovMaxDistance = UnityEngine.Mathf.NegativeInfinity;
+            foreach (FOV2DEyes eye in eyes)
+            {
+                if (eye.fovMaxDistance > fovMaxDistance)
+                {
+                    fovMaxDistance = eye.fovMaxDistance;
+                }
+            }
+
+            // 先用简单的算法。如果四个巡逻点以及出生点中，其中一个点距离宝石小于了fovMaxDistance，那这颗宝石就是这个守卫在守护的宝石，
+            System.Collections.Generic.List<UnityEngine.Vector3> poses = new System.Collections.Generic.List<UnityEngine.Vector3>(patrol.routePoses);
+            poses.Add(Globals.GetPathNodePos(birthNode));
+            foreach (UnityEngine.GameObject gem in Globals.maze.gemHolders)
+            {
+                foreach (UnityEngine.Vector3 pos in poses)
+                {
+                    float dis = UnityEngine.Vector3.Distance(pos, gem.transform.position);
+                    if (dis < fovMaxDistance)
+                    {
+                        guardedGemHolder = gem;
+                        break;
+                        // to do: 找到最近的那一颗宝石
+                        // fovMaxDistance = dis;
+                    }
+                }
+            }
+        }
         base.Start();
     }
 
@@ -78,8 +118,13 @@ public class Guard : Actor
 
     public void InitArrangeUI()
     {
-        uiPrefab = UnityEngine.Resources.Load("Avatar/CanvasOnGuard") as UnityEngine.GameObject;        
+        defenderArrangeUIPrefab = UnityEngine.Resources.Load("Avatar/CanvasOnGuard") as UnityEngine.GameObject;        
     }
+
+    public void InitTricksUI()
+    {
+        challengerTricksUIPrefab = UnityEngine.Resources.Load("Avatar/TricksOnGuard") as UnityEngine.GameObject;        
+    }    
 
     public void Choosen()
     {
@@ -91,7 +136,7 @@ public class Guard : Actor
                         new ScaleTo(transform, scaleCache, 0.1f))
                         )
                         );
-        ShowBtns();        
+        ShowArrangeBtns();        
         Tint();
         if (patrol != null)
         {
@@ -114,12 +159,13 @@ public class Guard : Actor
         Globals.maze.choosenGuard = null;
     }
 
-    public bool isShownBtns = true;
-    public void ShowBtns()
+    [UnityEngine.HideInInspector]
+    public bool isShownBtn = false;
+    public void ShowArrangeBtns()
     {
-        if (!isShownBtns)
+        if (!isShownBtn)
         {
-            UnityEngine.GameObject obj = UnityEngine.GameObject.Instantiate(uiPrefab) as UnityEngine.GameObject;
+            UnityEngine.GameObject obj = UnityEngine.GameObject.Instantiate(defenderArrangeUIPrefab) as UnityEngine.GameObject;
             canvasForCommandBtns = obj.GetComponent<UnityEngine.Canvas>();
             canvasForCommandBtns.worldCamera = Globals.cameraFollowMagician.camera;
             beginPatrolBtn = obj.GetComponentInChildren<BeginPatrolBtn>();
@@ -129,15 +175,38 @@ public class Guard : Actor
             takeGuardBackBtn = obj.GetComponentInChildren<TakeGuardBack>();
             takeGuardBackBtn.guard = this;
 
-            isShownBtns = true;            
+            isShownBtn = true;            
             canvasForCommandBtns.GetComponent<Actor>().AddAction(
                 new ScaleTo(canvasForCommandBtns.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), 0.2f));            
         }        
     }
 
+    public void ShowTrickBtns()
+    {
+        if (!isShownBtn)
+        {
+            UnityEngine.GameObject obj = UnityEngine.GameObject.Instantiate(challengerTricksUIPrefab) as UnityEngine.GameObject;
+            canvasForCommandBtns = obj.GetComponent<UnityEngine.Canvas>();
+            canvasForCommandBtns.worldCamera = Globals.cameraFollowMagician.camera;
+
+            TrickBtnOnGuardHead btn = obj.GetComponentInChildren<TrickBtnOnGuardHead>();
+            if(beenHypnosised != null)
+            {
+                btn.guard = this;
+            }
+            else
+            {
+                btn.gameObject.SetActive(false);
+            }
+
+            isShownBtn = true;            
+        }
+    }
+    
+
     public void HideBtns()
     {
-        isShownBtns = false;
+        isShownBtn = false;
         if (canvasForCommandBtns != null)
         {
             Destroy(canvasForCommandBtns.gameObject);
@@ -145,14 +214,19 @@ public class Guard : Actor
         }        
     }
 
+    public void EnableEyes(bool enable)
+    {
+        foreach (FOV2DEyes eye in eyes)
+        {
+            eye.gameObject.SetActive(enable);
+        }
+    }
+
     public void BeginPatrol()
     {
         if (patrol != null)
         {
-            foreach (FOV2DEyes eye in eyes)
-            {
-                eye.gameObject.SetActive(true);
-            }
+            EnableEyes(true);
             patrol.RouteConfirmed();
             patrol.SetRouteCubesVisible(false);
             patrol.Excute();
@@ -161,10 +235,7 @@ public class Guard : Actor
 
     public void StopAttacking()
     {
-        foreach (FOV2DEyes eye in eyes)
-        {
-            eye.gameObject.SetActive(false);
-        }
+        EnableEyes(false);        
         currentAction.Stop();
         anim.CrossFade("idle");
     }
@@ -298,10 +369,14 @@ public class Guard : Actor
         {
             canvasForCommandBtns.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 1.0f, 0.0f);
         }        
-	}
+    }   
 
     public virtual void SpotEnemy(UnityEngine.GameObject gameObj)
     {
+        if(!eyes[0].gameObject.activeSelf)
+        {
+            return;
+        }
         if (gameObj.layer == 11)
         {
             spot.SpotMagician(gameObj, magicianOutVisionTime, true);
@@ -310,5 +385,32 @@ public class Guard : Actor
         {
             spot.SpotMagician(gameObj, doveOutVisionTime, true);
         }
+    }
+
+    public bool IsSeenEnemy(UnityEngine.GameObject enemy)
+    {
+        // 如果守卫面对着魔术师
+        UnityEngine.Vector3 magicianDir = enemy.transform.position - transform.position;
+        magicianDir.y = 0;
+        UnityEngine.Vector3 faceDir = transform.forward;
+        faceDir.y = 0;
+        float angle = UnityEngine.Vector3.Angle(magicianDir, faceDir);
+        if (angle < 90 && angle > -90)
+        {
+            // 而且中间没有任何墙体挡住
+            UnityEngine.RaycastHit hitInfo;
+            int layermask = 1 << 8;
+            UnityEngine.Ray ray = new UnityEngine.Ray(transform.position, magicianDir);
+            if (!UnityEngine.Physics.Raycast(ray, out hitInfo, magicianDir.magnitude, layermask))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return false;
     }
 }

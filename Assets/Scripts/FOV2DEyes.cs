@@ -85,10 +85,27 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
 			}
 		}
 	}
-
-
+    
     void OnTriggerEnter(UnityEngine.Collider other)
     {
+        // 由于FOV的更新频率问题，有时候墙后的也会被看到
+        if (!guard.IsSeenEnemy(other.gameObject))
+        {
+            return;
+        }
+        // 如果是宝石，检查是否被偷
+        if (guard.realiseGemLost != null && 
+            guard.realiseGemLost != guard.currentAction &&
+            guard.spot.target == null && 
+            other.gameObject == guard.guardedGemHolder)
+        {            
+            if (other.gameObject.layer == 24 && other.GetComponentInChildren<Gem>() == null)
+            {
+                guard.realiseGemLost.Excute();
+                return;
+            }
+        }
+        
         if (other.enabled)
         {
             guard.SpotEnemy(other.gameObject);            

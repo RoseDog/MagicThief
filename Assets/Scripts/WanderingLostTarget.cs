@@ -12,6 +12,7 @@ public class WanderingLostTarget : GuardAction
             guard.heardAlert.alertTeammate = null;
         }
         guard.anim.CrossFade("idle");
+        guard.HideBtns();
         Invoke("GoOnPatrol", 3.0f);
     }
 

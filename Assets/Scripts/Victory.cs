@@ -1,9 +1,9 @@
 ﻿public class Victory : Action
 {
     public override void Excute()
-    {
+    {        
+        base.Excute();
         UnityEngine.Debug.Log("magician victory:" + actor.anim["A_Shake_Hand_1"].length.ToString());
-        base.Excute();        
         actor.OutStealing();
         Invoke("Escape",actor.anim["A_Shake_Hand_1"].length);
         actor.anim.Play("A_Shake_Hand_1");        

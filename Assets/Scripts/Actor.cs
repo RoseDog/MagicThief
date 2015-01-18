@@ -1,10 +1,17 @@
 ﻿public class Actor : UnityEngine.MonoBehaviour 
 {
+    [UnityEngine.HideInInspector]
     public UnityEngine.Animation anim;
+    [UnityEngine.HideInInspector]
     public UnityEngine.CharacterController controller;
+
     public Action currentAction;
+
+    [UnityEngine.HideInInspector]
     public Hitted hitted;
+    [UnityEngine.HideInInspector]
     public LifeOver lifeOver;
+    [UnityEngine.HideInInspector]
     public GuardMoving moving;
 
     [UnityEngine.HideInInspector]
@@ -17,9 +24,13 @@
     UnityEngine.GameObject pathMeshPrefab;
     UnityEngine.GameObject pathMesh;
 
+    [UnityEngine.HideInInspector]
     public bool bVisible = false;
-
+    [UnityEngine.HideInInspector]
     public bool Stealing = false;
+
+    [UnityEngine.HideInInspector]
+    public bool inLight = false;
 
     [UnityEngine.HideInInspector]
     public int LifeAmount;
@@ -29,6 +40,7 @@
     public int PowerAmount;
     [UnityEngine.HideInInspector]
     public int PowerCurrent;
+    
 
     public virtual void Awake()
     {        
@@ -216,6 +228,7 @@
         powerTemp += delta;
         if (powerTemp < 0)
         {
+            Globals.tipDisplay.Msg("魔力值不够了");
             return false;
         }
         else

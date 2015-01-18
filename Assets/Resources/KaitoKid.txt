@@ -1,6 +1,7 @@
-﻿GuardCount=2
-(0.2500, 0.0000, -8.2500)=Lamp
-(4.2500, 0.0000, 6.2500)=Lamp
+﻿GuardCount=3
+(-3.2500, 0.0000, -12.7500)=Lamp
+(8.7500, 0.0000, 12.2500)=Lamp
+(-11.2500, 0.0500, -10.7500)=Guard
 randSeedCacheWhenEditLevel=1014913832
 Z_CELLS_COUNT=10
 X_CELLS_COUNT=6

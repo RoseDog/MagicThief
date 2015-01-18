@@ -58,8 +58,8 @@
             if (Globals.unclickedBuildingAchives.Count == 0 && Globals.buildingAchives.Count == 0)
             {
                 System.Collections.Generic.List<IniFile> newAchives = new System.Collections.Generic.List<IniFile>() { 
-                    IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition1\n" + Globals.TargetBuildingDescriptionKey + "=猫眼三姐妹"), 
                     IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition2\n" + Globals.TargetBuildingDescriptionKey + "=扑克脸"),
+                    IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition1\n" + Globals.TargetBuildingDescriptionKey + "=猫眼三姐妹"),
                     IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition3\n" + Globals.TargetBuildingDescriptionKey + "=现金眼")};
                 Globals.AddNewTargetBuildingAchives(newAchives);
 

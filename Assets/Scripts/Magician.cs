@@ -1,12 +1,7 @@
 public class Magician : Actor
 {
     public bool isMoving;    
-    /** Minimum velocity for moving */
-    public float sleepVelocity = 0.4F;
 
-    /** Speed relative to velocity with which to play animations */
-    public float animationSpeed = 0.2F;
-    public float speed = 3.0f;
     public BattleUI battleUI;
 
     public Escape escape;
@@ -14,8 +9,8 @@ public class Magician : Actor
     public Falling falling;
     public Incant incant;
     public Disguise disguise;
-    public ShotLight shotLight;
-
+    public ShotLight shot;
+    public Hypnosis hypnosis;
     
     public override void Awake()
     {
@@ -25,7 +20,8 @@ public class Magician : Actor
         falling = GetComponent<Falling>();
         incant = GetComponent<Incant>();
         disguise = GetComponent<Disguise>();
-        shotLight = GetComponent<ShotLight>();
+        shot = GetComponent<ShotLight>();
+        hypnosis = GetComponent<Hypnosis>();
         moving.canMove = false;  
         gameObject.name = "Mage_Girl";              
         Globals.magician = this;
@@ -97,28 +93,32 @@ public class Magician : Actor
     public void TrickBtnClicked(UnityEngine.UI.Button btn)
     {
         int powerDelta = System.Convert.ToInt32(btn.GetComponentInChildren<UnityEngine.UI.Text>().text);
-        FireTrick(btn.name, powerDelta);
-    }
-
-    public void FireTrick(System.String trickName, int powerDelta, UnityEngine.Object paramObj = null)
-    {
         if (ChangePower(-powerDelta))
         {
-            if (trickName == "Dove")
+            if (btn.name == "Dove")
             {
             }
-            else if (trickName == "Disguise")
+            else if (btn.name == "Disguise")
             {
                 disguise.Excute();
             }
-            else if (trickName == "ShotLight")
-            {
-                Globals.magician.shotLight.Shot(paramObj as UnityEngine.GameObject);
-            }
         }
-        else
+    }
+
+    public void ShotLight(UnityEngine.GameObject bulb)
+    {
+        if (ChangePower(-10))
         {
-            Globals.tipDisplay.Msg("魔力值不够了");
+            shot.Shot(bulb);
+        }
+    }
+
+    public void CastHypnosis(Guard guard, UnityEngine.UI.Button btn)
+    {
+        int powerDelta = System.Convert.ToInt32(btn.GetComponentInChildren<UnityEngine.UI.Text>().text);
+        if (ChangePower(-powerDelta))
+        {
+            hypnosis.Cast(guard);
         }
     }
 

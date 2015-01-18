@@ -9,6 +9,10 @@ public class Spot : GuardAction
         if (target != magician.transform)
         {
             target = magician.transform;
+            if(target == Globals.magician.transform)
+            {
+                guard.ShowTrickBtns();
+            }
             Excute();
             if (goChasing)
             {
@@ -25,7 +29,11 @@ public class Spot : GuardAction
         {
             this.CancelInvoke("EnemyOutVision");
         }
-        this.Invoke("EnemyOutVision", outVisionTime);
+
+        if (!target.GetComponent<Actor>().inLight)
+        {
+            this.Invoke("EnemyOutVision", outVisionTime);
+        }        
     }
 
     public override void Excute()

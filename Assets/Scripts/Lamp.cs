@@ -13,7 +13,7 @@
         LightCone = Globals.getChildGameObject(gameObject, "LightCone");
     }
 
-    float fixingDuration = 5.0f;
+    float fixingDuration = 15.0f;
     public void BulbBroken()
     {
         fixTimer.BeginCountDown(bulb, fixingDuration, UnityEngine.Vector3.zero);
