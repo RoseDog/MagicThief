@@ -26,11 +26,11 @@ public class Globals
     // 以后要存到服务器上的
     public enum TutorialLevel
     {
-        FirstFalling = 0,
-        Chest,
-        Guard,
-        MagicianBorn,
-        InitMaze,
+        GetGem = 0,
+        GetAroundGuard,
+        FirstTrick,
+        FirstTarget,
+        InitMyMaze,
         Over
     }
     public static TutorialLevel TutorialLevelIdx = TutorialLevel.Over;
@@ -235,7 +235,7 @@ public class Globals
         Globals.maze.minRoomZCellsCount = ini.get("minRoomZCellsCount", 0);
         Globals.maze.maxRoomZCellsCount = ini.get("maxRoomZCellsCount", 0);
         Globals.maze.GEMS_COUNT = ini.get("GEMS_COUNT", 0);
-        Globals.maze.LevelTipText = ini.get("LevelTipText");        
+        Globals.maze.LevelTipText = ini.get("LevelTipText");            
     }
 
     public static void SaveMazeIniFile(System.String mazeIniFileName)
