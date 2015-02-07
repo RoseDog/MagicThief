@@ -35,6 +35,7 @@
     {
         UnityEngine.GameObject rose3d = UnityEngine.GameObject.Instantiate(rose3d_prefab) as UnityEngine.GameObject;
         rose3d.transform.position = roseBtn.transform.position;
-        rose3d.GetComponent<FlyToScreenNumber>().ToRoseNumber(false);
+        rose3d.GetComponent<FlyToScreenNumber>().ToRoseNumber();
+        Globals.roseCount += 1;
     }
 }

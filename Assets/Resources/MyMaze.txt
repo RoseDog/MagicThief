@@ -1,0 +1,16 @@
+﻿GuardCount=2
+(1.7500, 0.0500, 2.7500)=Tiger
+(-4.2500, 0.0500, -1.7500)=Guard
+randSeedCacheWhenEditLevel=-1471226901
+Z_CELLS_COUNT=6
+X_CELLS_COUNT=4
+CHANGE_DIRECTION_MODIFIER=50
+sparsenessModifier=26
+deadEndRemovalModifier=100
+noOfRoomsToPlace=3
+minRoomXCellsCount=2
+maxRoomXCellsCount=2
+minRoomZCellsCount=2
+maxRoomZCellsCount=2
+GEMS_COUNT=0
+LevelTipText=

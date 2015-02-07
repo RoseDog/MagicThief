@@ -63,6 +63,7 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
     float currentTime;
     public void MoveToPoint(UnityEngine.Vector3 look, UnityEngine.Vector3 offset, float duration)
     {
+        enabled = true;
         EndLookAt = RestrictPosition(look);
         EndOffset = offset;
         StartMove = lookAt;
@@ -92,6 +93,7 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
         }
         lookAt = EndLookAt;
         disOffset = EndOffset;
+        UnityEngine.Debug.Log(disOffset);
         //moving = false;
     }
 

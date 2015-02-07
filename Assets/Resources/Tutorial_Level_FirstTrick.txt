@@ -1,0 +1,17 @@
+﻿GuardCount=3
+(3.7500, 0.0500, -3.2500)=lancer
+(-8.7500, 0.0500, -1.2500)=lancer
+(-13.2500, 0.0500, -1.2500)=lancer
+randSeedCacheWhenEditLevel=553263908
+Z_CELLS_COUNT=7
+X_CELLS_COUNT=5
+CHANGE_DIRECTION_MODIFIER=50
+sparsenessModifier=60
+deadEndRemovalModifier=100
+noOfRoomsToPlace=3
+minRoomXCellsCount=2
+maxRoomXCellsCount=2
+minRoomZCellsCount=2
+maxRoomZCellsCount=2
+GEMS_COUNT=3
+LevelTipText=“睡个好觉”

@@ -16,6 +16,15 @@
         animationNamesArray.Add("A_Shake_Hand_1");        
 	}
 
+    void OnDestroy()
+    {
+        for (int idx = 0; idx < 1; ++idx)
+        {
+            Finger finger = Globals.input.GetFingerByID(idx);
+            finger.Evt_Down -= OnFingerDown;
+        }
+    }
+
     public bool OnFingerDown(object sender)
     {
         Finger finger = sender as Finger;

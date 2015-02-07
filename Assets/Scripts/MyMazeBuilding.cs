@@ -3,6 +3,6 @@
     public void IntoHomeMaze()
     {
         base.DivedIn();
-        Globals.asyncLoad.ToLoadSceneAsync("MagicianHome");        
+        Globals.asyncLoad.ToLoadSceneAsync("MyMaze");        
     }
 }

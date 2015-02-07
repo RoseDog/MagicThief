@@ -14,7 +14,8 @@ public class TipDisplayManager : UnityEngine.MonoBehaviour
     {
         Tip tip = (Instantiate(tipPrefab) as UnityEngine.GameObject).GetComponent<Tip>();
         UnityEngine.RectTransform tipTransform = tip.GetComponent<UnityEngine.RectTransform>();
-        tipTransform.SetParent(Globals.canvasForMagician.transform);
+        tipTransform.SetParent(Globals.LevelController.mainCanvas.transform);        
+        tipTransform.SetAsLastSibling();
         tipTransform.localScale = new UnityEngine.Vector3(1.0f, 1.0f, 1.0f);
         
         // left
@@ -22,8 +23,7 @@ public class TipDisplayManager : UnityEngine.MonoBehaviour
         // right
         //tipTransform.sizeDelta = new UnityEngine.Vector2(0.0f, tipTransform.sizeDelta.y);
 
-
-        tip.uiText.text = msg;
+        Globals.languageTable.SetText(tip.uiText, msg);
         msgList.Add(tipTransform);
         float tip_y_pos = UnityEngine.Screen.height * 0.5f;
         for (int idx = msgList.Count - 1; idx >= 0; --idx )

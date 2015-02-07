@@ -1,4 +1,4 @@
-﻿public class Chest : Actor 
+﻿public class Chest : Actor, System.IComparable<Chest>
 {
     bool isMagicianNear = false;
     bool isPlayingBack = false;
@@ -11,11 +11,32 @@
 
     Cell locate;
 
-    UnityEngine.GameObject coinPrefab = UnityEngine.Resources.Load("Props/GoldCoin") as UnityEngine.GameObject;
+    UnityEngine.GameObject coinPrefab;
+    UnityEngine.GameObject SafeboxUpgradeUIPrefab;
+    UnityEngine.Canvas canvasForSafeboxBtns;
+
+    public SafeBoxData data;
+
+    public int CompareTo(Chest other)
+    {
+        if(other == this)
+        {
+            return 0;
+        }
+        if (UnityEngine.Vector3.Distance(transform.position, Globals.maze.left_up_corner_pos) >
+            UnityEngine.Vector3.Distance(other.transform.position, Globals.maze.left_up_corner_pos))
+        {
+            return 1;
+        }
+        return -1;
+    }
 
     public override void Awake()
     {
         base.Awake();
+        coinPrefab = UnityEngine.Resources.Load("Props/GoldCoin") as UnityEngine.GameObject;
+        SafeboxUpgradeUIPrefab = UnityEngine.Resources.Load("Avatar/CanvasOnSafebox") as UnityEngine.GameObject;
+
         animation["ChestAnim"].speed = 2.0f;
         chestMesh = GetComponentInChildren<UnityEngine.SkinnedMeshRenderer>();
         foreach (UnityEngine.Renderer renderer in renderers)
@@ -117,14 +138,10 @@
 
         // 在教程中，TutorialThief偷东西的时候，不生成往界面上飞的金币
         TutorialLevelController controller = Globals.LevelController as TutorialLevelController;
-        if (controller == null)
+        if (controller != null)
         {
-            return;
-        }
-        if (Globals.cameraFollowMagician != null)
-        {
-            StartCoroutine(Coins());        
-        }
+            StartCoroutine(Coins());
+        }               
     }
 
     public void ResetGold()
@@ -221,5 +238,48 @@
     void FallingOver()
     {
         ClearAllActions();
+    }
+
+    bool isShownBtn = false;
+    public void ShowUpgradeBtn()
+    {
+        AddAction(
+                new Cocos2dParallel(
+                    new Sequence(new ScaleTo(transform, new UnityEngine.Vector3(1.6f, 1.6f, 1.6f), 0.1f),
+                        new ScaleTo(transform, scaleCache, 0.1f))
+                        )
+                        );
+
+        if (!isShownBtn)
+        {
+            UnityEngine.GameObject obj = UnityEngine.GameObject.Instantiate(SafeboxUpgradeUIPrefab) as UnityEngine.GameObject;
+            canvasForSafeboxBtns = obj.GetComponent<UnityEngine.Canvas>();
+            canvasForSafeboxBtns.worldCamera = Globals.cameraFollowMagician.camera;
+
+            UnityEngine.UI.Button UpgradeBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(obj, "UpgradeBtn");
+            UpgradeBtn.onClick.AddListener(() => UpgradeBtnClicked());
+
+            isShownBtn = true;
+            canvasForSafeboxBtns.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 1.0f, 0.0f);
+            canvasForSafeboxBtns.GetComponent<Actor>().AddAction(
+                new ScaleTo(canvasForSafeboxBtns.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), 0.2f));
+        } 
+    }
+
+    void UpgradeBtnClicked()
+    {
+        UnityEngine.GameObject SafeboxUpgradeUI_prefab = UnityEngine.Resources.Load("UI/SafeboxUpgradeUI") as UnityEngine.GameObject;
+        SafeboxUpgradeUI upgradeUI = (UnityEngine.GameObject.Instantiate(SafeboxUpgradeUI_prefab) as UnityEngine.GameObject).GetComponentInChildren<SafeboxUpgradeUI>();
+        upgradeUI.SetSafebox(this);
+    }
+
+    public void HideBtn()
+    {
+        isShownBtn = false;
+        if (canvasForSafeboxBtns != null)
+        {
+            Destroy(canvasForSafeboxBtns.gameObject);
+            canvasForSafeboxBtns = null;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿public class MagicianTrickAction : Action 
 {
+    public TrickData data;
     protected Magician mage;
     protected System.String animationName;
     protected System.String castTrickFuncName;    
@@ -12,7 +13,7 @@
 
         rotateBody = GetComponent<RotateUpperBody>();
 
-        if (!Globals.AvatarAnimationEventNameCache.Contains(actor.name + "-" + animationName))
+        if (actor.anim[animationName] != null && !Globals.AvatarAnimationEventNameCache.Contains(actor.name + "-" + animationName))
         {
             actor.anim[animationName].layer = 3;
 
@@ -46,14 +47,17 @@
 
     public virtual void TrickActionEnd()
     {
-        Stop();
+        base.Stop();
         rotateBody.enabled = false;
     }
 
     public override void Excute()
     {
         base.Excute();
-        actor.anim.Play(animationName);
-        actor.anim[animationName].weight = 1.0f;
+        if (actor.anim[animationName] != null)
+        {
+            actor.anim.Play(animationName);
+            actor.anim[animationName].weight = 1.0f;
+        }        
     }
 }

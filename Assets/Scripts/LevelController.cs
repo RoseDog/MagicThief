@@ -1,15 +1,28 @@
 ﻿public class LevelController : Actor
 {
-    public int randomSeed;    
+    public int randomSeed;
+    public UnityEngine.Canvas mainCanvas;
     public override void Awake()
     {
         base.Awake();
-        Globals.LevelController = this;        
+        Globals.LevelController = this;
+        if (Globals.canvasForMagician == null && (this as LevelEditor) == null)
+        {
+            UnityEngine.GameObject canvas_prefab = UnityEngine.Resources.Load("CanvasForMagician") as UnityEngine.GameObject;
+            UnityEngine.GameObject.Instantiate(canvas_prefab);
+        }
+        if (Globals.magician == null)
+        {
+            // 魔术师出场
+            UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/Mage_Girl") as UnityEngine.GameObject;
+            UnityEngine.GameObject.Instantiate(magician_prefab);
+            Globals.magician.gameObject.SetActive(false);
+        }
     }
 
     public virtual void BeforeGenerateMaze()
     {
-        Globals.ReadMazeIniFile(Globals.iniFileName);        
+        
     }
 
     public virtual void MazeFinished()
@@ -35,21 +48,9 @@
                 Pathfinding.Node birthNode = Globals.maze.pathFinder.GetSingleNode(pos, false);
 
                 Guard guard = Globals.CreateGuard(ini.get(keys[i]), birthNode);
-                if (guard.patrol != null)
-                {
-                    guard.patrol.DestroyRouteCubes();
-                    guard.patrol.Excute();
-                }
+                guard.BeginPatrol();
             }           
-        }
-        
-        
-        // 魔术师
-        if (Globals.canvasForMagician == null)
-        {
-            UnityEngine.GameObject canvas_prefab = UnityEngine.Resources.Load("CanvasForMagician") as UnityEngine.GameObject;
-            UnityEngine.GameObject.Instantiate(canvas_prefab);
-        }
+        }        
 
         Globals.transition.fadeColor.a = 1.0f;
         Globals.transition.BlackIn();
@@ -110,7 +111,12 @@
 
     public virtual void GuardDestroyed(Guard guard)
     {        
-    }    
+    }
+
+    public virtual void GuardChoosen(Guard guard)
+    {
+
+    }
 
     public virtual void GuardDropped(Guard guard)
     {

@@ -1,6 +1,5 @@
 ﻿public class BeenHypnosised : GuardAction
 {
-    float duration = 10.0f;
     UnityEngine.GameObject TrickTimerPrefab;
     UnityEngine.GameObject TrickTimer;
     public override void Awake()
@@ -8,7 +7,8 @@
         base.Awake();
         TrickTimerPrefab = UnityEngine.Resources.Load("UI/FakeGuardTimer") as UnityEngine.GameObject;
     }
-    public override void Excute()
+
+    public void GoToSleep(float duration)
     {
         base.Excute();
         actor.anim.Play("BeenHypnosised");

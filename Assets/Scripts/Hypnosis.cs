@@ -18,7 +18,7 @@
 
     public void GoToSleep()
     {
-        target.beenHypnosised.Excute();
+        target.beenHypnosised.GoToSleep(data.duration);
     }
 
     public override void TrickActionEnd()

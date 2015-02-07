@@ -19,8 +19,6 @@
         HideTip();
         base.Awake();
 
-        animation["repel"].speed = 0.2f;
-
         LifeAmount = 100;
         LifeCurrent = LifeAmount;
     }

@@ -3,7 +3,8 @@
     public override void Excute()
     {
         base.Excute();
-        actor.OutStealing();        
+        actor.OutStealing();
+        actor.moving.GetSeeker().GetCurrentPath().Reset();
         actor.anim.Play("die");
         Globals.LevelController.MagicianLifeOver();
     }

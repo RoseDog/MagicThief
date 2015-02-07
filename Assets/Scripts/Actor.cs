@@ -40,10 +40,11 @@
     public int PowerAmount;
     [UnityEngine.HideInInspector]
     public int PowerCurrent;
-    
 
+    protected UnityEngine.Vector3 scaleCache;    
     public virtual void Awake()
-    {        
+    {
+        scaleCache = transform.localScale;
         anim = GetComponent<UnityEngine.Animation>();
         controller = GetComponent<UnityEngine.CharacterController>();
         hitted = GetComponent<Hitted>();
@@ -125,6 +126,11 @@
         }
 
         bVisible = visibility;
+    }
+
+    public bool IsVisible()
+    {
+        return renderers[0].enabled;
     }
 
     public bool IsLifeOver()
@@ -228,7 +234,7 @@
         powerTemp += delta;
         if (powerTemp < 0)
         {
-            Globals.tipDisplay.Msg("魔力值不够了");
+            Globals.tipDisplay.Msg("not_enough_power");
             return false;
         }
         else
@@ -256,5 +262,5 @@
     {
         LifeCurrent = LifeAmount;
         PowerCurrent = PowerAmount;
-    }
+    }    
 }

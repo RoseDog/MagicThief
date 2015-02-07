@@ -1,3 +1,91 @@
+public class TrickData
+{
+    public System.String nameKey;
+    public System.String descriptionKey;
+    public float duration;
+    public int powerCost;
+    public int unlockRoseCount;
+    public int slotIdxInUsingPanel = -1;
+    public int price;
+    public bool bought = false;
+
+    public bool IsLocked()
+    {
+        if (Globals.roseCount >= unlockRoseCount)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public bool IsInUse()
+    {
+        if (slotIdxInUsingPanel == -1)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public void Use(int idx)
+    {
+        slotIdxInUsingPanel = idx;
+    }
+
+    public void Unuse()
+    {
+        slotIdxInUsingPanel = -1;
+    }
+}
+
+public class TrickUsingSlotData
+{
+    public int price;
+    public bool bought = false;
+}
+
+public class GuardHireInfo
+{
+    public System.String name;
+    public int price;
+    public bool locked;
+    public bool hired;
+    public int unlockMazeLv;
+    public GuardHireInfo(System.String n, int p)
+    {
+        name = n;
+        price = p;
+        hired = false;
+    }
+}
+
+public class MazeLvData
+{
+    public int roseRequire;
+    public int price;
+    public System.Collections.Generic.List<GuardHireInfo> guards;
+    public bool playerEverClickGuards = false;
+    public bool playerEverClickSafebox = false;
+    public int safeBoxCount;
+}
+
+public class SafeBoxLvData
+{
+    public int price;
+    public int capacity;
+    public SafeBoxLvData(int p, int c)
+    {
+        price = p;
+        capacity = c;
+    }
+}
+
+public class SafeBoxData
+{
+    public int Lv;
+    public int cashInBox;
+}
+
 public class Globals
 {
     public static readonly System.String EAST = "E";
@@ -6,12 +94,14 @@ public class Globals
     public static readonly System.String NORTH = "N";
     public static readonly System.String[] DIRECTIONS = { EAST, SOUTH, WEST, NORTH };
     public static bool SHOW_MACE_GENERATING_PROCESS = false;
-    public static bool SHOW_ROOMS = false;
+    public static bool SHOW_ROOMS = true;
     public static float CREATE_MAZE_TIME_STEP = 0.1f;
     public static float cameraMoveDuration = 1.2f;
     public static float uiMoveAndScaleDuration = 0.5f;
+    public static MultiLanguageTable languageTable;
     public static SelectGuard selectGuard;
     public static CanvasForMagician canvasForMagician;
+    public static CanvasForMyMaze canvasForMyMaze;
     public static PathFinder pathFinder;
     public static InputMgr input;
     public static MagicThiefCamera cameraFollowMagician;
@@ -23,6 +113,8 @@ public class Globals
     public static Magician magician;
     public static System.String iniFileName = "";
     public static float FLOOR_HEIGHT = 0.1f;
+    public static System.Collections.Generic.List<System.String> AvatarAnimationEventNameCache = new System.Collections.Generic.List<System.String>();
+
     // 以后要存到服务器上的
     public enum TutorialLevel
     {
@@ -34,16 +126,30 @@ public class Globals
         Over
     }
     public static TutorialLevel TutorialLevelIdx = TutorialLevel.Over;
-    public static float cashAmount;
+    public static float cashAmount = 8000000.0f;
+    public static int roseCount = 10000;
+    
+
+    public static System.String PosHolderKey = "PosHolder";
+    public static System.String TargetBuildingDescriptionKey = "Description";
     public static System.Collections.Generic.List<IniFile> unclickedBuildingAchives = new System.Collections.Generic.List<IniFile>();
     public static System.Collections.Generic.List<IniFile> buildingAchives = new System.Collections.Generic.List<IniFile>();
     public static System.Collections.Generic.List<IniFile> poorsBuildingAchives = new System.Collections.Generic.List<IniFile>();
     public static System.Collections.Generic.List<IniFile> roseBuildingAchives = new System.Collections.Generic.List<IniFile>();
-    public static IniFile currentStealingTargetBuildingAchive;
+    public static IniFile currentStealingTargetBuildingAchive;    
+    
+    public static System.Collections.Generic.List<TrickData> tricks = new System.Collections.Generic.List<TrickData>();
+    public static System.Collections.Generic.List<TrickItem> tricksInUse = new System.Collections.Generic.List<TrickItem>();
 
-    public static System.String PosHolderKey = "PosHolder";
-    public static System.String TargetBuildingDescriptionKey = "Description";
-    public static System.Collections.Generic.List<System.String> AvatarAnimationEventNameCache = new System.Collections.Generic.List<System.String>();
+    public static int CurrentMazeLevel = 0;
+    public static System.Collections.Generic.List<MazeLvData> mazeLvDatas = new System.Collections.Generic.List<MazeLvData>();
+
+    public static int buySafeBoxPrice = 3000;
+    public static SafeBoxLvData[] safeBoxLvDatas = new SafeBoxLvData[] { 
+        new SafeBoxLvData(2000, 10000), 
+        new SafeBoxLvData(5000, 15000), 
+        new SafeBoxLvData(8000, 25000) };
+    public static System.Collections.Generic.List<SafeBoxData> safeBoxDatas = new System.Collections.Generic.List<SafeBoxData>();    
 
     public static void AddNewTargetBuildingAchives(System.Collections.Generic.List<IniFile> newAchives)
     {
@@ -62,7 +168,6 @@ public class Globals
                 return;
             }            
         }
-        Assert(false);
     }
 
     public static void AddPoorBuildingAchives(IniFile achive)
@@ -175,7 +280,7 @@ public class Globals
         where T : UnityEngine.Component
     {
         //Author: Isaac Dart, June-13.
-        T[] ts = fromGameObject.GetComponentsInChildren<T>();
+        T[] ts = fromGameObject.GetComponentsInChildren<T>(true);
         foreach (T child in ts)
         {
             if (child.gameObject.name == withName)
@@ -219,11 +324,22 @@ public class Globals
         return equal;
     }
 
-    public static void ReadMazeIniFile(System.String mazeIniFileName)
+    public static void ReadMazeIniFile(System.String mazeIniFileName, bool readSeed)
     {
         IniFile ini = new IniFile(mazeIniFileName);
-        UnityEngine.Random.seed = ini.get("randSeedCacheWhenEditLevel", 0);
-        Globals.maze.randSeedCacheWhenEditLevel = UnityEngine.Random.seed;
+        
+        if (readSeed)
+        {
+            UnityEngine.Random.seed = ini.get("randSeedCacheWhenEditLevel", 0);
+            Globals.maze.randSeedCacheWhenEditLevel = ini.get("randSeedCacheWhenEditLevel", 0);
+        }
+        else
+        {
+            Globals.maze.randSeedCacheWhenEditLevel = UnityEngine.Random.seed;
+            UnityEngine.Random.seed = Globals.maze.randSeedCacheWhenEditLevel;
+        }
+        
+
         Globals.maze.Z_CELLS_COUNT = ini.get("Z_CELLS_COUNT", 0);
         Globals.maze.X_CELLS_COUNT = ini.get("X_CELLS_COUNT", 0);
         Globals.maze.CHANGE_DIRECTION_MODIFIER = ini.get("CHANGE_DIRECTION_MODIFIER", 0);
@@ -235,6 +351,7 @@ public class Globals
         Globals.maze.minRoomZCellsCount = ini.get("minRoomZCellsCount", 0);
         Globals.maze.maxRoomZCellsCount = ini.get("maxRoomZCellsCount", 0);
         Globals.maze.GEMS_COUNT = ini.get("GEMS_COUNT", 0);
+        Globals.maze.LAMPS_COUNT = ini.get("LAMPS_COUNT", 0);        
         Globals.maze.LevelTipText = ini.get("LevelTipText");            
     }
 
@@ -260,6 +377,7 @@ public class Globals
         ini.set("minRoomZCellsCount", Globals.maze.minRoomZCellsCount);
         ini.set("maxRoomZCellsCount", Globals.maze.maxRoomZCellsCount);
         ini.set("GEMS_COUNT", Globals.maze.GEMS_COUNT);
+        ini.set("LAMPS_COUNT", Globals.maze.LAMPS_COUNT);        
         ini.set("LevelTipText", Globals.maze.LevelTipText);
 
         ini.save(mazeIniFileName);
@@ -314,5 +432,22 @@ public class Globals
             new UnityEngine.EventSystems.EventTrigger.Entry() { callback = trigger, eventID = triggerType };
         // Add the EventTrigger.Entry to delegates list on the EventTrigger
         eventTrigger.delegates.Add(entry);
+    }
+
+    public static void MessageBox(System.String text, UnityEngine.Events.UnityAction action = null)
+    {
+        UnityEngine.GameObject msgbox_prefab = UnityEngine.Resources.Load("UI/MsgBox") as UnityEngine.GameObject;
+        MsgBox msgbox = (UnityEngine.GameObject.Instantiate(msgbox_prefab) as UnityEngine.GameObject).GetComponent<MsgBox>();        
+        msgbox.Msg(text,action);
+    }
+
+    public static int AccumulateCashInBox()
+    {
+        int amount = 0;
+        foreach (SafeBoxData data in safeBoxDatas)
+        {
+            amount += data.cashInBox;
+        }
+        return amount;
     }
 }

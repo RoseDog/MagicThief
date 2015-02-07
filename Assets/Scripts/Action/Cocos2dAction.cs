@@ -7,10 +7,10 @@ public class Cocos2dAction
 	public MonoBehaviour parent = null;
 	
 	// completed flag
-	protected bool completed = false;
+    public bool completed = false;
 	
 	// initialized flag
-	protected bool initialized = false;
+    public bool initialized = false;
 	
 	// Return true if action is completed
 	public bool IsCompleted() { return completed; }

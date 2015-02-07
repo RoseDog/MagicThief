@@ -10,8 +10,8 @@ public class Guard : Actor
     public WanderingLostTarget wandering;
     public BackToBirthCell backing;
     public UnityEngine.Canvas canvasForCommandBtns;
-    public BeginPatrolBtn beginPatrolBtn;
-    public TakeGuardBack takeGuardBackBtn;    
+    UnityEngine.UI.Button CancelHireBtn;
+    UnityEngine.UI.Button GuardInfoBtn;
     public FOV2DEyes[] eyes;
     public GuardAlertSound alertSound;
     public HeardAlert heardAlert;
@@ -19,8 +19,7 @@ public class Guard : Actor
     public Distraction distraction;
     public BeenHypnosised beenHypnosised;
     public WakeUp wakeFromHypnosised;
-    public RealiseGemLost realiseGemLost;
-    UnityEngine.Vector3 scaleCache;
+    public RealiseGemLost realiseGemLost;    
 
     [UnityEngine.HideInInspector]
     public bool walkable;
@@ -42,9 +41,10 @@ public class Guard : Actor
     UnityEngine.GameObject challengerTricksUIPrefab;
 
     public UnityEngine.GameObject guardedGemHolder = null;
+
+    public GuardHireInfo hireInfo;
     public override void Awake()
-    {        
-        scaleCache = transform.localScale;
+    {                
         patrol = GetComponent<Patrol>();
         chase = GetComponent<Chase>();
         spot = GetComponent<Spot>();
@@ -76,9 +76,33 @@ public class Guard : Actor
         if (anim != null)
         {
             anim["A"].speed = attackSpeed;
-        }       
+        }
+        base.Start();
+    }
+
+    public void OnDestroy()
+    {
+        if (currentAction != null)
+        {
+            currentAction.Stop();
+        }
+        Globals.maze.guards.Remove(this);
+    }
+
+    public void InitArrangeUI()
+    {
+        defenderArrangeUIPrefab = UnityEngine.Resources.Load("Avatar/CanvasOnGuard") as UnityEngine.GameObject;        
+    }
+
+    public void InitTricksUI()
+    {
+        challengerTricksUIPrefab = UnityEngine.Resources.Load("Avatar/TricksOnGuard") as UnityEngine.GameObject;        
+    }
+
+    public void FindGuardedGem()
+    {
         // 找到自己在守护的那颗宝石
-        if(patrol != null)
+        if (patrol != null)
         {
             // 找出最远的视野
             float fovMaxDistance = UnityEngine.Mathf.NegativeInfinity;
@@ -108,27 +132,12 @@ public class Guard : Actor
                 }
             }
         }
-        base.Start();
     }
-
-    public void OnDestroy()
-    {
-        Globals.maze.guards.Remove(this);
-    }
-
-    public void InitArrangeUI()
-    {
-        defenderArrangeUIPrefab = UnityEngine.Resources.Load("Avatar/CanvasOnGuard") as UnityEngine.GameObject;        
-    }
-
-    public void InitTricksUI()
-    {
-        challengerTricksUIPrefab = UnityEngine.Resources.Load("Avatar/TricksOnGuard") as UnityEngine.GameObject;        
-    }    
 
     public void Choosen()
     {
         UnityEngine.Debug.Log("Choosen");
+        Globals.LevelController.GuardChoosen(this);
         ClearAllActions();
         AddAction(
                 new Cocos2dParallel(
@@ -136,7 +145,7 @@ public class Guard : Actor
                         new ScaleTo(transform, scaleCache, 0.1f))
                         )
                         );
-        ShowArrangeBtns();        
+        ShowArrangeBtns();
         Tint();
         if (patrol != null)
         {
@@ -168,17 +177,68 @@ public class Guard : Actor
             UnityEngine.GameObject obj = UnityEngine.GameObject.Instantiate(defenderArrangeUIPrefab) as UnityEngine.GameObject;
             canvasForCommandBtns = obj.GetComponent<UnityEngine.Canvas>();
             canvasForCommandBtns.worldCamera = Globals.cameraFollowMagician.camera;
-            beginPatrolBtn = obj.GetComponentInChildren<BeginPatrolBtn>();
-            beginPatrolBtn.guard = this;
-            beginPatrolBtn.patrol = patrol;
 
-            takeGuardBackBtn = obj.GetComponentInChildren<TakeGuardBack>();
-            takeGuardBackBtn.guard = this;
+            UnityEngine.UI.Button ConfirmHireBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(obj, "ConfirmHireBtn");
+            ConfirmHireBtn.onClick.AddListener(() => ConfirmBtnClicked());
 
-            isShownBtn = true;            
+            GuardInfoBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(obj, "GuardInfoBtn");
+            CancelHireBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(obj, "CancelHireBtn");
+
+            if (everConfirmed)
+            {
+                CancelHireBtn.gameObject.SetActive(false);
+                GuardInfoBtn.onClick.AddListener(() => GuardInfoBtnClicked());            
+            }
+            else
+            {
+                GuardInfoBtn.gameObject.SetActive(false);
+                CancelHireBtn.onClick.AddListener(() => CancelHireBtnClicked());
+            }                        
+
+            isShownBtn = true;
+            canvasForCommandBtns.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 1.0f, 0.0f);
             canvasForCommandBtns.GetComponent<Actor>().AddAction(
                 new ScaleTo(canvasForCommandBtns.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), 0.2f));            
         }        
+    }
+
+    bool everConfirmed = false;
+    public void ConfirmBtnClicked()
+    {        
+        if (birthNode.walkable == walkable)
+        {
+            everConfirmed = true;
+            if (hireInfo != null)
+            {
+                hireInfo.hired = true;
+            }
+            Unchoose();
+            Globals.LevelController.GuardDropped(this);
+        }
+        else
+        {
+            if (walkable)
+            {
+                Globals.tipDisplay.Msg("guard_cant_be_on_wall");
+            }
+            else
+            {
+                Globals.tipDisplay.Msg("lamp_cant_be_on_road");
+            }
+        }
+    }
+
+    public void CancelHireBtnClicked()
+    {
+        HideBtns();
+        Globals.DestroyGuard(this);        
+    }
+
+    public void GuardInfoBtnClicked()
+    {
+        UnityEngine.GameObject GuardInfoUI_prefab = UnityEngine.Resources.Load("UI/GuardInfoUI") as UnityEngine.GameObject;
+        GuardInfoUI info = (UnityEngine.GameObject.Instantiate(GuardInfoUI_prefab) as UnityEngine.GameObject).GetComponentInChildren<GuardInfoUI>();
+        info.SetGuard(this);
     }
 
     public void ShowTrickBtns()
@@ -224,6 +284,7 @@ public class Guard : Actor
 
     public void BeginPatrol()
     {
+        everConfirmed = true;
         if (patrol != null)
         {
             EnableEyes(true);
@@ -398,19 +459,26 @@ public class Guard : Actor
         if (angle < 90 && angle > -90)
         {
             // 而且中间没有任何墙体挡住
-            UnityEngine.RaycastHit hitInfo;
-            int layermask = 1 << 8;
-            UnityEngine.Ray ray = new UnityEngine.Ray(transform.position, magicianDir);
-            if (!UnityEngine.Physics.Raycast(ray, out hitInfo, magicianDir.magnitude, layermask))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return IsBlockByWall(enemy);
         }
 
         return false;
+    }
+
+    public bool IsBlockByWall(UnityEngine.GameObject enemy)
+    {
+        UnityEngine.Vector3 magicianDir = enemy.transform.position - transform.position;
+        magicianDir.y = 0;
+        UnityEngine.RaycastHit hitInfo;
+        int layermask = 1 << 8;
+        UnityEngine.Ray ray = new UnityEngine.Ray(transform.position, magicianDir);
+        if (!UnityEngine.Physics.Raycast(ray, out hitInfo, magicianDir.magnitude, layermask))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

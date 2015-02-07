@@ -25,7 +25,7 @@
     }   
 
     public void ToLoadSceneAsync(string nextLevelName)
-    {
+    {        
         Globals.EnableAllInput(false);
         LastLevelName = UnityEngine.Application.loadedLevelName;
         Next = nextLevelName;
@@ -34,6 +34,7 @@
 
     public void _ToLoadingScene()
     {
+        Globals.magician.gameObject.SetActive(false);
         UnityEngine.Application.LoadLevel("loading");
     }
 
@@ -49,9 +50,8 @@
         {
             float val = (float)progress / 100.0f;
             gui_bar_script.Value = val;
-            System.String text = "场景加载" + progress.ToString() + "%";
+            Globals.languageTable.SetText(ui_text, "level_loading_progress", new System.String[] { progress.ToString() });
             progress += 2;
-            ui_text.text = text;
             yield return new UnityEngine.WaitForSeconds(0.0f);
         }
         progress = 0;

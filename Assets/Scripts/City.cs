@@ -1,4 +1,4 @@
-﻿public class City : UnityEngine.MonoBehaviour 
+﻿public class City : LevelController
 {
     UnityEngine.GameObject firstTarget;
     UnityEngine.GameObject myMazeBuilding;
@@ -12,15 +12,11 @@
     UnityEngine.GameObject canvasForCity;
     public UIMover cityEventsOpenBtn;
     public CityEventsWindow eventsWindow;    
-    void Awake()
+    public override void Awake()
     {
-        if (Globals.input == null)
-        {
-            UnityEngine.GameObject mgrs_prefab = UnityEngine.Resources.Load("GlobalMgrs") as UnityEngine.GameObject;
-            UnityEngine.GameObject.Instantiate(mgrs_prefab);
-        }                
+        base.Awake();                   
 
-        canvasForCity = UnityEngine.GameObject.Find("CanvasForCity");
+        canvasForCity = UnityEngine.GameObject.Find("CanvasForCity");        
         cityEventsOpenBtn = Globals.getChildGameObject<UIMover>(canvasForCity, "CityEventsOpenBtn");        
         eventsWindow = Globals.getChildGameObject<CityEventsWindow>(canvasForCity, "CityEventsWindow");
         eventsWindow.city = this;
@@ -50,6 +46,7 @@
         Globals.EnableAllInput(true);
         Globals.canvasForMagician.RoseNumberBg.SetActive(true);
         Globals.canvasForMagician.SetLifeVisible(false);
+        Globals.canvasForMagician.HideTricksPanel();
         if (Globals.TutorialLevelIdx == Globals.TutorialLevel.Over)
         {            
             firstTarget.SetActive(false);
@@ -58,9 +55,9 @@
             if (Globals.unclickedBuildingAchives.Count == 0 && Globals.buildingAchives.Count == 0)
             {
                 System.Collections.Generic.List<IniFile> newAchives = new System.Collections.Generic.List<IniFile>() { 
-                    IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition2\n" + Globals.TargetBuildingDescriptionKey + "=扑克脸"),
-                    IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition1\n" + Globals.TargetBuildingDescriptionKey + "=猫眼三姐妹"),
-                    IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition3\n" + Globals.TargetBuildingDescriptionKey + "=现金眼")};
+                    IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition2\n" + Globals.TargetBuildingDescriptionKey + "=poker_face"),
+                    IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition1\n" + Globals.TargetBuildingDescriptionKey + "=cat_eye_lady"),
+                    IniFile.ReadIniText(Globals.PosHolderKey + "=BuildingPosition3\n" + Globals.TargetBuildingDescriptionKey + "=cash_eye")};
                 Globals.AddNewTargetBuildingAchives(newAchives);
 
 //                 IniFile poorAchive = new IniFile();
@@ -99,6 +96,17 @@
         }
     }
 
+    public void OnDestroy()
+    {
+        for (int idx = 0; idx < 1; ++idx)
+        {
+            Finger finger = Globals.input.GetFingerByID(0);
+            finger.Evt_Down -= OnDragFingerDown;
+            finger.Evt_Moving -= OnDragFingerMoving;
+            finger.Evt_Up -= OnDragFingerUp;
+        }
+    }
+
     public void BornRoseBuilding(System.Collections.Generic.List<IniFile> poorBuildingsAchives)
     {
         // 创建新的building, 删除TargetPos
@@ -124,9 +132,9 @@
         for(int idx = 0; idx < targetAchives.Count; ++idx)
         {
             TargetBuilding building = BornBuilding(targetAchives[idx], "Props/TargetBuilding") as TargetBuilding;            
-            System.String tipText = targetAchives[idx].get(Globals.TargetBuildingDescriptionKey);
-            building.tip.text = tipText;
-            building.gameObject.name = tipText;            
+            System.String tipTextKey = targetAchives[idx].get(Globals.TargetBuildingDescriptionKey);
+            Globals.languageTable.SetText(building.tip, tipTextKey);
+            building.gameObject.name = tipTextKey;            
             targetBuildings.Add(building);
         }        
     }

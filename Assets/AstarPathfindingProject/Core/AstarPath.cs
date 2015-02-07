@@ -967,7 +967,7 @@ public class AstarPath : MonoBehaviour {
 					//if so just continue without locking since the other function has already claimed them
 					//and will not release them until the Unity thread has responded (which it does now)
 					if (threadSafeUpdateState) break;
-					locked = Monitor.TryEnter(threadInfos[i].Lock,10);
+					locked = System.Threading.Monitor.TryEnter(threadInfos[i].Lock,10);
 				}
 				if (threadSafeUpdateState) {
 					if (i != 0 || locked) throw new System.Exception ("Wait wut! This should not happen! "+i+" "+locked);
@@ -990,7 +990,7 @@ public class AstarPath : MonoBehaviour {
 		
 		if (IsUsingMultithreading && didLock) {
 			//Release locks
-			for (int i=0;i<threadInfos.Length;i++) Monitor.Exit(threadInfos[i].Lock);
+            for (int i = 0; i < threadInfos.Length; i++) System.Threading.Monitor.Exit(threadInfos[i].Lock);
 		}
 	}
 	
@@ -1801,7 +1801,7 @@ AstarPath.RegisterSafeUpdate (delegate () {
 			int max = 0;
 			//Try to aquire all locks, this will not block
 			for (int i=0;i<threadInfos.Length;i++) {
-				if (Monitor.TryEnter (threadInfos[i].Lock))
+                if (System.Threading.Monitor.TryEnter(threadInfos[i].Lock))
 					max = i;
 				else
 					break;
@@ -1817,7 +1817,7 @@ AstarPath.RegisterSafeUpdate (delegate () {
 			
 			//Release all locks we managed to aquire
 			for (int i=0;i<=max;i++)
-				Monitor.Exit (threadInfos[i].Lock);
+                System.Threading.Monitor.Exit(threadInfos[i].Lock);
 			
 			//If we could not aquire all locks, put it in a queue to be called as soon as possible
 			if (max != threadInfos.Length-1) {
@@ -2031,7 +2031,7 @@ AstarPath.RegisterSafeUpdate (delegate () {
 			
 			//Claim all locks
 			for (int i=0;i<infos.Length;i++)
-				Monitor.Enter (infos[i].Lock);
+                System.Threading.Monitor.Enter(infos[i].Lock);
 			
 			lock (safeUpdateLock) {
 				safeUpdateFlag.Reset ();
@@ -2056,7 +2056,7 @@ AstarPath.RegisterSafeUpdate (delegate () {
 			
 			//Release all locks
 			for (int i=0;i<infos.Length;i++)
-				Monitor.Exit (infos[i].Lock);
+                System.Threading.Monitor.Exit(infos[i].Lock);
 			
 		}
 	}
@@ -2136,7 +2136,7 @@ AstarPath.RegisterSafeUpdate (delegate () {
 				
 				//Aquire lock for this thread
 				//Another thread can try to aquire locks for all threads to be able to update stuff while making sure no pathfinding is run at the same time
-				Monitor.Enter (threadInfo.Lock);
+                System.Threading.Monitor.Enter(threadInfo.Lock);
 				
 				//Max number of ticks we are allowed to continue working in one run
 				//One tick is 1/10000 of a millisecond
@@ -2233,7 +2233,7 @@ AstarPath.RegisterSafeUpdate (delegate () {
 				AstarProfiler.EndFastProfile (9);
 				
 				//Release lock for this thread
-				Monitor.Exit (threadInfo.Lock);
+                System.Threading.Monitor.Exit(threadInfo.Lock);
 				
 				//Wait a bit if we have calculated a lot of paths
 				if (System.DateTime.UtcNow.Ticks > targetTick) {

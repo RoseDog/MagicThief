@@ -89,7 +89,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
     void OnTriggerEnter(UnityEngine.Collider other)
     {
         // 由于FOV的更新频率问题，有时候墙后的也会被看到
-        if (!guard.IsSeenEnemy(other.gameObject))
+        if (!guard.IsBlockByWall(other.gameObject))
         {
             return;
         }

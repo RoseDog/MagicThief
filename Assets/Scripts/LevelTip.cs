@@ -16,7 +16,7 @@
     public void Show(System.String text)
     {
         gameObject.SetActive(true);
-        tip.text = text;
+        Globals.languageTable.SetText(tip, text);
         AddAction(new Sequence(new FadeUI(this, 0, 1, fade), new SleepFor(wait),
             new FadeUI(this, 1, 0, fade), new FunctionCall(this, "FadeOver")));
     }

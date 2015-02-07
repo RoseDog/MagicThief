@@ -9,7 +9,7 @@ public class Spot : GuardAction
         if (target != magician.transform)
         {
             target = magician.transform;
-            if(target == Globals.magician.transform)
+            if(target == Globals.magician.transform && Globals.magician.hypnosis.data.slotIdxInUsingPanel != -1)
             {
                 guard.ShowTrickBtns();
             }

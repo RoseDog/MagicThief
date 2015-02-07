@@ -1,6 +1,5 @@
-﻿public class Disguise : Action 
+﻿public class Disguise : MagicianTrickAction 
 {
-    float duration = 8.0f;
     float originSpeed;
     UnityEngine.GameObject FakeGuard_prefab;
     UnityEngine.GameObject FakeGuard;
@@ -16,7 +15,7 @@
     {
         if (actor.currentAction == this)
         {
-            TrickTimer.GetComponent<TrickTimer>().AddTime(duration);
+            TrickTimer.GetComponent<TrickTimer>().AddTime(data.duration);
             CancelInvoke("Stop");
         }
         else
@@ -31,14 +30,14 @@
             actor.anim = FakeGuard.animation;
 
             TrickTimer = UnityEngine.GameObject.Instantiate(TrickTimerPrefab) as UnityEngine.GameObject;
-            TrickTimer.GetComponent<TrickTimer>().BeginCountDown(FakeGuard, duration, new UnityEngine.Vector3(0, 2.8f, 0));
+            TrickTimer.GetComponent<TrickTimer>().BeginCountDown(FakeGuard, data.duration, new UnityEngine.Vector3(0, 2.8f, 0));
 
             originSpeed = actor.moving.speed;
             actor.moving.speed = 0.03f;
             gameObject.layer = 23;
         }
-        
-        Invoke("Stop", duration);
+
+        Invoke("Stop", data.duration);
     }
 
     public override void Stop()

@@ -1,5 +1,10 @@
 ﻿public class LevelEditor : LevelController 
 {
+    public override void Awake()
+    {
+        base.Awake();
+        mainCanvas = GetComponent<UnityEngine.Canvas>();
+    }
     public override void BeforeGenerateMaze()
     {
         // 如果没有iniFile或iniFile内容为空，生成新的迷宫        
@@ -13,6 +18,7 @@
         else
         {
             Globals.iniFileName = Globals.maze.IniFileNameForEditor;
+            Globals.ReadMazeIniFile(Globals.iniFileName, true);
             base.BeforeGenerateMaze();
         }        
     }

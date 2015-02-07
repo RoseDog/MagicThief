@@ -119,7 +119,7 @@ public class EaseOut : Cocos2dAction
 		if(!completed)
 		{
             UnityEngine.Vector3 tempResult = UnityEngine.Vector3.zero;
-            float time = Time.time - _start_time;
+            float time = (Time.time - _start_time)/ _duration;
             
             // exponential 
             //float temp = time == 1 ? 1 : (-UnityEngine.Mathf.Pow(2, -10 * time / 1) + 1);

@@ -36,6 +36,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     public int maxRoomZCellsCount;
 
     public int GEMS_COUNT = 3;
+    public int LAMPS_COUNT = 3;
 
     public System.String IniFileNameForEditor;
     public System.String LevelTipText;
@@ -43,7 +44,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 
     UnityEngine.GameObject maze;
 
-    UnityEngine.Vector3 left_up_corner_pos;
+    public UnityEngine.Vector3 left_up_corner_pos;
     Cell EastNorthCornerCell;
     Cell EastSouthCornerCell;
     Cell WestSouthCornerCell;
@@ -305,6 +306,24 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             }
         }
 
+        public System.Collections.Generic.List<Cell> GetCornersWithTwoWall()
+        {
+            System.Collections.Generic.List < Cell >  corners = new System.Collections.Generic.List<Cell>();
+            for (int x = 0; x < X_CELLS_COUNT; ++x)
+            {
+                for (int z = 0; z < Z_CELLS_COUNT; ++z)
+                {
+                    Cell cell = Globals.maze.GetCell(upper_left.z + z, upper_left.x + x);
+                    if ((IsCorner(cell) && cell.WallCount() == 2)
+                        || (!IsCorner(cell) && cell.WallCount() == 1))
+                    {
+                        corners.Add(cell);
+                    }
+                }
+            }
+            return corners;
+        }
+
         public void TurnToWhite()
         {
             for (int x = 0; x < X_CELLS_COUNT; ++x)
@@ -315,6 +334,18 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                     cell.FloorTurnToWhite();
                 }
             }
+        }
+
+        public UnityEngine.Vector3 GetRandomRoomPosition()
+        {
+            Cell bottom_right = Globals.maze.GetCell(upper_left.z + Z_CELLS_COUNT-1, upper_left.x + X_CELLS_COUNT-1);
+            UnityEngine.Vector3 upper_left_pos = upper_left.GetFloorPos();
+            UnityEngine.Vector3 bottom_right_pos = bottom_right.GetFloorPos();
+            return new UnityEngine.Vector3(
+                UnityEngine.Random.Range(upper_left_pos.x, bottom_right_pos.x), 
+                UnityEngine.Random.Range(upper_left_pos.y, bottom_right_pos.y), 
+                UnityEngine.Random.Range(upper_left_pos.z, bottom_right_pos.z)
+                );
         }
     }
 
@@ -361,7 +392,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         // SparsifyMaze
         // 封闭DeadEnd
         // DeadEnd：只有一个出口的Cell
-        // sparsenessModifier：要封闭的DeadEnd占所有Cells的百分比
+        // sparsenessModifier：要封闭的DeadEnd占所有Cells的百分比。这个数字越低，迷宫的感官复杂度会越高。
         // noOfDeadEndCellsToRemove：要封闭的DeadEnd具体数量
 
         // Calculate the number of cells to remove as a percentage of the total number of cells in the map
@@ -613,108 +644,186 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     }
 
     void PlaceChests()
-    {
-        return;
-        UnityEngine.GameObject chest_prefab = UnityEngine.Resources.Load("Props/Chest") as UnityEngine.GameObject;
+    {        
         for (int idx = 0; idx < rooms.Count;++idx)
         {
             Room room = rooms[idx];
-            UnityEngine.GameObject chest = UnityEngine.GameObject.Instantiate(chest_prefab) as UnityEngine.GameObject;
+            Chest chest = chests[idx];
             Cell cell = null;
             float rotate_angle = 0.0f;
-            // 防止死循环
-            int while_times = 0;
-            while(true)
-            {
-                if(while_times++ > 50)
-                {
-                    // 放弃这个箱子
-                    throw new InvalidOperationException("chest place error");
-                }
-                UnityEngine.Vector2 range_x  =UnityEngine.Vector2.zero;
-                UnityEngine.Vector2 range_z = UnityEngine.Vector2.zero;
-                int rand_no = UnityEngine.Random.Range(0, 3);
-                if (rand_no == 0)
-                {
-                    // east wall
-                    range_x.x = room.X_CELLS_COUNT-1;
-                    range_x.y = room.X_CELLS_COUNT-1;
-                    range_z.x = 0;
-                    range_z.y = room.Z_CELLS_COUNT-1;
-                    rotate_angle = UnityEngine.Random.Range(130.0f, 170.0f);
-                }
-                else if (rand_no == 1)
-                {
-                    // west wall
-                    range_x.x = 0;
-                    range_x.y = 0;
-                    range_z.x = 0;
-                    range_z.y = room.Z_CELLS_COUNT-1;
-                    rotate_angle = UnityEngine.Random.Range(0.0f, 20.0f);
-                }
-                else if(rand_no == 2)
-                {
-                    // north wall
-                    range_x.x = 0;
-                    range_x.y = room.X_CELLS_COUNT-1;
-                    range_z.x = 0;
-                    range_z.y = 0;
-                    rotate_angle = 90.0f;
-                }
-                cell = GetCell(room.upper_left.z + (int)UnityEngine.Random.Range(range_z.x, range_z.y),
-                    room.upper_left.x + (int)UnityEngine.Random.Range(range_x.x, range_x.y));                
 
-                // 如果在角上，有两面墙，通过
-                if (room.IsCorner(cell))
-                {
-                    if(cell.WallCount() == 2)
-                    {
-                        break;
-                    }
-                    UnityEngine.Debug.Log("chest on room corner but a door , rechoose a cell to place");
-                }
-                    // 如果不在角上，有一面墙，通过
-                else
-                {
-                    if (cell.WallCount() == 1)
-                    {
-                        break;
-                    }
-                }                
+            System.Collections.Generic.List < Cell >  corners = room.GetCornersWithTwoWall();
+            int rand_no = UnityEngine.Random.Range(0, corners.Count);
+            cell = corners[rand_no];
+            if(cell.HasWallInDirection(Globals.EAST))
+            {
+                rotate_angle = UnityEngine.Random.Range(130.0f, 170.0f);
             }
-            chest.GetComponent<Chest>().PlaceOnCell(cell, rotate_angle);
+            else if (cell.HasWallInDirection(Globals.WEST))
+            {
+                rotate_angle = UnityEngine.Random.Range(0.0f, 20.0f);
+            }
+            else if (cell.HasWallInDirection(Globals.NORTH))
+            {
+                rotate_angle = 90.0f;
+            }
+            chest.PlaceOnCell(cell, rotate_angle);            
         }
+
+        // 为了放灯
+        // 先把靠左上最近的箱子排在前面
+        if (chests.Count != 0)
+        {
+            chests.Sort();
+            // 然后逆时针排列Chest
+            System.Collections.Generic.List<Chest> sortedChests = new System.Collections.Generic.List<Chest>();
+            System.Collections.Generic.List<Chest> unsortedChests = new System.Collections.Generic.List<Chest>();
+            unsortedChests.AddRange(chests);
+            unsortedChests.RemoveAt(0);
+            sortedChests.Add(chests[0]);
+            chests[0].name = "Chest0";
+            while (unsortedChests.Count != 0)
+            {
+                Chest lastSortedChest = sortedChests[sortedChests.Count - 1];
+                Chest clockSequenceChest = null;
+                float minAngle = UnityEngine.Mathf.Infinity;
+                for (int idx = 0; idx < unsortedChests.Count; ++idx)
+                {
+                    Chest unsored_chest = unsortedChests[idx];
+                    UnityEngine.Vector3 dir = unsored_chest.transform.position - lastSortedChest.transform.position;
+                    float angle = UnityEngine.Vector3.Angle(dir.normalized, UnityEngine.Vector3.left);
+                    int sign = UnityEngine.Vector3.Cross(dir, UnityEngine.Vector3.left).z < 0 ? -1 : 1;
+                    if (sign == -1)
+                    {
+                        angle = 360 - angle;
+                    }
+                    if (angle < minAngle)
+                    {
+                        clockSequenceChest = unsored_chest;
+                        minAngle = angle;
+                    }
+                }
+                clockSequenceChest.name = "Chest" + sortedChests.Count.ToString();
+                sortedChests.Add(clockSequenceChest);
+                unsortedChests.Remove(clockSequenceChest);
+            }
+            chests = sortedChests;
+        }
+        
 
         // 调试代码，在入口处创建一个宝箱
 //         UnityEngine.GameObject test_chest = UnityEngine.GameObject.Instantiate(chest_prefab) as UnityEngine.GameObject;
 //         test_chest.transform.position = entryOfMaze.GetFloorPos();
-    }    
+    }
 
-    void PlaceGems()
+    System.Collections.Generic.List<UnityEngine.Vector3> propertyPoses = new System.Collections.Generic.List<UnityEngine.Vector3>();
+    int gemsToPlace;
+    void PlaceGem(Cell cell)
+    {
+        UnityEngine.GameObject gem_prefab = UnityEngine.Resources.Load("Props/purple diamond base") as UnityEngine.GameObject;
+        UnityEngine.GameObject gem = UnityEngine.GameObject.Instantiate(gem_prefab) as UnityEngine.GameObject;
+        UnityEngine.Vector3 gem_pos = cell.GetFloorPos() +
+            new UnityEngine.Vector3(UnityEngine.Random.Range(-cell_side_length / 3.0f, cell_side_length / 3.0f), 0.9f, UnityEngine.Random.Range(-cell_side_length / 3.0f, cell_side_length / 3.0f));
+        gem.transform.position = gem_pos;
+        gem.gameObject.name = "Gem" + gemHolders.Count.ToString();
+        gemHolders.Add(gem);
+        propertyPoses.Add(gem.transform.position);
+        --gemsToPlace;
+    }
+
+    public void PlaceGemsAtBoarder()
     {        
-        int gemsToPlace = GEMS_COUNT;
+        foreach (Chest chest in chests)
+        {
+            propertyPoses.Add(chest.transform.position);
+        }
+
+        gemsToPlace = GEMS_COUNT;
         while (gemsToPlace > 0)
         {
+            
+            // 找到离所有箱子和宝石总距离最远的Cell
+            Cell farestCell = null;
+            Cell shortestCell = null;
+            float maxDis = UnityEngine.Mathf.NegativeInfinity;
+            float minDis = UnityEngine.Mathf.Infinity;
             foreach (Cell corrido in CorridorCellLocations)
             {
-                if (UnityEngine.Random.Range(0.0f, 1.0f) < 1.0f / (X_CELLS_COUNT * Z_CELLS_COUNT))
+                float logDis = 0.0f;
+                float Dis = 0.0f;
+                foreach (UnityEngine.Vector3 pos in propertyPoses)
                 {
-                    UnityEngine.GameObject gem_prefab = UnityEngine.Resources.Load("Props/purple diamond base") as UnityEngine.GameObject;
-                    UnityEngine.GameObject gem = UnityEngine.GameObject.Instantiate(gem_prefab) as UnityEngine.GameObject;
-                    UnityEngine.Vector3 gem_pos = corrido.GetFloorPos() + 
-                        new UnityEngine.Vector3(UnityEngine.Random.Range(-cell_side_length / 3.0f, cell_side_length / 3.0f), 0.9f, UnityEngine.Random.Range(-cell_side_length / 3.0f, cell_side_length / 3.0f));
-                    gem.transform.position = gem_pos;
-                    gem.gameObject.name = "Gem" + gemHolders.Count.ToString();
-                    gemHolders.Add(gem);
-                    --gemsToPlace;
-                    if (gemsToPlace == 0)
-                    {
-                        break;
-                    }
+                    float temp = UnityEngine.Vector3.Distance(pos, corrido.GetFloorPos());
+                    logDis +=  UnityEngine.Mathf.Log(temp);
+                    Dis += UnityEngine.Mathf.Sqrt(temp);
+                }
+                if (logDis > maxDis)
+                {
+                    maxDis = logDis;
+                    farestCell = corrido;
+                }
+                if (Dis < minDis)
+                {
+                    minDis = Dis;
+                    shortestCell = corrido;
                 }
             }
+
+            // 暂时不往中间放宝石。这个算法还有点问题。
+            if(UnityEngine.Random.Range(0.0f, 1.0f) > 0.0f)
+            {
+                PlaceGem(farestCell);
+            }
+            else 
+            {
+                PlaceGem(shortestCell);
+            }            
         }        
     }
+    
+    public void PlaceLamp()
+    {
+        // 优先放箱子附近
+        if (LAMPS_COUNT > 0)
+        {
+            int lampsToPlace = LAMPS_COUNT;
+            for (int idx = 0; idx < chests.Count; ++idx)
+            {
+                Globals.CreateGuard("Lamp", pathFinder.GetNearestUnwalkableNode(chests[idx].transform.position));
+                --lampsToPlace;
+                if (lampsToPlace == 0)
+                {
+                    return;
+                }
+            }
+
+            // 然后放路中间。Chests的顺序是按逆时针方向排列的。
+            int a = 0;
+            while (lampsToPlace != 0)
+            {
+                int b = a + 1;
+                b = b % chests.Count;
+                if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.3f)
+                {
+                    Chest chestA = chests[a];
+                    Chest chestB = chests[b];
+                    Pathfinding.Path p = Pathfinding.ABPath.Construct(chestA.transform.position, chestB.transform.position, null);
+                    p.callback += OnPathBetweenTwoChest;
+                    AstarPath.StartPath(p);
+                    --lampsToPlace;
+                }
+                ++a;
+                a = a % chests.Count;
+            }
+        }
+    }
+
+    public void OnPathBetweenTwoChest(Pathfinding.Path p)
+    {
+        UnityEngine.Vector3 midpos = p.vectorPath[p.vectorPath.Count/2];
+        Globals.CreateGuard("Lamp", pathFinder.GetNearestUnwalkableNode(midpos));
+    }   
+
 
     IEnumerator PlaceRooms(float waitTime)
     {
@@ -767,11 +876,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         }
         entryOfMaze = allCorridorsAfterMazeCompleted[allCorridorsAfterMazeCompleted.Count - 1];
 
-        // 宝箱
-        PlaceChests();
-
-        // 宝石
-        PlaceGems();
+        
 
         // 要等一下生成路径，不然会出问题。
         Invoke("finished", 0.3f);        
@@ -780,6 +885,14 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     void finished()
     {
         pathFinder.GenerateGridGraph();
+        // 宝箱
+        PlaceChests();
+
+        if ((Globals.LevelController as MyMazeLevelController) == null)
+        {
+            PlaceGemsAtBoarder();
+            PlaceLamp();
+        }        
 
         rayCastPlane = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
         rayCastPlane.transform.localPosition = new UnityEngine.Vector3(0, Globals.FLOOR_HEIGHT, 0);
@@ -839,7 +952,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         }
     }
 
-    public void UnRegistDefenderEvent()
+    public void UnRegisterGuardArrangeEvent()
     {
         for (int idx = 0; idx < 1; ++idx)
         {
@@ -870,6 +983,12 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             finger.Evt_Moving -= OnChallengerFingerMoving;
             finger.Evt_Up -= OnChallengerFingerUp;
         }
+    }
+
+    public void OnDestroy()
+    {
+        UnRegistChallengerEvent();
+        UnRegisterGuardArrangeEvent();
     }
 
     Finger fingerDownOnMap;
@@ -917,7 +1036,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                         controller.landingMark.SetActive(true);
                         controller.landingMark.transform.position = pos;
                     }
-                    else
+                    else if (Globals.magician.Stealing)
                     {
                         if (hitInfo.collider.gameObject.layer == 9)
                         {
@@ -990,12 +1109,18 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     }
 
     public Guard draggingGuard;
+    public Chest choosenChest;
     public bool OnDragFingerDown(object sender)
-    {        
+    {
+        if (choosenChest != null)
+        {
+            choosenChest.HideBtn();
+        }
+
         fingerDownOnMap = sender as Finger;
         Guard guard = Globals.FingerRayToObj<Guard>(Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), 13, fingerDownOnMap);
         if (guard != null)
-        {
+        {            
             // 如果上一个守卫在墙面上，那么不能拖拽新的
             if (guard != choosenGuard && 
                 choosenGuard != null && 
@@ -1004,6 +1129,15 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                 return false;
             }
             _DragGuard(guard);
+        }
+        else if (choosenGuard == null)
+        {
+            Chest chest = Globals.FingerRayToObj<Chest>(Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), 14, fingerDownOnMap);
+            if (chest != null)
+            {
+                chest.ShowUpgradeBtn();
+                choosenChest = chest;
+            }            
         }
         
         return true;
@@ -1033,20 +1167,16 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
             {
                 Pathfinding.Node node = pathFinder.GetSingleNode(hitInfo.point, false);
-                if (node != null && (node.walkable == draggingGuard.walkable))
-                {
-                    choosenGuard.birthNode = node;
-                    draggingGuard.transform.position = new UnityEngine.Vector3(node.position.x / 1000.0f, node.position.y / 1000.0f, node.position.z / 1000.0f);
+                Globals.Assert(node != null);
+                choosenGuard.birthNode = node;
+                draggingGuard.transform.position = new UnityEngine.Vector3(node.position.x / 1000.0f, node.position.y / 1000.0f, node.position.z / 1000.0f);
+                if (node.walkable == draggingGuard.walkable)
+                {                    
                     if (draggingGuard.patrol != null)
                     {
                         draggingGuard.patrol.InitPatrolRoute();
                     }                    
-                }
-                else
-                {
-                    draggingGuard.birthNode = null;
-                    draggingGuard.transform.position = hitInfo.point;
-                }
+                }                
             }
         }
         else
@@ -1073,26 +1203,12 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             // 点击空地
             if (choosenGuard != null)
             {
-                if (choosenGuard.birthNode != null)
-                {					
-                    if (Globals.LevelController != null)
-                    {
-                        Globals.LevelController.GuardDropped(choosenGuard);
-                    }
-                    choosenGuard.Unchoose();
-                }
-                else
-                {
-                    if (choosenGuard.walkable)
-                    {
-                        Globals.tipDisplay.Msg("守卫不能放在墙体上");
-                    }
-                    else
-                    {
-                        Globals.tipDisplay.Msg("灯不能放在路上");
-                    }
+                Guard guard = Globals.FingerRayToObj<Guard>(Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), 13, fingerDownOnMap);
+                if (guard != choosenGuard)
+                {                    
+                    choosenGuard.ConfirmBtnClicked();    
                 }                
-            }
+            }            
         }
         return true;
     }    
@@ -1165,7 +1281,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         pathFinder = GetComponent<PathFinder>();        
     }
 
-
+    UnityEngine.GameObject chest_prefab;
     // Use this for initialization
     public void Start()
     {
@@ -1173,6 +1289,16 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                 
         cells = new Cell[Z_CELLS_COUNT, X_CELLS_COUNT];
         bounds = new UnityEngine.Rect(0, 0, X_CELLS_COUNT, Z_CELLS_COUNT);
+
+        if(chests.Count == 0)
+        {
+            chest_prefab = UnityEngine.Resources.Load("Props/Chest") as UnityEngine.GameObject;
+            for (int idx = 0; idx < noOfRoomsToPlace; ++idx)
+            {
+                Chest chest = (UnityEngine.GameObject.Instantiate(chest_prefab) as UnityEngine.GameObject).GetComponent<Chest>();
+                chest.Visible(false);
+            }
+        }               
 
         // 所有Cell的父节点
         maze = new UnityEngine.GameObject("Maze");
@@ -1214,7 +1340,8 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     {
         foreach(Chest chest in chests)
         {
-            DestroyObject(chest.gameObject);
+            chest.Visible(false);
+            chest.data = null;
         }
         foreach(UnityEngine.GameObject holder in gemHolders)
         {
@@ -1236,6 +1363,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         {
             DestroyObject(guard.gameObject);
         }
+        guards.Clear();
     }
 
     // Update is called once per frame

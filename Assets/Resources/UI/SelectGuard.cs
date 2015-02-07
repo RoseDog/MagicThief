@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-
-public class SelectGuard : UnityEngine.MonoBehaviour 
+﻿public class SelectGuard : AlphaFadeUI
 {    
     [UnityEngine.HideInInspector]
     public GuardBtn[] btns;
@@ -72,7 +69,7 @@ public class SelectGuard : UnityEngine.MonoBehaviour
 
     float currentScaleTime = 1.0f;
     float scaleCanvasForCommandTime = 0.2f;
-    IEnumerator _scaleCanvasOut()
+    System.Collections.IEnumerator _scaleCanvasOut()
     {
         float scale = 0.0f;
         currentScaleTime = 0.0f;

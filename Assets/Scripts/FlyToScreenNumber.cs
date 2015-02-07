@@ -18,13 +18,13 @@
         FlyOff(rotate);
     }
 
-    public void ToRoseNumber(bool rotate)
+    public void ToRoseNumber()
     {        
         // 玫瑰数字的位置
         scaleOnScreen = 0.002f;
         numberFlyTo = Globals.canvasForMagician.RoseNumber;
         numberDelta = 1;
-        FlyOff(rotate);
+        FlyOff(false);
     }
 
     public void FlyOff(bool rotate)
@@ -66,12 +66,12 @@
 
             if (disNow < 0.01f)
             {
-                numberFlyTo.Add(numberDelta);
                 DestroyImmediate(gameObject);
-                if (Globals.LevelController != null)
+                if (Globals.magician.LifeCurrent > 0)
                 {
+                    numberFlyTo.Add(numberDelta);
                     Globals.LevelController.MagicianGotCash(numberDelta);
-                }                
+                }
                 break;
             }
             else

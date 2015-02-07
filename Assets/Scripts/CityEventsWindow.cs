@@ -34,8 +34,8 @@
         CityEvent ce = (Instantiate(eventPrefab) as UnityEngine.GameObject).GetComponent<CityEvent>();
         UnityEngine.RectTransform ceTransform = ce.GetComponent<UnityEngine.RectTransform>();
         ceTransform.SetParent(transform);
-        ceTransform.localScale = new UnityEngine.Vector3(1,1,1);
-        ce.uiText.text = eventText.get(Globals.TargetBuildingDescriptionKey);
+        ceTransform.localScale = new UnityEngine.Vector3(1, 1, 1);
+        Globals.languageTable.SetText(ce.uiText, eventText.get(Globals.TargetBuildingDescriptionKey));
         ce.name = eventText.get(Globals.TargetBuildingDescriptionKey);
         ce.newText.enabled = bNew;
         cityEvents.Add(ce);
@@ -47,16 +47,16 @@
     public void EventBtnClicked(UnityEngine.UI.Button btn)
     {
         CityEvent ce = btn.GetComponentInParent<CityEvent>();
-        System.String clickedBuilding = ce.uiText.text;
+        System.String clickedBuilding = ce.name;
 
         EventClicked(clickedBuilding);
         // 相机移动
         Globals.cameraFollowMagician.MoveToPoint(
-            city.GetTargetPosition(ce.uiText.text) + Globals.cameraFollowMagician.GetHorForward() * 15 + 
+            city.GetTargetPosition(ce.name) + Globals.cameraFollowMagician.GetHorForward() * 15 + 
             -Globals.cameraFollowMagician.GetHorRight() * 10, 
             Globals.cameraFollowMagician.disOffset, 0.7f);
         // 选中建筑
-        city.ChooseBuilding(city.GetTargetBuilding(ce.uiText.text));
+        city.ChooseBuilding(city.GetTargetBuilding(ce.name));
         // 更新列表
         Globals.NewTargetBuildingClicked(clickedBuilding);
         

@@ -10,7 +10,6 @@
     public LevelTip LevelTip;
     UnityEngine.UI.Button LeaveBtn;
     public Number StealingCash;
-    UIMover TricksPanel;
     public System.Collections.Generic.List<UnityEngine.GameObject> coinsOnFloor = new System.Collections.Generic.List<UnityEngine.GameObject>();
 
     public float paperMovingDuration = 1.2f;
@@ -29,13 +28,14 @@
         countDownSeconds = restartInSeconds;
 
         canvasForStealingBegin = UnityEngine.GameObject.Find("CanvasForStealingBegin") as UnityEngine.GameObject;
+        mainCanvas = canvasForStealingBegin.GetComponent<UnityEngine.Canvas>();
         LevelTip = Globals.getChildGameObject<LevelTip>(canvasForStealingBegin, "LevelTip");
         LevelTip.gameObject.SetActive(false);
         LeaveBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(canvasForStealingBegin, "LeaveBtn");
         LeaveBtn.gameObject.SetActive(false);
         StealingCash = Globals.getChildGameObject<Number>(canvasForStealingBegin, "StealingCash");
         StealingCash.gameObject.SetActive(false);
-        TricksPanel = Globals.getChildGameObject<UIMover>(canvasForStealingBegin, "TricksPanel");
+        
 
         if (Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
         {
@@ -46,7 +46,7 @@
             Globals.Assert(Globals.iniFileName != "");
             if (Globals.iniFileName == "")
             {
-                Globals.iniFileName = "扑克脸";
+                Globals.iniFileName = "Tutorial_Level_";
             }            
         }        
                 
@@ -64,16 +64,20 @@
         landingMark.SetActive(false);
     }
 
+    public override void BeforeGenerateMaze()
+    {
+        Globals.ReadMazeIniFile(Globals.iniFileName, true);
+        base.BeforeGenerateMaze();
+    }    
+
     public override void MazeFinished()
     {
-        base.MazeFinished();                
-        if (Globals.magician == null)
+        base.MazeFinished();
+        foreach (Chest chest in Globals.maze.chests)
         {
-            // 魔术师出场
-            UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/Mage_Girl") as UnityEngine.GameObject;
-            UnityEngine.GameObject.Instantiate(magician_prefab);
+            chest.Visible(true);
         }
-
+        unstolenGems.Clear();
         foreach(UnityEngine.GameObject gem in Globals.maze.gemHolders)
         {
             unstolenGems.Add(gem);
@@ -82,7 +86,8 @@
         foreach(Guard guard in Globals.maze.guards)
         {
             guard.InitTricksUI();
-        }
+            guard.FindGuardedGem();
+        }        
        
         Globals.magician.transform.position = Globals.maze.entryOfMaze.GetFloorPos();
         Globals.maze.RegistChallengerEvent();
@@ -93,7 +98,9 @@
 
         if (Globals.TutorialLevelIdx == Globals.TutorialLevel.GetGem)
         {
+            Globals.magician.gameObject.SetActive(true);
             Globals.cameraFollowMagician.disOffset = camOffsetInStealing;
+            Globals.canvasForMagician.HideTricksPanel();
             // 隐藏界面            
             StealingCash.gameObject.SetActive(false);
 
@@ -114,21 +121,30 @@
             Globals.canvasForMagician.RestartText.gameObject.SetActive(false);
             Globals.magician.ResetLifeAndPower();
 
-            Globals.cameraFollowMagician.disOffset = camOffsetInSpy;            
-
+            Globals.cameraFollowMagician.disOffset = camOffsetInSpy;
+            if (Globals.TutorialLevelIdx == Globals.TutorialLevel.GetAroundGuard)
+            {
+                Globals.canvasForMagician.HideTricksPanel();
+            }
+            else
+            {
+                Globals.canvasForMagician.ShowTricksPanel();
+            }
+            
             // 有守卫，要点了潜入才能开始
             if (Globals.maze.guards.Count != 0)
-            {
-                
-                Globals.magician.gameObject.SetActive(false);
+            {                
+                Globals.magician.gameObject.SetActive(false);                
             }
             // 没有守卫，不需要潜入按钮，直接开始
             else
             {
+                Globals.magician.gameObject.SetActive(true);
                 // 主角降下          
                 MagicianFallingDown();
             }
 
+            // 如果从城市地图过来，显示出离开的按钮
             if (Globals.asyncLoad.LastLevelName == "City")
             {
                 LeaveBtn.gameObject.SetActive(true);
@@ -137,14 +153,14 @@
             {
                 LeaveBtn.gameObject.SetActive(false);
             }
-        }        
+        }
+        Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();
     }
 
     public virtual void MagicianFallingDown()
-    {
-        UnityEngine.UI.Button markBtn = landingMark.GetComponentInChildren<UnityEngine.UI.Button>();
-        markBtn.interactable = false;
+    {        
         LeaveBtn.gameObject.SetActive(false);
+        Globals.canvasForMagician.equipBtn.gameObject.SetActive(false);
         Globals.magician.gameObject.SetActive(true);        
         if(landingMark.activeSelf)
         {
@@ -152,6 +168,8 @@
         }        
         if (Globals.TutorialLevelIdx != Globals.TutorialLevel.GetGem)
         {
+            UnityEngine.UI.Button markBtn = landingMark.GetComponentInChildren<UnityEngine.UI.Button>();
+            markBtn.interactable = false;
             // 相机跟随                    
             Globals.cameraFollowMagician.MoveToPoint(Globals.magician.transform.position, camOffsetInStealing, 1.0f);
         }
@@ -164,34 +182,43 @@
     }
 
     public override void AfterMagicianFalling()
-    {
-        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.Over)
-        {
-            OperateMagician();
-        }
-        else if (Globals.TutorialLevelIdx != Globals.TutorialLevel.GetGem)
-        {
-            ShowLevelTip();
-        }
-        else
+    {        
+        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.GetGem)
         {
             // 妈比这个名字到底咋个取
             Invoke("TutorialOneMageGirlFallingOver", 1.5f);
         }
-        landingMark.SetActive(false);
+        else if (Globals.maze.LevelTipText == "")
+        {
+            OperateMagician();
+        }
+        else
+        {
+            ShowLevelTip();
+        }
+
+        if (landingMark.activeSelf)
+        {
+            UnityEngine.UI.Button markBtn = landingMark.GetComponentInChildren<UnityEngine.UI.Button>();
+            markBtn.interactable = true;
+            landingMark.SetActive(false);
+        }
+        
         base.AfterMagicianFalling();
     }
 
     void TutorialOneMageGirlFallingOver()
     {
-        Globals.transition.BlackOut(this, "ShowLevelTip");
+        Globals.transition.BlackOut(this, "ShowLevelTip");        
     }
 
     public void ShowLevelTip()
     {
         // 关卡提示        
         Invoke("OperateMagician", LevelTip.GetFadeDuration() + LevelTip.GetWaitingDuration());
-        LevelTip.Show(Globals.maze.LevelTipText);        
+        LevelTip.Show(Globals.maze.LevelTipText);
+        // 相机跟随                    
+        Globals.cameraFollowMagician.MoveToPoint(Globals.magician.transform.position, camOffsetInStealing, 1.0f);
     }
 
     public void OperateMagician()
@@ -200,15 +227,7 @@
         {            
             Globals.transition.BlackIn();
         }
-        TricksPanel.BeginMove(Globals.uiMoveAndScaleDuration);
-
-        UnityEngine.UI.Button[] btns = TricksPanel.GetComponentsInChildren<UnityEngine.UI.Button>();
-        foreach (UnityEngine.UI.Button btn in btns)
-        {
-            UnityEngine.UI.Button temp = btn.GetComponent<UnityEngine.UI.Button>();
-            temp.onClick.AddListener(() => Globals.magician.TrickBtnClicked(temp));           
-        }
-
+        
         StealingCash.gameObject.SetActive(true);
         // 魔术师出场   
         Globals.magician.InStealing();                
@@ -248,6 +267,7 @@
 
 
         StealingCash.SetToZero();
+        Globals.canvasForMagician.HideTricksPanel();
         base.MagicianLifeOver();
         if(Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
         {
@@ -260,7 +280,8 @@
         Globals.canvasForMagician.RestartText.gameObject.SetActive(true);
         if (countDownSeconds >= 0)
         {
-            Globals.canvasForMagician.RestartText.text = "<b><color=red><size=30>" + countDownSeconds.ToString() + "</size></color></b> 秒后重新开始\n\n 教程关卡你都能输，能专心点儿么 =.= ";
+            Globals.languageTable.SetText(Globals.canvasForMagician.RestartText, "restart_tutorial_level_tip", 
+                new System.String[] { countDownSeconds.ToString() });
             --countDownSeconds;
         }
         else
@@ -291,6 +312,7 @@
         UnityEngine.Debug.Log("map file:" + Globals.iniFileName);
         Globals.cashAmount += StealingCash.numberAmont;
         Globals.canvasForMagician.cashNumber.SetNumber(Globals.cashAmount);
+        Globals.canvasForMagician.HideTricksPanel();
         StealingCash.SetToZero();
         UnityEngine.Debug.Log("level passed:" + Globals.cashAmount.ToString());
         Globals.magician.victory.Excute();
@@ -375,7 +397,7 @@
         }
         if (Globals.TutorialLevelIdx == Globals.TutorialLevel.InitMyMaze)
         {
-            Globals.asyncLoad.ToLoadSceneAsync("MagicianHome");
+            Globals.asyncLoad.ToLoadSceneAsync("MyMaze");
         }
         else if (Globals.TutorialLevelIdx == Globals.TutorialLevel.Over)
         {
@@ -395,18 +417,21 @@
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-        foreach (Guard guard in Globals.maze.guards)
+        if (Globals.magician.hypnosis.data.IsInUse())
         {
-            if (Globals.magician.Stealing  
-                && UnityEngine.Vector3.Distance(Globals.magician.transform.position, guard.transform.position) < 7.0f
-                && guard.currentAction != guard.beenHypnosised)
+            foreach (Guard guard in Globals.maze.guards)
             {
-                guard.ShowTrickBtns();                                         
+                if (Globals.magician.Stealing
+                    && UnityEngine.Vector3.Distance(Globals.magician.transform.position, guard.transform.position) < 7.0f
+                    && guard.currentAction != guard.beenHypnosised)
+                {
+                    guard.ShowTrickBtns();
+                }
+                else
+                {
+                    guard.HideBtns();
+                }
             }
-            else
-            {
-                guard.HideBtns();
-            }   
-        }               
+        }
     }
 }

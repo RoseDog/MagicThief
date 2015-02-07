@@ -218,52 +218,49 @@ public class Finger
 
     public string ResolveState()
     {
-        if (enabled)
+        if (touchBegin)
         {
-            if (touchBegin)
+            _SetCurrentState(FINGER_STATE_DOWN);
+        }
+        else if (touchEnd)
+        {
+            _SetCurrentState(FINGER_STATE_UP);
+        }
+        else if (touchStaying)
+        {
+            _SetCurrentState(FINGER_STATE_HOLDING);
+        }
+        else if (touchMoving)
+        {
+            if (currentState == FINGER_STATE_HOLDING || currentState == FINGER_STATE_DOWN)
             {
-                _SetCurrentState(FINGER_STATE_DOWN);
+                timeSinceMoving = UnityEngine.Mathf.Epsilon;
+                movingLength = (nowPosition - lastPosition).magnitude;
             }
-            else if (touchEnd)
+            float speed = movingLength / timeSinceMoving;
+            if (speed > inputMgr.movingSpeedThreshold)
             {
-                _SetCurrentState(FINGER_STATE_UP);
-            }
-            else if (touchStaying)
-            {
-                _SetCurrentState(FINGER_STATE_HOLDING);
-            }
-            else if (touchMoving)
-            {
-                if (currentState == FINGER_STATE_HOLDING || currentState == FINGER_STATE_DOWN)
-                {
-                    timeSinceMoving = UnityEngine.Mathf.Epsilon;
-                    movingLength = (nowPosition - lastPosition).magnitude;
-                }
-                float speed = movingLength / timeSinceMoving;
-                if (speed > inputMgr.movingSpeedThreshold)
-                {
-                    _SetCurrentState(FINGER_STATE_FAST_MOVING);
+                _SetCurrentState(FINGER_STATE_FAST_MOVING);
 
-                    if (Evt_FastMoving != null)
-                    {
-                        Evt_FastMoving(this);
-                    }
-                }
-                else if (speed < inputMgr.movingSpeedThreshold)
+                if (enabled && Evt_FastMoving != null)
                 {
-                    _SetCurrentState(FINGER_STATE_SLOW_MOVING);
-
-                    if (Evt_SlowMoving != null)
-                    {
-                        Evt_SlowMoving(this);
-                    }
+                    Evt_FastMoving(this);
                 }
             }
-            else if (hovering)
+            else if (speed < inputMgr.movingSpeedThreshold)
             {
-                _SetCurrentState(FINGER_STATE_HOVERING);
+                _SetCurrentState(FINGER_STATE_SLOW_MOVING);
+
+                if (enabled && Evt_SlowMoving != null)
+                {
+                    Evt_SlowMoving(this);
+                }
             }
         }
+        else if (hovering)
+        {
+            _SetCurrentState(FINGER_STATE_HOVERING);
+        }        
 
         return currentState;
     }
@@ -366,16 +363,16 @@ public class InputMgr : MonoBehaviour
 
     void OnLevelWasLoaded(int scene_id)
     {
-        foreach (Finger f in fingers)
-        {
-            f.Evt_Down = null;
-            f.Evt_FastMoving = null;
-            f.Evt_Hovering = null;
-            f.Evt_SlowMoving = null;
-            f.Evt_Moving = null;
-            f.Evt_Staying = null;
-            f.Evt_Up = null;
-        }
+//         foreach (Finger f in fingers)
+//         {
+//             f.Evt_Down = null;
+//             f.Evt_FastMoving = null;
+//             f.Evt_Hovering = null;
+//             f.Evt_SlowMoving = null;
+//             f.Evt_Moving = null;
+//             f.Evt_Staying = null;
+//             f.Evt_Up = null;
+//         }
     }
 
     bool GetTouchByID(int id)
