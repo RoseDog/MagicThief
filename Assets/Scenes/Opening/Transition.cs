@@ -1,22 +1,14 @@
 using System.Collections;
-public class Transition : UnityEngine.MonoBehaviour
+public class Transition : Actor
 {
 	public UnityEngine.Material cookShadersCover;
-	public float fadeSpeed = 0.5f;
-	public UnityEngine.Color fadeColor = new UnityEngine.Color(0.0f, 0.0f, 0.0f, 1.0f);
 	private UnityEngine.GameObject cookShadersObject;
-
-	float fadingTime = 1.5f;
-	float current;
-
-    UnityEngine.MonoBehaviour callBackObj;
-    System.String method;
-
-	void Awake()
+	
+	public override void Awake()
 	{
+        base.Awake();
         Globals.transition = this;
         cookShadersCover = Instantiate(cookShadersCover) as UnityEngine.Material;
-		cookShadersCover.SetColor("_TintColor", fadeColor);        
 	}
 
     UnityEngine.GameObject CreateCameraCoverPlane()
@@ -29,56 +21,14 @@ public class Transition : UnityEngine.MonoBehaviour
 	void Location()
 	{
 		cookShadersObject.transform.parent = UnityEngine.Camera.main.transform;
-        cookShadersObject.transform.localPosition = UnityEngine.Vector3.zero;
-        cookShadersObject.transform.localPosition = new UnityEngine.Vector3(cookShadersObject.transform.localPosition.x, cookShadersObject.transform.localPosition.y, cookShadersObject.transform.localPosition.z + 1.55f);
-        cookShadersObject.transform.localRotation = UnityEngine.Quaternion.identity;
-        cookShadersObject.transform.localEulerAngles = new UnityEngine.Vector3(cookShadersObject.transform.localPosition.x, cookShadersObject.transform.localPosition.y, cookShadersObject.transform.localPosition.z + 180.0f);
-        cookShadersObject.transform.localScale = new UnityEngine.Vector3(3.6f * 1.5f, 1.5f, 1.5f);
+        cookShadersObject.transform.localPosition = UnityEngine.Vector3.zero;        
+        cookShadersObject.transform.localRotation = UnityEngine.Quaternion.identity;        
+        cookShadersObject.transform.localScale = new UnityEngine.Vector3(20, 10, 1);
 	}
 
-	public void Visible(bool visibility)
+	public override void Visible(bool visibility)
 	{
 		cookShadersObject.renderer.enabled = visibility;
-	}
-
-	IEnumerator FadeOut()
-	{
-		Location();
-        fadeColor.a = 0.0f;
-		while (fadeColor.a < 1.0f)
-		{
-			current = current + UnityEngine.Time.deltaTime;
-			fadeColor.a = current / fadingTime;
-			cookShadersCover.SetColor("_TintColor", fadeColor);
-			yield return null;
-		}
-
-        if (callBackObj != null)
-        {
-            callBackObj.Invoke(method, 0.0f);
-            callBackObj = null;
-        }
-        fadeOutCoroutine = null;
-	}
-
-	IEnumerator FadeIn()
-	{
-		Location();
-        fadeColor.a = 1.0f;
-		while (fadeColor.a > 0.0f)
-		{
-            current = current - UnityEngine.Time.deltaTime;
-			fadeColor.a = current / fadingTime;
-			cookShadersCover.SetColor("_TintColor", fadeColor);
-			yield return null;
-		}
-        Visible(false);
-        if (callBackObj != null)
-        {
-            callBackObj.Invoke(method, 0.0f);
-            callBackObj = null;
-        }
-        fadeInCoroutine = null;
 	}
 
 	void DestroyCameraCoverPlane()
@@ -92,45 +42,38 @@ public class Transition : UnityEngine.MonoBehaviour
 		cookShadersObject = null;
 	}
 
-    UnityEngine.Coroutine fadeOutCoroutine;
-    UnityEngine.Coroutine fadeInCoroutine;
-
-    public void BlackOut(UnityEngine.MonoBehaviour callback = null, System.String methodName = "")
+    public void BlackOut(UnityEngine.Events.UnityAction action = null)
 	{
         if (cookShadersObject == null)
         {
             CreateCameraCoverPlane();
         }
         Visible(true);
-        current = 0.0f;
-        callBackObj = callback;
-        method = methodName;
-        if (fadeInCoroutine != null)
+
+        if (fadeInAction != null)
         {
-            StopCoroutine(fadeInCoroutine);
-        }        
-        fadeOutCoroutine = StartCoroutine(FadeOut());        
+            RemoveAction(ref fadeInAction);
+        }
+        Location();
+        fadeOutAction = new Sequence(new FadeTo(cookShadersObject.renderer, 0, 1, 1.5f), new FunctionCall(action));
+        AddAction(fadeOutAction);
 	}
 
-    public void BlackIn(UnityEngine.MonoBehaviour callback = null, System.String methodName = "")
+    Cocos2dAction fadeInAction;
+    Cocos2dAction fadeOutAction;
+    public void BlackIn(UnityEngine.Events.UnityAction action = null)
 	{
         if (cookShadersObject == null)
         {
             CreateCameraCoverPlane();
         }
         Visible(true);
-		current = fadingTime;
-        callBackObj = callback;
-        method = methodName;
-        if (fadeOutCoroutine != null)
+        if (fadeOutAction != null)
         {
-            StopCoroutine(fadeOutCoroutine);
-        }        
-        fadeInCoroutine = StartCoroutine(FadeIn());        
-	}
-
-    public bool IsBackOutFinished()
-    {
-        return fadeColor.a >= 1.0f;
-    }
+            RemoveAction(ref fadeOutAction);
+        }
+        Location();
+        fadeInAction = new Sequence(new FadeTo(cookShadersObject.renderer, 1, 0, 1.5f), new FunctionCall(action));
+        AddAction(fadeInAction);
+	}    
 }

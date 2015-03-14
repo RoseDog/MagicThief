@@ -5,7 +5,7 @@ public class Sequence : Cocos2dAction
 {
 	
 	// Action list
-    private List<Cocos2dAction> actions = new List<Cocos2dAction>();
+    public List<Cocos2dAction> actions = new List<Cocos2dAction>();
 	
 	// Constructor
     public Sequence(params Cocos2dAction[] action_list)
@@ -47,10 +47,9 @@ public class Sequence : Cocos2dAction
 				// Remove action when completed
 				if(action.IsCompleted()) actions.Remove(action);
 
-			} else {
-				
-				Debug.Log("Sequence completed");
-				
+			} 
+            else 
+            {				
 				// No more actions
 				EndAction();
 			}

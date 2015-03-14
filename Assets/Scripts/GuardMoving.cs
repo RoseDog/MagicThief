@@ -23,25 +23,28 @@ using Pathfinding.RVO;
 [UnityEngine.RequireComponent(typeof(Seeker))]
 public class GuardMoving : AIPath
 {
-
     Actor actor;
+    Guard guard;
+    Magician mage;
     /** Minimum velocity for moving */
     public float sleepVelocity = 0.4f;
 
-    /** Speed relative to velocity with which to play animations */
-    public float animationSpeed = 0.2F;
-
-    float heightOriginCache;
+    [UnityEngine.HideInInspector]
+    public float heightOriginCache;
 
     public UnityEngine.Vector3 currentDir;
+
+    public bool needAnimation = true;
 
     public new void Awake()
     {
         actor = GetComponent<Actor>();
-        heightOriginCache = transform.position.y;
+        guard = actor as Guard;
+        mage = actor as Magician;
+        heightOriginCache = transform.position.z;
         base.Awake();
 
-        animation["moving"].speed = animationSpeed;
+//        animation["moving"].speed = animationSpeed;
     }
 
     public new void Start()
@@ -75,44 +78,75 @@ public class GuardMoving : AIPath
 
     public override void Update()
     {
-
-    }
-
-    public void FixedUpdate()
-    {
-        //Get velocity in world-space
         UnityEngine.Vector3 velocity = UnityEngine.Vector3.zero;
-        if (canMove)
-        {
-            //Calculate desired velocity
-            currentDir = CalculateVelocity(GetFeetPosition());
 
-            //Rotate towards targetDirection (filled in by CalculateVelocity)
-            RotateTowards(targetDirection);
-
-
-            if (controller != null)
+//         if (Globals.PLAY_RECORDS && mage && Globals.replay.magePositions.Count != 0)
+//         {
+//             transform.position = Globals.replay.magePositions[0];
+//             Globals.replay.magePositions.RemoveAt(0);
+//         }
+//         else
+        {            
+            if (canMove)
             {
-                controller.Move(currentDir);
-                velocity = controller.velocity;
-            }
+                //Calculate desired velocity
+                float s = speed;
+                if (guard != null && guard.currentAction == guard.patrol)
+                {
+                    s *= 0.5f;
+                }
+                UnityEngine.Vector3 dir = CalculateVelocity(GetFeetPosition(), s);
+
+                System.String content = gameObject.name;
+                content +=  "movement:" + dir.ToString("F5");
+                Globals.record("testReplay", content);
+
+                if (controller != null)
+                {
+                    controller.Move(dir);
+                    velocity = controller.velocity;
+                    //transform.position += dir;
+                    //velocity = dir;
+                }
+                if (dir.magnitude > UnityEngine.Mathf.Epsilon)
+                {
+                    currentDir = dir;
+                    if (velocity.sqrMagnitude > 0.1f)
+                    {
+                        actor.FaceDir(velocity);
+                    }
+                }
+                transform.position = new UnityEngine.Vector3(transform.position.x, transform.position.y, heightOriginCache);                
+            }                        
         }
 
-        if (canMove)
+        if (Globals.PLAY_RECORDS && mage && Globals.replay.magePositions.Count != 0)
+        {
+            transform.position = Globals.replay.magePositions[0];
+            Globals.replay.magePositions.RemoveAt(0);
+        }
+
+        if (mage)
+        {
+            Globals.replay.RecordMagePosition(transform.position);
+        }
+
+        if (canMove && needAnimation)
         {
             //Animation
             //Calculate the velocity relative to this transform's orientation
             UnityEngine.Vector3 relVelocity = tr.InverseTransformDirection(velocity);
-            relVelocity.y = 0;
+            relVelocity.z = 0;
             if (velocity.sqrMagnitude <= sleepVelocity * sleepVelocity)
             {
-                // 轻微的颤抖，玩家看不出来，但是这样FOV trigger才会触发
-                controller.Move(new UnityEngine.Vector3(0.001f, 0.0f, 0.001f));
-                controller.Move(new UnityEngine.Vector3(-0.001f, 0.0f, -0.001f));
                 //Fade out walking animation
                 if (target == null)
                 {
-                    actor.anim.CrossFade("idle");
+                    //actor.anim.CrossFade("idle");
+                    if (actor.spriteSheet != null)
+                    {
+                        actor.spriteSheet.Play("idle");
+                    }
                 }
                 else
                 {
@@ -121,71 +155,48 @@ public class GuardMoving : AIPath
                     {
                         throw new InvalidOperationException("guard moving error");
                     }
-                    actor.anim.CrossFade("atkReady");
+                    //actor.anim.CrossFade("atkReady");
                 }
             }
             else
             {
+
                 //Fade in walking animation
-                actor.anim.CrossFade("moving");
-
-                //Modify animation speed to match velocity
-                //UnityEngine.AnimationState state = actor.anim["moving"];
-                //float speed = relVelocity.z;
-                //state.speed = speed * animationSpeed;
-            }
-                        
-//             foreach (Pathfinding.Node node in preStandNodes)
-//             {
-//                 node.walkable = true;
-//             }
-            transform.position = new UnityEngine.Vector3(transform.position.x, heightOriginCache, transform.position.z);
-        }
-
-//         if (!bPathError)
-//         {
-//             System.Collections.Generic.List<Pathfinding.Node> nodes =
-//                 Globals.maze.pathFinder.graph.GetNodesInArea(new UnityEngine.Bounds(transform.position, new UnityEngine.Vector3(1.5f, 10.0f, 1.5f)));
-//             foreach (Pathfinding.Node node in nodes)
-//             {
-//                 node.walkable = false;
-//             }
-//             preStandNodes = nodes;
-//         }        
-    }
-    public System.Collections.Generic.List<Pathfinding.Node> preStandNodes = new System.Collections.Generic.List<Pathfinding.Node>();
-
-//    bool bPathError = false;
-    public void PathComplete(Pathfinding.Path path)
-    {
-        if (path.CompleteState == PathCompleteState.Error)
-        {
-            UnityEngine.Debug.Log("ReDoPath");
-            seeker.ReleaseClaimedPath();
-            System.Collections.Generic.List<Pathfinding.Node> nodes =
-                Globals.maze.pathFinder.graph.GetNodesInArea(new UnityEngine.Bounds(transform.position, new UnityEngine.Vector3(1.5f, 10.0f, 1.5f)));
-            foreach (Pathfinding.Node node in nodes)
-            {
-                if (node.walkable)
+                //actor.anim.CrossFade("moving");
+                if (actor.spriteSheet != null)
                 {
-                    transform.position = Globals.GetPathNodePos(node);
-                    break;
+                    if (actor.spriteSheet.HasAnimation("walking"))
+                    {
+                        if (guard != null && guard.currentAction == guard.patrol)
+                        {
+                            actor.spriteSheet.Play("walking");
+                        }
+                        else
+                        {
+                            actor.spriteSheet.Play("running");
+                        }
+                    }
+                    else
+                    {
+                        actor.spriteSheet.Play("moving");
+                    }
                 }
             }
-            transform.position = GetNearestWalkableNodePosition();
-            seeker.StartPath(GetFeetPosition(), seeker.endPositionCache);
-//            bPathError = true;
         }
-//         else
-//         {
-//             bPathError = false;
-//         }
+        
+
+        System.String content_test = gameObject.name;
+        content_test += " pos:" + transform.position.ToString("F5");
+        Globals.record("testReplay", content_test);
     }
+
+   
+    public System.Collections.Generic.List<Pathfinding.Node> preStandNodes = new System.Collections.Generic.List<Pathfinding.Node>();
 
     public UnityEngine.Vector3 GetNearestWalkableNodePosition()
     {
         System.Collections.Generic.List<Pathfinding.Node> nodes =
-                Globals.maze.pathFinder.graph.GetNodesInArea(new UnityEngine.Bounds(transform.position, new UnityEngine.Vector3(1.5f, 10.0f, 1.5f)));
+                Globals.maze.pathFinder.graph.GetNodesInArea(new UnityEngine.Bounds(transform.position, new UnityEngine.Vector3(1.5f, 1.5f, 10.0f)));
         foreach (Pathfinding.Node node in nodes)
         {
             if (node.walkable)

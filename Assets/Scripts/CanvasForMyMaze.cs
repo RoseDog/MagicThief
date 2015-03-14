@@ -2,7 +2,7 @@
 {
     public MyMazeLevelController myMaze;
     UnityEngine.GameObject TipToClickCreateMaze;
-    UnityEngine.GameObject SelectGuardPanelTip;
+    UnityEngine.UI.Text tip;
     public UnityEngine.UI.Button FingerImageToDragGuard;
     UnityEngine.Vector2 fingerImagePosCache;
 
@@ -13,17 +13,24 @@
     public UIMover TipBuyHereAsHome;
     public UIMover btnEnhanceDef;
 
-    public UnityEngine.UI.Text RedPointsOnEnchanceDefBtn;    
-    void Awake()
+    public UnityEngine.UI.Text RedPointsOnEnchanceDefBtn;
+
+    public UnityEngine.GameObject MazeRoomNumerBg;
+    public LifeNumber MazeRoomNumber;
+    public int roomConsumed;
+    public UnityEngine.GameObject room_not_full_used;
+    public override void Awake()
     {
+        base.Awake();
         Globals.canvasForMyMaze = this;
         TipBuyHereAsHome = Globals.getChildGameObject<UIMover>(gameObject, "TipBuyHereAsHome");
         btnEnhanceDef = Globals.getChildGameObject<UIMover>(gameObject, "EnhanceDefenseBtn");
         btnEnhanceDef.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => ShowEnhanceMazeUI());
         enhanceDefenseUI = Globals.getChildGameObject<EnhanceDefenseUI>(gameObject, "EnhanceDefenseUI");
         
-//         TipToClickCreateMaze = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "TipToClickCreateMaze").gameObject;
-//         TipToClickCreateMaze.SetActive(false);
+        TipToClickCreateMaze = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "TipToClickCreateMaze").gameObject;        
+        tip = Globals.getChildGameObject(TipToClickCreateMaze, "Tip").GetComponent<UnityEngine.UI.Text>();        
+        TipToClickCreateMaze.SetActive(false);
 //         SelectGuardPanelTip = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "SelectGuardPanelTip").gameObject;
 //         UnityEngine.UI.Button howToUseBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(SelectGuardPanelTip.gameObject, "HowToUse");
 //         howToUseBtn.onClick.AddListener(() => HowToUseGuardBtnClicked());
@@ -37,11 +44,18 @@
         
         unclickedTargetCount = UnityEngine.GameObject.Find("UnclickedCount").GetComponent<UnityEngine.UI.Text>();
 
-        RedPointsOnEnchanceDefBtn = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "RedPointsOnEnchanceDefBtn").GetComponentInChildren<UnityEngine.UI.Text>();        
+        RedPointsOnEnchanceDefBtn = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "RedPointsOnEnchanceDefBtn").GetComponentInChildren<UnityEngine.UI.Text>();
+
+        MazeRoomNumerBg = Globals.getChildGameObject(gameObject, "MazeRoomNumerBg");
+        MazeRoomNumber = Globals.getChildGameObject<LifeNumber>(MazeRoomNumerBg, "MazeRoomNumber");
+
+        room_not_full_used = Globals.getChildGameObject(gameObject, "room_not_full_used");
+        room_not_full_used.SetActive(false);
     }
 	// Use this for initialization
-	void Start () 
+	public override void Start () 
     {
+        base.Start();
         myMaze = (Globals.LevelController as MyMazeLevelController);
 
         UnityEngine.UI.Button chestDownBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(TipBuyHereAsHome.gameObject, "ChestDown");
@@ -55,13 +69,19 @@
         myMaze.currentThief.HideTip();
 
         btnEnhanceDef.BeginMove(Globals.uiMoveAndScaleDuration);
-        Invoke("ShowTipToClickCreateMaze", Globals.uiMoveAndScaleDuration);
+        SleepThenCallFunction(Globals.uiMoveAndScaleDuration, ()=>ShowTipToClickCreateMaze());
     }
 
     public void ShowTipToClickCreateMaze()
-    {
+    {        
         TipToClickCreateMaze.SetActive(true);
-        TipToClickCreateMaze.transform.localScale = UnityEngine.Vector3.zero;
+        TipToClickCreateMaze.transform.localScale = UnityEngine.Vector3.zero;        
+        TipToClickCreateMaze.GetComponent<UnityEngine.CanvasGroup>().ignoreParentGroups = true;
+        TipToClickCreateMaze.GetComponent<UnityEngine.CanvasGroup>().blocksRaycasts = false;
+        TipToClickCreateMaze.GetComponent<UnityEngine.CanvasGroup>().interactable = false;
+        tip.GetComponent<UnityEngine.CanvasGroup>().ignoreParentGroups = true;
+        tip.GetComponent<UnityEngine.CanvasGroup>().blocksRaycasts = false;
+        tip.GetComponent<UnityEngine.CanvasGroup>().interactable = false;
         AddAction(new Sequence(
             new ScaleTo(TipToClickCreateMaze.transform, new UnityEngine.Vector3(1.2f, 1.2f, 1.2f), Globals.uiMoveAndScaleDuration / 2),
             new ScaleTo(TipToClickCreateMaze.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), Globals.uiMoveAndScaleDuration / 4)));
@@ -73,51 +93,28 @@
         enhanceDefenseUI.Open();
     }
 
-    public void CreateMazeBtnClicked()
+    public void InitMazeBtnClicked()
     {
         btnEnhanceDef.Goback(Globals.uiMoveAndScaleDuration);
         TipToClickCreateMaze.SetActive(false);
         Globals.cameraFollowMagician.MoveToPoint(UnityEngine.Vector3.zero,
-            Globals.cameraFollowMagician.disOffset + new UnityEngine.Vector3(0.0f, 15.0f, -7.0f),
             Globals.cameraMoveDuration);
-        myMaze.Invoke("StartDropPieces", Globals.cameraMoveDuration);
+        myMaze.StartDropPieces();
     }
 
     public void ShowSelectGuardPanelTip()
     {
-        SelectGuardPanelTip.SetActive(true);
-        SelectGuardPanelTip.transform.localScale = UnityEngine.Vector3.zero;
-
-        AddAction(new Sequence(
-            new ScaleTo(SelectGuardPanelTip.transform, new UnityEngine.Vector3(1.2f, 1.2f, 1.2f), Globals.uiMoveAndScaleDuration / 2),
-            new ScaleTo(SelectGuardPanelTip.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), Globals.uiMoveAndScaleDuration / 4)));
-    }
-
-    public void HowToUseGuardBtnClicked()
-    {
-        if (SelectGuardPanelTip.activeSelf)
-        {
-            AddAction(new ScaleTo(SelectGuardPanelTip.transform, UnityEngine.Vector3.zero, Globals.uiMoveAndScaleDuration));
-            Globals.selectGuard.EnableBtns(true);
-        }
-        FingerImageToDragGuard.gameObject.SetActive(true);
-        InvokeRepeating("FingerDraggingAnimation", 0, 2.5f);
-    }
-
-    void FingerDraggingAnimation()
-    {
-        FingerImageToDragGuard.GetComponent<UnityEngine.RectTransform>().anchoredPosition = fingerImagePosCache;
-        FingerImageToDragGuard.GetComponent<Actor>().ClearAllActions();
-        FingerImageToDragGuard.GetComponent<Actor>().AddAction(new MoveTo(FingerImageToDragGuard.transform, new UnityEngine.Vector2(0.0f, 300.0f), 2.0f, true));
+        ShowCreateMazeBtn();
+        Globals.languageTable.SetText(tip, "place_guard_in_maze_to_protect_your_property");        
     }
 
     void ShowTutorialEndMsgBox()
     {
         Globals.MessageBox(Globals.languageTable.GetText("property_is_safe_now"), () => TutorialEnd());
-        if (!UnityEngine.Application.isMobilePlatform)
-        {
-            Globals.SaveMazeIniFile(Globals.iniFileName);
-        }
+//         if (!UnityEngine.Application.isMobilePlatform)
+//         {
+//             Globals.SaveMazeIniFile(Globals.iniFileName);
+//         }
 
         ++Globals.TutorialLevelIdx;
     }
@@ -125,6 +122,8 @@
     public void TutorialEnd()
     {
         //Globals.selectGuard.mover.BeginMove(Globals.uiMoveAndScaleDuration);
+        DestroyObject(Globals.canvasForMyMaze.TipToClickCreateMaze);
+        btnEnhanceDef.gameObject.SetActive(true);
         btnEnhanceDef.BeginMove(Globals.uiMoveAndScaleDuration);        
         ExitMazeBtn.BeginMove(Globals.uiMoveAndScaleDuration);
         //进入MyMaze，HomeExit上面的红点根据new targets来更新        
@@ -146,11 +145,36 @@
         if (!mazeData.playerEverClickGuards)
         {
             RedPointsOnEnchanceDefBtn.transform.parent.gameObject.SetActive(true);
-            RedPointsOnEnchanceDefBtn.text = mazeData.guards.Count.ToString();            
+            RedPointsOnEnchanceDefBtn.text = mazeData.lockGuardsName.Count.ToString();            
         }
         else
         {
             RedPointsOnEnchanceDefBtn.transform.parent.gameObject.SetActive(false);
+        }
+    }
+
+    public bool ChangeMazeRoom(int delta)
+    {
+        int roomTemp = roomConsumed;
+        roomTemp += delta;
+        if (roomTemp > Globals.mazeLvDatas[Globals.CurrentMazeLevel].roomSupport)
+        {
+            Globals.tipDisplay.Msg("not_enough_room");
+            return false;
+        }
+        else
+        {
+            roomConsumed = roomTemp;
+            MazeRoomNumber.UpdateCurrentLife(roomTemp, Globals.mazeLvDatas[Globals.CurrentMazeLevel].roomSupport);
+            if (roomTemp == Globals.mazeLvDatas[Globals.CurrentMazeLevel].roomSupport)
+            {
+                room_not_full_used.SetActive(false);
+            }
+            else
+            {
+                room_not_full_used.SetActive(true);
+            }
+            return true;
         }
     }
 }

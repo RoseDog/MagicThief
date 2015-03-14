@@ -4,26 +4,23 @@
 
     public override void Awake()
     {
-        animationName = "A_Attack_2";
-        castTrickFuncName = "GoToSleep";
         base.Awake();
+        mage.spriteSheet.CreateAnimationByName("Hypnosis",1.3f);
+        mage.spriteSheet.AddAnimationEvent("Hypnosis", -1, () => TrickActionEnd());
     }
 
     public void Cast(Guard guard)
     {
         target = guard;        
-        AimTarget(guard.transform.position + new UnityEngine.Vector3(0, 1, 0));
         Excute();
-    }
+        mage.spriteSheet.Play("Hypnosis");
+        mage.FaceTarget(target.transform);
+    }   
 
-    public void GoToSleep()
+    public void TrickActionEnd()
     {
         target.beenHypnosised.GoToSleep(data.duration);
-    }
-
-    public override void TrickActionEnd()
-    {
-        base.TrickActionEnd();
         target = null;
+        base.Stop();
     }
 }

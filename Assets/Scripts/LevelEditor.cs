@@ -29,6 +29,10 @@
         Globals.selectGuard.mover.BeginMove(Globals.uiMoveAndScaleDuration);
         Globals.maze.SetRestrictToCamera(Globals.cameraFollowMagician);
         Globals.maze.RegistGuardArrangeEvent();
+        foreach (Chest chest in Globals.maze.chests)
+        {
+            chest.Visible(true);
+        }
     }
 
     public override void GuardCreated(Guard guard)

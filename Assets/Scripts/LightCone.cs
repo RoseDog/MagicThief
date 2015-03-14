@@ -1,6 +1,6 @@
 ﻿public class LightCone : UnityEngine.MonoBehaviour 
 {
-    System.Collections.Generic.List<UnityEngine.GameObject> enemiesInLight = new System.Collections.Generic.List<UnityEngine.GameObject>();
+    public System.Collections.Generic.List<UnityEngine.GameObject> enemiesInLight = new System.Collections.Generic.List<UnityEngine.GameObject>();
     void OnTriggerEnter(UnityEngine.Collider other)
     {
         other.GetComponent<Actor>().inLight = true;
@@ -16,6 +16,7 @@
                 if (guard.spot != null && guard.spot.target == null && guard.IsSeenEnemy(enemy))
                 {
                     guard.SpotEnemy(enemy);
+                    guard.eye.enemiesInEye.Add(enemy);                    
                 }
             }
         }
@@ -24,15 +25,6 @@
     void OnTriggerExit(UnityEngine.Collider other)
     {
         other.GetComponent<Actor>().inLight = false;
-        enemiesInLight.Remove(other.gameObject);
-
-        foreach (Guard guard in Globals.maze.guards)
-        {
-            if (guard.spot != null && guard.spot.target == other.transform)
-            {
-                // 主要是为了调用EnemyOutVision
-                guard.SpotEnemy(other.gameObject);
-            }
-        }
+        enemiesInLight.Remove(other.gameObject);        
     }    
 }

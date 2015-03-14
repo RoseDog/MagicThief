@@ -1086,20 +1086,20 @@ public class AstarPath : MonoBehaviour {
 #endif
 		UpdatePathThreadInfoNodes ();
 		
-		//Start pathfinding threads
-		if (threads.Length > 0) {
-			Thread lockThread = new Thread(new ParameterizedThreadStart(LockThread));
-			lockThread.Start (this);
-		}
-		
-		for (int i=0;i<threads.Length;i++) {
-			if (logPathResults == PathLog.Heavy)
-				Debug.Log ("Starting pathfinding thread "+i);
-			threads[i].Start (threadInfos[i]);
-		}
+// 		//Start pathfinding threads
+// 		if (threads.Length > 0) {
+// 			Thread lockThread = new Thread(new ParameterizedThreadStart(LockThread));
+// 			lockThread.Start (this);
+// 		}
+// 		
+// 		for (int i=0;i<threads.Length;i++) {
+// 			if (logPathResults == PathLog.Heavy)
+// 				Debug.Log ("Starting pathfinding thread "+i);
+// 			threads[i].Start (threadInfos[i]);
+// 		}
 		
 		//Or if there are no threads, it should run as a coroutine
-		if (threads.Length == 0)
+		//if (threads.Length == 0)
 			StartCoroutine (CalculatePathsHandler(threadInfos[0]));
 		
 	}
@@ -1245,10 +1245,10 @@ public class AstarPath : MonoBehaviour {
 						"Not good.\nUnity webplayer does not support Thread.Abort\nHoping that it will be terminated by Unity WebPlayer");
 				}
 #else
-				if (!threads[i].Join (50)) {
-					Debug.LogError ("Could not terminate pathfinding thread["+i+"] in 50ms, trying Thread.Abort");
-					threads[i].Abort ();
-				}
+// 				if (!threads[i].Join (50)) {
+// 					Debug.LogError ("Could not terminate pathfinding thread["+i+"] in 50ms, trying Thread.Abort");
+// 					threads[i].Abort ();
+// 				}
 #endif
 			}
 		}

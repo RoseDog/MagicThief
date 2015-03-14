@@ -80,7 +80,7 @@ public class MineBotAI : AIPath {
 		if (canMove) {
 		
 			//Calculate desired velocity
-			Vector3 dir = CalculateVelocity (GetFeetPosition());
+			Vector3 dir = CalculateVelocity (GetFeetPosition(),speed);
 			
 			//Rotate towards targetDirection (filled in by CalculateVelocity)
 			if (targetDirection != Vector3.zero) {

@@ -1,31 +1,48 @@
 ﻿
-public class MagicThiefCamera : UnityEngine.MonoBehaviour
+public class MagicThiefCamera : Actor
 {
-    float dragCamSpeed = 0.02f;
-    public UnityEngine.Vector3 lookAt;
-    public UnityEngine.Vector3 disOffset;
-    public UnityEngine.Vector3 lookAtCache;
-    public UnityEngine.Vector3 disOffsetCache;
+    float dragCamSpeed = 0.02f;    
     [UnityEngine.HideInInspector]
     public float disScale = 1.0f;
 
     public UnityEngine.Vector2 restriction_x = new UnityEngine.Vector2(-5, 5);
-    public UnityEngine.Vector2 restriction_z = new UnityEngine.Vector2(-5, 5);
+    public UnityEngine.Vector2 restriction_y = new UnityEngine.Vector2(-5, 5);
 
-    public UnityEngine.Transform target;            
-
+    public UnityEngine.Transform target;
+    public UnityEngine.GameObject MiniMapPlane;
+    public UnityEngine.GameObject viewportFrame;
     public virtual void Awake()
     {
-        lookAtCache = lookAt;
-        disOffsetCache = disOffset;
         Globals.cameraFollowMagician = this;
+        MiniMapPlane = Globals.getChildGameObject(gameObject, "MiniMapPlane");
+        MiniMapPlane.SetActive(false);
+        viewportFrame = Globals.getChildGameObject(gameObject, "viewport-frame");
+        viewportFrame.SetActive(false);
+        base.Awake();
+    }
+
+    public void OpenMinimap()
+    {
+        MiniMapPlane.SetActive(true);
+        float view_port_height = camera.orthographicSize;
+        float view_port_width = camera.orthographicSize * UnityEngine.Screen.width / UnityEngine.Screen.height;
+        float plane_width = 11.0f * MiniMapPlane.transform.localScale.x;
+        MiniMapPlane.transform.localPosition = new UnityEngine.Vector3(
+            view_port_width - plane_width * 0.5f,
+            view_port_height - plane_width * 0.5f,
+            MiniMapPlane.transform.localPosition.z);
+        viewportFrame.SetActive(true);
+    }
+
+    public void CloseMinimap()
+    {
+        MiniMapPlane.SetActive(false);
+        viewportFrame.SetActive(false);
     }
 
     public void Reset()
     {
         enabled = true;
-        lookAt = lookAtCache;
-        disOffset = disOffsetCache;
         SetDragSpeed(0.06f);
     }
 
@@ -52,49 +69,14 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
     {
 		disScale = UnityEngine.Mathf.Clamp(disScale + scale, 0.3f, 2.0f);
 		//dragCamSpeed = 0.05f * disScale;
-    }
-
-    UnityEngine.Vector3 EndOffset;
-    UnityEngine.Vector3 StartOffset;
-    UnityEngine.Vector3 EndLookAt;
-    UnityEngine.Vector3 StartMove;
-    float startTime;
-    float durationTime;
-    float currentTime;
-    public void MoveToPoint(UnityEngine.Vector3 look, UnityEngine.Vector3 offset, float duration)
+    }    
+    
+    public void MoveToPoint(UnityEngine.Vector3 destination, int duration)
     {
         enabled = true;
-        EndLookAt = RestrictPosition(look);
-        EndOffset = offset;
-        StartMove = lookAt;
-        StartOffset = disOffset;
-        startTime = UnityEngine.Time.time;
-        durationTime = duration;
-        currentTime = durationTime;
-        //moving = true;
-        StartCoroutine(Moving());
-    }
+        destination = RestrictPosition(destination);
 
-    //bool moving = false;
-    System.Collections.IEnumerator Moving()
-    {
-        while (currentTime > 0)
-        {
-            float time = UnityEngine.Time.time - startTime;
-            
-            time -= 1;
-            float temp = time * time * time * time * time + 1;
-            
-            lookAt = UnityEngine.Vector3.Lerp(StartMove, EndLookAt, temp);
-            disOffset = UnityEngine.Vector3.Lerp(StartOffset, EndOffset, temp);
-
-            currentTime -= UnityEngine.Time.deltaTime;
-            yield return null;
-        }
-        lookAt = EndLookAt;
-        disOffset = EndOffset;
-        UnityEngine.Debug.Log(disOffset);
-        //moving = false;
+        AddAction(new MoveTo(transform, destination, duration, false));
     }
 
     bool bStaring = false;
@@ -119,36 +101,32 @@ public class MagicThiefCamera : UnityEngine.MonoBehaviour
 		if (!(finger0.enabled && finger1.enabled))
 		{
 			UnityEngine.Vector2 finger_move_delta = finger.MovmentDelta();
-			UnityEngine.Vector3 cameraHorForward = GetHorForward();
-			UnityEngine.Vector3 cameraHorRight = GetHorRight();
-			UnityEngine.Vector3 movementDirection = -cameraHorForward * finger_move_delta.y - cameraHorRight * finger_move_delta.x;
-			lookAt += movementDirection * dragCamSpeed;
-			lookAt = RestrictPosition(lookAt);
+            UnityEngine.Vector3 movementDirection = -finger_move_delta;
+			transform.position += movementDirection * dragCamSpeed;
+            transform.position = RestrictPosition(transform.position);
 		}
     }
 
-    public virtual void Update()
-    {        
+    public override void Update()
+    {
+        base.Update();
         if (bStaring)
         {
-            transform.LookAt(Globals.magician.transform.position + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f));           
+            //transform.LookAt(Globals.magician.transform.position + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f));           
+            transform.position = Globals.magician.transform.position + new UnityEngine.Vector3(0,0, -1.0f);
         }
-        else
+        else if (target != null)
         {
-            if (target != null)
-            {
-                lookAt = target.position;
-                lookAt = RestrictPosition(lookAt);
-            }
-            transform.position = lookAt + disOffset * disScale;
-            transform.LookAt(lookAt);
+            transform.position = target.position;
+            transform.position = RestrictPosition(transform.position);
         }        
     }
 
     public UnityEngine.Vector3 RestrictPosition(UnityEngine.Vector3 pos)
     {
         pos.x = UnityEngine.Mathf.Clamp(pos.x, restriction_x.x, restriction_x.y);
-        pos.z = UnityEngine.Mathf.Clamp(pos.z, restriction_z.x, restriction_z.y);
+        pos.y = UnityEngine.Mathf.Clamp(pos.y, restriction_y.x, restriction_y.y);
+        pos.z = -1.0f;
         return pos;
     }
 }

@@ -132,7 +132,7 @@ public class Seeker : MonoBehaviour {
 			prevPath = null;
 		}
 	}
-	
+
 	private List<IPathModifier> modifiers = new List<IPathModifier> ();
 	
 	public void RegisterModifier (IPathModifier mod) {
@@ -263,7 +263,7 @@ public class Seeker : MonoBehaviour {
 		OnPathComplete (p,true,true);
         if (this != null && GetComponent<Guard>())
         {
-            GetComponent<Guard>().moving.PathComplete(p);
+            //GetComponent<Guard>().moving.PathComplete(p);
         }        
 	}
 	

@@ -37,13 +37,13 @@
                 trickItem.rt.localScale = UnityEngine.Vector3.one;
                 trickItem.rt.localPosition = UnityEngine.Vector3.zero;
                 trickItem.name = data.nameKey;
-                trickItem.GetComponent<UnityEngine.UI.Image>().sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/" + data.nameKey + "_icon");
+                trickItem.GetComponent<UnityEngine.UI.Image>().sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/" + data.nameKey + "_icon_disabled");
                 trickItem.trickData = data;
                 trickItem.CheckIfUnlock();
                 trickItem.CheckIfPurchased();
                 
-                trickItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => Globals.canvasForMagician.TrickItemClicked(trickItem));
-                trickItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => Globals.magician.TrickBtnClicked(trickItem.trickData));                
+                trickItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => Globals.canvasForMagician.OpenItemDescriptionUI(trickItem));
+                trickItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => Globals.magician.CastMagic(trickItem.trickData));                
                 trickItem.slotInPack = itemSlot;
                 trickItemsInPack.Add(trickItem);
             }

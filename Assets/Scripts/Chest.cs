@@ -6,8 +6,11 @@
     public int goldAmount = 100;
     public int goldLast;
     public int goldLostPersecond = 500;
+    UnityEngine.Sprite openSprite;
+    UnityEngine.Sprite closedSprite;
+    UnityEngine.UI.Image unlockProgressSprite;
+    UnityEngine.Vector3 progressScaleCache;
     System.Collections.Generic.List<UnityEngine.Renderer> goldMeshes = new System.Collections.Generic.List<UnityEngine.Renderer>();
-    UnityEngine.SkinnedMeshRenderer chestMesh;
 
     Cell locate;
 
@@ -37,8 +40,14 @@
         coinPrefab = UnityEngine.Resources.Load("Props/GoldCoin") as UnityEngine.GameObject;
         SafeboxUpgradeUIPrefab = UnityEngine.Resources.Load("Avatar/CanvasOnSafebox") as UnityEngine.GameObject;
 
-        animation["ChestAnim"].speed = 2.0f;
-        chestMesh = GetComponentInChildren<UnityEngine.SkinnedMeshRenderer>();
+        unlockProgressSprite = Globals.getChildGameObject<UnityEngine.UI.Image>(gameObject, "progress");
+        unlockProgressSprite.transform.parent.gameObject.SetActive(false);
+
+        UnityEngine.Sprite[] sprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Props/chest_open");
+        openSprite = sprites[0];
+        sprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Props/chest_closed");
+        closedSprite = sprites[0];
+
         foreach (UnityEngine.Renderer renderer in renderers)
         {
             if (renderer.tag == "GoldMesh")
@@ -68,6 +77,12 @@
         goldPoper.transform.parent = transform;
         ResetGold();
 	}
+
+    public override void Visible(bool visibility)
+    {
+        base.Visible(visibility);
+        collider.enabled = visibility;        
+    }
 	
 	public void PlaceOnCell(Cell cell, float rotate_angle)
     {
@@ -75,7 +90,7 @@
         locate.chest = this;
         //cell.CreateTorchLight();
         transform.position = cell.GetFloorPos();
-        transform.localEulerAngles = new UnityEngine.Vector3(0.0f, rotate_angle, 0.0f);
+        //transform.localEulerAngles = new UnityEngine.Vector3(0.0f, rotate_angle, 0.0f);
     }
 
     void OnTriggerEnter(UnityEngine.Collider other)
@@ -84,10 +99,9 @@
         isMagicianNear = true;
         if (goldAmount > 0)
         {
-            animation.Play();
-        }
-        
-        EnhanceEdge();
+            unlockProgressSprite.transform.parent.gameObject.SetActive(true);
+            AddAction(new Sequence(new Cocos2dProgress(unlockProgressSprite, 120), new FunctionCall(()=> ChestOpened())));
+        }        
     }
 
     void OnTriggerStay(UnityEngine.Collider other)
@@ -102,14 +116,18 @@
     {
         UnityEngine.Debug.Log("leave chest");
         isMagicianNear = false;
-        if (goldLast > 0 && animation["ChestAnim"].speed < UnityEngine.Mathf.Epsilon)
+                        
+        if (goldLast > 0)
         {
-            animation["ChestAnim"].speed = 2.0f;
+            ClearAllActions();
+            unlockProgressSprite.transform.parent.gameObject.SetActive(false);
+            if (spriteRenderer.sprite == openSprite)
+            {
+                ChestClosed();
+            }            
         }
 
-        goldPoper.StopPop();
-        
-        EdgeEnahancementOff();
+        goldPoper.StopPop();       
     }
 
     public void ChestOpened()
@@ -118,9 +136,27 @@
         UnityEngine.Debug.Log("ChestOpened");
         if (isMagicianNear)
         {
-            animation["ChestAnim"].speed = 0.0f;
+            unlockProgressSprite.transform.parent.gameObject.SetActive(false);
+            spriteRenderer.sprite = openSprite;
             goldPoper.Pop();
         }        
+    }
+
+    public void ChestClosed()
+    {
+        if(goldLast > 0)
+        {
+            spriteRenderer.sprite = closedSprite;
+        }
+        if (isPlayingBack)
+        {
+            UnityEngine.Debug.Log("ChestClosed");
+            if (!isMagicianNear)
+            {
+                spriteRenderer.sprite = closedSprite;
+            }
+        }
+        isPlayingBack = false;
     }
 
     public void LostGold()
@@ -177,61 +213,14 @@
             --time;
             yield return new UnityEngine.WaitForSeconds(0.1f); 
         }
-    }
+    }    
 
-    public void ChestClosed()
-    {
-        if (isPlayingBack)
-        {
-            UnityEngine.Debug.Log("ChestClosed");
-            if (!isMagicianNear)
-            {
-                animation.Stop();
-            }
-        }
-        isPlayingBack = false;
-    }
-
-    public void EnhanceEdge()
-    {
-
-        {
-            chestMesh.material.shader = UnityEngine.Shader.Find("Custom/Rim");
-            chestMesh.material.SetColor("_RimColor", UnityEngine.Color.yellow);            
-        }
-
-//         for (int idx = 0; idx < skinnedMeshRenderers.Length; ++idx)
-//         {
-//             skinnedMeshRenderers[idx].material.shader = UnityEngine.Shader.Find("Custom/ToonWithExtrusion");
-//             skinnedMeshRenderers[idx].material.SetColor("_ExtrusionColor", UnityEngine.Color.yellow);
-//             skinnedMeshRenderers[idx].material.SetFloat("_Amount", 0.1f);
-//             skinnedMeshRenderers[idx].material.SetFloat("_Cutoff", 0.0f);
-//         }
-    }
-
-    public void EdgeEnahancementOff()
-    {
-//         for (int idx = 0; idx < meshRenderers.Length; ++idx)
-//         {
-//             meshRenderers[idx].material.shader = UnityEngine.Shader.Find("Mobile/Unlit (Supports Lightmap)");
-//         }
-// 
-//         for (int idx = 0; idx < skinnedMeshRenderers.Length; ++idx)
-//         {
-//             skinnedMeshRenderers[idx].material.shader = UnityEngine.Shader.Find("Mobile/Unlit (Supports Lightmap)");
-//         }
-
-        chestMesh.material.shader = UnityEngine.Shader.Find("Mobile/Unlit (Supports Lightmap)");
-    }
-    
-    public void Falling(float fallingDuration)
+    public void Falling(int fallingDuration)
     {
         UnityEngine.Vector3 to = transform.position;
         UnityEngine.Vector3 from = transform.position + new UnityEngine.Vector3(0, 20, 0);
         transform.position = from;
-        AddAction(new Cocos2dParallel(new MoveTo(transform, to, fallingDuration),
-            new RotateTo(UnityEngine.Vector3.zero, new UnityEngine.Vector3(0.0f, 360.0f, 0.0f), UnityEngine.Random.Range(2.0f, 3.0f), true)) 
-            );
+        AddAction(new MoveTo(transform, to, fallingDuration));
         Invoke("FallingOver", fallingDuration + 0.3f);
     }
 
@@ -245,8 +234,8 @@
     {
         AddAction(
                 new Cocos2dParallel(
-                    new Sequence(new ScaleTo(transform, new UnityEngine.Vector3(1.6f, 1.6f, 1.6f), 0.1f),
-                        new ScaleTo(transform, scaleCache, 0.1f))
+                    new Sequence(new ScaleTo(transform, new UnityEngine.Vector3(1.6f, 1.6f, 1.6f), 5),
+                        new ScaleTo(transform, scaleCache, 5))
                         )
                         );
 
@@ -260,13 +249,13 @@
             UpgradeBtn.onClick.AddListener(() => UpgradeBtnClicked());
 
             isShownBtn = true;
-            canvasForSafeboxBtns.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 1.0f, 0.0f);
+            canvasForSafeboxBtns.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f);
             canvasForSafeboxBtns.GetComponent<Actor>().AddAction(
-                new ScaleTo(canvasForSafeboxBtns.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), 0.2f));
+                new ScaleTo(canvasForSafeboxBtns.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), 8));
         } 
     }
 
-    void UpgradeBtnClicked()
+    public void UpgradeBtnClicked()
     {
         UnityEngine.GameObject SafeboxUpgradeUI_prefab = UnityEngine.Resources.Load("UI/SafeboxUpgradeUI") as UnityEngine.GameObject;
         SafeboxUpgradeUI upgradeUI = (UnityEngine.GameObject.Instantiate(SafeboxUpgradeUI_prefab) as UnityEngine.GameObject).GetComponentInChildren<SafeboxUpgradeUI>();

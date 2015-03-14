@@ -21,7 +21,7 @@
             Guard guard = null;
             UnityEngine.Vector3 screenPos = new UnityEngine.Vector3(UnityEngine.Input.mousePosition.x, UnityEngine.Input.mousePosition.y, 0);
             Pathfinding.Node birthNode = Globals.maze.GetNodeFromScreenRay(screenPos);
-            guard = Globals.CreateGuard(gameObject.name, birthNode);            
+            guard = Globals.CreateGuard(Globals.GetGuardData(gameObject.name), birthNode);            
            
             Globals.maze._DragGuard(guard);
         }        

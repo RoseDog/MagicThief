@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Cell : Actor
 {
     private bool visited;
-    public int z;
+    public int y;
     public int x;
     public MazeGenerate maze;
     public Chest chest;
@@ -39,19 +39,19 @@ public class Cell : Actor
 
         if (direction == Globals.EAST)
         {
-            return maze.GetCell(z, x + 1);
+            return maze.GetCell(y, x + 1);
         }
         else if (direction == Globals.SOUTH)
         {
-            return maze.GetCell(z + 1, x);
+            return maze.GetCell(y + 1, x);
         }
         else if (direction == Globals.WEST)
         {
-            return maze.GetCell(z, x - 1);
+            return maze.GetCell(y, x - 1);
         }
         else if (direction == Globals.NORTH)
         {
-            return maze.GetCell(z - 1, x);
+            return maze.GetCell(y - 1, x);
         }
         else
         {
@@ -101,7 +101,7 @@ public class Cell : Actor
         }
         else if (direction == Globals.SOUTH)
         {
-            return z < (maze.Z_CELLS_COUNT - 1);
+            return y < (maze.Y_CELLS_COUNT - 1);
         }
         else if (direction == Globals.WEST)
         {
@@ -109,7 +109,7 @@ public class Cell : Actor
         }
         else if (direction == Globals.NORTH)
         {
-            return z > 0;
+            return y > 0;
         }
         return true;
     }
@@ -211,12 +211,15 @@ public class Cell : Actor
         UnityEngine.GameObject wall = Globals.getChildGameObject(cell.gameObject, dir);
         if (wall == null)
         {
-            UnityEngine.GameObject cell_prefab = UnityEngine.Resources.Load("Props/Cell") as UnityEngine.GameObject;
+            UnityEngine.GameObject cell_prefab = UnityEngine.Resources.Load("Props/Cell_2d") as UnityEngine.GameObject;
             UnityEngine.GameObject wall_prefab = Globals.getChildGameObject(cell_prefab, dir);
             wall = UnityEngine.GameObject.Instantiate(wall_prefab) as UnityEngine.GameObject;
-            wall.name = dir;
-            wall.transform.position += cell.transform.position;
-            wall.transform.parent = cell.transform;            
+            wall.name = dir;            
+            UnityEngine.Vector3 pos_cache = wall.transform.localPosition;
+            UnityEngine.Vector3 scale_cache = wall.transform.localScale;
+            wall.transform.parent = cell.transform;
+            wall.transform.localScale = scale_cache;
+            wall.transform.localPosition = pos_cache;
         }
         
         return wall;
@@ -226,12 +229,14 @@ public class Cell : Actor
     {
         if (GetFloor() == null)
         {
-            UnityEngine.GameObject cell_prefab = UnityEngine.Resources.Load("Props/Cell") as UnityEngine.GameObject;
+            UnityEngine.GameObject cell_prefab = UnityEngine.Resources.Load("Props/Cell_2d") as UnityEngine.GameObject;
             UnityEngine.GameObject floor_prefab = Globals.getChildGameObject(cell_prefab, "floor_tile");
             UnityEngine.GameObject floor = UnityEngine.GameObject.Instantiate(floor_prefab) as UnityEngine.GameObject;
             floor.name = "floor_tile";
+            UnityEngine.Vector3 scale_cache = floor.transform.localScale;
             floor.transform.position += transform.position;
             floor.transform.parent = transform;
+            floor.transform.localScale = scale_cache;
             return floor;
         }
         return null;
@@ -289,16 +294,16 @@ public class Cell : Actor
     public UnityEngine.Vector3 GetFloorPos()
     {
         UnityEngine.GameObject floor = GetFloor();
-        return floor.transform.position + new UnityEngine.Vector3(0.0f, Globals.FLOOR_HEIGHT, 0.0f);
+        return floor.transform.position/* + new UnityEngine.Vector3(0.0f, 0.0f, -Globals.FLOOR_HEIGHT)*/;
     }
 
     public void HideEverythingExceptFloor()
     {
         UnityEngine.GameObject floor = GetFloor();
-        UnityEngine.MeshRenderer[] renderers = GetComponentsInChildren<UnityEngine.MeshRenderer>();
-        foreach (UnityEngine.MeshRenderer renderer in renderers)
+        UnityEngine.Renderer[] renderers = GetComponentsInChildren<UnityEngine.Renderer>();
+        foreach (UnityEngine.Renderer renderer in renderers)
         {
-            if (renderer.gameObject != floor)
+            if (renderer.transform.parent.gameObject != floor)
             {
                 renderer.enabled = false;
             }            
@@ -308,10 +313,10 @@ public class Cell : Actor
     public void ShowEverythingExceptFloor()
     {
         UnityEngine.GameObject floor = GetFloor();
-        UnityEngine.MeshRenderer[] renderers = GetComponentsInChildren<UnityEngine.MeshRenderer>();
-        foreach (UnityEngine.MeshRenderer renderer in renderers)
+        UnityEngine.SpriteRenderer[] renderers = GetComponentsInChildren<UnityEngine.SpriteRenderer>();
+        foreach (UnityEngine.SpriteRenderer renderer in renderers)
         {
-            if (renderer.gameObject != floor)
+            if (renderer.transform.parent.gameObject != floor)
             {
                 renderer.enabled = true;
             }

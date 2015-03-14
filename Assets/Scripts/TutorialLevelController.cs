@@ -1,7 +1,7 @@
 ﻿public class TutorialLevelController : LevelController
 {    
-    protected UnityEngine.Vector3 posOnSky = new UnityEngine.Vector3(0.0f, 8.0f, 0.0f);
-    protected float fallingDuration = 1.5f;
+    protected UnityEngine.Vector3 posOnSky = new UnityEngine.Vector3(0.0f, 5.0f, 0.0f);
+    protected float fallingDuration = 0.4f;
         
     int restartInSeconds = 3;
     int countDownSeconds;
@@ -10,9 +10,10 @@
     public LevelTip LevelTip;
     UnityEngine.UI.Button LeaveBtn;
     public Number StealingCash;
+    public UnityEngine.UI.Text RestartText;    
     public System.Collections.Generic.List<UnityEngine.GameObject> coinsOnFloor = new System.Collections.Generic.List<UnityEngine.GameObject>();
 
-    public float paperMovingDuration = 1.2f;
+    public int paperMovingDuration = 40;
     
     UnityEngine.Vector3 camOffsetInSpy = new UnityEngine.Vector3(0, 20, -7);
     UnityEngine.Vector3 camOffsetInStealing = new UnityEngine.Vector3(0, 21, -7);
@@ -22,6 +23,7 @@
 
     public System.Collections.Generic.List<UnityEngine.GameObject> unstolenGems = new System.Collections.Generic.List<UnityEngine.GameObject>();
 
+    public UnityEngine.GameObject fogPlane;    
     public override void Awake()
     {
         base.Awake();
@@ -35,7 +37,8 @@
         LeaveBtn.gameObject.SetActive(false);
         StealingCash = Globals.getChildGameObject<Number>(canvasForStealingBegin, "StealingCash");
         StealingCash.gameObject.SetActive(false);
-        
+        RestartText = Globals.getChildGameObject<UnityEngine.UI.Text>(canvasForStealingBegin, "RestartText");
+        RestartText.gameObject.SetActive(false);
 
         if (Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
         {
@@ -46,33 +49,48 @@
             Globals.Assert(Globals.iniFileName != "");
             if (Globals.iniFileName == "")
             {
-                Globals.iniFileName = "Tutorial_Level_";
-            }            
+                Globals.iniFileName = "poker_face";
+            }
         }        
                 
         UnityEngine.Debug.Log("map file:" + Globals.iniFileName);
 
 
-        mark_prefab = UnityEngine.Resources.Load("UI/LandingPositionMark") as UnityEngine.GameObject;
+        mark_prefab = UnityEngine.Resources.Load("Misc/LandingPositionMark") as UnityEngine.GameObject;
         landingMark = UnityEngine.GameObject.Instantiate(mark_prefab) as UnityEngine.GameObject;
         UnityEngine.UI.Button markBtn = landingMark.GetComponentInChildren<UnityEngine.UI.Button>();
         markBtn.onClick.AddListener(() => MagicianFallingDown());        
         markBtn.GetComponent<Actor>().AddAction(
             new RotateTo(
-                new UnityEngine.Vector3(90.0f, 0.0f, 0.0f), 
-                new UnityEngine.Vector3(90.0f, 360.0f, 0.0f), 3.0f, true));
+                new UnityEngine.Vector3(0.0f, 0.0f, 0.0f), 
+                new UnityEngine.Vector3(0.0f, 00.0f, 360.0f), 100, true));
         landingMark.SetActive(false);
+
+        fogPlane = UnityEngine.GameObject.Find("FogPlane");
+        Globals.Assert(fogPlane != null, "no FogPlane");        
     }
 
     public override void BeforeGenerateMaze()
     {
-        Globals.ReadMazeIniFile(Globals.iniFileName, true);
+        if(!Globals.PLAY_RECORDS)
+        {
+            Globals.ReadMazeIniFile(Globals.iniFileName, true);
+            System.IO.File.Delete(UnityEngine.Application.dataPath + "/Resources/replay.txt");
+            System.IO.File.Delete(UnityEngine.Application.dataPath + "/Resources/testReplay_pvp.txt");
+            System.IO.File.Delete(UnityEngine.Application.dataPath + "/Resources/testReplay_reply.txt");
+        }
+        else
+        {
+            System.IO.File.Delete(UnityEngine.Application.dataPath + "/Resources/testReplay_reply.txt");
+            Globals.replay.ReadFile();            
+        }
+        
         base.BeforeGenerateMaze();
     }    
 
     public override void MazeFinished()
     {
-        base.MazeFinished();
+        base.MazeFinished();        
         foreach (Chest chest in Globals.maze.chests)
         {
             chest.Visible(true);
@@ -93,16 +111,17 @@
         Globals.maze.RegistChallengerEvent();
 
         Globals.cameraFollowMagician.Reset();
-        
+
+        Globals.canvasForMagician.gameObject.SetActive(true);
         Globals.canvasForMagician.RoseNumberBg.SetActive(false);
 
         if (Globals.TutorialLevelIdx == Globals.TutorialLevel.GetGem)
         {
             Globals.magician.gameObject.SetActive(true);
-            Globals.cameraFollowMagician.disOffset = camOffsetInStealing;
+            //Globals.cameraFollowMagician.disOffset = camOffsetInStealing;
             Globals.canvasForMagician.HideTricksPanel();
-            // 隐藏界面            
-            StealingCash.gameObject.SetActive(false);
+            // 隐藏界面                        
+            StealingCash.gameObject.SetActive(false);            
 
             // 禁止输入        
             Globals.EnableAllInput(false);
@@ -118,10 +137,11 @@
         {
             Globals.EnableAllInput(true);
             Globals.canvasForMagician.SetLifeVisible(true);
-            Globals.canvasForMagician.RestartText.gameObject.SetActive(false);
+            RestartText.gameObject.SetActive(true);
+            Globals.languageTable.SetText(RestartText, "click_guard_to_show_info");
             Globals.magician.ResetLifeAndPower();
 
-            Globals.cameraFollowMagician.disOffset = camOffsetInSpy;
+            //Globals.cameraFollowMagician.disOffset = camOffsetInSpy;
             if (Globals.TutorialLevelIdx == Globals.TutorialLevel.GetAroundGuard)
             {
                 Globals.canvasForMagician.HideTricksPanel();
@@ -157,21 +177,29 @@
         Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();
     }
 
-    public virtual void MagicianFallingDown()
-    {        
+    public void MagicianFallingDown()
+    {
+        Globals.replay.RecordMageFallingDown();
+        RestartText.gameObject.SetActive(false);
         LeaveBtn.gameObject.SetActive(false);
         Globals.canvasForMagician.equipBtn.gameObject.SetActive(false);
         Globals.magician.gameObject.SetActive(true);        
         if(landingMark.activeSelf)
         {
-            Globals.magician.transform.position = landingMark.transform.position;
+            Globals.magician.transform.position = new UnityEngine.Vector3(
+                landingMark.transform.position.x, 
+                landingMark.transform.position.y,
+                landingMark.transform.position.z-0.01f);
         }        
         if (Globals.TutorialLevelIdx != Globals.TutorialLevel.GetGem)
         {
             UnityEngine.UI.Button markBtn = landingMark.GetComponentInChildren<UnityEngine.UI.Button>();
             markBtn.interactable = false;
             // 相机跟随                    
-            Globals.cameraFollowMagician.MoveToPoint(Globals.magician.transform.position, camOffsetInStealing, 1.0f);
+            Globals.cameraFollowMagician.MoveToPoint(Globals.magician.transform.position, 30);
+
+
+            Globals.EnableAllInput(false);
         }
 
         // 主角降下     
@@ -186,17 +214,14 @@
         if (Globals.TutorialLevelIdx == Globals.TutorialLevel.GetGem)
         {
             // 妈比这个名字到底咋个取
-            Invoke("TutorialOneMageGirlFallingOver", 1.5f);
+            SleepThenCallFunction(80, () => TutorialOneMageGirlFallingOver());
         }
-        else if (Globals.maze.LevelTipText == "")
+        else 
         {
+            Globals.EnableAllInput(true);
             OperateMagician();
         }
-        else
-        {
-            ShowLevelTip();
-        }
-
+       
         if (landingMark.activeSelf)
         {
             UnityEngine.UI.Button markBtn = landingMark.GetComponentInChildren<UnityEngine.UI.Button>();
@@ -209,34 +234,26 @@
 
     void TutorialOneMageGirlFallingOver()
     {
-        Globals.transition.BlackOut(this, "ShowLevelTip");        
-    }
-
-    public void ShowLevelTip()
-    {
-        // 关卡提示        
-        Invoke("OperateMagician", LevelTip.GetFadeDuration() + LevelTip.GetWaitingDuration());
-        LevelTip.Show(Globals.maze.LevelTipText);
+        Globals.transition.BlackOut(()=>OperateMagician());
         // 相机跟随                    
-        Globals.cameraFollowMagician.MoveToPoint(Globals.magician.transform.position, camOffsetInStealing, 1.0f);
-    }
+        Globals.cameraFollowMagician.MoveToPoint(Globals.magician.transform.position, 30);
+    }   
 
     public void OperateMagician()
     {
+        if (Globals.maze.LevelTipText != "")
+        {
+            LevelTip.Show(Globals.maze.LevelTipText);        
+        }
         if (Globals.TutorialLevelIdx == Globals.TutorialLevel.GetGem)
         {            
             Globals.transition.BlackIn();
         }
         
         StealingCash.gameObject.SetActive(true);
+        Globals.canvasForMagician.tricksInUseTip.SetActive(false);
         // 魔术师出场   
         Globals.magician.InStealing();                
-    }
-
-    public override void MagicianGotCash(float value)
-    {
-        //Invoke("LevelPassed", 0.5f);        
-        base.MagicianGotCash(value);
     }
 
     public override void MagicianLifeOver()
@@ -267,7 +284,8 @@
 
 
         StealingCash.SetToZero();
-        Globals.canvasForMagician.HideTricksPanel();
+        StealingCash.gameObject.SetActive(false);
+        Globals.canvasForMagician.gameObject.SetActive(false);
         base.MagicianLifeOver();
         if(Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
         {
@@ -277,10 +295,10 @@
 
     void RestartCount()
     {
-        Globals.canvasForMagician.RestartText.gameObject.SetActive(true);
+        RestartText.gameObject.SetActive(true);
         if (countDownSeconds >= 0)
         {
-            Globals.languageTable.SetText(Globals.canvasForMagician.RestartText, "restart_tutorial_level_tip", 
+            Globals.languageTable.SetText(RestartText, "restart_tutorial_level_tip", 
                 new System.String[] { countDownSeconds.ToString() });
             --countDownSeconds;
         }
@@ -294,7 +312,7 @@
             countDownSeconds = restartInSeconds;
             CancelInvoke("RestartCount");
 
-            Globals.magician.gameObject.SetActive(false);
+            Globals.magician.gameObject.SetActive(false);            
             Globals.maze.ClearMaze();
             Start();
             Globals.maze.Start();
@@ -310,8 +328,7 @@
         }        
         Globals.iniFileName = "Tutorial_Level_" + Globals.TutorialLevelIdx.ToString();
         UnityEngine.Debug.Log("map file:" + Globals.iniFileName);
-        Globals.cashAmount += StealingCash.numberAmont;
-        Globals.canvasForMagician.cashNumber.SetNumber(Globals.cashAmount);
+        Globals.canvasForMagician.ChangeCash(StealingCash.numberAmont);
         Globals.canvasForMagician.HideTricksPanel();
         StealingCash.SetToZero();
         UnityEngine.Debug.Log("level passed:" + Globals.cashAmount.ToString());
@@ -323,7 +340,7 @@
         if (Globals.TutorialLevelIdx == Globals.TutorialLevel.InitMyMaze || Globals.TutorialLevelIdx == Globals.TutorialLevel.Over)
         {
             canvasForStealingBegin.SetActive(false);
-            Globals.transition.BlackOut(this, "Newsreport");
+            Globals.transition.BlackOut(()=>Newsreport());
         }
         else if (Globals.TutorialLevelIdx == Globals.TutorialLevel.FirstTarget)
         {
@@ -372,29 +389,34 @@
         // 相机就位
         UnityEngine.GameObject cam = Globals.getChildGameObject(MoonNightThief, "Camera");
         Globals.cameraFollowMagician.transform.parent = cam.transform.parent;
-        Globals.cameraFollowMagician.transform.position = cam.transform.position;
+        Globals.cameraFollowMagician.transform.localPosition = cam.transform.localPosition;
         Globals.cameraFollowMagician.transform.localRotation = cam.transform.localRotation;
+        Globals.cameraFollowMagician.transform.localScale = UnityEngine.Vector3.one;
         Globals.cameraFollowMagician.enabled = false;
-        Globals.cameraFollowMagician.transform.LookAt(Stand.transform.position);
+        Globals.cameraFollowMagician.MiniMapPlane.SetActive(false);
 
         // 报纸报道
         // Newsreport.Show();
         papers = MoonNightThief.GetComponentsInChildren<UIMover>();
-        Globals.transition.BlackIn(this, "NewsreportOut");
+        Globals.transition.BlackIn(()=>NewsreportOut());
     }
 
     void NewsreportOut()
     {
-        StartCoroutine(_NewsreportOut());
-    }
-
-    System.Collections.IEnumerator _NewsreportOut()
-    {        
+        Sequence seq_action = new Sequence();
         foreach (UIMover paper in papers)
         {
-            paper.BeginMove(paperMovingDuration);
-            yield return new UnityEngine.WaitForSeconds(paperMovingDuration);
+            UIMover p = paper;
+            seq_action.actions.Add(new SleepFor(paperMovingDuration));
+            seq_action.actions.Add(new FunctionCall(() => p.BeginMove(paperMovingDuration)));
         }
+        seq_action.actions.Add(new SleepFor(paperMovingDuration*3));
+        seq_action.actions.Add(new FunctionCall(() => NewsreportOutEnd()));
+        AddAction(seq_action);
+    }
+
+    void NewsreportOutEnd()
+    {                
         if (Globals.TutorialLevelIdx == Globals.TutorialLevel.InitMyMaze)
         {
             Globals.asyncLoad.ToLoadSceneAsync("MyMaze");
@@ -414,22 +436,84 @@
         Globals.asyncLoad.ToLoadSceneAsync("City");
     }
 
-    public override void FixedUpdate()
+    public Guard m_lastNearest;
+    public override void Update()
     {
-        base.FixedUpdate();
-        if (Globals.magician.hypnosis.data.IsInUse())
+        base.Update();
+        if (Globals.magician.Stealing && Globals.magician.hypnosis.data.IsInUse())
         {
+            float minDis = UnityEngine.Mathf.Infinity;
+            Guard nearest = null;
             foreach (Guard guard in Globals.maze.guards)
             {
-                if (Globals.magician.Stealing
-                    && UnityEngine.Vector3.Distance(Globals.magician.transform.position, guard.transform.position) < 7.0f
-                    && guard.currentAction != guard.beenHypnosised)
+                float dis = UnityEngine.Vector3.Distance(Globals.magician.transform.position, guard.transform.position);
+                if (dis < 7.0f && dis < minDis && guard.currentAction != guard.beenHypnosised)
                 {
-                    guard.ShowTrickBtns();
+                    minDis = dis;
+                    nearest = guard;
+                }
+            }
+            if (nearest != null && m_lastNearest != nearest)
+            {
+                if (m_lastNearest != null)
+                {
+                    m_lastNearest.HideBtns();
+                }
+                nearest.ShowTrickBtns();
+                m_lastNearest = nearest;
+            }                                   
+        }        
+    }
+
+    public override void ClickOnMap(UnityEngine.Vector2 finger_pos)
+    {
+        base.ClickOnMap(finger_pos);
+        int mask = 1 << 10 | 1 << 27;
+        Guard guard = Globals.FingerRayToObj<Guard>(
+            Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), mask, finger_pos);
+
+        mask = 1 << 14;
+        Chest chest = Globals.FingerRayToObj<Chest>(Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), mask, finger_pos);
+
+        if (!Globals.magician.Stealing && guard != null)
+        {
+            guard.GuardInfoBtnClicked();
+        }
+        else if (!Globals.magician.Stealing && chest != null)
+        {
+            chest.UpgradeBtnClicked();
+        }
+        else if (!Globals.PLAY_RECORDS)
+        {
+            UnityEngine.Ray ray = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().ScreenPointToRay(finger_pos);
+            RayOnMap(ray);
+            Globals.replay.RecordClick(ray);
+        }               
+    }
+
+    public void RayOnMap(UnityEngine.Ray ray)
+    {
+        UnityEngine.RaycastHit hitInfo;
+        int layermask = 1 << 9 | 1 << 21;
+        if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
+        {            
+            Pathfinding.Node node = Globals.maze.pathFinder.GetNearestWalkableNode(hitInfo.point);
+            UnityEngine.Vector3 pos = Globals.GetPathNodePos(node);
+            if (!Globals.magician.gameObject.activeSelf)
+            {
+                TutorialLevelController controller = (Globals.LevelController as TutorialLevelController);
+                controller.landingMark.SetActive(true);
+                controller.landingMark.transform.position = new UnityEngine.Vector3(pos.x, pos.y, controller.fogPlane.transform.position.z - 0.1f);
+            }
+            else if (Globals.magician.Stealing)
+            {
+                if (hitInfo.collider.gameObject.layer == 9)
+                {
+                    Globals.magician.GoTo(hitInfo.point);
                 }
                 else
                 {
-                    guard.HideBtns();
+                    Globals.magician.ShotLight(hitInfo.collider.gameObject);
                 }
             }
         }

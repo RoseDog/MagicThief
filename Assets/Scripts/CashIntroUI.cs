@@ -1,0 +1,42 @@
+﻿public class CashIntroUI : CustomEventTrigger
+{
+    MultiLanguageUIText cash;
+    MultiLanguageUIText safebox_count;
+    MultiLanguageUIText total_capacity;
+    MultiLanguageUIText capacity;
+    MultiLanguageUIText cash_averaged;
+    public override void Awake()
+    {
+        base.Awake();
+        cash = Globals.getChildGameObject<MultiLanguageUIText>(gameObject, "cash");
+        safebox_count = Globals.getChildGameObject<MultiLanguageUIText>(gameObject, "safebox_count");
+        total_capacity = Globals.getChildGameObject<MultiLanguageUIText>(gameObject, "total_capacity");
+        capacity = Globals.getChildGameObject<MultiLanguageUIText>(gameObject, "capacity");
+        cash_averaged = Globals.getChildGameObject<MultiLanguageUIText>(gameObject, "cash_averaged");
+    }
+
+    public void Open()
+    {
+        gameObject.SetActive(true);
+        Globals.languageTable.SetText(cash, "you_have_some_cash", new System.String[]{Globals.cashAmount.ToString()});
+        Globals.languageTable.SetText(safebox_count, "you_have_some_safeboxes", new System.String[] { Globals.safeBoxDatas.Count.ToString() });
+        Globals.languageTable.SetText(total_capacity, "total_capacity");
+        System.String str = "=";
+        foreach(SafeBoxData data in Globals.safeBoxDatas)
+        {
+            str += Globals.safeBoxLvDatas[data.Lv].capacity.ToString();
+            if(Globals.safeBoxDatas[Globals.safeBoxDatas.Count-1] != data)
+            {
+                str += "+";
+            }
+        }
+        capacity.text = Globals.AccumulateSafeboxCapacity().ToString() + str;
+        Globals.languageTable.SetText(cash_averaged, "cash_average_put_in_box");
+    }
+
+	public override void OnTouchUpOutside(Finger f)
+    {
+        base.OnTouchUpOutside(f);
+        gameObject.SetActive(false);
+    }
+}

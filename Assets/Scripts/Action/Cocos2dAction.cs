@@ -11,6 +11,8 @@ public class Cocos2dAction
 	
 	// initialized flag
     public bool initialized = false;
+
+    public bool paused = false;
 	
 	// Return true if action is completed
 	public bool IsCompleted() { return completed; }

@@ -1,0 +1,1727 @@
+fileFormatVersion: 2
+guid: 1af934528cdaf8a488f223920fa33eae
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: idle_0
+    21300002: idle_1
+    21300004: idle_2
+    21300006: idle_3
+    21300008: moving_0
+    21300010: moving_1
+    21300012: moving_2
+    21300014: moving_3
+    21300016: moving_4
+    21300018: BeenHypnosised_0
+    21300020: BeenHypnosised_1
+    21300022: BeenHypnosised_2
+    21300024: BeenHypnosised_4
+    21300026: BeenHypnosised_4
+    21300028: BeenHypnosised_5
+    21300030: Atk_0
+    21300032: Atk_1
+    21300034: Atk_2
+    21300036: Atk_3
+    21300038: Atk_4
+    21300040: "\u91CD\u578B\u5B88\u536B_20"
+    21300042: "\u91CD\u578B\u5B88\u536B_21"
+    21300044: "\u91CD\u578B\u5B88\u536B_22"
+    21300046: "\u91CD\u578B\u5B88\u536B_23"
+    21300048: "\u91CD\u578B\u5B88\u536B_24"
+    21300050: "\u91CD\u578B\u5B88\u536B_25"
+    21300052: "\u91CD\u578B\u5B88\u536B_26"
+    21300054: "\u91CD\u578B\u5B88\u536B_27"
+    21300056: "\u91CD\u578B\u5B88\u536B_28"
+    21300058: "\u91CD\u578B\u5B88\u536B_29"
+    21300060: "\u91CD\u578B\u5B88\u536B_30"
+    21300062: "\u91CD\u578B\u5B88\u536B_31"
+    21300064: "\u91CD\u578B\u5B88\u536B_32"
+    21300066: "\u91CD\u578B\u5B88\u536B_33"
+    21300068: "\u91CD\u578B\u5B88\u536B_34"
+    21300070: "\u91CD\u578B\u5B88\u536B_35"
+    21300072: "\u91CD\u578B\u5B88\u536B_36"
+    21300074: "\u91CD\u578B\u5B88\u536B_37"
+    21300076: "\u91CD\u578B\u5B88\u536B_38"
+    21300078: "\u91CD\u578B\u5B88\u536B_39"
+    21300080: "\u91CD\u578B\u5B88\u536B_40"
+    21300082: "\u91CD\u578B\u5B88\u536B_41"
+    21300084: "\u91CD\u578B\u5B88\u536B_42"
+    21300086: "\u91CD\u578B\u5B88\u536B_43"
+    21300088: "\u91CD\u578B\u5B88\u536B_44"
+    21300090: "\u91CD\u578B\u5B88\u536B_45"
+    21300092: "\u91CD\u578B\u5B88\u536B_46"
+    21300094: "\u91CD\u578B\u5B88\u536B_47"
+    21300096: "\u91CD\u578B\u5B88\u536B_48"
+    21300098: "\u91CD\u578B\u5B88\u536B_49"
+    21300100: "\u91CD\u578B\u5B88\u536B_50"
+    21300102: "\u91CD\u578B\u5B88\u536B_51"
+    21300104: "\u91CD\u578B\u5B88\u536B_52"
+    21300106: "\u91CD\u578B\u5B88\u536B_53"
+    21300108: "\u91CD\u578B\u5B88\u536B_54"
+    21300110: "\u91CD\u578B\u5B88\u536B_55"
+    21300112: "\u91CD\u578B\u5B88\u536B_56"
+    21300114: "\u91CD\u578B\u5B88\u536B_57"
+    21300116: "\u91CD\u578B\u5B88\u536B_58"
+    21300118: "\u91CD\u578B\u5B88\u536B_59"
+    21300120: "\u91CD\u578B\u5B88\u536B_60"
+    21300122: "\u91CD\u578B\u5B88\u536B_61"
+    21300124: "\u91CD\u578B\u5B88\u536B_62"
+    21300126: "\u91CD\u578B\u5B88\u536B_63"
+    21300128: "\u91CD\u578B\u5B88\u536B_64"
+    21300130: "\u91CD\u578B\u5B88\u536B_65"
+    21300132: "\u91CD\u578B\u5B88\u536B_66"
+    21300134: "\u91CD\u578B\u5B88\u536B_67"
+    21300136: "\u91CD\u578B\u5B88\u536B_68"
+    21300138: "\u91CD\u578B\u5B88\u536B_69"
+    21300140: "\u91CD\u578B\u5B88\u536B_70"
+    21300142: "\u91CD\u578B\u5B88\u536B_71"
+    21300144: "\u91CD\u578B\u5B88\u536B_72"
+    21300146: "\u91CD\u578B\u5B88\u536B_73"
+    21300148: "\u91CD\u578B\u5B88\u536B_74"
+    21300150: "\u91CD\u578B\u5B88\u536B_75"
+    21300152: "\u91CD\u578B\u5B88\u536B_76"
+    21300154: "\u91CD\u578B\u5B88\u536B_77"
+    21300156: "\u91CD\u578B\u5B88\u536B_78"
+    21300158: "\u91CD\u578B\u5B88\u536B_79"
+    21300160: "\u91CD\u578B\u5B88\u536B_80"
+    21300162: "\u91CD\u578B\u5B88\u536B_81"
+    21300164: "\u91CD\u578B\u5B88\u536B_82"
+    21300166: "\u91CD\u578B\u5B88\u536B_83"
+    21300168: "\u91CD\u578B\u5B88\u536B_84"
+    21300170: "\u91CD\u578B\u5B88\u536B_85"
+    21300172: "\u91CD\u578B\u5B88\u536B_86"
+    21300174: "\u91CD\u578B\u5B88\u536B_87"
+    21300176: "\u91CD\u578B\u5B88\u536B_88"
+    21300178: "\u91CD\u578B\u5B88\u536B_89"
+    21300180: "\u91CD\u578B\u5B88\u536B_90"
+    21300182: "\u91CD\u578B\u5B88\u536B_91"
+    21300184: "\u91CD\u578B\u5B88\u536B_92"
+    21300186: "\u91CD\u578B\u5B88\u536B_93"
+    21300188: "\u91CD\u578B\u5B88\u536B_94"
+    21300190: "\u91CD\u578B\u5B88\u536B_95"
+    21300192: "\u91CD\u578B\u5B88\u536B_96"
+    21300194: "\u91CD\u578B\u5B88\u536B_97"
+    21300196: "\u91CD\u578B\u5B88\u536B_98"
+    21300198: "\u91CD\u578B\u5B88\u536B_99"
+    21300200: "\u91CD\u578B\u5B88\u536B_100"
+    21300202: "\u91CD\u578B\u5B88\u536B_101"
+    21300204: "\u91CD\u578B\u5B88\u536B_102"
+    21300206: "\u91CD\u578B\u5B88\u536B_103"
+    21300208: "\u91CD\u578B\u5B88\u536B_104"
+    21300210: "\u91CD\u578B\u5B88\u536B_105"
+    21300212: "\u91CD\u578B\u5B88\u536B_106"
+    21300214: "\u91CD\u578B\u5B88\u536B_107"
+    21300216: "\u91CD\u578B\u5B88\u536B_108"
+    21300218: "\u91CD\u578B\u5B88\u536B_109"
+    21300220: "\u91CD\u578B\u5B88\u536B_110"
+    21300222: "\u91CD\u578B\u5B88\u536B_111"
+    21300224: "\u91CD\u578B\u5B88\u536B_112"
+    21300226: "\u91CD\u578B\u5B88\u536B_113"
+    21300228: "\u91CD\u578B\u5B88\u536B_114"
+    21300230: "\u91CD\u578B\u5B88\u536B_115"
+    21300232: "\u91CD\u578B\u5B88\u536B_116"
+    21300234: "\u91CD\u578B\u5B88\u536B_117"
+    21300236: "\u91CD\u578B\u5B88\u536B_118"
+    21300238: "\u91CD\u578B\u5B88\u536B_119"
+    21300240: "\u91CD\u578B\u5B88\u536B_120"
+    21300242: "\u91CD\u578B\u5B88\u536B_121"
+    21300244: "\u91CD\u578B\u5B88\u536B_122"
+    21300246: "\u91CD\u578B\u5B88\u536B_123"
+    21300248: "\u91CD\u578B\u5B88\u536B_124"
+    21300250: "\u91CD\u578B\u5B88\u536B_125"
+    21300252: "\u91CD\u578B\u5B88\u536B_126"
+    21300254: "\u91CD\u578B\u5B88\u536B_127"
+    21300256: "\u91CD\u578B\u5B88\u536B_128"
+    21300258: "\u91CD\u578B\u5B88\u536B_129"
+    21300260: "\u91CD\u578B\u5B88\u536B_130"
+    21300262: "\u91CD\u578B\u5B88\u536B_131"
+    21300264: "\u91CD\u578B\u5B88\u536B_132"
+    21300266: "\u91CD\u578B\u5B88\u536B_133"
+    21300268: "\u91CD\u578B\u5B88\u536B_134"
+    21300270: "\u91CD\u578B\u5B88\u536B_135"
+    21300272: "\u91CD\u578B\u5B88\u536B_136"
+    21300274: "\u91CD\u578B\u5B88\u536B_137"
+    21300276: "\u91CD\u578B\u5B88\u536B_138"
+    21300278: "\u91CD\u578B\u5B88\u536B_139"
+    21300280: "\u91CD\u578B\u5B88\u536B_140"
+    21300282: armed_Sprite_8
+    21300284: BeenHypnosised_3
+    21300286: armed_Sprite_14
+    21300288: Atk_0
+    21300290: Atk_1
+    21300292: Atk_2
+    21300294: Atk_3
+    21300296: Atk_4
+    21300298: armed_Sprite_20
+    21300300: armed_Sprite_21
+    21300302: armed_Sprite_22
+    21300304: armed_Sprite_23
+    21300306: armed_Sprite_24
+    21300308: armed_Sprite_25
+    21300310: armed_Sprite_26
+    21300312: armed_Sprite_27
+    21300314: armed_Sprite_28
+    21300316: armed_Sprite_29
+    21300318: armed_Sprite_30
+    21300320: armed_Sprite_31
+    21300322: armed_Sprite_32
+    21300324: armed_Sprite_33
+    21300326: armed_Sprite_34
+    21300328: armed_Sprite_35
+    21300330: armed_Sprite_36
+    21300332: armed_Sprite_37
+    21300334: armed_Sprite_38
+    21300336: armed_Sprite_39
+    21300338: armed_Sprite_40
+    21300340: armed_Sprite_41
+    21300342: armed_Sprite_42
+    21300344: armed_Sprite_43
+    21300346: armed_Sprite_44
+    21300348: armed_Sprite_45
+    21300350: armed_Sprite_46
+    21300352: armed_Sprite_47
+    21300354: armed_Sprite_48
+    21300356: armed_Sprite_49
+    21300358: armed_Sprite_50
+    21300360: armed_Sprite_51
+    21300362: armed_Sprite_52
+    21300364: armed_Sprite_53
+    21300366: armed_Sprite_54
+    21300368: armed_Sprite_55
+    21300370: armed_Sprite_56
+    21300372: armed_Sprite_57
+    21300374: armed_Sprite_58
+    21300376: armed_Sprite_59
+    21300378: armed_Sprite_60
+    21300380: armed_Sprite_61
+    21300382: armed_Sprite_62
+    21300384: armed_Sprite_63
+    21300386: armed_Sprite_64
+    21300388: armed_Sprite_65
+    21300390: armed_Sprite_66
+    21300392: armed_Sprite_67
+    21300394: armed_Sprite_68
+    21300396: armed_Sprite_69
+    21300398: armed_Sprite_70
+    21300400: armed_Sprite_71
+    21300402: armed_Sprite_72
+    21300404: armed_Sprite_73
+    21300406: armed_Sprite_74
+    21300408: armed_Sprite_75
+    21300410: armed_Sprite_76
+    21300412: armed_Sprite_77
+    21300414: armed_Sprite_78
+    21300416: armed_Sprite_79
+    21300418: armed_Sprite_80
+    21300420: armed_Sprite_81
+    21300422: armed_Sprite_82
+    21300424: armed_Sprite_83
+    21300426: armed_Sprite_84
+    21300428: armed_Sprite_85
+    21300430: armed_Sprite_86
+    21300432: armed_Sprite_87
+    21300434: armed_Sprite_88
+    21300436: armed_Sprite_89
+    21300438: armed_Sprite_90
+    21300440: armed_Sprite_91
+    21300442: armed_Sprite_92
+    21300444: armed_Sprite_93
+    21300446: armed_Sprite_94
+    21300448: armed_Sprite_95
+    21300450: armed_Sprite_96
+    21300452: armed_Sprite_97
+    21300454: armed_Sprite_98
+    21300456: armed_Sprite_99
+    21300458: armed_Sprite_100
+    21300460: armed_Sprite_101
+    21300462: armed_Sprite_102
+    21300464: armed_Sprite_103
+    21300466: armed_Sprite_104
+    21300468: armed_Sprite_105
+    21300470: armed_Sprite_106
+    21300472: armed_Sprite_107
+    21300474: armed_Sprite_108
+    21300476: armed_Sprite_109
+    21300478: armed_Sprite_110
+    21300480: armed_Sprite_111
+    21300482: armed_Sprite_112
+    21300484: armed_Sprite_113
+    21300486: armed_Sprite_114
+    21300488: armed_Sprite_115
+    21300490: armed_Sprite_116
+    21300492: armed_Sprite_117
+    21300494: armed_Sprite_118
+    21300496: armed_Sprite_119
+    21300498: armed_Sprite_120
+    21300500: armed_Sprite_121
+    21300502: armed_Sprite_122
+    21300504: armed_Sprite_123
+    21300506: armed_Sprite_124
+    21300508: armed_Sprite_125
+    21300510: armed_Sprite_126
+    21300512: armed_Sprite_127
+    21300514: armed_Sprite_128
+    21300516: armed_Sprite_129
+    21300518: armed_Sprite_130
+    21300520: armed_Sprite_131
+    21300522: armed_Sprite_132
+    21300524: armed_Sprite_133
+    21300526: armed_Sprite_134
+    21300528: armed_Sprite_135
+    21300530: armed_Sprite_136
+    21300532: armed_Sprite_137
+    21300534: armed_Sprite_138
+    21300536: armed_Sprite_139
+    21300538: armed_Sprite_140
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: idle_0
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 321
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: idle_1
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 319
+        width: 61
+        height: 60
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: idle_2
+      rect:
+        serializedVersion: 2
+        x: 141
+        y: 320
+        width: 61
+        height: 59
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: idle_3
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 320
+        width: 61
+        height: 60
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: moving_0
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 243
+        width: 49
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: moving_1
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 244
+        width: 53
+        height: 59
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: moving_2
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 244
+        width: 64
+        height: 59
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: moving_3
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 242
+        width: 60
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_8
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 241
+        width: 56
+        height: 59
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BeenHypnosised_0
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 169
+        width: 63
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BeenHypnosised_1
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 171
+        width: 58
+        height: 47
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BeenHypnosised_2
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 170
+        width: 55
+        height: 51
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BeenHypnosised_3
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 175
+        width: 58
+        height: 47
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BeenHypnosised_4
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 177
+        width: 66
+        height: 36
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_14
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 173
+        width: 63
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Atk_0
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 94
+        width: 53
+        height: 59
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Atk_1
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 91
+        width: 55
+        height: 59
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Atk_2
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 88
+        width: 65
+        height: 62
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Atk_3
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 87
+        width: 92
+        height: 59
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Atk_4
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 88
+        width: 85
+        height: 57
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_20
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 64
+        width: 10
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_21
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 64
+        width: 4
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_22
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 64
+        width: 5
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_23
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 64
+        width: 6
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_24
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 64
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_25
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 64
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_26
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 64
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_27
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 64
+        width: 6
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_28
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 64
+        width: 9
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_29
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 62
+        width: 9
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_30
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 64
+        width: 7
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_31
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 64
+        width: 6
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_32
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 64
+        width: 4
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_33
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 62
+        width: 10
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_34
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 64
+        width: 6
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_35
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 64
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_36
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 64
+        width: 4
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_37
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 62
+        width: 12
+        height: 11
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_38
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 62
+        width: 6
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_39
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 64
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_40
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 64
+        width: 6
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_41
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 64
+        width: 6
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_42
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 62
+        width: 5
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_43
+      rect:
+        serializedVersion: 2
+        x: 239
+        y: 64
+        width: 7
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_44
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 64
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_45
+      rect:
+        serializedVersion: 2
+        x: 254
+        y: 64
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_46
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 64
+        width: 5
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_47
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 64
+        width: 9
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_48
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 64
+        width: 5
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_49
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 64
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_50
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 50
+        width: 7
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_51
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 50
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_52
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 50
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_53
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 50
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_54
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 50
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_55
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 50
+        width: 6
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_56
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 50
+        width: 4
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_57
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 50
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_58
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 48
+        width: 8
+        height: 11
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_59
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 50
+        width: 5
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_60
+      rect:
+        serializedVersion: 2
+        x: 121
+        y: 50
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_61
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 50
+        width: 9
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_62
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 50
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_63
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 50
+        width: 9
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_64
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 50
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_65
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 50
+        width: 8
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_66
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 50
+        width: 4
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_67
+      rect:
+        serializedVersion: 2
+        x: 188
+        y: 50
+        width: 6
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_68
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 50
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_69
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 50
+        width: 4
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_70
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 50
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_71
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 50
+        width: 6
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_72
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 50
+        width: 6
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_73
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 50
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_74
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 50
+        width: 4
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_75
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 50
+        width: 6
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_76
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 48
+        width: 5
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_77
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 50
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_78
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 50
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_79
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 48
+        width: 6
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_80
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 50
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_81
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 50
+        width: 4
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_82
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 36
+        width: 4
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_83
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 36
+        width: 8
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_84
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 36
+        width: 4
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_85
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 36
+        width: 4
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_86
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 36
+        width: 6
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_87
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 36
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_88
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 36
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_89
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 36
+        width: 4
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_90
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 36
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_91
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 36
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_92
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 34
+        width: 5
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_93
+      rect:
+        serializedVersion: 2
+        x: 121
+        y: 36
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_94
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 36
+        width: 10
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_95
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 36
+        width: 4
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_96
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 36
+        width: 6
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_97
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 36
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_98
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 34
+        width: 8
+        height: 12
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_99
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 36
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_100
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 36
+        width: 5
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_101
+      rect:
+        serializedVersion: 2
+        x: 188
+        y: 36
+        width: 4
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_102
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 36
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_103
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 36
+        width: 8
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_104
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 36
+        width: 5
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_105
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 36
+        width: 5
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_106
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 36
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_107
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 36
+        width: 4
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_108
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 36
+        width: 8
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_109
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 36
+        width: 4
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_110
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 36
+        width: 4
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_111
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 36
+        width: 5
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_112
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 34
+        width: 6
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_113
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 36
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_114
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 36
+        width: 9
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_115
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 22
+        width: 7
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_116
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 22
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_117
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 22
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_118
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 22
+        width: 5
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_119
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 22
+        width: 9
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_120
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 22
+        width: 5
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_121
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 22
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_122
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 8
+        width: 6
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_123
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 8
+        width: 4
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_124
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 8
+        width: 4
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_125
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 6
+        width: 9
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_126
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 6
+        width: 4
+        height: 12
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_127
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 6
+        width: 4
+        height: 12
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_128
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 8
+        width: 6
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_129
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 8
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_130
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 8
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_131
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 8
+        width: 5
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_132
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 8
+        width: 9
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_133
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 8
+        width: 5
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_134
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 8
+        width: 9
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_135
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 6
+        width: 8
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_136
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 8
+        width: 11
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_137
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 8
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_138
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 8
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_139
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 8
+        width: 4
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: armed_Sprite_140
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 6
+        width: 4
+        height: 12
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

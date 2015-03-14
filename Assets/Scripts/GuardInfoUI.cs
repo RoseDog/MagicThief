@@ -26,8 +26,8 @@
         Globals.languageTable.SetText(Desc, guard.name + "_desc");
         if (guard.patrol != null)
         {
-            StrengthNumber.text = guard.attackValue.ToString();
-            VisionNumber.text = (guard.eyes[0].fovMaxDistance + guard.eyes[1].fovMaxDistance).ToString();
+            StrengthNumber.text = guard.data.attackValue.ToString();
+            VisionNumber.text = guard.eye.fovMaxDistance.ToString();
             SpeedNumber.text = guard.moving.speed.ToString();
         }
         else

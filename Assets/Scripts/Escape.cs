@@ -1,18 +1,20 @@
 ﻿public class Escape : Action
 {
-    public float duration = 1.8f;
+    public int duration = 80;
     public override void Excute()
     {
         UnityEngine.Debug.Log("magician Escape");
+        Globals.maze.GuardsTargetVanish(actor.gameObject);
         base.Excute();
-        actor.anim.CrossFade("A_Falling_1");                        
+        actor.spriteSheet.Play("flying");
+        transform.position = transform.position - new UnityEngine.Vector3(0,0,0.6f);
         actor.AddAction(
             new Sequence(new MoveTo(transform, transform.position + new UnityEngine.Vector3(0, 15, 0), duration)
-                ,new FunctionCall(this, "EscapeOver")));        
+                ,new FunctionCall(()=>EscapeOver())));        
     }
 
     void EscapeOver()
     {        
-        Stop();
+        Stop();                
     }
 }

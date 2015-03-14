@@ -1,52 +1,69 @@
 ﻿public class TrickTimer : Actor 
 {
     public UnityEngine.GameObject actor;
-    
-    GUIBarScript gui_bar_script;
+    UnityEngine.UI.Image unlockProgressSprite;
     UnityEngine.UI.Text timerText;
 
-    float duration;
-    float currentTime;
+    int duration;
+    int lastFrames;
     UnityEngine.Vector3 posOffset;
     public override void Awake()
     {
         base.Awake();
-        gui_bar_script = GetComponent<GUIBarScript>();
         timerText = GetComponentInChildren<UnityEngine.UI.Text>();
+        unlockProgressSprite = Globals.getChildGameObject<UnityEngine.UI.Image>(gameObject, "progress");
+        if (unlockProgressSprite != null)
+        {
+            unlockProgressSprite.type = UnityEngine.UI.Image.Type.Filled;
+            unlockProgressSprite.fillMethod = UnityEngine.UI.Image.FillMethod.Horizontal;
+            unlockProgressSprite.fillOrigin = (int)UnityEngine.UI.Image.OriginHorizontal.Left;
+        }
+        
     }
 
-    public void BeginCountDown(UnityEngine.GameObject a, float durationTime, UnityEngine.Vector3 timerOffset)
+    public void BeginCountDown(UnityEngine.GameObject a, int durationTime, UnityEngine.Vector3 timerOffset)
     {
         actor = a;
         duration = durationTime;
-        currentTime = durationTime;
+        lastFrames = durationTime;
         posOffset = timerOffset;
         transform.position = actor.transform.position + posOffset;
     }
 
-    public void AddTime(float time)
+    public void AddFrameTime(int frames)
     {
-        currentTime += time;
-        duration += time;
+        lastFrames += frames;
+        duration += frames;
     }
 
-    public override void FixedUpdate()
+    public int GetLastFrameTime()
     {
-        base.FixedUpdate();
+        return lastFrames;
+    }
+
+    public override void Update()
+    {
+        base.Update();
         if (actor != null)
         {
             transform.position = actor.transform.position + posOffset;
-            currentTime -= UnityEngine.Time.fixedDeltaTime;
-            float val = (float)currentTime / duration;
-            if (gui_bar_script != null)
+            --lastFrames;
+            if (unlockProgressSprite != null)
             {
-                gui_bar_script.Value = val;
+                unlockProgressSprite.fillAmount = (float)lastFrames / duration;
+            }                        
+            if (lastFrames <= 0.0f)
+            {
+                lastFrames = 0;
             }            
-            if (currentTime <= 0.0f)
-            {
-                currentTime = 0.0f;
-            }
-            timerText.text = currentTime.ToString("F1");
         }
-    }    
+    }
+
+    public void FixedUpdate()
+    {
+        if (actor != null)
+        {
+            timerText.text = (lastFrames * UnityEngine.Time.fixedDeltaTime).ToString("F1");
+        }        
+    }
 }

@@ -1,34 +1,34 @@
 ﻿public class BeenHypnosised : GuardAction
-{
-    UnityEngine.GameObject TrickTimerPrefab;
-    UnityEngine.GameObject TrickTimer;
+{    
+    TrickTimer timer;
     public override void Awake()
     {
-        base.Awake();
-        TrickTimerPrefab = UnityEngine.Resources.Load("UI/FakeGuardTimer") as UnityEngine.GameObject;
+        base.Awake();        
+        guard.spriteSheet.CreateAnimationByName("BeenHypnosised",0.5f, true);
     }
 
-    public void GoToSleep(float duration)
+    public void GoToSleep(int duration)
     {
         base.Excute();
-        actor.anim.Play("BeenHypnosised");
+        actor.spriteSheet.Play("BeenHypnosised");
         actor.moving.canMove = false;
         guard.HideBtns();
         guard.spot.target = null;
-        guard.spot.CancelInvoke("EnemyOutVision");
+        guard.RemoveAction(ref guard.spot.outVisionCountDown);
         guard.EnableEyes(false);
         guard.gameObject.layer = 0;
 
-        TrickTimer = UnityEngine.GameObject.Instantiate(TrickTimerPrefab) as UnityEngine.GameObject;
-        TrickTimer.GetComponent<TrickTimer>().BeginCountDown(gameObject, duration, new UnityEngine.Vector3(0, 2.8f, 0));
+        timer = (UnityEngine.GameObject.Instantiate(Globals.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
+        timer.BeginCountDown(gameObject, duration, new UnityEngine.Vector3(0, 1.0f, 0));
 
-        Invoke("Stop", duration);
+        guard.SleepThenCallFunction(duration, ()=>Stop());
     }
 
     public override void Stop()
     {
         base.Stop();
-        DestroyObject(TrickTimer);
+        DestroyObject(timer.gameObject);
+        guard.gameObject.layer = 13;
         guard.wakeFromHypnosised.Excute();
     }
 }

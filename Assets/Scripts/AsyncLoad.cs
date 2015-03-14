@@ -29,7 +29,7 @@
         Globals.EnableAllInput(false);
         LastLevelName = UnityEngine.Application.loadedLevelName;
         Next = nextLevelName;
-        Globals.transition.BlackOut(this, "_ToLoadingScene");                
+        Globals.transition.BlackOut(()=>_ToLoadingScene());                
     }
 
     public void _ToLoadingScene()

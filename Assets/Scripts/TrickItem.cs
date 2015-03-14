@@ -110,23 +110,26 @@
 
     public void CheckIfPurchased()
     {
-        UnityEngine.UI.ColorBlock colors = itemButton.colors;
+        //UnityEngine.UI.ColorBlock colors = itemButton.colors;
         if (!trickData.bought)
         {
-            colors.normalColor = new UnityEngine.Color(0.2f,0.2f,0.2f,1);
+            //colors.normalColor = new UnityEngine.Color(0.2f,0.2f,0.2f,1);
         }
         else
         {
-            colors.normalColor = UnityEngine.Color.white;
+            //colors.normalColor = UnityEngine.Color.white;
+            GetComponent<UnityEngine.UI.Image>().sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/" + trickData.nameKey + "_icon");
         }
-        itemButton.colors = colors;
+        //itemButton.colors = colors;
     }
 
     public void Buy()
     {
         trickData.bought = true;
-        UnityEngine.UI.ColorBlock colors = itemButton.colors;
-        colors.normalColor = UnityEngine.Color.white;
-        itemButton.colors = colors;
+//         UnityEngine.UI.ColorBlock colors = itemButton.colors;
+//         colors.normalColor = UnityEngine.Color.white;
+//         itemButton.colors = colors;
+
+        GetComponent<UnityEngine.UI.Image>().sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/" + trickData.nameKey + "_icon");
     }
 }

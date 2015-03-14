@@ -2,7 +2,7 @@ public class TrickData
 {
     public System.String nameKey;
     public System.String descriptionKey;
-    public float duration;
+    public int duration;
     public int powerCost;
     public int unlockRoseCount;
     public int slotIdxInUsingPanel = -1;
@@ -36,6 +36,13 @@ public class TrickData
     {
         slotIdxInUsingPanel = -1;
     }
+
+    public void CopyTo(TrickData data)
+    {
+        data.nameKey = nameKey;
+        data.duration = duration;
+        data.powerCost = powerCost;
+    }
 }
 
 public class TrickUsingSlotData
@@ -44,26 +51,35 @@ public class TrickUsingSlotData
     public bool bought = false;
 }
 
-public class GuardHireInfo
+public class GuardData
 {
     public System.String name;
     public int price;
     public bool locked;
     public bool hired;
     public int unlockMazeLv;
-    public GuardHireInfo(System.String n, int p)
+    public int roomConsume;
+
+    public int magicianOutVisionTime = 250;
+    public int atkCd = 120;
+    public int attackValue = 40;
+    public float atkShortestDistance = 1.5f;
+    public float rushAtShortestDistance = 1.0f;
+    public int doveOutVisionTime = 100;
+    public float attackSpeed = 1.0f;
+
+    public GuardData()
     {
-        name = n;
-        price = p;
-        hired = false;
+        
     }
 }
 
 public class MazeLvData
 {
     public int roseRequire;
-    public int price;
-    public System.Collections.Generic.List<GuardHireInfo> guards;
+    public float price;
+    public int roomSupport;
+    public System.Collections.Generic.List<System.String> lockGuardsName;
     public bool playerEverClickGuards = false;
     public bool playerEverClickSafebox = false;
     public int safeBoxCount;
@@ -71,9 +87,9 @@ public class MazeLvData
 
 public class SafeBoxLvData
 {
-    public int price;
-    public int capacity;
-    public SafeBoxLvData(int p, int c)
+    public float price;
+    public float capacity;
+    public SafeBoxLvData(float p, float c)
     {
         price = p;
         capacity = c;
@@ -83,7 +99,8 @@ public class SafeBoxLvData
 public class SafeBoxData
 {
     public int Lv;
-    public int cashInBox;
+    public float cashInBox;
+    public bool unlocked = false;
 }
 
 public class Globals
@@ -94,10 +111,10 @@ public class Globals
     public static readonly System.String NORTH = "N";
     public static readonly System.String[] DIRECTIONS = { EAST, SOUTH, WEST, NORTH };
     public static bool SHOW_MACE_GENERATING_PROCESS = false;
-    public static bool SHOW_ROOMS = true;
+    public static bool SHOW_ROOMS = false;
     public static float CREATE_MAZE_TIME_STEP = 0.1f;
-    public static float cameraMoveDuration = 1.2f;
-    public static float uiMoveAndScaleDuration = 0.5f;
+    public static int cameraMoveDuration = 10;
+    public static int uiMoveAndScaleDuration = 20;
     public static MultiLanguageTable languageTable;
     public static SelectGuard selectGuard;
     public static CanvasForMagician canvasForMagician;
@@ -114,7 +131,9 @@ public class Globals
     public static System.String iniFileName = "";
     public static float FLOOR_HEIGHT = 0.1f;
     public static System.Collections.Generic.List<System.String> AvatarAnimationEventNameCache = new System.Collections.Generic.List<System.String>();
-
+    public static Replay replay;
+    public static bool PLAY_RECORDS = false;
+    public static bool DEBUG_REPLAY = false;
     // 以后要存到服务器上的
     public enum TutorialLevel
     {
@@ -126,7 +145,7 @@ public class Globals
         Over
     }
     public static TutorialLevel TutorialLevelIdx = TutorialLevel.Over;
-    public static float cashAmount = 8000000.0f;
+    public static float cashAmount = 80000.0f;
     public static int roseCount = 10000;
     
 
@@ -149,7 +168,8 @@ public class Globals
         new SafeBoxLvData(2000, 10000), 
         new SafeBoxLvData(5000, 15000), 
         new SafeBoxLvData(8000, 25000) };
-    public static System.Collections.Generic.List<SafeBoxData> safeBoxDatas = new System.Collections.Generic.List<SafeBoxData>();    
+    public static System.Collections.Generic.List<SafeBoxData> safeBoxDatas = new System.Collections.Generic.List<SafeBoxData>();
+    public static System.Collections.Generic.List<GuardData> guardDatas = new System.Collections.Generic.List<GuardData>();    
 
     public static void AddNewTargetBuildingAchives(System.Collections.Generic.List<IniFile> newAchives)
     {
@@ -200,12 +220,12 @@ public class Globals
         }
     }
 
-    public static Guard CreateGuard(System.String name, Pathfinding.Node birthNode)
+    public static Guard CreateGuard(GuardData data, Pathfinding.Node birthNode)
     {
-        UnityEngine.GameObject guard_prefab = UnityEngine.Resources.Load("Avatar/" + name) as UnityEngine.GameObject;
+        UnityEngine.GameObject guard_prefab = UnityEngine.Resources.Load("Avatar/" + data.name) as UnityEngine.GameObject;
         UnityEngine.GameObject guardObject = UnityEngine.GameObject.Instantiate(guard_prefab) as UnityEngine.GameObject;
-        guardObject.name = name;        
         Guard guard = guardObject.GetComponent<Guard>();
+        guard.data = data;
         if (birthNode != null)
         {
             guardObject.transform.position = Globals.GetPathNodePos(birthNode);
@@ -219,15 +239,19 @@ public class Globals
         return guard;
     }
 
-    public static T FingerRayToObj<T>(UnityEngine.Camera camera, int layer, Finger finger) 
+    public static T FingerRayToObj<T>(UnityEngine.Camera camera, int layermask, UnityEngine.Vector2 finger_pos) 
         where T : UnityEngine.Component
     {
         UnityEngine.RaycastHit hitInfo;
-        int layermask = 1 << layer;
-        UnityEngine.Ray ray = camera.ScreenPointToRay(finger.nowPosition);
+        UnityEngine.Ray ray = camera.ScreenPointToRay(finger_pos);
         if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
         {
-            return hitInfo.collider.gameObject.GetComponent<T>();
+            T ret = hitInfo.collider.gameObject.GetComponent<T>();
+            if (ret == null)
+            {
+                ret = hitInfo.collider.gameObject.GetComponentInParent<T>();
+            }
+            return ret;
         }
         return null;
     }
@@ -279,7 +303,6 @@ public class Globals
     static public T getChildGameObject<T>(UnityEngine.GameObject fromGameObject, System.String withName)
         where T : UnityEngine.Component
     {
-        //Author: Isaac Dart, June-13.
         T[] ts = fromGameObject.GetComponentsInChildren<T>(true);
         foreach (T child in ts)
         {
@@ -324,7 +347,7 @@ public class Globals
         return equal;
     }
 
-    public static void ReadMazeIniFile(System.String mazeIniFileName, bool readSeed)
+    public static IniFile ReadMazeIniFile(System.String mazeIniFileName, bool readSeed)
     {
         IniFile ini = new IniFile(mazeIniFileName);
         
@@ -339,8 +362,7 @@ public class Globals
             UnityEngine.Random.seed = Globals.maze.randSeedCacheWhenEditLevel;
         }
         
-
-        Globals.maze.Z_CELLS_COUNT = ini.get("Z_CELLS_COUNT", 0);
+        Globals.maze.Y_CELLS_COUNT = ini.get("Z_CELLS_COUNT", 0);
         Globals.maze.X_CELLS_COUNT = ini.get("X_CELLS_COUNT", 0);
         Globals.maze.CHANGE_DIRECTION_MODIFIER = ini.get("CHANGE_DIRECTION_MODIFIER", 0);
         Globals.maze.sparsenessModifier = ini.get("sparsenessModifier", 0);
@@ -351,11 +373,13 @@ public class Globals
         Globals.maze.minRoomZCellsCount = ini.get("minRoomZCellsCount", 0);
         Globals.maze.maxRoomZCellsCount = ini.get("maxRoomZCellsCount", 0);
         Globals.maze.GEMS_COUNT = ini.get("GEMS_COUNT", 0);
-        Globals.maze.LAMPS_COUNT = ini.get("LAMPS_COUNT", 0);        
-        Globals.maze.LevelTipText = ini.get("LevelTipText");            
+        Globals.maze.LAMPS_COUNT = ini.get("LAMPS_COUNT", 0);
+        Globals.maze.LevelTipText = ini.get("LevelTipText");
+
+        return ini;
     }
 
-    public static void SaveMazeIniFile(System.String mazeIniFileName)
+    public static IniFile SaveMazeIniFile(System.String mazeIniFileName)
     {
         IniFile ini = new IniFile();
         ini.clear();
@@ -366,7 +390,7 @@ public class Globals
             ini.set(Globals.GetPathNodePos(guard.birthNode).ToString("F4"), guard.gameObject.name);
         }
         ini.set("randSeedCacheWhenEditLevel", Globals.maze.randSeedCacheWhenEditLevel);
-        ini.set("Z_CELLS_COUNT", Globals.maze.Z_CELLS_COUNT);
+        ini.set("Z_CELLS_COUNT", Globals.maze.Y_CELLS_COUNT);
         ini.set("X_CELLS_COUNT", Globals.maze.X_CELLS_COUNT);
         ini.set("CHANGE_DIRECTION_MODIFIER", Globals.maze.CHANGE_DIRECTION_MODIFIER);
         ini.set("sparsenessModifier", Globals.maze.sparsenessModifier);
@@ -381,6 +405,7 @@ public class Globals
         ini.set("LevelTipText", Globals.maze.LevelTipText);
 
         ini.save(mazeIniFileName);
+        return ini;
     }    
 
     public static void UpdateUnclickedRedPointsText(UnityEngine.UI.Text redPointsText)
@@ -434,20 +459,110 @@ public class Globals
         eventTrigger.delegates.Add(entry);
     }
 
-    public static void MessageBox(System.String text, UnityEngine.Events.UnityAction action = null)
+    public static void MessageBox(System.String text, UnityEngine.Events.UnityAction yesAction = null, bool bNeedCancel = false)
     {
         UnityEngine.GameObject msgbox_prefab = UnityEngine.Resources.Load("UI/MsgBox") as UnityEngine.GameObject;
-        MsgBox msgbox = (UnityEngine.GameObject.Instantiate(msgbox_prefab) as UnityEngine.GameObject).GetComponent<MsgBox>();        
-        msgbox.Msg(text,action);
+        MsgBox msgbox = (UnityEngine.GameObject.Instantiate(msgbox_prefab) as UnityEngine.GameObject).GetComponent<MsgBox>();
+        msgbox.Msg(text, yesAction, bNeedCancel);
     }
 
-    public static int AccumulateCashInBox()
+    public static float AccumulateCashInBox()
     {
-        int amount = 0;
+        float amount = 0;
         foreach (SafeBoxData data in safeBoxDatas)
         {
             amount += data.cashInBox;
         }
         return amount;
+    }
+
+    public static float AccumulateSafeboxCapacity()
+    {
+        float capacity = 0;
+        foreach (SafeBoxData data in safeBoxDatas)
+        {
+            capacity += Globals.safeBoxLvDatas[data.Lv].capacity;
+        }
+        return capacity;
+    }
+
+    public static SafeBoxData AddSafeBox()
+    {
+        SafeBoxData data = new SafeBoxData();
+        Globals.safeBoxDatas.Add(data);
+        return data;
+    }
+
+    public static System.String StripCloneString(System.String s)
+    {
+        int idx = s.IndexOf("(");
+        if(idx == -1)
+        {
+            return s;
+        }
+        return s.Substring(0, idx);
+    }
+
+    public static float Angle(UnityEngine.Vector3 a, UnityEngine.Vector3 b)
+    {
+        float angle = UnityEngine.Vector3.Angle(a.normalized, b);
+        int sign = UnityEngine.Vector3.Cross(a, b).z > 0 ? -1 : 1;
+        if (sign == -1)
+        {
+            angle = 360 - angle;
+        }
+        return angle;
+    }
+
+
+    public static void record(System.String file, System.String content)
+    {
+        if (DEBUG_REPLAY)
+        {
+            content = " rand seed:" + UnityEngine.Random.seed.ToString() + " " + content;
+            content = " frame:" + UnityEngine.Time.frameCount + content;
+
+            System.String filename = file;
+            if (!PLAY_RECORDS)
+            {
+                filename += "_pvp";
+            }
+            else
+            {
+                filename += "_reply";
+            }
+
+            System.IO.StreamWriter stream = new System.IO.StreamWriter(UnityEngine.Application.dataPath + "/Resources/" + filename + ".txt",
+                true, System.Text.Encoding.UTF8);
+            stream.WriteLine(content);
+            stream.Close();
+        }        
+    }
+
+    public static float Floor(float value)
+    {
+        int temp = (int)(value * 10);
+        float ret = temp / 10.0f;
+        return ret;
+    }
+
+    public static float Floor2(float value)
+    {
+        int temp = (int)(value * 100);
+        float ret = temp / 100.0f;
+        return ret;
+    }
+
+    public static GuardData GetGuardData(System.String name)
+    {
+        foreach(GuardData data in guardDatas)
+        {
+            if (data.name == name)
+            {
+                return data;
+            }
+        }
+        Globals.Assert(false,"no guard named:" + name);
+        return null;
     }
 }

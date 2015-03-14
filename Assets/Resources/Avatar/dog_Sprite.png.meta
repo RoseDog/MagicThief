@@ -1,0 +1,344 @@
+fileFormatVersion: 2
+guid: 2ef97911f7288b945bc09d66e1d2f7d2
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: dog_Sprite_0
+    21300002: dog_Sprite_1
+    21300004: dog_Sprite_2
+    21300006: moving_0
+    21300008: idle_0
+    21300010: moving_1
+    21300012: moving_2
+    21300014: dog_Sprite_7
+    21300016: dog_Sprite_8
+    21300018: dog_Sprite_9
+    21300020: dog_Sprite_10
+    21300022: dog_Sprite_11
+    21300024: dog_Sprite_12
+    21300026: dog_Sprite_13
+    21300028: dog_Sprite_14
+    21300030: dog_Sprite_15
+    21300032: dog_Sprite_16
+    21300034: dog_Sprite_17
+    21300036: dog_Sprite_18
+    21300038: dog_Sprite_19
+    21300040: dog_Sprite_20
+    21300042: dog_Sprite_21
+    21300044: dog_Sprite_22
+    21300046: dog_Sprite_23
+    21300048: dog_Sprite_24
+    21300050: dog_Sprite_25
+    21300052: dog_Sprite_26
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: 0
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: dog_Sprite_0
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 200
+        width: 15
+        height: 19
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_1
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 197
+        width: 15
+        height: 24
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_2
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 194
+        width: 15
+        height: 31
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: moving_0
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 193
+        width: 28
+        height: 32
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: idle_0
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 194
+        width: 24
+        height: 30
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: moving_1
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 193
+        width: 29
+        height: 32
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: moving_2
+      rect:
+        serializedVersion: 2
+        x: 374
+        y: 194
+        width: 28
+        height: 30
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_7
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 131
+        width: 18
+        height: 36
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_8
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 129
+        width: 19
+        height: 40
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_9
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 131
+        width: 24
+        height: 36
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_10
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 129
+        width: 18
+        height: 40
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_11
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 134
+        width: 17
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_12
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 134
+        width: 17
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_13
+      rect:
+        serializedVersion: 2
+        x: 374
+        y: 134
+        width: 28
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_14
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 74
+        width: 26
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_15
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 69
+        width: 33
+        height: 40
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_16
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 73
+        width: 37
+        height: 32
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_17
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 87
+        width: 16
+        height: 5
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_18
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 81
+        width: 53
+        height: 16
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_19
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 74
+        width: 21
+        height: 30
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_20
+      rect:
+        serializedVersion: 2
+        x: 377
+        y: 73
+        width: 21
+        height: 32
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_21
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 12
+        width: 23
+        height: 34
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_22
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 12
+        width: 25
+        height: 35
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_23
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 12
+        width: 21
+        height: 35
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_24
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 16
+        width: 30
+        height: 27
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_25
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 8
+        width: 15
+        height: 42
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_26
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 18
+        width: 32
+        height: 23
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

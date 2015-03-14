@@ -3,10 +3,12 @@
     UnityEngine.RectTransform peopleGivesYouRose;
     UnityEngine.RectTransform roseBtn;
     UnityEngine.GameObject rose3d_prefab;
+    UnityEngine.Vector3 tipScaleCache;
     public override void Awake()
     {
         base.Awake();
         peopleGivesYouRose = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "PeopleGivesYouRose");
+        tipScaleCache = peopleGivesYouRose.transform.localScale;
         peopleGivesYouRose.localScale = UnityEngine.Vector3.zero;
         roseBtn = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "Rose");
         roseBtn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => RoseClicked());
@@ -19,8 +21,8 @@
         if (peopleGivesYouRose.localScale.x < UnityEngine.Mathf.Epsilon)
         {
             AddAction(new Sequence(
-            new ScaleTo(peopleGivesYouRose.transform, new UnityEngine.Vector3(1.2f, 1.2f, 1.2f), Globals.uiMoveAndScaleDuration / 3),
-            new ScaleTo(peopleGivesYouRose.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), Globals.uiMoveAndScaleDuration / 4)));
+            new ScaleTo(peopleGivesYouRose.transform, tipScaleCache*1.2f, Globals.uiMoveAndScaleDuration / 3),
+            new ScaleTo(peopleGivesYouRose.transform, tipScaleCache, Globals.uiMoveAndScaleDuration / 4)));
         }        
         base.Choosen();
     }

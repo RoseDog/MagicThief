@@ -1,0 +1,272 @@
+fileFormatVersion: 2
+guid: b69637a2666399d4797541227d2ff820
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: flash_0
+    21300002: flash_1
+    21300004: flash_2
+    21300006: flash_3
+    21300008: flash_4
+    21300010: flash_5
+    21300012: flash_6
+    21300014: flash_7
+    21300016: flash_8
+    21300018: flash_9
+    21300020: flash_10
+    21300022: flash_11
+    21300024: flash_12
+    21300026: flash_13
+    21300028: flash_14
+    21300030: flash_15
+    21300032: flash_16
+    21300034: flash_17
+    21300036: flash_18
+    21300038: flash_19
+    21300040: flash_20
+    21300042: flash_21
+    21300044: flash_22
+    21300046: flash_23
+    21300048: flash_24
+    21300050: flash_25
+    21300052: flash_26
+    21300054: flash_27
+    21300056: flash_28
+    21300058: flash_29
+    21300060: flash_13
+    21300062: flash_31
+    21300064: flash_32
+    21300066: flash_33
+    21300068: flash_34
+    21300070: flash_35
+    21300072: flash_36
+    21300074: flash_37
+    21300076: flash_38
+    21300078: flash_39
+    21300080: flash_0
+    21300082: flash_1
+    21300084: flash_2
+    21300086: flash_3
+    21300088: flash_4
+    21300090: flash_45
+    21300092: flash_10
+    21300094: flash_11
+    21300096: flash_12
+    21300098: flash_49
+    21300100: flash_14
+    21300102: flash_51
+    21300104: flash_52
+    21300106: flash_53
+    21300108: flash_5
+    21300110: flash_6
+    21300112: flash_7
+    21300114: flash_8
+    21300116: flash_9
+    21300118: flash_59
+    21300120: flash_60
+    21300122: flash_61
+    21300124: flash_62
+    21300126: flash_63
+    21300128: flash_64
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: 0
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: flash_13
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 37
+        width: 31
+        height: 33
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: flash_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 41
+        width: 19
+        height: 23
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: flash_1
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 38
+        width: 23
+        height: 30
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: flash_2
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 36
+        width: 26
+        height: 35
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: flash_3
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 41
+        width: 20
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: flash_4
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 45
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: flash_45
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 42
+        width: 21
+        height: 21
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: flash_10
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 44
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: flash_11
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 42
+        width: 21
+        height: 21
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: flash_12
+      rect:
+        serializedVersion: 2
+        x: 268
+        y: 37
+        width: 26
+        height: 30
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: flash_14
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 35
+        width: 32
+        height: 33
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: flash_5
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 47
+        width: 16
+        height: 12
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: flash_6
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 48
+        width: 13
+        height: 10
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: flash_7
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 49
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: flash_8
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 49
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: flash_9
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 47
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

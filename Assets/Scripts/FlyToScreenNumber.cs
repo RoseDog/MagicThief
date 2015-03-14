@@ -2,7 +2,7 @@
 {
     // 这个是跟相机的projection matrix有关的。每次调整相机的距离可能需要调整这个参数
     public float numberDelta;
-    float scaleOnScreen = 0.015f;
+    float scaleOnScreen = 1.0f;
     UnityEngine.Vector3 numberScreenPos;
     UnityEngine.Vector3 posWhenFlyBegin;
     UnityEngine.Vector3 scaleWhenFlyBegin;
@@ -15,13 +15,17 @@
 
         // 金钱增量的位置
         numberFlyTo = controller.StealingCash;
+        if(!controller.StealingCash.gameObject.activeSelf)
+        {
+            controller.StealingCash.gameObject.SetActive(true);
+        }
         FlyOff(rotate);
     }
 
     public void ToRoseNumber()
     {        
         // 玫瑰数字的位置
-        scaleOnScreen = 0.002f;
+        scaleOnScreen = 1;
         numberFlyTo = Globals.canvasForMagician.RoseNumber;
         numberDelta = 1;
         FlyOff(false);
@@ -44,7 +48,7 @@
                 UnityEngine.Random.Range(0, 360));
             UnityEngine.Vector3 to = new UnityEngine.Vector3(360.0f - from.x, 360.0f - from.z, 0.0f - from.z);
             
-            AddAction(new RotateTo(from, to, UnityEngine.Random.Range(0.1f, 0.3f), true));
+            AddAction(new RotateTo(from, to, UnityEngine.Random.Range(3, 10), true));
         }
     }
 
@@ -53,7 +57,7 @@
         while (true)
         {
             UnityEngine.Vector3 uiWorldPos = Globals.cameraFollowMagician.camera.ScreenToWorldPoint(numberScreenPos);
-            UnityEngine.Vector3 destination = Globals.cameraFollowMagician.transform.InverseTransformPoint(uiWorldPos);            
+            UnityEngine.Vector3 destination = Globals.cameraFollowMagician.transform.InverseTransformPoint(uiWorldPos);
             
             float disNow = UnityEngine.Vector3.Distance(destination, transform.localPosition);
             float dis = UnityEngine.Vector3.Distance(destination, posWhenFlyBegin);
@@ -62,7 +66,7 @@
             float scaleNow = scaleOnScreen + (1.0f - scaleOnScreen) * disRatio;
             transform.localScale = scaleWhenFlyBegin * scaleNow;
 
-            transform.localPosition += (destination - transform.localPosition) * 0.2f;
+            transform.localPosition += (destination - transform.localPosition) * 0.1f;
 
             if (disNow < 0.01f)
             {

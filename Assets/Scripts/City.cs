@@ -230,9 +230,10 @@
         if (fingerDownOnMap.timeSinceTouchBegin < 0.5f &&
             UnityEngine.Vector2.Distance(fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition) < 10.0f)
         {
+            int mask = 1 << 16;
             Building building = Globals.FingerRayToObj<Building>(
-                Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), 16, fingerDownOnMap);
-
+                Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), mask, fingerDownOnMap.nowPosition);
+            UnityEngine.Debug.Log(building);
             ChooseBuilding(building);
         }
 

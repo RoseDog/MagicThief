@@ -1,0 +1,2033 @@
+fileFormatVersion: 2
+guid: 68c0d7147f8fc9a41871246ea3e196a4
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: idle_0
+    21300002: walking_0
+    21300004: walking_1
+    21300006: walking_2
+    21300008: walking_3
+    21300010: walking_4
+    21300012: walking_5
+    21300014: walking_6
+    21300016: walking_7
+    21300018: guard_9
+    21300020: guard_10
+    21300022: guard_11
+    21300024: guard_12
+    21300026: guard_13
+    21300028: walking_7
+    21300030: walking_6
+    21300032: walking_5
+    21300034: walking_4
+    21300036: walking_3
+    21300038: walking_2
+    21300040: walking_1
+    21300042: walking_0
+    21300044: idle_0
+    21300046: guard_23
+    21300048: guard_24
+    21300050: guard_25
+    21300052: guard_26
+    21300054: guard_27
+    21300056: guard_28
+    21300058: guard_29
+    21300060: guard_30
+    21300062: guard_31
+    21300064: guard_32
+    21300066: guard_33
+    21300068: guard_34
+    21300070: guard_35
+    21300072: guard_36
+    21300074: guard_37
+    21300076: guard_38
+    21300078: guard_39
+    21300080: guard_40
+    21300082: guard_41
+    21300084: guard_42
+    21300086: running_0
+    21300088: running_1
+    21300090: running_2
+    21300092: running_3
+    21300094: running_7
+    21300096: running_4
+    21300098: running_5
+    21300100: running_6
+    21300102: running_3
+    21300104: running_2
+    21300106: running_1
+    21300108: running_0
+    21300110: guard_55
+    21300112: guard_56
+    21300114: guard_57
+    21300116: guard_58
+    21300118: guard_59
+    21300120: guard_60
+    21300122: guard_61
+    21300124: guard_62
+    21300126: guard_63
+    21300128: guard_64
+    21300130: guard_65
+    21300132: guard_66
+    21300134: guard_67
+    21300136: guard_68
+    21300138: guard_69
+    21300140: guard_70
+    21300142: guard_71
+    21300144: guard_72
+    21300146: guard_73
+    21300148: takeoff_1
+    21300150: takeoff_2
+    21300152: rushing_at_magician_1
+    21300154: guard_77
+    21300156: guard_78
+    21300158: guard_79
+    21300160: takeoff_0
+    21300162: guard_81
+    21300164: pressing_mage_1
+    21300166: pressing_mage_0
+    21300168: takeoff_0
+    21300170: guard_85
+    21300172: guard_86
+    21300174: guard_87
+    21300176: rushing_at_magician_1
+    21300178: takeoff_2
+    21300180: takeoff_1
+    21300182: guard_91
+    21300184: guard_92
+    21300186: guard_93
+    21300188: guard_94
+    21300190: guard_95
+    21300192: guard_96
+    21300194: guard_97
+    21300196: rushing_at_magician_1
+    21300198: guard_99
+    21300200: guard_100
+    21300202: guard_101
+    21300204: rushing_at_magician_1
+    21300206: guard_103
+    21300208: guard_104
+    21300210: guard_105
+    21300212: guard_106
+    21300214: guard_107
+    21300216: guard_108
+    21300218: guard_109
+    21300220: guard_110
+    21300222: guard_111
+    21300224: guard_112
+    21300226: guard_113
+    21300228: guard_114
+    21300230: guard_115
+    21300232: guard_116
+    21300234: guard_117
+    21300236: guard_118
+    21300238: guard_119
+    21300240: guard_120
+    21300242: guard_121
+    21300244: guard_122
+    21300246: guard_123
+    21300248: guard_124
+    21300250: guard_125
+    21300252: guard_126
+    21300254: guard_127
+    21300256: guard_128
+    21300258: guard_129
+    21300260: guard_130
+    21300262: guard_131
+    21300264: guard_132
+    21300266: guard_133
+    21300268: guard_134
+    21300270: BeenHypnosised_3
+    21300272: BeenHypnosised_2
+    21300274: BeenHypnosised_1
+    21300276: BeenHypnosised_0
+    21300278: guard_139
+    21300280: guard_140
+    21300282: guard_141
+    21300284: guard_142
+    21300286: guard_143
+    21300288: guard_144
+    21300290: guard_145
+    21300292: guard_146
+    21300294: pushed_away_0
+    21300296: pushed_away_1
+    21300298: pushed_away_2
+    21300300: getup_4
+    21300302: pushed_away_3
+    21300304: get_up_0
+    21300306: get_up_1
+    21300308: get_up_2
+    21300310: get_up_3
+    21300312: get_up_4
+    21300314: get_up_5
+    21300316: pushed_away_1
+    21300318: pushed_away_0
+    21300320: guard_160
+    21300322: guard_161
+    21300324: guard_162
+    21300326: guard_163
+    21300328: guard_164
+    21300330: rushing_at_magician_2
+    21300332: rushing_miss_down_on_floor_0
+    21300334: rushing_miss_down_on_floor_1
+    21300336: rushing_miss_down_on_floor_2
+    21300338: stand_up_0
+    21300340: stand_up_1
+    21300342: stand_up_2
+    21300344: stand_up_3
+    21300346: stand_up_4
+    21300348: rushing_at_magician_2
+    21300350: guard_175
+    21300352: guard_176
+    21300354: guard_177
+    21300356: guard_0
+    21300358: guard_1
+    21300360: guard_2
+    21300362: guard_3
+    21300364: guard_4
+    21300366: guard_5
+    21300368: guard_6
+    21300370: guard_7
+    21300372: guard_8
+    21300374: guard_43
+    21300376: guard_44
+    21300378: guard_45
+    21300380: guard_46
+    21300382: guard_84
+    21300384: guard_88
+    21300386: guard_89
+    21300388: guard_90
+    21300390: guard_102
+    21300392: guard_147
+    21300394: BeenHypnosised_4
+    21300396: getup_5
+    21300398: getup_3
+    21300400: getup_2
+    21300402: getup_1
+    21300404: getup_0
+    21300406: pushed_away_4
+    21300408: pushed_away_3
+    21300410: pushed_away_2
+    21300412: guard_165
+    21300414: stand_up_4
+    21300416: stand_up_3
+    21300418: stand_up_2
+    21300420: stand_up_1
+    21300422: stand_up_0
+    21300424: rushing_miss_2
+    21300426: rushing_miss_1
+    21300428: rushing_miss_0
+    21300430: rushing_at_magician_0
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: 0
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: guard_0
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 750
+        width: 27
+        height: 84
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_1
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 750
+        width: 46
+        height: 57
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_2
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 750
+        width: 37
+        height: 51
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_3
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 750
+        width: 35
+        height: 55
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_4
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 742
+        width: 36
+        height: 57
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_5
+      rect:
+        serializedVersion: 2
+        x: 269
+        y: 740
+        width: 56
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_6
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 739
+        width: 30
+        height: 63
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_7
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 739
+        width: 38
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_8
+      rect:
+        serializedVersion: 2
+        x: 463
+        y: 741
+        width: 30
+        height: 57
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_9
+      rect:
+        serializedVersion: 2
+        x: 497
+        y: 741
+        width: 40
+        height: 57
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_10
+      rect:
+        serializedVersion: 2
+        x: 541
+        y: 742
+        width: 43
+        height: 60
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_11
+      rect:
+        serializedVersion: 2
+        x: 592
+        y: 742
+        width: 30
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_12
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 742
+        width: 38
+        height: 59
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_13
+      rect:
+        serializedVersion: 2
+        x: 676
+        y: 742
+        width: 36
+        height: 58
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: walking_7
+      rect:
+        serializedVersion: 2
+        x: 773
+        y: 763
+        width: 27
+        height: 64
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: walking_6
+      rect:
+        serializedVersion: 2
+        x: 806
+        y: 762
+        width: 24
+        height: 63
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: walking_5
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 761
+        width: 27
+        height: 63
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: walking_4
+      rect:
+        serializedVersion: 2
+        x: 874
+        y: 761
+        width: 37
+        height: 62
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: walking_3
+      rect:
+        serializedVersion: 2
+        x: 918
+        y: 760
+        width: 26
+        height: 63
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: walking_2
+      rect:
+        serializedVersion: 2
+        x: 954
+        y: 759
+        width: 19
+        height: 63
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: walking_1
+      rect:
+        serializedVersion: 2
+        x: 985
+        y: 761
+        width: 27
+        height: 62
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: walking_0
+      rect:
+        serializedVersion: 2
+        x: 1023
+        y: 760
+        width: 34
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: idle_0
+      rect:
+        serializedVersion: 2
+        x: 1083
+        y: 759
+        width: 43
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_23
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 657
+        width: 40
+        height: 63
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_24
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 655
+        width: 31
+        height: 65
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_25
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 653
+        width: 48
+        height: 70
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_26
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 653
+        width: 40
+        height: 67
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_27
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 656
+        width: 44
+        height: 66
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_28
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 657
+        width: 44
+        height: 65
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_29
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 660
+        width: 31
+        height: 65
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_30
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 659
+        width: 51
+        height: 63
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_31
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 660
+        width: 31
+        height: 62
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_32
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 659
+        width: 45
+        height: 63
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_33
+      rect:
+        serializedVersion: 2
+        x: 588
+        y: 660
+        width: 44
+        height: 62
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_34
+      rect:
+        serializedVersion: 2
+        x: 643
+        y: 659
+        width: 31
+        height: 63
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_35
+      rect:
+        serializedVersion: 2
+        x: 780
+        y: 686
+        width: 29
+        height: 62
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_36
+      rect:
+        serializedVersion: 2
+        x: 815
+        y: 683
+        width: 28
+        height: 65
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_37
+      rect:
+        serializedVersion: 2
+        x: 853
+        y: 683
+        width: 28
+        height: 62
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_38
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 685
+        width: 29
+        height: 64
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_39
+      rect:
+        serializedVersion: 2
+        x: 930
+        y: 685
+        width: 28
+        height: 64
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_40
+      rect:
+        serializedVersion: 2
+        x: 967
+        y: 684
+        width: 33
+        height: 64
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_41
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 685
+        width: 32
+        height: 64
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_42
+      rect:
+        serializedVersion: 2
+        x: 1047
+        y: 685
+        width: 33
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_43
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 567
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_44
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 564
+        width: 43
+        height: 68
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_45
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 565
+        width: 43
+        height: 62
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_46
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 564
+        width: 51
+        height: 60
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: running_7
+      rect:
+        serializedVersion: 2
+        x: 756
+        y: 612
+        width: 30
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: running_6
+      rect:
+        serializedVersion: 2
+        x: 793
+        y: 614
+        width: 41
+        height: 60
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: running_5
+      rect:
+        serializedVersion: 2
+        x: 841
+        y: 611
+        width: 44
+        height: 62
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: running_4
+      rect:
+        serializedVersion: 2
+        x: 898
+        y: 614
+        width: 37
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: running_3
+      rect:
+        serializedVersion: 2
+        x: 944
+        y: 614
+        width: 28
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: running_2
+      rect:
+        serializedVersion: 2
+        x: 983
+        y: 614
+        width: 40
+        height: 59
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: running_1
+      rect:
+        serializedVersion: 2
+        x: 1033
+        y: 615
+        width: 43
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: running_0
+      rect:
+        serializedVersion: 2
+        x: 1081
+        y: 619
+        width: 40
+        height: 60
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_55
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 466
+        width: 47
+        height: 82
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_56
+      rect:
+        serializedVersion: 2
+        x: 445
+        y: 471
+        width: 50
+        height: 77
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_57
+      rect:
+        serializedVersion: 2
+        x: 870
+        y: 542
+        width: 28
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_58
+      rect:
+        serializedVersion: 2
+        x: 907
+        y: 544
+        width: 27
+        height: 59
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_59
+      rect:
+        serializedVersion: 2
+        x: 952
+        y: 542
+        width: 25
+        height: 62
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_60
+      rect:
+        serializedVersion: 2
+        x: 996
+        y: 542
+        width: 30
+        height: 62
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_61
+      rect:
+        serializedVersion: 2
+        x: 1040
+        y: 542
+        width: 32
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_62
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 542
+        width: 24
+        height: 62
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_63
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 462
+        width: 56
+        height: 49
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_64
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 462
+        width: 59
+        height: 50
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_65
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 463
+        width: 48
+        height: 81
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_66
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 471
+        width: 77
+        height: 57
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_67
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 474
+        width: 75
+        height: 50
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_68
+      rect:
+        serializedVersion: 2
+        x: 862
+        y: 467
+        width: 33
+        height: 60
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_69
+      rect:
+        serializedVersion: 2
+        x: 905
+        y: 469
+        width: 36
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_70
+      rect:
+        serializedVersion: 2
+        x: 951
+        y: 469
+        width: 33
+        height: 63
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_71
+      rect:
+        serializedVersion: 2
+        x: 997
+        y: 472
+        width: 30
+        height: 62
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_72
+      rect:
+        serializedVersion: 2
+        x: 1040
+        y: 474
+        width: 36
+        height: 59
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_73
+      rect:
+        serializedVersion: 2
+        x: 1089
+        y: 475
+        width: 31
+        height: 59
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: takeoff_1
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 377
+        width: 44
+        height: 57
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: takeoff_2
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 378
+        width: 59
+        height: 63
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rushing_at_magician_1
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 398
+        width: 65
+        height: 46
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_77
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 379
+        width: 42
+        height: 66
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_78
+      rect:
+        serializedVersion: 2
+        x: 297
+        y: 383
+        width: 52
+        height: 55
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_79
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 384
+        width: 48
+        height: 78
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: takeoff_0
+      rect:
+        serializedVersion: 2
+        x: 422
+        y: 383
+        width: 40
+        height: 60
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_81
+      rect:
+        serializedVersion: 2
+        x: 635
+        y: 377
+        width: 37
+        height: 59
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: pressing_mage_1
+      rect:
+        serializedVersion: 2
+        x: 685
+        y: 377
+        width: 32
+        height: 51
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: pressing_mage_0
+      rect:
+        serializedVersion: 2
+        x: 731
+        y: 380
+        width: 35
+        height: 52
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_84
+      rect:
+        serializedVersion: 2
+        x: 775
+        y: 382
+        width: 36
+        height: 60
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_85
+      rect:
+        serializedVersion: 2
+        x: 834
+        y: 378
+        width: 39
+        height: 66
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_86
+      rect:
+        serializedVersion: 2
+        x: 894
+        y: 380
+        width: 28
+        height: 87
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_87
+      rect:
+        serializedVersion: 2
+        x: 947
+        y: 383
+        width: 41
+        height: 44
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_88
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 379
+        width: 32
+        height: 63
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_89
+      rect:
+        serializedVersion: 2
+        x: 1051
+        y: 379
+        width: 33
+        height: 64
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_90
+      rect:
+        serializedVersion: 2
+        x: 1095
+        y: 380
+        width: 33
+        height: 63
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_91
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 380
+        width: 32
+        height: 8
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_92
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 267
+        width: 32
+        height: 87
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_93
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 301
+        width: 30
+        height: 37
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_94
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 308
+        width: 32
+        height: 34
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_95
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 304
+        width: 33
+        height: 38
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_96
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 307
+        width: 35
+        height: 29
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_97
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 293
+        width: 42
+        height: 52
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rushing_at_magician_0
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 286
+        width: 43
+        height: 67
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_99
+      rect:
+        serializedVersion: 2
+        x: 674
+        y: 307
+        width: 60
+        height: 43
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_100
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 307
+        width: 40
+        height: 42
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_101
+      rect:
+        serializedVersion: 2
+        x: 779
+        y: 307
+        width: 45
+        height: 37
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_102
+      rect:
+        serializedVersion: 2
+        x: 826
+        y: 307
+        width: 49
+        height: 41
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_103
+      rect:
+        serializedVersion: 2
+        x: 878
+        y: 307
+        width: 37
+        height: 29
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_104
+      rect:
+        serializedVersion: 2
+        x: 918
+        y: 307
+        width: 41
+        height: 21
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_105
+      rect:
+        serializedVersion: 2
+        x: 962
+        y: 307
+        width: 36
+        height: 14
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_106
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 307
+        width: 43
+        height: 17
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_107
+      rect:
+        serializedVersion: 2
+        x: 1046
+        y: 307
+        width: 42
+        height: 14
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_108
+      rect:
+        serializedVersion: 2
+        x: 1095
+        y: 307
+        width: 35
+        height: 18
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_109
+      rect:
+        serializedVersion: 2
+        x: 601
+        y: 239
+        width: 11
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_110
+      rect:
+        serializedVersion: 2
+        x: 613
+        y: 238
+        width: 11
+        height: 12
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_111
+      rect:
+        serializedVersion: 2
+        x: 651
+        y: 207
+        width: 51
+        height: 58
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_112
+      rect:
+        serializedVersion: 2
+        x: 706
+        y: 207
+        width: 55
+        height: 58
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_113
+      rect:
+        serializedVersion: 2
+        x: 763
+        y: 208
+        width: 63
+        height: 60
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_114
+      rect:
+        serializedVersion: 2
+        x: 836
+        y: 208
+        width: 44
+        height: 77
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_115
+      rect:
+        serializedVersion: 2
+        x: 891
+        y: 209
+        width: 50
+        height: 71
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_116
+      rect:
+        serializedVersion: 2
+        x: 957
+        y: 209
+        width: 45
+        height: 75
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_117
+      rect:
+        serializedVersion: 2
+        x: 1020
+        y: 209
+        width: 59
+        height: 59
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_118
+      rect:
+        serializedVersion: 2
+        x: 1088
+        y: 209
+        width: 41
+        height: 60
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_119
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 227
+        width: 5
+        height: 5
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_120
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 228
+        width: 5
+        height: 6
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_121
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 219
+        width: 17
+        height: 16
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_122
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 217
+        width: 22
+        height: 20
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_123
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 226
+        width: 7
+        height: 5
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_124
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 211
+        width: 4
+        height: 4
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_125
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 208
+        width: 5
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_126
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 202
+        width: 4
+        height: 16
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_127
+      rect:
+        serializedVersion: 2
+        x: 268
+        y: 211
+        width: 9
+        height: 10
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_128
+      rect:
+        serializedVersion: 2
+        x: 591
+        y: 209
+        width: 33
+        height: 15
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_129
+      rect:
+        serializedVersion: 2
+        x: 631
+        y: 209
+        width: 10
+        height: 6
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_130
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 166
+        width: 69
+        height: 44
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_131
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 177
+        width: 80
+        height: 27
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_132
+      rect:
+        serializedVersion: 2
+        x: 648
+        y: 135
+        width: 55
+        height: 63
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_133
+      rect:
+        serializedVersion: 2
+        x: 712
+        y: 135
+        width: 44
+        height: 56
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_134
+      rect:
+        serializedVersion: 2
+        x: 772
+        y: 136
+        width: 39
+        height: 54
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BeenHypnosised_3
+      rect:
+        serializedVersion: 2
+        x: 825
+        y: 133
+        width: 54
+        height: 64
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BeenHypnosised_2
+      rect:
+        serializedVersion: 2
+        x: 899
+        y: 136
+        width: 38
+        height: 56
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BeenHypnosised_1
+      rect:
+        serializedVersion: 2
+        x: 953
+        y: 138
+        width: 29
+        height: 53
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BeenHypnosised_0
+      rect:
+        serializedVersion: 2
+        x: 1002
+        y: 139
+        width: 31
+        height: 57
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_139
+      rect:
+        serializedVersion: 2
+        x: 1053
+        y: 139
+        width: 31
+        height: 48
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_140
+      rect:
+        serializedVersion: 2
+        x: 1099
+        y: 141
+        width: 29
+        height: 55
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_141
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 96
+        width: 57
+        height: 58
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_142
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 98
+        width: 56
+        height: 57
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_143
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 151
+        width: 4
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_144
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 145
+        width: 9
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_145
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 146
+        width: 4
+        height: 5
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_146
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 142
+        width: 7
+        height: 5
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_147
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 96
+        width: 56
+        height: 41
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BeenHypnosised_4
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 100
+        width: 62
+        height: 31
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: getup_5
+      rect:
+        serializedVersion: 2
+        x: 437
+        y: 77
+        width: 38
+        height: 56
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: getup_4
+      rect:
+        serializedVersion: 2
+        x: 492
+        y: 79
+        width: 43
+        height: 46
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: getup_3
+      rect:
+        serializedVersion: 2
+        x: 549
+        y: 77
+        width: 45
+        height: 41
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: getup_2
+      rect:
+        serializedVersion: 2
+        x: 601
+        y: 76
+        width: 50
+        height: 45
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: getup_1
+      rect:
+        serializedVersion: 2
+        x: 664
+        y: 77
+        width: 58
+        height: 41
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: getup_0
+      rect:
+        serializedVersion: 2
+        x: 733
+        y: 86
+        width: 60
+        height: 33
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: pushed_away_4
+      rect:
+        serializedVersion: 2
+        x: 815
+        y: 81
+        width: 64
+        height: 29
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: pushed_away_3
+      rect:
+        serializedVersion: 2
+        x: 895
+        y: 79
+        width: 56
+        height: 32
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: pushed_away_2
+      rect:
+        serializedVersion: 2
+        x: 962
+        y: 82
+        width: 54
+        height: 34
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: pushed_away_1
+      rect:
+        serializedVersion: 2
+        x: 1028
+        y: 79
+        width: 53
+        height: 52
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: pushed_away_0
+      rect:
+        serializedVersion: 2
+        x: 1090
+        y: 82
+        width: 42
+        height: 50
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_160
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 19
+        width: 54
+        height: 61
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_161
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 56
+        width: 33
+        height: 26
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_162
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 59
+        width: 10
+        height: 29
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_164
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 13
+        width: 56
+        height: 60
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_165
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 13
+        width: 53
+        height: 60
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: stand_up_4
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 0
+        width: 35
+        height: 57
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: stand_up_3
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 1
+        width: 41
+        height: 48
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: stand_up_2
+      rect:
+        serializedVersion: 2
+        x: 567
+        y: 0
+        width: 56
+        height: 43
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: stand_up_1
+      rect:
+        serializedVersion: 2
+        x: 632
+        y: 2
+        width: 67
+        height: 40
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: stand_up_0
+      rect:
+        serializedVersion: 2
+        x: 712
+        y: 0
+        width: 64
+        height: 28
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rushing_miss_2
+      rect:
+        serializedVersion: 2
+        x: 791
+        y: 4
+        width: 80
+        height: 27
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rushing_miss_1
+      rect:
+        serializedVersion: 2
+        x: 879
+        y: 8
+        width: 55
+        height: 51
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rushing_miss_0
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 10
+        width: 48
+        height: 58
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rushing_at_magician_2
+      rect:
+        serializedVersion: 2
+        x: 1003
+        y: 17
+        width: 59
+        height: 52
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_175
+      rect:
+        serializedVersion: 2
+        x: 1077
+        y: 24
+        width: 59
+        height: 49
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_176
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 0
+        width: 22
+        height: 4
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: guard_177
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 0
+        width: 7
+        height: 4
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

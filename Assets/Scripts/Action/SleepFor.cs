@@ -1,25 +1,22 @@
-using UnityEngine;
-using System.Collections;
-
 public class SleepFor : Cocos2dAction
 {
 
 	// duration
-	private float _duration;
+    public int _frameDuration;
 	// start time
-	private float _start_time;
+    public int _start_frame;
 
 	// Constructor
-	public SleepFor(float duration = 1f)
+	public SleepFor(int duration = 100)
 	{
 		// define duration
-		_duration = duration;
+		_frameDuration = duration;
 	}
 	
 	// Init
 	public override void Init () {
 		// get start time
-		_start_time = Time.time;
+		_start_frame = UnityEngine.Time.frameCount;
 	
 		initialized = true;
 	}
@@ -31,7 +28,7 @@ public class SleepFor : Cocos2dAction
 		if(!completed)
 		{
 			// Reached target duration
-			if((Time.time - _start_time) >= _duration) EndAction();
+            if ((UnityEngine.Time.frameCount - _start_frame) >= _frameDuration) EndAction();
 		}
 		
 	}

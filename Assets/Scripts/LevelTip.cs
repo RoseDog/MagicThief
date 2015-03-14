@@ -3,7 +3,7 @@
     [UnityEngine.HideInInspector]
     float fade = 1.0f;
     [UnityEngine.HideInInspector]
-    float wait = 1.0f;
+    int wait = 100;
     UnityEngine.UI.Text tip;
     
     public override void Awake()
@@ -18,7 +18,7 @@
         gameObject.SetActive(true);
         Globals.languageTable.SetText(tip, text);
         AddAction(new Sequence(new FadeUI(this, 0, 1, fade), new SleepFor(wait),
-            new FadeUI(this, 1, 0, fade), new FunctionCall(this, "FadeOver")));
+            new FadeUI(this, 1, 0, fade), new FunctionCall(()=>FadeOver())));
     }
 
     void FadeOver()
@@ -31,7 +31,7 @@
         return fade;
     }
 
-    public float GetWaitingDuration()
+    public int GetWaitingDuration()
     {
         return wait;
     }

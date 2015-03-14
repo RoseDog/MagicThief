@@ -3,7 +3,7 @@
     UnityEngine.UI.Text numberText;
     public float numberAmont = 0;
     float scaleTo = 1.6f;
-    float scaleTotalTime = 0.2f;
+    int scaleTotalTime = 6;
     public override void Awake()
     {
         base.Awake();
@@ -21,8 +21,8 @@
         SetNumber(numberAmont + cash);
         ClearAllActions();
         AddAction(new Sequence(
-                    new ScaleTo(transform, new UnityEngine.Vector3(scaleTo, scaleTo, scaleTo), scaleTotalTime / 2.0f),
-                    new ScaleTo(transform, new UnityEngine.Vector3(1f, 1f, 1f), scaleTotalTime / 2.0f)));
+                    new ScaleTo(transform, new UnityEngine.Vector3(scaleTo, scaleTo, scaleTo), scaleTotalTime / 2),
+                    new ScaleTo(transform, new UnityEngine.Vector3(1f, 1f, 1f), scaleTotalTime / 2)));
     }
 
     public void SetNumber(float number)

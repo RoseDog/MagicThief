@@ -358,7 +358,12 @@ public class InputMgr : MonoBehaviour
     {
         DontDestroyOnLoad(this);
         Globals.input = this;
-        Prepare();
+        UnityEngine.Application.targetFrameRate = 30;
+        for (int idx = 0; idx < 3; ++idx)
+        {
+            Finger finger = new Finger(idx, this);
+            fingers.Add(finger);
+        }
     }
 
     void OnLevelWasLoaded(int scene_id)
@@ -574,16 +579,9 @@ public class InputMgr : MonoBehaviour
 				Globals.cameraFollowMagician.SetDisScale(-deltaMagnitudeDiff * cameraPinchZoomingSpeed);
 			}
 		}
-	}
-	
-	public void Prepare()
-	{
-		for (int idx = 0; idx < 3; ++idx)
-		{
-			Finger finger = new Finger(idx, this);
-			fingers.Add(finger);
-		}
-	}
+
+        Globals.replay.FrameFunc();
+	}	
 	
 	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
 	{

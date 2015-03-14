@@ -1,0 +1,223 @@
+fileFormatVersion: 2
+guid: f81cb67439b3d3c48848c46ea1075888
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: city-3_0
+    21300002: city-3_1
+    21300004: city-3_2
+    21300006: city-3_3
+    21300008: city-3_4
+    21300010: city-3_5
+    21300012: city-3_6
+    21300014: city-3_7
+    21300016: city-3_8
+    21300018: city-3_9
+    21300020: city-3_10
+    21300022: city-3_11
+    21300024: city-3_12
+    21300026: city-3_13
+    21300028: city-3_14
+    21300030: city-3_15
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: 0
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: city-3_0
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 400
+        width: 66
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city-3_1
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 400
+        width: 66
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city-3_2
+      rect:
+        serializedVersion: 2
+        x: 287
+        y: 400
+        width: 66
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city-3_3
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 400
+        width: 65
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city-3_4
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 272
+        width: 66
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city-3_5
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 272
+        width: 66
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city-3_6
+      rect:
+        serializedVersion: 2
+        x: 287
+        y: 272
+        width: 66
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city-3_7
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 272
+        width: 65
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city-3_8
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 144
+        width: 66
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city-3_9
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 144
+        width: 66
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city-3_10
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 144
+        width: 64
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city-3_11
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 144
+        width: 65
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city-3_12
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 16
+        width: 66
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city-3_13
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 16
+        width: 66
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city-3_14
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 16
+        width: 65
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: city-3_15
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 16
+        width: 65
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

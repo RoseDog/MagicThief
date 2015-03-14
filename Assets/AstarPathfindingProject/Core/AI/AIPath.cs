@@ -39,7 +39,7 @@ public class AIPath : MonoBehaviour {
 	 * If you have fast moving targets or AIs, you might want to set it to a lower value.
 	 * The value is in seconds between path requests.
 	 */
-	public float repathRate = 0.5F;
+	int repathRate = 30;
 	
 	/** Target to move towards.
 	 * The AI will try to follow/move towards this target.
@@ -66,12 +66,14 @@ public class AIPath : MonoBehaviour {
 	/** Rotation speed.
 	 * Rotation is calculated using Quaternion.SLerp. This variable represents the damping, the higher, the faster it will be able to rotate.
 	 */
+    [UnityEngine.HideInInspector]
 	public float turningSpeed = 5;
 	
 	/** Distance from the target point where the AI will start to slow down.
 	 * Note that this doesn't only affect the end point of the path
  	 * but also any intermediate points, so be sure to set #forwardLook and #pickNextWaypointDist to a higher value than this
  	 */
+    [UnityEngine.HideInInspector]
 	public float slowdownDistance = 0.6F;
 	
 	/** Determines within what range it will switch to target the next waypoint in the path */
@@ -104,7 +106,7 @@ public class AIPath : MonoBehaviour {
 	protected Transform tr;
 	
 	/** Time when the last path request was sent */
-	private float lastRepath = -9999;
+	private int lastRepath = -9999;
 	
 	/** Current path which is followed */
 	protected Path path;
@@ -121,7 +123,7 @@ public class AIPath : MonoBehaviour {
 	protected Rigidbody rigid;
 	
 	/** Current index in the path which is current target */
-	protected int currentWaypointIndex = 0;
+	protected int waypointIndex = 0;
 	
 	/** Holds if the end-of-path is reached
 	 * \see TargetReached */
@@ -188,7 +190,12 @@ public class AIPath : MonoBehaviour {
 	public IEnumerator RepeatTrySearchPath () {
 		while (true) {
 			TrySearchPath ();
-			yield return new WaitForSeconds (repathRate);
+            int counter = repathRate;
+            while (counter != 0)
+            {
+                counter--;                
+                yield return 0;
+            }			
 		}
 	}
 	
@@ -198,7 +205,7 @@ public class AIPath : MonoBehaviour {
 	 * Otherwise will start WaitForPath function.
 	 */
 	public void TrySearchPath () {
-		if (Time.time - lastRepath >= repathRate && canSearchAgain && canSearch) {
+		if (Time.frameCount - lastRepath >= repathRate && canSearchAgain && canSearch) {
 			SearchPath ();
 		} else {
 			StartCoroutine (WaitForRepath ());
@@ -218,8 +225,15 @@ public class AIPath : MonoBehaviour {
 		
 		waitingForRepath = true;
 		//Wait until it is predicted that the AI should search for a path again
-		yield return new WaitForSeconds (repathRate - (Time.time-lastRepath));
-		
+        if ((Time.frameCount - lastRepath) < repathRate)
+        {
+            yield return 0;
+        }
+        else
+        {
+            yield return 0;
+        }
+				
 		waitingForRepath = false;
 		//Try to search for a path again
 		TrySearchPath ();
@@ -227,10 +241,9 @@ public class AIPath : MonoBehaviour {
 	
 	/** Requests a path to the target */
 	public virtual void SearchPath (OnPathDelegate callback = null) {
-		
 		if (target == null) { Debug.LogWarning ("Target is null, aborting all search"); canSearch = false; return; }
 		
-		lastRepath = Time.time;
+		lastRepath = Time.frameCount;
 		//This is where we should search to
         Vector3 targetPosition = target.position + targetOffset;
 		
@@ -274,7 +287,7 @@ public class AIPath : MonoBehaviour {
 		path = p;
 		
 		//Reset some variables
-		currentWaypointIndex = 0;
+		waypointIndex = 0;
 		targetReached = false;
 		canSearchAgain = true;
 		
@@ -291,7 +304,7 @@ public class AIPath : MonoBehaviour {
 			dir /= magn;
 			int steps = (int)(magn/pickNextWaypointDist);
 			for (int i=0;i<steps;i++) {
-				CalculateVelocity (p1);
+				CalculateVelocity (p1,speed);
 				p1 += dir;
 			}
 #if ASTARDEBUG
@@ -315,7 +328,7 @@ public class AIPath : MonoBehaviour {
 		
 		if (!canMove) { return; }
 		
-		Vector3 dir = CalculateVelocity (GetFeetPosition());
+		Vector3 dir = CalculateVelocity (GetFeetPosition(),speed);
 		
 		//Rotate towards targetDirection (filled in by CalculateVelocity)
 		if (targetDirection != Vector3.zero) {
@@ -343,10 +356,10 @@ public class AIPath : MonoBehaviour {
 	 * Filled in by #CalculateVelocity */
 	protected Vector3 targetDirection;
 	
-	protected float XZSqrMagnitude (Vector3 a, Vector3 b) {
+	protected float XYSqrMagnitude (Vector3 a, Vector3 b) {
 		float dx = b.x-a.x;
-		float dz = b.z-a.z;
-		return dx*dx + dz*dz;
+		float dy = b.y-a.y;
+		return dx*dx + dy*dy;
 	}
 	
 	/** Calculates desired velocity.
@@ -361,8 +374,18 @@ public class AIPath : MonoBehaviour {
 	 * /see targetDirection
 	 * /see currentWaypointIndex
 	 */
-	protected Vector3 CalculateVelocity (Vector3 currentPosition) {
-		if (path == null || path.vectorPath == null || path.vectorPath.Count == 0) return Vector3.zero; 
+	protected Vector3 CalculateVelocity (Vector3 currentPosition, float s) {
+//         currentPosition = new UnityEngine.Vector3(
+//             (float)System.Math.Round(currentPosition.x, 2),
+//             (float)System.Math.Round(currentPosition.y, 2),
+//             (float)System.Math.Round(currentPosition.z, 2));
+        if (path == null || path.vectorPath == null || path.vectorPath.Count == 0)
+        {
+//             System.String content = gameObject.name;
+//             content += " no path";
+//             Globals.record("testReplay", content);
+            return Vector3.zero; 
+        }
 		
 		List<Vector3> vPath = path.vectorPath;
 		//Vector3 currentPosition = GetFeetPosition();
@@ -371,17 +394,21 @@ public class AIPath : MonoBehaviour {
 			vPath.Insert (0,currentPosition);
 		}
 		
-		if (currentWaypointIndex >= vPath.Count) { currentWaypointIndex = vPath.Count-1; }
+		if (waypointIndex >= vPath.Count) 
+        { 
+            waypointIndex = vPath.Count-1; 
+        }
 		
-		if (currentWaypointIndex <= 1) currentWaypointIndex = 1;
+		if (waypointIndex <= 1) 
+            waypointIndex = 1;
 		
 		while (true) {
-			if (currentWaypointIndex < vPath.Count-1) {
+			if (waypointIndex < vPath.Count-1) {
 				//There is a "next path segment"
-				float dist = XZSqrMagnitude (vPath[currentWaypointIndex], currentPosition);
+				float dist = XYSqrMagnitude (vPath[waypointIndex], currentPosition);
 					//Mathfx.DistancePointSegmentStrict (vPath[currentWaypointIndex+1],vPath[currentWaypointIndex+2],currentPosition);
 				if (dist < pickNextWaypointDist*pickNextWaypointDist) {
-					currentWaypointIndex++;
+					waypointIndex++;
 				} else {
 					break;
 				}
@@ -389,45 +416,67 @@ public class AIPath : MonoBehaviour {
 				break;
 			}
 		}
+
 		
-		Vector3 dir = vPath[currentWaypointIndex] - vPath[currentWaypointIndex-1];
-		Vector3 targetPosition = CalculateTargetPoint (currentPosition,vPath[currentWaypointIndex-1] , vPath[currentWaypointIndex]);
-			//vPath[currentWaypointIndex] + Vector3.ClampMagnitude (dir,forwardLook);
-		
-		
-		
-		dir = targetPosition-currentPosition;
-		dir.y = 0;
+		Vector3 dir = vPath[waypointIndex] - vPath[waypointIndex-1];
+		//Vector3 targetPosition = CalculateTargetPoint (currentPosition,vPath[waypointIndex-1] , vPath[waypointIndex]);
+        Vector3 targetPosition = CalculateMovingDir.Calculate(currentPosition, vPath[waypointIndex - 1], vPath[waypointIndex], forwardLook);
+        targetPosition = new UnityEngine.Vector3(
+            (float)System.Math.Round(targetPosition.x, 2),
+            (float)System.Math.Round(targetPosition.y, 2),
+            (float)System.Math.Round(targetPosition.z, 2));
+        
+        
+        dir = targetPosition-currentPosition;
+        //dir = new Vector3(Globals.Floor(dir.x), Globals.Floor(dir.y), 0);
+        dir = new UnityEngine.Vector3(
+            (float)System.Math.Round(dir.x, 2),
+            (float)System.Math.Round(dir.y, 2),
+            0);
+		dir.z = 0;
+
+//         System.String record_content = gameObject.name;
+//         record_content += " vPath " + (waypointIndex - 1).ToString() + ":" + vPath[waypointIndex - 1].ToString("F5");
+//         record_content += "vPath " + waypointIndex.ToString() +":" + vPath[waypointIndex].ToString("F5");
+//         record_content += " currentPosition:" + currentPosition.ToString("F5");
+//         record_content += " targetPosition:" + targetPosition.ToString("F5");
+//         record_content += " dir:" + dir.ToString("F5");
+//         Globals.record("testReplay", record_content);
+
 		float targetDist = dir.magnitude;
 		
-		float slowdown = Mathf.Clamp01 (targetDist / slowdownDistance);
-		
 		this.targetDirection = dir;
-		this.targetPoint = targetPosition;
+		//this.targetPoint = targetPosition;
 		
-		if (currentWaypointIndex == vPath.Count-1 && targetDist <= endReachedDistance) {
-			if (!targetReached) { targetReached = true; OnTargetReached (); }
+		if (targetDist <= endReachedDistance) 
+        {
+			if (!targetReached) 
+            { 
+                targetReached = true; 
+                OnTargetReached (); 
+            }
+
+//             System.String content = gameObject.name;
+//             content += " endReachedDistance:" + endReachedDistance.ToString("F3");
+//             content += " dist:" + targetDist.ToString("F3");
+//             content += " currentPosition:" + currentPosition.ToString("F3");
+//             
+//             Globals.record("testReplay", content);
 			
 			//Send a move request, this ensures gravity is applied
 			return Vector3.zero;
-		}
-		
-		Vector3 forward = tr.forward;
-		float dot = Vector3.Dot (dir.normalized,forward);
-		float sp = speed * Mathf.Max (dot,minMoveScale) * slowdown;
+		}        
 		
 #if ASTARDEBUG
-		Debug.DrawLine (vPath[currentWaypointIndex-1] , vPath[currentWaypointIndex],Color.black);
+		Debug.DrawLine (vPath[waypointIndex-1] , vPath[waypointIndex],Color.black);
 		Debug.DrawLine (GetFeetPosition(),targetPosition,Color.red);
 		Debug.DrawRay (targetPosition,Vector3.up, Color.red);
 		Debug.DrawRay (GetFeetPosition(),dir,Color.yellow);
 		Debug.DrawRay (GetFeetPosition(),forward*sp,Color.cyan);
 #endif
-		
-		if (Time.deltaTime	> 0) {
-			sp = Mathf.Clamp (sp,0,targetDist/(Time.deltaTime*2));
-		}
-		return forward*sp;
+
+
+        return dir.normalized * s;
 	}
 	
 	/** Rotates in the specified direction.
@@ -442,8 +491,8 @@ public class AIPath : MonoBehaviour {
 
             rot = Quaternion.Slerp(rot, toTarget, turningSpeed * Time.fixedDeltaTime);
             Vector3 euler = rot.eulerAngles;
-            euler.z = 0;
-            euler.x = 0;
+            euler.y = 90;
+            euler.z = -90;
             rot = Quaternion.Euler(euler);
         }		
 		
@@ -459,8 +508,8 @@ public class AIPath : MonoBehaviour {
 	 * \todo This function uses .magnitude quite a lot, can it be optimized?
 	 */
 	protected Vector3 CalculateTargetPoint (Vector3 p, Vector3 a, Vector3 b) {
-		a.y = p.y;
-		b.y = p.y;
+		a.z = p.z;
+		b.z = p.z;
 		
 		float magn = (a-b).magnitude;
 		if (magn == 0) return a;
@@ -475,4 +524,9 @@ public class AIPath : MonoBehaviour {
 		offset = Mathf.Clamp (offset+closest,0.0F,1.0F);
 		return (b-a)*offset + a;
 	}
+
+    public void ClearPath()
+    {
+        path = null;
+    }
 }

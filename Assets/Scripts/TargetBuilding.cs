@@ -16,7 +16,6 @@
         }        
     }
 
-    float fallingDuration = 0.8f;
     public override void DivedIn()
     {
         base.DivedIn();        
@@ -24,7 +23,7 @@
         Globals.EnableAllInput(false);
 
         Globals.currentStealingTargetBuildingAchive = buildingAchive;
-        Invoke("InToBuilding", fallingDuration + 0.5f);        
+        Invoke("InToBuilding", 0.5f);        
     }
 
     void InToBuilding()

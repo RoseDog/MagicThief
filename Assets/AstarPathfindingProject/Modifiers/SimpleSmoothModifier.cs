@@ -238,8 +238,8 @@ public class SimpleSmoothModifier : MonoModifier {
 			for (int i=0;i<currentPathLength-1;i++) {
 				Vector3 current = subdivided2[i];
 				Vector3 next = subdivided2[i+1];
-				
-				Vector3 normal = Vector3.Cross (next-current,Vector3.up);
+
+                Vector3 normal = Vector3.Cross(next - current, Vector3.forward);
 				normal = normal.normalized;
 				
 				//This didn't work very well, made the path jaggy

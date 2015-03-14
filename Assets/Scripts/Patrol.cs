@@ -40,12 +40,12 @@ public class Patrol : GuardAction
         for (int i = 0; i < patrolCellsCount; ++i)
         {
             // 如果是家里或者关卡编辑器，生成表示行走区域的方块
-            UnityEngine.Vector3 nextNodePos = Globals.GetPathNodePos(node) + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f);
+            UnityEngine.Vector3 nextNodePos = Globals.GetPathNodePos(node);
             TutorialLevelController battleLevel = Globals.LevelController as TutorialLevelController;
             if (battleLevel == null)
             {
                 UnityEngine.GameObject cube = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
-                cube.transform.localScale = new UnityEngine.Vector3(nodeSize, 0.5f, nodeSize);
+                cube.transform.localScale = new UnityEngine.Vector3(nodeSize, nodeSize, 0.2f);
                 cube.transform.position = nextNodePos;
                 cube.transform.parent = transform;
                 cube.layer = 0;
@@ -62,7 +62,7 @@ public class Patrol : GuardAction
             }
             else if (direction == Globals.SOUTH)
             {
-                nextNodePos += new UnityEngine.Vector3(0.0f, 0.0f, -nodeSize);
+                nextNodePos += new UnityEngine.Vector3(0.0f, -nodeSize, 0.0f);
             }
             else if (direction == Globals.WEST)
             {
@@ -70,7 +70,7 @@ public class Patrol : GuardAction
             }
             else if (direction == Globals.NORTH)
             {
-                nextNodePos += new UnityEngine.Vector3(0.0f, 0.0f, nodeSize);
+                nextNodePos += new UnityEngine.Vector3(0.0f, nodeSize, 0.0f);
             }
 
             // 如果没有可以行走的node了
@@ -128,24 +128,30 @@ public class Patrol : GuardAction
         UnityEngine.Debug.Log("patrol");
     }
 
+    Cocos2dAction beginPatrolAction;
     public void NextPatrolTargetPos()
     {
+        System.String content = gameObject.name + ":NextPatrolTargetPos";
+        Globals.record("testReplay", content);
+
         currentTargetIdx = (currentTargetIdx + 1) % 4;
-        this.Invoke("_beginPatrol", 2.0f);
+        beginPatrolAction = guard.SleepThenCallFunction(100, () => _beginPatrol());
     }
 
     void _beginPatrol()
     {
         if (routePoses.Count > currentTargetIdx)
         {
-            guard.MoveTo(routePoses[currentTargetIdx]);
-        }        
+            guard.GoTo(routePoses[currentTargetIdx]);
+        }
+        beginPatrolAction = null;
     }    
 
     public override void Stop()
     {
         base.Stop();
-        guard.moving.canMove = false;
+        guard.moving.canMove = false;        
+        guard.RemoveAction(ref beginPatrolAction);
         UnityEngine.Debug.Log("stop Patrol");
     }
 }

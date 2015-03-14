@@ -4,27 +4,22 @@
         
     public override void Awake()
     {
-        animationName = "A_Skill_1";        
-        castTrickFuncName = "ShotBulb";
         base.Awake();
-        actor.anim[animationName].speed = 2.0f;
+        mage.spriteSheet.CreateAnimationByName("Shot");
+        mage.spriteSheet.AddAnimationEvent("Shot", -1, () => TrickActionEnd());
     }
 
     public void Shot(UnityEngine.GameObject light)
     {
-        targetLight = light;
-        AimTarget(new UnityEngine.Vector3(light.transform.position.x, 4.0f, light.transform.position.z));        
+        targetLight = light;        
         Excute();
+        mage.spriteSheet.Play("Shot");
     }
 
-    public void ShotBulb()
+    public void TrickActionEnd()
     {
         targetLight.GetComponentInParent<Lamp>().BulbBroken();
-    }
-
-    public override void TrickActionEnd()
-    {
-        base.TrickActionEnd();                
         targetLight = null;
+        base.Stop();
     }
 }

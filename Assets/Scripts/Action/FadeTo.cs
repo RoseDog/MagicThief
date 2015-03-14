@@ -34,9 +34,11 @@ public class FadeTo : Cocos2dAction
 		_start_time = Time.time;	
         
 		// get material color
-        _color = _renderer.material.color;
+        //_color = _renderer.material.color;
+        _color = _renderer.material.GetColor("_TintColor");
         _color.a = _start;
-        _renderer.material.color = _color;
+        //_renderer.material.color = _color;
+        _renderer.material.SetColor("_TintColor", _color);
 		
 		initialized = true;
 	}
@@ -49,12 +51,13 @@ public class FadeTo : Cocos2dAction
 		{
 			// Change tmp color
 			_color.a = Mathf.Lerp(_start, _end, (Time.time - _start_time) / _duration);
+            _renderer.material.SetColor("_TintColor", _color);
 			
 			// Update material color
-            _renderer.material.color = _color;
+            //_renderer.material.color = _color;
 			
 			// Reached target position
-            if (_renderer.material.color.a == _end) EndAction();
+            if (_color.a == _end) EndAction();
 
 		}		
 	}

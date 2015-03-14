@@ -4,78 +4,114 @@ using System.Collections;
 public class Spot : GuardAction 
 {
     public Transform target;
-    public void SpotMagician(GameObject magician, float outVisionTime, bool goChasing)
+    public Cocos2dAction chaseCountDown;
+    public Cocos2dAction outVisionCountDown;
+
+    public override void Awake()
     {
-        if (target != magician.transform)
+        base.Awake();
+    }
+    public void SpotMagician(GameObject magician, bool goChasing)
+    {
+        if (outVisionCountDown != null)
+        {
+            guard.RemoveAction(ref outVisionCountDown);
+        }
+
+        if (target == null)
         {
             target = magician.transform;
-            if(target == Globals.magician.transform && Globals.magician.hypnosis.data.slotIdxInUsingPanel != -1)
+            if (target == Globals.magician.transform && Globals.magician.hypnosis.data.slotIdxInUsingPanel != -1)
             {
                 guard.ShowTrickBtns();
             }
             Excute();
             if (goChasing)
             {
-                Invoke("BeginChase", 1.0f);
-            }            
-        }
+                chaseCountDown = guard.SleepThenCallFunction(80, () => BeginChase());
+            }
+        }        
 
         if(goChasing && guard.currentAction == guard.wandering)
         {
             BeginChase();
         }
-        // eyes.OnTriggerEnter会反复触发，OnTriggerStay和OnTriggerExit不会触发。所以才这样写
-        if (this.IsInvoking("EnemyOutVision"))
-        {
-            this.CancelInvoke("EnemyOutVision");
-        }
 
-        if (!target.GetComponent<Actor>().inLight)
-        {
-            this.Invoke("EnemyOutVision", outVisionTime);
-        }        
+        System.String content = gameObject.name;
+        content += " enter vision";
+        Globals.record("testReplay", content);
     }
 
     public override void Excute()
     {
         base.Excute();
-        foreach(FOV2DEyes eye in guard.eyes)
-        {
-            eye.visionCone.status = FOV2DVisionCone.Status.Alert;
-        }
-                
-        guard.anim.CrossFade("atkReady");
-        guard.FaceTarget(target);
+        guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Alert);
+
+        guard.spriteSheet.Play("idle");
+        guard.FaceTarget(target);        
+        guard.moving.ClearPath();
+        guard.moving.canMove = false;
         Debug.Log("spot");        
         if (guard.alertSound)
         {
+            // 狗叫的时候视野会打开迷雾            
+            guard.eye.SetLayer(10);
             guard.alertSound.SpotAlert();
+        }
+
+        System.String content = gameObject.name;
+        content += " spot";
+        Globals.record("testReplay", content);
+    }
+
+    public void Update()
+    {
+        if(guard.currentAction == this)
+        {
+            guard.eye.CastRays(target.position - guard.transform.position, false);
         }
     }
 
     public override void Stop()
     {        
         base.Stop();
-        if (guard.alertSound)
+        guard.moving.canMove = true;
+        if (chaseCountDown != null)
         {
-            guard.alertSound.StopSpotAlert();
+            guard.RemoveAction(ref chaseCountDown);            
         }
-        CancelInvoke("BeginChase");
     }
 
-    public void EnemyOutVision()
+    public void EnemyOutVision(int outVisionTime)
     {
-        UnityEngine.Debug.Log("enemy out vision");        
+        UnityEngine.Debug.Log("enemy out vision");
         
-        // bug, repeat invoking EnemyOutVision
-        if (guard.wandering != guard.currentAction)
+        if (!target.GetComponent<Actor>().inLight)
+        {
+            outVisionCountDown = guard.SleepThenCallFunction(outVisionTime, () => LostTarget());
+        }
+
+        System.String content = gameObject.name;
+        content += " EnemyOutVision";
+        Globals.record("testReplay", content);
+    }
+
+    public void LostTarget()
+    {
+        // rushAt最后会调用Wandering。防止重复调用。
+        if (guard.chase == guard.currentAction)
         {
             guard.wandering.Excute();
         }
-    }    
 
-    void BeginChase()
+        System.String content = gameObject.name;
+        content += " LostTarget";
+        Globals.record("testReplay", content);
+    }
+    
+    public void BeginChase()
     {
+        chaseCountDown = null;        
         guard.moving.target = guard.spot.target;
         guard.chase.Excute();        
     }

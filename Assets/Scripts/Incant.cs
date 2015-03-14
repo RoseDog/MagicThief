@@ -67,11 +67,11 @@
                 actor.transform.forward = horDir;
                 actor.anim["A_Attack_2"].time = 0.2f * rate;
                 float flyDistance = 15.0f * rate;
-                dove.ShowFlyPath(horDir, flyDistance);
+                //dove.ShowFlyPath(horDir, flyDistance);
             }            
             else
             {
-                dove.HideFlyPath();
+                //dove.HideFlyPath();
                 bReadyToReleaseDove = false;
             }
         }
@@ -97,8 +97,8 @@
 
     public void ReleaseDove()
     {        
-        dove.ReleaseToFly();
-        dove.HideFlyPath();
+        //dove.ReleaseToFly();
+        //dove.HideFlyPath();
     }
 
     public void IncantOver()

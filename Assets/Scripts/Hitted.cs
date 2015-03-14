@@ -3,21 +3,15 @@
     public override void Awake()
     {
         base.Awake();
-        if (!Globals.AvatarAnimationEventNameCache.Contains(actor.name + "-repel"))
-        {
-            UnityEngine.AnimationEvent evt = new UnityEngine.AnimationEvent();
-            evt.functionName = "hitteAnimEnd";
-            evt.time = animation["repel"].length;
-            animation["repel"].clip.AddEvent(evt);
-            Globals.AvatarAnimationEventNameCache.Add(actor.name + "-repel");
-        }
+        actor.spriteSheet.CreateAnimationByName("hitted");
+        actor.spriteSheet.AddAnimationEvent("hitted", -1, () => hitteAnimEnd());
     }
 	public override void Excute()
     {
         UnityEngine.Debug.Log("hitted");
         base.Excute();
         actor.moving.canMove = false;
-        actor.anim.Play("repel");                
+        actor.spriteSheet.Play("hitted");
     }
        
     public virtual void hitteAnimEnd()
@@ -25,6 +19,5 @@
         UnityEngine.Debug.Log("hitteAnimEnd");
         Stop();
         actor.moving.canMove = true;
-        actor.currentAction = null;
     }    
 }

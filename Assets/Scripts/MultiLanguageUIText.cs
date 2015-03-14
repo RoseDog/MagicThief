@@ -13,4 +13,13 @@
             Globals.languageTable.SetText(this, text);
         }        
     }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        if (Globals.languageTable)
+        {
+            Globals.languageTable.SetText(this, text);
+        }
+    }
 }

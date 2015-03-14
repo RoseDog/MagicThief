@@ -1,0 +1,1103 @@
+fileFormatVersion: 2
+guid: a52853b9271cd7a4598bf64edb7c8a6a
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: cat_moving_down_0
+    21300002: cat_moving_down_1
+    21300004: cat_moving_down_2
+    21300006: dove_Sprite_3
+    21300008: dove_Sprite_4
+    21300010: dove_Sprite_5
+    21300012: dove_moving_down_0
+    21300014: dove_moving_down_1
+    21300016: dove_moving_down_2
+    21300018: mouse_moving_down_0
+    21300020: mouse_moving_down_1
+    21300022: mouse_moving_down_2
+    21300024: cat_moving_left_0
+    21300026: cat_moving_left_1
+    21300028: cat_moving_left_2
+    21300030: dove_Sprite_15
+    21300032: dove_Sprite_16
+    21300034: dove_Sprite_17
+    21300036: dove_moving_left_0
+    21300038: dove_moving_left_1
+    21300040: dove_moving_left_2
+    21300042: mouse_moving_left_1
+    21300044: mouse_moving_left_2
+    21300046: mouse_moving_left_2
+    21300048: cat_moving_right_0
+    21300050: cat_moving_right_1
+    21300052: cat_moving_right_2
+    21300054: dove_Sprite_27
+    21300056: dove_Sprite_28
+    21300058: dove_Sprite_29
+    21300060: dove_moving_right_0
+    21300062: dove_moving_right_1
+    21300064: dove_moving_right_2
+    21300066: mouse_moving_right_0
+    21300068: mouse_moving_right_1
+    21300070: mouse_moving_right_2
+    21300072: cat_moving_up_0
+    21300074: cat_moving_up_1
+    21300076: cat_moving_up_2
+    21300078: dove_Sprite_39
+    21300080: dove_Sprite_40
+    21300082: dove_Sprite_41
+    21300084: dove_moving_up_0
+    21300086: dove_moving_up_1
+    21300088: dove_moving_up_2
+    21300090: mouse_moving_up_0
+    21300092: mouse_moving_up_1
+    21300094: mouse_moving_up_2
+    21300096: dove_Sprite_48
+    21300098: dove_Sprite_49
+    21300100: dove_Sprite_50
+    21300102: chicken_moving_down_0
+    21300104: chicken_moving_down_1
+    21300106: chicken_moving_down_2
+    21300108: fog_moving_down_0
+    21300110: fog_moving_down_1
+    21300112: fog_moving_down_2
+    21300114: rabbit_moving_down_0
+    21300116: rabbit_moving_down_1
+    21300118: rabbit_moving_down_2
+    21300120: dove_Sprite_60
+    21300122: dove_Sprite_61
+    21300124: dove_Sprite_62
+    21300126: chicken_moving_left_0
+    21300128: chicken_moving_left_1
+    21300130: chicken_moving_left_2
+    21300132: fog_moving_left_0
+    21300134: fog_moving_left_1
+    21300136: fog_moving_left_2
+    21300138: rabbit_moving_left_0
+    21300140: rabbit_moving_left_1
+    21300142: rabbit_moving_left_2
+    21300144: dove_Sprite_72
+    21300146: dove_Sprite_73
+    21300148: dove_Sprite_74
+    21300150: chicken_moving_right_0
+    21300152: chicken_moving_right_1
+    21300154: chicken_moving_right_2
+    21300156: fog_moving_right_0
+    21300158: fog_moving_right_1
+    21300160: fog_moving_right_2
+    21300162: rabbit_moving_right_0
+    21300164: rabbit_moving_right_1
+    21300166: rabbit_moving_right_2
+    21300168: dove_Sprite_84
+    21300170: dove_Sprite_85
+    21300172: dove_Sprite_86
+    21300174: chicken_moving_up_0
+    21300176: chicken_moving_up_1
+    21300178: chicken_moving_up_2
+    21300180: fog_moving_up_0
+    21300182: fog_moving_up_1
+    21300184: fog_moving_up_2
+    21300186: rabbit_moving_up_0
+    21300188: rabbit_moving_up_1
+    21300190: rabbit_moving_up_2
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: 0
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: cat_moving_down_0
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 224
+        width: 13
+        height: 30
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cat_moving_down_1
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 224
+        width: 11
+        height: 30
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cat_moving_down_2
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 224
+        width: 13
+        height: 30
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_3
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 226
+        width: 13
+        height: 18
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_4
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 226
+        width: 13
+        height: 17
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_5
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 226
+        width: 13
+        height: 18
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_moving_down_0
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 225
+        width: 17
+        height: 26
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_moving_down_1
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 228
+        width: 31
+        height: 17
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_moving_down_2
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 225
+        width: 17
+        height: 19
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mouse_moving_down_0
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 226
+        width: 9
+        height: 15
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mouse_moving_down_1
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 226
+        width: 9
+        height: 16
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mouse_moving_down_2
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 226
+        width: 9
+        height: 14
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cat_moving_left_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 193
+        width: 28
+        height: 17
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cat_moving_left_1
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 192
+        width: 29
+        height: 17
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cat_moving_left_2
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 193
+        width: 27
+        height: 18
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_15
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 194
+        width: 24
+        height: 12
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_16
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 194
+        width: 23
+        height: 13
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_17
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 194
+        width: 24
+        height: 12
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_moving_left_0
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 191
+        width: 19
+        height: 26
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_moving_left_1
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 195
+        width: 24
+        height: 20
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_moving_left_2
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 193
+        width: 23
+        height: 17
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mouse_moving_left_1
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 194
+        width: 16
+        height: 11
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mouse_moving_left_2
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 194
+        width: 15
+        height: 13
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mouse_moving_left_2
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 194
+        width: 16
+        height: 11
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cat_moving_right_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 161
+        width: 28
+        height: 17
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cat_moving_right_1
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 160
+        width: 29
+        height: 17
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cat_moving_right_2
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 161
+        width: 27
+        height: 18
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_27
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 162
+        width: 24
+        height: 12
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_28
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 162
+        width: 23
+        height: 13
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_29
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 162
+        width: 24
+        height: 12
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_moving_right_0
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 161
+        width: 19
+        height: 26
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_moving_right_1
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 163
+        width: 24
+        height: 20
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_moving_right_2
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 161
+        width: 23
+        height: 17
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mouse_moving_right_0
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 162
+        width: 16
+        height: 11
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mouse_moving_right_1
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 162
+        width: 15
+        height: 13
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mouse_moving_right_2
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 162
+        width: 16
+        height: 11
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cat_moving_up_0
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 128
+        width: 11
+        height: 22
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cat_moving_up_1
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 129
+        width: 11
+        height: 22
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cat_moving_up_2
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 128
+        width: 11
+        height: 22
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_39
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 131
+        width: 13
+        height: 15
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_40
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 130
+        width: 13
+        height: 17
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_41
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 131
+        width: 13
+        height: 15
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_moving_up_0
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 129
+        width: 19
+        height: 26
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_moving_up_1
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 131
+        width: 31
+        height: 16
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_moving_up_2
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 129
+        width: 17
+        height: 19
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mouse_moving_up_0
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 130
+        width: 9
+        height: 14
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mouse_moving_up_1
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 130
+        width: 9
+        height: 15
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mouse_moving_up_2
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 130
+        width: 9
+        height: 14
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_48
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 100
+        width: 9
+        height: 8
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_49
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 100
+        width: 9
+        height: 8
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_50
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 100
+        width: 9
+        height: 8
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: chicken_moving_down_0
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 97
+        width: 13
+        height: 23
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: chicken_moving_down_1
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 97
+        width: 13
+        height: 24
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: chicken_moving_down_2
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 97
+        width: 13
+        height: 23
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: fog_moving_down_0
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 99
+        width: 17
+        height: 19
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: fog_moving_down_1
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 97
+        width: 21
+        height: 17
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: fog_moving_down_2
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 96
+        width: 21
+        height: 19
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rabbit_moving_down_0
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 98
+        width: 16
+        height: 24
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rabbit_moving_down_1
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 97
+        width: 18
+        height: 21
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rabbit_moving_down_2
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 100
+        width: 16
+        height: 22
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_60
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 68
+        width: 8
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_61
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 68
+        width: 8
+        height: 8
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_62
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 68
+        width: 8
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: chicken_moving_left_0
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 65
+        width: 23
+        height: 20
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: chicken_moving_left_1
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 65
+        width: 22
+        height: 21
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: chicken_moving_left_2
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 65
+        width: 23
+        height: 20
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: fog_moving_left_0
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 65
+        width: 24
+        height: 22
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: fog_moving_left_1
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 65
+        width: 22
+        height: 17
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: fog_moving_left_2
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 64
+        width: 24
+        height: 19
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rabbit_moving_left_0
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 67
+        width: 29
+        height: 23
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rabbit_moving_left_1
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 65
+        width: 23
+        height: 15
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rabbit_moving_left_2
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 64
+        width: 27
+        height: 19
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_72
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 36
+        width: 8
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_73
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 36
+        width: 8
+        height: 8
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_74
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 36
+        width: 8
+        height: 7
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: chicken_moving_right_0
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 33
+        width: 23
+        height: 20
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: chicken_moving_right_1
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 33
+        width: 22
+        height: 21
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: chicken_moving_right_2
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 33
+        width: 23
+        height: 20
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: fog_moving_right_0
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 33
+        width: 24
+        height: 22
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: fog_moving_right_1
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 33
+        width: 22
+        height: 17
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: fog_moving_right_2
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 32
+        width: 24
+        height: 19
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rabbit_moving_right_0
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 35
+        width: 29
+        height: 23
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rabbit_moving_right_1
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 33
+        width: 23
+        height: 15
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rabbit_moving_right_2
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 32
+        width: 27
+        height: 19
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_84
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 4
+        width: 9
+        height: 8
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_85
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 4
+        width: 7
+        height: 9
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dove_Sprite_86
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 4
+        width: 9
+        height: 8
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: chicken_moving_up_0
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 1
+        width: 13
+        height: 21
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: chicken_moving_up_1
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 1
+        width: 13
+        height: 23
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: chicken_moving_up_2
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 1
+        width: 13
+        height: 21
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: fog_moving_up_0
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 0
+        width: 21
+        height: 24
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: fog_moving_up_1
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 1
+        width: 23
+        height: 20
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: fog_moving_up_2
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 1
+        width: 21
+        height: 21
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rabbit_moving_up_0
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 4
+        width: 16
+        height: 24
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rabbit_moving_up_1
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 0
+        width: 18
+        height: 20
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rabbit_moving_up_2
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 5
+        width: 16
+        height: 21
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

@@ -6,7 +6,14 @@
         Guard guard = other.GetComponent<Guard>();
         if (owner != guard && guard.heardAlert != null && guard.heardAlert.alertTeammate == null && guard.spot.target == null)
         {
-            guard.heardAlert.Heard(owner);
+            if (owner == null)
+            {
+                guard.heardAlert.HeardSound(transform.position);
+            }
+            else
+            {
+                guard.heardAlert.Heard(owner);
+            }            
         }
     }
 
@@ -15,7 +22,14 @@
         Guard guard = other.GetComponent<Guard>();
         if (owner != guard && guard.heardAlert != null && guard.heardAlert.alertTeammate == null && guard.spot.target == null)
         {
-            guard.heardAlert.Heard(owner);
+            if (owner == null)
+            {
+                guard.heardAlert.HeardSound(transform.position);
+            }
+            else
+            {
+                guard.heardAlert.Heard(owner);
+            }
         }
     }
 

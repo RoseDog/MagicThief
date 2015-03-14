@@ -5,10 +5,7 @@
     public override void Excute()
     {
         base.Excute();
-        foreach (FOV2DEyes eye in guard.eyes)
-        {
-            eye.visionCone.status = FOV2DVisionCone.Status.Suspicious;
-        }
+        guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Suspicious);
         guard.anim.CrossFade("atkReady");
         guard.FaceTarget(guard.guardedGemHolder.transform);
 

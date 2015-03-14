@@ -19,7 +19,7 @@
             AddEvent(eventText, bNew);
         }
         
-        float event_y_pos = 206;
+        float event_y_pos = 136;
         float padding = 3;
         for (int idx = cityEvents.Count - 1; idx >= 0; --idx)
         {
@@ -51,10 +51,7 @@
 
         EventClicked(clickedBuilding);
         // 相机移动
-        Globals.cameraFollowMagician.MoveToPoint(
-            city.GetTargetPosition(ce.name) + Globals.cameraFollowMagician.GetHorForward() * 15 + 
-            -Globals.cameraFollowMagician.GetHorRight() * 10, 
-            Globals.cameraFollowMagician.disOffset, 0.7f);
+        Globals.cameraFollowMagician.MoveToPoint(city.GetTargetPosition(ce.name), Globals.cameraMoveDuration);
         // 选中建筑
         city.ChooseBuilding(city.GetTargetBuilding(ce.name));
         // 更新列表

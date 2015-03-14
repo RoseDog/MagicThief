@@ -4,9 +4,9 @@ using System.Collections;
 public class ScaleTo : Cocos2dAction
 {
 	// duration
-	private float _duration = 1f;
+	private int _duration;
 	// start time
-	private float _start_time = 0f;
+	private int _start_frame;
 	// start scale
 	private Vector3 _start;
 	// end scale
@@ -15,7 +15,7 @@ public class ScaleTo : Cocos2dAction
 	private Transform _transform;
 	
 	// Constructor
-	public ScaleTo(Transform target, Vector3 size, float duration = 1f)
+	public ScaleTo(Transform target, Vector3 size, int duration = 100)
 	{
         _transform = target;
 		// define destination scale
@@ -28,7 +28,7 @@ public class ScaleTo : Cocos2dAction
 	public override void Init () {
         
 		// get start time
-		_start_time = Time.time;
+		_start_frame = Time.frameCount;
 		// get starting scale
 		_start = _transform.localScale;
 		
@@ -42,9 +42,9 @@ public class ScaleTo : Cocos2dAction
 		if(!completed)
 		{
 			// Update scale
-			_transform.localScale = Vector3.Lerp(_start, _end, (Time.time - _start_time) / _duration);
+			_transform.localScale = Vector3.Lerp(_start, _end, (Time.frameCount - _start_frame) / (float)_duration);
 
-            if (Time.time - _start_time >= _duration)
+            if (Time.frameCount - _start_frame >= _duration)
             {
                 EndAction();
                 _transform.localScale = _end;

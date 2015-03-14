@@ -12,8 +12,8 @@
     {
         base.Awake();
         mazeTab = Globals.getChildGameObject<UnityEngine.UI.Button>(gameObject, "MazeTab");
-        guardsTab = Globals.getChildGameObject<UnityEngine.UI.Button>(gameObject, "GuardsTab");
-        safeboxTab = Globals.getChildGameObject<UnityEngine.UI.Button>(gameObject, "SafeBoxTab");
+        guardsTab = Globals.getChildGameObject<UnityEngine.UI.Button>(gameObject, "GuardsTab");        
+        safeboxTab = Globals.getChildGameObject<UnityEngine.UI.Button>(gameObject, "SafeBoxTab");        
 
         mazeInfo = Globals.getChildGameObject<MazeInfo>(gameObject, "MazeInfo");        
         hireGuards = Globals.getChildGameObject<HireGuards>(gameObject, "HireGuardsLayout");        
@@ -45,7 +45,7 @@
         if (!mazeData.playerEverClickGuards)
         {
             RedPointsOnGuardsTab.transform.parent.gameObject.SetActive(true);
-            RedPointsOnGuardsTab.text = mazeData.guards.Count.ToString();
+            RedPointsOnGuardsTab.text = mazeData.lockGuardsName.Count.ToString();
         }
         else
         {
@@ -55,7 +55,7 @@
         if (!mazeData.playerEverClickSafebox)
         {
             RedPointsOnSafeboxTab.transform.parent.gameObject.SetActive(true);
-            RedPointsOnSafeboxTab.text = mazeData.guards.Count.ToString();
+            RedPointsOnSafeboxTab.text = mazeData.lockGuardsName.Count.ToString();
         }
         else
         {

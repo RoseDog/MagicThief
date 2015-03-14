@@ -9,12 +9,12 @@
         originPosition = (transform as UnityEngine.RectTransform).anchoredPosition;
     }
 
-    public void BeginMove(float movingDuration)
+    public void BeginMove(int movingDuration)
     {
         AddAction(new EaseOut(transform, to, movingDuration));
     }
 
-    public void Goback(float movingDuration)
+    public void Goback(int movingDuration)
     {
         AddAction(new EaseOut(transform, originPosition, movingDuration));
     }
@@ -22,14 +22,14 @@
     public void Jump()
     {        
         AddAction(new RepeatForever(
-            new MoveTo(transform, to, Globals.uiMoveAndScaleDuration*0.5f, true),
-            new MoveTo(transform, originPosition, Globals.uiMoveAndScaleDuration * 0.5f, true)));
+            new MoveTo(transform, to, Globals.uiMoveAndScaleDuration/2, true),
+            new MoveTo(transform, originPosition, Globals.uiMoveAndScaleDuration/2, true)));
     }
 
-    public void ForeverMoving(float movingDuration)
+    public void ForeverMoving(int movingDuration)
     {        
         AddAction(new RepeatForever(
-            new MoveTo(transform, to, movingDuration, true), new FunctionCall(this, "RecoverPos")));
+            new MoveTo(transform, to, movingDuration, true), new FunctionCall(()=>RecoverPos())));
     }
 
     public void RecoverPos()

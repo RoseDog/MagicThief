@@ -3,8 +3,9 @@
     [UnityEngine.HideInInspector]
     public GuardBtn[] btns;
     public UIMover mover;
-    void Awake()
+    public override void Awake()
     {
+        base.Awake();
         Globals.selectGuard = this;
         btns = GetComponentsInChildren<GuardBtn>();
         mover = GetComponent<UIMover>();
@@ -18,11 +19,6 @@
         }
     }
     
-	// Use this for initialization
-	void Start () 
-    {
-        
-	}
 
     public void btnClicked(UnityEngine.UI.Button btn)
     {

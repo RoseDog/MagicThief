@@ -386,14 +386,14 @@ public class IniFile
         }
     }
 #else
-    public void save(string fileName)
+    public void save(string fileName, bool append = false)
     {
         // Debug.Log("Save properties to file: "+Application.persistentDataPath+"/"+fileName+".txt");
 
         try
         {
             StreamWriter stream = new StreamWriter(Application.dataPath + "/Resources/" + fileName + ".txt",
-                false, System.Text.Encoding.UTF8);
+                append, System.Text.Encoding.UTF8);
 
             for (int i = 0; i < mKeysList.Count; ++i)
             {

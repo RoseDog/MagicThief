@@ -10,7 +10,7 @@
     public void Awake()
     {
         btn = GetComponent<UnityEngine.UI.Button>();
-        btn.onClick.AddListener(() => ClickToBuyTrickSlot());
+        btn.onClick.AddListener(() => ShowBuyTrickSlotMsgBox());
         index = System.Convert.ToInt32(gameObject.name);
         cashCost = Globals.getChildGameObject<MultiLanguageUIText>(gameObject, "CashCost");
         
@@ -29,9 +29,20 @@
         }
     }
 
+    public void ShowBuyTrickSlotMsgBox()
+    {
+        if(!Globals.magician.Stealing && !data.bought)
+        {
+            Globals.MessageBox(
+            Globals.languageTable.GetText("sure_to_buy_slot", new System.String[] { data.price.ToString() }),
+            () => ClickToBuyTrickSlot(),
+            true);
+        }        
+    }
+
     public void ClickToBuyTrickSlot()
     {
-        if (!data.bought && Globals.canvasForMagician.ChangeCash(-data.price))
+        if (Globals.canvasForMagician.ChangeCash(-data.price))
         {
             Buy();
         }

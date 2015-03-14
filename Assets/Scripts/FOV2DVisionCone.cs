@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-[UnityEngine.RequireComponent(typeof(FOV2DEyes))]
 [UnityEngine.RequireComponent(typeof(UnityEngine.MeshFilter))]
 [UnityEngine.RequireComponent(typeof(UnityEngine.MeshRenderer))]
 
@@ -21,31 +20,20 @@ public class FOV2DVisionCone : UnityEngine.MonoBehaviour
     int[] newTriangles;
     UnityEngine.Mesh mesh;
     UnityEngine.MeshRenderer meshRenderer;
-	FOV2DEyes eyes;
-    List<UnityEngine.RaycastHit> hits;
+    
 	int i;
 	int v;
 	
-    void Start() 
+    void Awake() 
 	{
         mesh = GetComponent<UnityEngine.MeshFilter>().mesh;
         meshRenderer = GetComponent<UnityEngine.MeshRenderer>();
-		eyes = gameObject.GetComponent<FOV2DEyes>();
 		
 		meshRenderer.material = materials[0];
     }
-	
-	void LateUpdate() 
-	{
-		UpdateMesh();
-		
-		UpdateMeshMaterial();
-	}
-	
-	void UpdateMesh()
-	{
-		hits = eyes.hits;
-		
+
+	public void UpdateMesh(List<UnityEngine.RaycastHit> hits)
+	{		
 		if (hits == null || hits.Count == 0)
 			return;
 		
@@ -89,11 +77,9 @@ public class FOV2DVisionCone : UnityEngine.MonoBehaviour
 		
 		mesh.RecalculateNormals();
 		mesh.RecalculateBounds();
-        GetComponent<UnityEngine.MeshCollider>().sharedMesh = null;
-        GetComponent<UnityEngine.MeshCollider>().sharedMesh = mesh;
 	}
-	
-	void UpdateMeshMaterial()
+
+    public void UpdateMeshMaterial()
 	{	
 		for (i = 0; i < materials.Count; i++)
 		{

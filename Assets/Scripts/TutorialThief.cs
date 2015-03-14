@@ -21,6 +21,8 @@
 
         LifeAmount = 100;
         LifeCurrent = LifeAmount;
+        spriteSheet.CreateAnimationByName("idle");
+        spriteSheet.CreateAnimationByName("moving");
     }
 
     public void ShowTipToShowMazeBtn()
@@ -47,7 +49,7 @@
     void _ShowTip()
     {
         ThiefTip.transform.localScale = UnityEngine.Vector3.zero;
-        AddAction(new ScaleTo(ThiefTip.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), 0.3f));
+        AddAction(new ScaleTo(ThiefTip.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), 10));
     }
 
     public void HideTip()

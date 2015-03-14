@@ -1,19 +1,22 @@
 ﻿public class FunctionCall : Cocos2dAction 
 {
-    UnityEngine.MonoBehaviour callback;
-    System.String method;
+    public UnityEngine.MonoBehaviour callback;
+    public System.String method;
+    UnityEngine.Events.UnityAction action;
     // Constructor
-    public FunctionCall(UnityEngine.MonoBehaviour cb, System.String methodName)
+    public FunctionCall(UnityEngine.Events.UnityAction a)
 	{
-        callback = cb;
-        method = methodName;
+        action = a;
 	}
 	
 	// Init
 	public override void Init () 
     {
         initialized = true;
-        callback.Invoke(method, 0.0f);
+        if (action != null)
+        {
+            action.Invoke();
+        }        
 		EndAction();        				
 	}	
 }

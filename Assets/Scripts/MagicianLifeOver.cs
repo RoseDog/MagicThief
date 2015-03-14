@@ -1,19 +1,29 @@
 ﻿public class MagicianLifeOver : LifeOver
 {
-    public override void Excute()
+    public override void Awake()
     {
-        UnityEngine.Debug.Log("magician life over");
+        base.Awake();        
+        actor.spriteSheet.AddAnimationEvent("die", -1, () => DownOnFloor());
+    }
 
-        base.Excute();        
-        actor.anim.Play("A_Stun_1");
-        Invoke("Escape", actor.anim["A_Stun_1"].length);        
+    void DownOnFloor()
+    {
+        actor.spriteSheet.Play("down_on_floor");
+        actor.SleepThenCallFunction(40, () => StandUp());
+    }
+
+    void StandUp()
+    {
+        actor.spriteSheet.Play("stand_up");
+        actor.SleepThenCallFunction(actor.spriteSheet.GetAnimationLength("stand_up"), () => Escape());
     }
 
     void Escape()
     {
         Globals.cameraFollowMagician.target = null;
-        Globals.cameraFollowMagician.StaringMagician((actor as Magician).escape.duration - 0.8f);
-        Globals.LevelController.Invoke("AfterMagicianLifeOverEscaped", (actor as Magician).escape.duration + 0.1f);
+        //Globals.cameraFollowMagician.StaringMagician((actor as Magician).escape.duration - 0.8f);        
+        actor.SleepThenCallFunction((actor as Magician).escape.duration,
+            () => Globals.LevelController.AfterMagicianLifeOverEscaped());
         (actor as Magician).escape.Excute();
     }
 }
