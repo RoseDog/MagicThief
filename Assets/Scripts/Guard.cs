@@ -80,7 +80,7 @@ public class Guard : Actor, System.IComparable<Guard>
         {
             currentAction.Stop();
         }
-        Globals.maze.guards.Remove(this);
+        Globals.maze.guards.Remove(this);        
     }
 
     public void InitArrangeUI()
@@ -153,10 +153,11 @@ public class Guard : Actor, System.IComparable<Guard>
     public void Unchoose()
     {
         UnityEngine.Debug.Log("unchoose");
+        Globals.self.UploadGuards();
         StopTint();
         HideBtns();
         BeginPatrol();
-        Globals.maze.choosenGuard = null;
+        Globals.maze.choosenGuard = null;        
     }
 
     [UnityEngine.HideInInspector]
@@ -218,6 +219,7 @@ public class Guard : Actor, System.IComparable<Guard>
         }
         
         Globals.DestroyGuard(this);
+        Globals.self.UploadGuards();
     }
 
     public void GuardInfoBtnClicked()
@@ -236,15 +238,7 @@ public class Guard : Actor, System.IComparable<Guard>
             canvasForCommandBtns.worldCamera = Globals.cameraFollowMagician.camera;
 
             TrickBtnOnGuardHead btn = obj.GetComponentInChildren<TrickBtnOnGuardHead>();
-            if(beenHypnosised != null)
-            {
-                btn.guard = this;
-            }
-            else
-            {
-                btn.gameObject.SetActive(false);
-            }
-
+            btn.guard = this;            
             isShownBtn = true;            
         }
     }
@@ -255,7 +249,7 @@ public class Guard : Actor, System.IComparable<Guard>
         isShownBtn = false;
         if (canvasForCommandBtns != null)
         {
-            Destroy(canvasForCommandBtns.gameObject);
+            DestroyImmediate(canvasForCommandBtns.gameObject);
             canvasForCommandBtns = null;
         }        
     }

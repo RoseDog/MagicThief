@@ -22,25 +22,25 @@
             ui_text = canvasForLoading.GetComponentInChildren<UnityEngine.UI.Text>();
             FromLoadingSceneToNextScene();            
         }
-    }   
-
-    public void ToLoadSceneAsync(string nextLevelName)
-    {        
-        Globals.EnableAllInput(false);
-        LastLevelName = UnityEngine.Application.loadedLevelName;
-        Next = nextLevelName;
-        Globals.transition.BlackOut(()=>_ToLoadingScene());                
-    }
-
-    public void _ToLoadingScene()
-    {
-        Globals.magician.gameObject.SetActive(false);
-        UnityEngine.Application.LoadLevel("loading");
     }
 
     public void FromLoadingSceneToNextScene()
     {
         StartCoroutine("_LoadSceneAsync");
+    }
+
+    public void ToLoadSceneAsync(System.String nextLevelName)
+    {        
+        Globals.EnableAllInput(false);
+        Globals.transition.BlackOut(() => _ToLoadingScene(nextLevelName));                
+    }
+
+    public void _ToLoadingScene(System.String nextLevelName)
+    {
+        Next = nextLevelName;
+        LastLevelName = UnityEngine.Application.loadedLevelName;
+//        Globals.magician.gameObject.SetActive(false);
+        UnityEngine.Application.LoadLevel("loading");
     }
 
     System.Collections.IEnumerator _LoadSceneAsync()
@@ -58,8 +58,17 @@
         yield return new UnityEngine.WaitForSeconds(0.3f);
         if (Next != "")
         {
+            while(true)
+            {
+                yield return new UnityEngine.WaitForSeconds(0.1f);
+                if(Globals.socket.IsReady)
+                {
+                    break;
+                }
+            }
             loadingHangarOperation = UnityEngine.Application.LoadLevelAsync(Next);
             Globals.AvatarAnimationEventNameCache.Clear();
+            
         }        
     }
 

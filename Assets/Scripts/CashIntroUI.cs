@@ -18,19 +18,19 @@
     public void Open()
     {
         gameObject.SetActive(true);
-        Globals.languageTable.SetText(cash, "you_have_some_cash", new System.String[]{Globals.cashAmount.ToString()});
-        Globals.languageTable.SetText(safebox_count, "you_have_some_safeboxes", new System.String[] { Globals.safeBoxDatas.Count.ToString() });
+        Globals.languageTable.SetText(cash, "you_have_some_cash", new System.String[]{Globals.self.cashAmount.ToString()});
+        Globals.languageTable.SetText(safebox_count, "you_have_some_safeboxes", new System.String[] { Globals.self.safeBoxDatas.Count.ToString() });
         Globals.languageTable.SetText(total_capacity, "total_capacity");
         System.String str = "=";
-        foreach(SafeBoxData data in Globals.safeBoxDatas)
+        foreach(SafeBoxData data in Globals.self.safeBoxDatas)
         {
             str += Globals.safeBoxLvDatas[data.Lv].capacity.ToString();
-            if(Globals.safeBoxDatas[Globals.safeBoxDatas.Count-1] != data)
+            if(Globals.self.safeBoxDatas[Globals.self.safeBoxDatas.Count-1] != data)
             {
                 str += "+";
             }
         }
-        capacity.text = Globals.AccumulateSafeboxCapacity().ToString() + str;
+        capacity.text = Globals.AccumulateSafeboxCapacity(Globals.self).ToString() + str;
         Globals.languageTable.SetText(cash_averaged, "cash_average_put_in_box");
     }
 

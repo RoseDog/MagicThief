@@ -187,7 +187,7 @@
 
     public bool IsLifeOver()
     {
-        return currentAction == lifeOver;
+        return currentAction == lifeOver || LifeCurrent < UnityEngine.Mathf.Epsilon;
     }
 
     public virtual void InStealing()

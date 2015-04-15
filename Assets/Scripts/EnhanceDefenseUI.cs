@@ -41,11 +41,11 @@
         hireGuards.UpdateGuardsInfo();
         addSafeBox.UpdateInfo();
 
-        MazeLvData mazeData = Globals.mazeLvDatas[Globals.CurrentMazeLevel];
+        MazeLvData mazeData = Globals.mazeLvDatas[Globals.self.currentMazeLevel];
         if (!mazeData.playerEverClickGuards)
         {
             RedPointsOnGuardsTab.transform.parent.gameObject.SetActive(true);
-            RedPointsOnGuardsTab.text = mazeData.lockGuardsName.Count.ToString();
+            RedPointsOnGuardsTab.text = mazeData.lockGuardsName.Length.ToString();
         }
         else
         {
@@ -55,7 +55,7 @@
         if (!mazeData.playerEverClickSafebox)
         {
             RedPointsOnSafeboxTab.transform.parent.gameObject.SetActive(true);
-            RedPointsOnSafeboxTab.text = mazeData.lockGuardsName.Count.ToString();
+            RedPointsOnSafeboxTab.text = mazeData.lockGuardsName.Length.ToString();
         }
         else
         {
@@ -82,7 +82,7 @@
         {
             hireGuards.gameObject.SetActive(true);
 
-            Globals.mazeLvDatas[Globals.CurrentMazeLevel].playerEverClickGuards = true;
+            Globals.mazeLvDatas[Globals.self.currentMazeLevel].playerEverClickGuards = true;
             Globals.canvasForMyMaze.RedPointsOnEnchanceDefBtn.transform.parent.gameObject.SetActive(false);
             guardsTab.image.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/SelectedTabBtn");
         }
@@ -90,7 +90,7 @@
         {
             addSafeBox.gameObject.SetActive(true);
 
-            Globals.mazeLvDatas[Globals.CurrentMazeLevel].playerEverClickSafebox = true;            
+            Globals.mazeLvDatas[Globals.self.currentMazeLevel].playerEverClickSafebox = true;            
             safeboxTab.image.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/SelectedTabBtn");
         }     
 
@@ -103,5 +103,6 @@
         base.OnTouchUpOutside(f);        
         gameObject.SetActive(false);
         Globals.canvasForMyMaze.btnEnhanceDef.gameObject.SetActive(true);
+        Globals.canvasForMyMaze.CheckRoomFullUses();
     }
 }

@@ -413,6 +413,21 @@ public class IniFile
             Debug.LogWarning(e);
         }
     }
+
+    public System.String toString()
+    {
+        System.String ret = "";
+        for (int i = 0; i < mKeysList.Count; ++i)
+        {
+            if (!mKeysList[i].comment.Equals(""))
+            {
+                ret += "; " + mKeysList[i].comment;
+            }
+
+            ret += mKeysList[i].key + "=" + mKeysList[i].value + "\n";
+        }
+        return ret;
+    }
 #endif
 
     /// <summary>

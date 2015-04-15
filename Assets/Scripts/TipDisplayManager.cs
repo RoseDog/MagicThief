@@ -10,22 +10,25 @@ public class TipDisplayManager : UnityEngine.MonoBehaviour
         tipPrefab = UnityEngine.Resources.Load("UI/Tip") as UnityEngine.GameObject;        
     }
 
-    public void Msg(string msg)
+    public void Msg(string msg, float height_ratio = 0.5f, UnityEngine.Transform parent = null)
     {
         Tip tip = (Instantiate(tipPrefab) as UnityEngine.GameObject).GetComponent<Tip>();
         UnityEngine.RectTransform tipTransform = tip.GetComponent<UnityEngine.RectTransform>();
-        tipTransform.SetParent(Globals.LevelController.mainCanvas.transform);        
+        if (parent == null)
+        {
+            tipTransform.SetParent(Globals.LevelController.mainCanvas.transform);
+        }
+        else
+        {
+            tipTransform.SetParent(parent);
+        }
+        
         tipTransform.SetAsLastSibling();
         tipTransform.localScale = new UnityEngine.Vector3(1.0f, 1.0f, 1.0f);
-        
-        // left
-        tipTransform.position = new UnityEngine.Vector3(0.0f, UnityEngine.Screen.height*0.3f, 0.0f);
-        // right
-        //tipTransform.sizeDelta = new UnityEngine.Vector2(0.0f, tipTransform.sizeDelta.y);
-
+                
         Globals.languageTable.SetText(tip.uiText, msg);
         msgList.Add(tipTransform);
-        float tip_y_pos = UnityEngine.Screen.height * 0.5f;
+        float tip_y_pos = UnityEngine.Screen.height * height_ratio;
         for (int idx = msgList.Count - 1; idx >= 0; --idx )
         {
             if (msgList[idx] != null)

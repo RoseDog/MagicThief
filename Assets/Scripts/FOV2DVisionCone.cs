@@ -63,7 +63,7 @@ public class FOV2DVisionCone : UnityEngine.MonoBehaviour
 		{
 			newVertices[i] = transform.InverseTransformPoint(hits[i-1].point);
 		}
-
+        
         newUV = new UnityEngine.Vector2[newVertices.Length];
 		i = 0;
         while (i < newUV.Length) {
@@ -80,13 +80,7 @@ public class FOV2DVisionCone : UnityEngine.MonoBehaviour
 	}
 
     public void UpdateMeshMaterial()
-	{	
-		for (i = 0; i < materials.Count; i++)
-		{
-			if (i == (int) status && meshRenderer.material != materials[i])
-			{
-				meshRenderer.material = materials[i];
-			}
-		}
+	{
+        meshRenderer.material = materials[(int)status];
 	}
 }

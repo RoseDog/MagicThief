@@ -3,16 +3,15 @@
     bool isMagicianNear = false;
     bool isPlayingBack = false;
     GoldPoper goldPoper = null;
-    public int goldAmount = 100;
-    public int goldLast;
-    public int goldLostPersecond = 500;
+    public float goldLast;
+    public float goldLostPersecond = 500;
     UnityEngine.Sprite openSprite;
     UnityEngine.Sprite closedSprite;
     UnityEngine.UI.Image unlockProgressSprite;
     UnityEngine.Vector3 progressScaleCache;
     System.Collections.Generic.List<UnityEngine.Renderer> goldMeshes = new System.Collections.Generic.List<UnityEngine.Renderer>();
 
-    Cell locate;
+    public Cell locate;
 
     UnityEngine.GameObject coinPrefab;
     UnityEngine.GameObject SafeboxUpgradeUIPrefab;
@@ -66,17 +65,18 @@
         }        
     }
 
-	public override void Start () 
+    public void SyncWithData(SafeBoxData boxdata)
     {
-        base.Start();
+        data = boxdata;
         UnityEngine.GameObject effectPrefab = (UnityEngine.GameObject)UnityEngine.Resources.Load("Props/Chest/GoldPoper/GoldPoper", typeof(UnityEngine.GameObject));
         goldPoper = (Instantiate(effectPrefab, transform.position + UnityEngine.Vector3.up * 0.5f, UnityEngine.Quaternion.identity) as UnityEngine.GameObject).GetComponent<GoldPoper>();
-        goldPoper.InitParticleTex(goldLostPersecond);
         goldPoper.chest = this;
         goldPoper.transform.localScale = new UnityEngine.Vector3(2.0f, 2.0f, 2.0f);
         goldPoper.transform.parent = transform;
-        ResetGold();
-	}
+        ResetGold();        
+        goldPoper.InitParticleTex((int)goldLostPersecond);
+        Visible(true);
+    }
 
     public override void Visible(bool visibility)
     {
@@ -97,7 +97,7 @@
     {
         UnityEngine.Debug.Log("touch chest");
         isMagicianNear = true;
-        if (goldAmount > 0)
+        if (goldLast > 1)
         {
             unlockProgressSprite.transform.parent.gameObject.SetActive(true);
             AddAction(new Sequence(new Cocos2dProgress(unlockProgressSprite, 120), new FunctionCall(()=> ChestOpened())));
@@ -116,8 +116,8 @@
     {
         UnityEngine.Debug.Log("leave chest");
         isMagicianNear = false;
-                        
-        if (goldLast > 0)
+
+        if (goldLast > 1)
         {
             ClearAllActions();
             unlockProgressSprite.transform.parent.gameObject.SetActive(false);
@@ -144,7 +144,7 @@
 
     public void ChestClosed()
     {
-        if(goldLast > 0)
+        if(goldLast > 1)
         {
             spriteRenderer.sprite = closedSprite;
         }
@@ -160,9 +160,9 @@
     }
 
     public void LostGold()
-    {
-        goldLast -= goldLostPersecond;
-        if (goldLast <= 0)
+    {        
+        goldLast -= goldLostPersecond;        
+        if (goldLast < 1)
         {
             foreach (UnityEngine.Renderer renderer in goldMeshes)
             {
@@ -182,7 +182,9 @@
 
     public void ResetGold()
     {
-        goldLast = goldAmount;
+        goldLast = data.cashInBox;
+        // 总共需要3sec偷完整个箱子
+        goldLostPersecond = goldLast / 3.0f;
         foreach (UnityEngine.Renderer renderer in goldMeshes)
         {
             renderer.gameObject.SetActive(true);
@@ -193,7 +195,7 @@
     System.Collections.IEnumerator Coins()
     {
         int time = 3;
-        float gold_every_time = (float)goldLostPersecond / time;
+        float gold_every_time = goldLostPersecond / time;
         while (time > 0)
         {
             int count = UnityEngine.Random.Range(1,3);
@@ -259,7 +261,7 @@
     {
         UnityEngine.GameObject SafeboxUpgradeUI_prefab = UnityEngine.Resources.Load("UI/SafeboxUpgradeUI") as UnityEngine.GameObject;
         SafeboxUpgradeUI upgradeUI = (UnityEngine.GameObject.Instantiate(SafeboxUpgradeUI_prefab) as UnityEngine.GameObject).GetComponentInChildren<SafeboxUpgradeUI>();
-        upgradeUI.SetSafebox(this);
+        upgradeUI.SetSafebox(data);
     }
 
     public void HideBtn()

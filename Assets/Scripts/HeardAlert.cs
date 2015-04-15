@@ -37,8 +37,7 @@
 
         System.String content = gameObject.name;
         content += " HeardSound";
-        Globals.record("testReplay", content);
-    }
+        Globals.record("testReplay", content);    }
 
     public override void Stop()
     {

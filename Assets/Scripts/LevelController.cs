@@ -1,12 +1,17 @@
 ﻿public class LevelController : Actor
 {
-    public int randomSeed;
+    public int randSeedCache;
     public UnityEngine.Canvas mainCanvas;
     UnityEngine.Camera MiniMapCamera;
     public override void Awake()
     {
         base.Awake();
-        Globals.LevelController = this;        
+        Globals.LevelController = this;
+        if (Globals.input == null)
+        {
+            UnityEngine.GameObject mgrs_prefab = UnityEngine.Resources.Load("GlobalMgrs") as UnityEngine.GameObject;
+            UnityEngine.GameObject.Instantiate(mgrs_prefab);
+        }
         if (Globals.magician == null)
         {
             // 魔术师出场
@@ -14,6 +19,7 @@
             UnityEngine.GameObject.Instantiate(magician_prefab);
             Globals.magician.gameObject.SetActive(false);
         }
+        
         UnityEngine.GameObject minimapCamObj = UnityEngine.GameObject.Find("MiniMapCamera");
         if (minimapCamObj != null)
         {
@@ -38,6 +44,11 @@
         
     }
 
+    public virtual IniFile GetGuardsIniFile()
+    {
+        return new IniFile(Globals.iniFileName);
+    }
+
     public virtual void MazeFinished()
     {        
         // 创建相机，不允许跟随
@@ -48,22 +59,19 @@
         }
         Globals.maze.SetRestrictToCamera(Globals.cameraFollowMagician);
 
-        if (Globals.iniFileName != "")
+        UnityEngine.Debug.Log(Globals.iniFileName);
+        IniFile ini = GetGuardsIniFile();
+        // 关卡守卫               
+        int guard_count = ini.get("GuardCount", 0);
+        System.String[] keys = ini.keys();
+        for (int i = 1; i <= guard_count; ++i)
         {
-            UnityEngine.Debug.Log(Globals.iniFileName);
-            IniFile ini = new IniFile(Globals.iniFileName);
-            // 关卡守卫               
-            int guard_count = ini.get("GuardCount", 0);
-            System.String[] keys = ini.keys();
-            for (int i = 1; i <= guard_count; ++i)
-            {
-                UnityEngine.Vector3 pos = Globals.StringToVector3(keys[i]);
-                Pathfinding.Node birthNode = Globals.maze.pathFinder.GetSingleNode(pos, false);
+            UnityEngine.Vector3 pos = Globals.StringToVector3(keys[i]);
+            Pathfinding.Node birthNode = Globals.maze.pathFinder.GetSingleNode(pos, false);
 
-                Guard guard = Globals.CreateGuard(Globals.GetGuardData(ini.get(keys[i])), birthNode);
-                guard.BeginPatrol();
-            }           
-        }        
+            Guard guard = Globals.CreateGuard(Globals.GetGuardData(ini.get(keys[i])), birthNode);
+            guard.BeginPatrol();
+        }           
 
         Globals.transition.BlackIn();
 
@@ -84,16 +92,16 @@
         {
             return;
         }
-        levelPassed = true;
-        Invoke("LevelPassed", 0.5f);
-        return;
+//         levelPassed = true;
+//         Invoke("LevelPassed", 0.5f);
+//         return;
 
         Gem[] gems = UnityEngine.GameObject.FindObjectsOfType<Gem>();        
         if (gems.Length == 0)
         {            
             foreach(Chest chest in Globals.maze.chests)
             {
-                if (chest.goldLast > 0)
+                if (chest.IsVisible() && chest.goldLast > 1)
                 {
                     return;
                 }
@@ -129,7 +137,7 @@
     }
 
     public virtual void GuardCreated(Guard guard)
-    {        
+    {     
     }
 
     public virtual void GuardDestroyed(Guard guard)
@@ -202,6 +210,46 @@
             {
                 sprite.sortingOrder = -20000;
             }
+        }
+    }
+
+    public void SyncWithChestData(PlayerInfo player)
+    {
+        PutCashInBox(player);
+        for (int idx = 0; idx < player.safeBoxDatas.Count; ++idx)
+        {            
+            Globals.maze.chests[idx].SyncWithData(player.safeBoxDatas[idx]);
+        }        
+    }
+
+    public void PutCashInBox(PlayerInfo player)
+    {
+        // 给safebox分配金钱
+        float cash = player.cashAmount;
+        int box_count = player.safeBoxDatas.Count;
+        while (box_count > 0)
+        {
+            float average_cash = cash / box_count;
+            SafeBoxData box_data = player.safeBoxDatas[box_count - 1];
+            float cash_limit = Globals.safeBoxLvDatas[box_data.Lv].capacity;
+            float cash_put_in = 0;
+            if (cash_limit >= average_cash)
+            {
+                cash_put_in = average_cash;
+            }
+            else
+            {
+                cash_put_in = cash_limit;
+            }
+            cash -= cash_put_in;
+            box_data.cashInBox = cash_put_in;
+            --box_count;
+        }
+
+        if (player == Globals.self)
+        {
+            Globals.self.cashAmount = Globals.AccumulateCashInBox(player);
+            Globals.canvasForMagician.UpdateCash();
         }
     }
 }

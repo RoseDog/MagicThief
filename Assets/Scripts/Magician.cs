@@ -107,7 +107,7 @@ public class Magician : Actor
         guard_data.roomConsume = 3;
         guard_data.magicianOutVisionTime = 250;
         guard_data.atkCd = 120;
-        guard_data.attackValue = 4;
+        guard_data.attackValue = 40;
         guard_data.atkShortestDistance = 1.5f;
         guard_data.doveOutVisionTime = 100;
         guard_data.attackSpeed = 1.0f;
@@ -141,8 +141,8 @@ public class Magician : Actor
         guard_data.roomConsume = 1;        
         Globals.guardDatas.Add(guard_data);
 
-        MazeLvData data = new MazeLvData();        
-        data.lockGuardsName = new System.Collections.Generic.List<System.String>();
+        MazeLvData data = new MazeLvData();
+        data.lockGuardsName = new System.String[]{};
         data.playerEverClickGuards = true;
         data.playerEverClickSafebox = true;
         Globals.mazeLvDatas.Add(data);
@@ -151,7 +151,7 @@ public class Magician : Actor
         data.roseRequire = 10;
         data.price = 5000;
         data.roomSupport = 10;
-        data.lockGuardsName = new System.Collections.Generic.List<System.String>(new System.String[] { "armed"});
+        data.lockGuardsName = new System.String[] { "armed"};
         data.safeBoxCount = 3;
         Globals.mazeLvDatas.Add(data);
 
@@ -159,7 +159,7 @@ public class Magician : Actor
         data.roseRequire = 30;
         data.price = 10000;
         data.roomSupport = 20;
-        data.lockGuardsName = new System.Collections.Generic.List<System.String>(new System.String[] { "dog","guard"});
+        data.lockGuardsName = new System.String[] { "dog","guard"};
         data.safeBoxCount = 4;
         Globals.mazeLvDatas.Add(data);
 
@@ -167,7 +167,7 @@ public class Magician : Actor
         data.roseRequire = 50;
         data.price = 10000;
         data.roomSupport = 30;
-        data.lockGuardsName = new System.Collections.Generic.List<System.String>(new System.String[] { "lamp"});
+        data.lockGuardsName = new System.String[] { "lamp"};
         data.safeBoxCount = 5;
         Globals.mazeLvDatas.Add(data);
 
@@ -204,7 +204,8 @@ public class Magician : Actor
         eye.gameObject.SetActive(true);
         //moving.canMove = true;
         Globals.EnableAllInput(true);
-        Globals.cameraFollowMagician.SetDragSpeed(0.02f);        
+        Globals.cameraFollowMagician.SetDragSpeed(0.02f);
+        Globals.canvasForMagician.gameObject.SetActive(true);
     }
 
     public override void OutStealing()
@@ -220,6 +221,8 @@ public class Magician : Actor
         isMoving = false;
         eye.gameObject.SetActive(false);
         Globals.cameraFollowMagician.CloseMinimap();
+        Globals.canvasForMagician.gameObject.SetActive(false);
+        (Globals.LevelController as TutorialLevelController).canvasForStealing.gameObject.SetActive(false);
     }
 
     public void CoverInMoonlight()
@@ -302,7 +305,16 @@ public class Magician : Actor
             }
             if (data.nameKey == "hypnosis" && Globals.magician.currentAction != Globals.magician.hypnosis)
             {
-                hypnosis.Cast((Globals.LevelController as TutorialLevelController).m_lastNearest);
+                Guard guard = (Globals.LevelController as TutorialLevelController).m_lastNearest;
+                if (guard != null)
+                {
+                    hypnosis.Cast(guard);
+                }
+                else
+                {
+                    ChangePower(data.powerCost);
+                    Globals.tipDisplay.Msg("no_hypnosis_target_nearby");
+                }                
             }
             if (data.nameKey == "shotLight")
             {
@@ -338,14 +350,6 @@ public class Magician : Actor
             ChangePower(-shot.data.powerCost))
         {
             shot.Shot(bulb);
-        }
-    }
-
-    public void CastHypnosis(Guard guard, UnityEngine.UI.Button btn)
-    {        
-        if (ChangePower(-hypnosis.data.powerCost))
-        {
-            hypnosis.Cast(guard);
         }
     }
 
@@ -402,6 +406,6 @@ public class Magician : Actor
 
     public void OnDestroy()
     {
-        Globals.replay.SaveToFile();
+
     }
 }

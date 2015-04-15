@@ -15,14 +15,9 @@
     }
 
     public void Msg(System.String text, UnityEngine.Events.UnityAction yesAction = null, bool bNeedCancel = false)
-    {
-        transform.parent = Globals.LevelController.mainCanvas.transform;
-        transform.SetAsLastSibling();
-        (transform as UnityEngine.RectTransform).anchoredPosition = UnityEngine.Vector2.zero;
-        transform.localScale = UnityEngine.Vector3.one;
-
+    {        
         MsgBoxBG.UpdateAlpha(0);
-        MsgBoxBG.AddAction(new FadeUI(MsgBoxBG, 0, 1, 0.4f));        
+        MsgBoxBG.AddAction(new FadeUI(MsgBoxBG, 0, 1, 0.2f));        
         msgBoxText.text = text;
 
         YesBtn.interactable = true;
@@ -47,7 +42,7 @@
         }
         
         UpdateAlpha(0);
-        AddAction(new FadeUI(this, 0, 0.4f, 0.4f));
+        AddAction(new FadeUI(this, 0, 0.4f, 0.2f));
     }
 
     public void MessageBoxBtnClicked()
@@ -61,6 +56,6 @@
     public void FadeOver()
     {
         UnityEngine.Debug.Log("FadeOver");
-        Destroy(gameObject);
+        Destroy(transform.parent.gameObject);
     }
 }

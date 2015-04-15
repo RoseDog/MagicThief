@@ -6,7 +6,7 @@ public class MapSaver : UnityEditor.Editor
         base.OnInspectorGUI();
         if (UnityEngine.GUILayout.Button("Save"))
         {
-            Globals.SaveMazeIniFile(Globals.maze.IniFileNameForEditor);
+            Globals.SaveMazeIniFile(Globals.maze.IniFileNameForEditor, Globals.LevelController.randSeedCache, true);
             UnityEngine.Debug.Log("save level data to " + Globals.maze.IniFileNameForEditor + ".txt");
         }
     }    

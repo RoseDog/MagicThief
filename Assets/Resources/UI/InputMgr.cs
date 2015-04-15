@@ -25,7 +25,7 @@ public class Finger
     static public string GESTURE_U = "U";
     static public string GESTURE_TWO_FIGURE_CLICK = "2C";
 
-    static public float HALF_PI = Mathf.PI / 2.0f;
+    static public float HALF_PI = (float)Mathf.PI / 2.0f;
     static public float UP_GESTURE_RADIAN = 60.0f / 90.0f;
 
 
@@ -363,8 +363,8 @@ public class InputMgr : MonoBehaviour
         {
             Finger finger = new Finger(idx, this);
             fingers.Add(finger);
-        }
-    }
+        }        
+    }    
 
     void OnLevelWasLoaded(int scene_id)
     {

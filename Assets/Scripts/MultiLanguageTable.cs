@@ -86,12 +86,48 @@
         table.Add("already_bought", new System.String[] { "已购买", "Already Bought" });
         table.Add("already_unlocked", new System.String[] { "已解锁", "Already Unlocked" });
         table.Add("no_landmark_yet", new System.String[] { "还没有标记降落点", "no_landmark_yet" });
+        table.Add("no_hypnosis_target_nearby", new System.String[] { "附近没有可以催眠的目标", "no_hypnosis_target_nearby" });        
         table.Add("stealing_cant_use_flash", new System.String[] { "潜入中，不能使用照明弹", "stealing_cant_use_flash" });
         table.Add("place_guard_in_maze_to_protect_your_property", new System.String[] { "在迷宫中放置守卫来保护你的财产", "place_guard_in_maze_to_protect_your_property" });
         table.Add("hired", new System.String[] { "已雇佣", "Hired" });
         table.Add("not_hired_yet", new System.String[] { "尚未雇佣", "Not hired yet" });
         table.Add("no_more_safebox", new System.String[] { "没有更多的保险箱了", "No More Safebox" });
-        table.Add("room_not_full_used", new System.String[] { "迷宫空间未完全使用，请放置更多守卫，以防其他玩家太轻易的盗取你的钱财", "room not full used" });        
+        table.Add("room_not_full_used", new System.String[] { "迷宫空间未完全使用，请放置更多守卫，以防其他玩家太轻易的盗取你的钱财", "room not full used" });
+        table.Add("enter_name", new System.String[] { "请输入你的名字", "Enter a name" });
+        table.Add("name_duplicated", new System.String[] { "名字重复，请重新输入", "Name Duplicated" });
+        table.Add("spotted_cant_escape", new System.String[] { "被守卫发现！无法逃离！", "Spotted！Can't escape！" });        
+        table.Add("cash_back_then", new System.String[] { "迷宫金钱:{0}", "Total Cash:{0}" });
+        table.Add("stealing_cash", new System.String[] { "失窃金钱:{0}", "Stolen:{0}" });
+        table.Add("stolen_by_others_event", new System.String[] { "{0}潜入了你的迷宫", "{0} dived in your Maze" });
+        table.Add("you_stole_others_event", new System.String[] { "你潜入了{0}的迷宫", "You dived in {0}'s Maze" });
+
+        table.Add("news_success_1", new System.String[] { 
+            "News\n-------\n珍宝失窃", 
+            "News\n-------\nPrecious Stolen！" });
+
+        table.Add("news_success_2", new System.String[] { 
+            "EXTRA!!\n-------\n惊天魔盗\n作风华丽", 
+            "EXTRA!!\n-------\n惊天魔盗\n作风华丽" });        
+
+        table.Add("news_success_3", new System.String[] { 
+            "损失财产价值：\n<color=red><size=40>{0}</size></color>\n富商破产！\n-----\n-----\n----\n", 
+            "Stolen Property Valued：\n<color=red><size=40>{0}</size></color>\nMr.Rich Broken！\n-----\n-----\n----\n" });
+
+        table.Add("news_failure_1", new System.String[] { 
+            "News\n-------\n魔盗再现！！", 
+            "News\n-------\n魔盗再现！！" });
+
+        table.Add("news_failure_2", new System.String[] { 
+            "魔盗无机可趁！", 
+            "魔盗无机可趁！" });
+
+        table.Add("news_failure_3", new System.String[] { 
+            "守卫森严\n魔盗败走", 
+            "守卫森严\n魔盗败走" });
+
+        table.Add("would_you_share", new System.String[] { 
+            "富人长年非法敛财使得这里的居民生活压力很大，犯罪率居高不下，要把你盗窃的成果分一些给他们吗？", 
+            "would you share your money with poor?" });
    }    
 
     public void SetText(UnityEngine.UI.Text uiText, System.String key, System.String[] strings = null)

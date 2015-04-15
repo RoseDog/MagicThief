@@ -1,5 +1,5 @@
 ﻿public class LevelEditor : LevelController 
-{
+{    
     public override void Awake()
     {
         base.Awake();
@@ -10,15 +10,16 @@
         // 如果没有iniFile或iniFile内容为空，生成新的迷宫        
         UnityEngine.TextAsset textAssets = UnityEngine.Resources.Load(Globals.maze.IniFileNameForEditor) as UnityEngine.TextAsset;
         if (textAssets == null || textAssets.text.Length == 0)
-        {
-            Globals.maze.randSeedCacheWhenEditLevel = UnityEngine.Random.seed;
-            UnityEngine.Random.seed = Globals.maze.randSeedCacheWhenEditLevel;
+        {           
+            randSeedCache = (int)System.DateTime.Now.Ticks;
+            UnityEngine.Random.seed = randSeedCache;            
         }
         // 如果有，就读文件
         else
         {
             Globals.iniFileName = Globals.maze.IniFileNameForEditor;
-            Globals.ReadMazeIniFile(Globals.iniFileName, true);
+            Globals.ReadMazeIniFile(Globals.iniFileName);
+            randSeedCache = UnityEngine.Random.seed;
             base.BeforeGenerateMaze();
         }        
     }

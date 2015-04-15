@@ -1,13 +1,5 @@
-﻿GuardCount=8
-(2.1350, 8.6250, -0.0200)=dog
-(-9.8650, 9.8750, -0.0200)=dog
-(-5.6150, 10.8750, -0.0200)=guard
-(-3.6150, 9.3750, -0.0200)=guard
-(-3.1150, -9.3750, -0.0200)=guard
-(-2.3650, -8.8750, -0.0200)=guard
-(-5.3650, -6.8750, -0.0200)=dog
-(4.1350, -3.3750, -0.0200)=armed
-randSeedCacheWhenEditLevel=-772884440
+﻿GuardCount=0
+randSeedCacheWhenEditLevel=-2049329099
 Z_CELLS_COUNT=6
 X_CELLS_COUNT=6
 CHANGE_DIRECTION_MODIFIER=80

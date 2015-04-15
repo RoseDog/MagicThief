@@ -84,6 +84,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
         foreach(FOV2DVisionCone cone in visionCones)
         {
             cone.status = status;
+            cone.UpdateMeshMaterial();
         }
     }
 
@@ -152,7 +153,6 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
             currentAngle += 1f / quality;
         }
         cone.UpdateMesh(hits);
-        cone.UpdateMeshMaterial();
     }
 	
 	void OnDrawGizmosSelected()

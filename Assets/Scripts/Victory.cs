@@ -3,7 +3,7 @@
     public override void Excute()
     {        
         base.Excute();
-        actor.OutStealing();        
+        actor.OutStealing();
         Invoke("Escape", 0.3f);
     }
 

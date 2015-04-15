@@ -5,7 +5,7 @@
     {
         UnityEngine.Debug.Log("magician Escape");
         Globals.maze.GuardsTargetVanish(actor.gameObject);
-        base.Excute();
+        base.Excute();        
         actor.spriteSheet.Play("flying");
         transform.position = transform.position - new UnityEngine.Vector3(0,0,0.6f);
         actor.AddAction(
@@ -15,6 +15,7 @@
 
     void EscapeOver()
     {        
-        Stop();                
+        Stop();
+        Globals.magician.gameObject.SetActive(false);
     }
 }

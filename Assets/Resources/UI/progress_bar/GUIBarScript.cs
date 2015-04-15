@@ -8,16 +8,16 @@ public class GUIBarScript : MonoBehaviour {
 
 	//for the CurrentValue, and the Value it will be after the update
 	private float CurrentValue;
-	public float Value;
+    public float Value;
 
 	//FadeValue is current amount the bar is faded 
-	private float FadeValue;
+    private float FadeValue;
 	//FadeFactor is a little complex, Open the ReadMe file to know more
-	public float FadeFactor = 6f;
+    public float FadeFactor = 6f;
 
 	//position and scale of the GUIBar on the screen
 	public Vector2 Position;
-	public float ScaleSize;
+    public float ScaleSize;
 
 	//Font Variables
 	public bool DisplayText = true;
@@ -76,7 +76,7 @@ public class GUIBarScript : MonoBehaviour {
 		while (y < ValueBar.height) 
 		{
 			int x = 0;
-			float xf = 0f;
+            float xf = 0f;
 			while (x < ValueBar.width) 
 			{
 				Color gC = g.Evaluate(xf/Mask.width);
@@ -126,7 +126,7 @@ public class GUIBarScript : MonoBehaviour {
 
 		//add colors to gradient
 		int i = 0;
-		float f = 0f;
+        float f = 0f;
 		while (i < GradientColors.Count) 
 		{
 			gck[i].color = GradientColors[i];
@@ -184,24 +184,24 @@ public class GUIBarScript : MonoBehaviour {
 		GradientColors.RemoveAt(Key);
 	}
 
-	public void SetNewValue(float V)
+    public void SetNewValue(float V)
 	{
 		Value = V;
 	}	
 
 	public void SetNewValue(double V)
 	{
-		Value = (float)V;
+        Value = (float)V;
 	}
 
-	public void SetNewValue(float V, float MV)
+    public void SetNewValue(float V, float MV)
 	{
 		Value = V/MV;
 	}
 
 	public void SetNewValue(double V, double MV)
 	{
-		Value = (float)V / (float)MV;
+        Value = (float)V / (float)MV;
 	}
 
 	public void ForceUpdate()

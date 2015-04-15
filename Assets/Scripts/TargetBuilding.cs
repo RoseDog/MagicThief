@@ -7,12 +7,22 @@
         base.Awake();
     }
 
+    public override void Start()
+    {
+        base.Start();
+        if (data != null)
+        {
+            Globals.languageTable.SetText(tip, data.targetName);
+            city.eventsWindow.AddEvent(this);
+        }        
+    }
+
     public override void Choosen()
     {
         base.Choosen();
         if (tip)
         {
-            city.TargetClicked(gameObject.name);
+            city.TargetClicked(data.targetName);
         }        
     }
 
@@ -22,22 +32,13 @@
 
         Globals.EnableAllInput(false);
 
-        Globals.currentStealingTargetBuildingAchive = buildingAchive;
+        Globals.currentStealingTargetBuildingData = data;
         Invoke("InToBuilding", 0.5f);        
     }
 
     void InToBuilding()
-    {
-        // 这是FirstTarget，所以没有tip
-        if (tip == null)
-        {
-            Globals.Assert(Globals.TutorialLevelIdx == Globals.TutorialLevel.FirstTarget);
-        }
-        else
-        {
-            Globals.iniFileName = gameObject.name;
-        }
-        
+    {          
+        Globals.self.DownloadTarget(data);
         Globals.asyncLoad.ToLoadSceneAsync("Tutorial_Levels");
     }
 }

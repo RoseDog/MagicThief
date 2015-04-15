@@ -114,11 +114,6 @@ public class AIPath : MonoBehaviour {
 	/** Cached CharacterController component */
 	protected CharacterController controller;
 	
-	/** Cached NavmeshController component */
-	protected NavmeshController navController;
-	
-	protected RVOController rvoController;
-	
 	/** Cached Rigidbody component */
 	protected Rigidbody rigid;
 	
@@ -160,8 +155,6 @@ public class AIPath : MonoBehaviour {
 		
 		//Cache some other components (not all are necessarily there)
 		controller = GetComponent<CharacterController>();
-		navController = GetComponent<NavmeshController>();
-		rvoController = GetComponent<RVOController>();
 		rigid = rigidbody;
 	}
 	
@@ -313,10 +306,7 @@ public class AIPath : MonoBehaviour {
 		}
 	}
 	
-	public virtual Vector3 GetFeetPosition () {
-		if (rvoController != null) {
-			return tr.position - Vector3.up*rvoController.height*0.5f;
-		} else
+	public virtual Vector3 GetFeetPosition () {		
 		if (controller != null) {
 			return tr.position - Vector3.up*controller.height*0.5F;
 		}
@@ -335,12 +325,7 @@ public class AIPath : MonoBehaviour {
 			RotateTowards (targetDirection);
 		}
 	
-		if (rvoController != null) {
-			rvoController.Move (dir);
-		} else
-		if (navController != null) {
-			navController.SimpleMove (GetFeetPosition(),dir);
-		} else if (controller != null) {
+		if (controller != null) {
 			controller.SimpleMove (dir);
 		} else if (rigid != null) {
 			rigid.AddForce (dir);

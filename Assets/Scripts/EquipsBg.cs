@@ -24,29 +24,32 @@
     {
         UnityEngine.GameObject itemSlotPrefab = UnityEngine.Resources.Load<UnityEngine.GameObject>("UI/TrickItemSlot");
         UnityEngine.GameObject itemPrefab = UnityEngine.Resources.Load<UnityEngine.GameObject>("UI/TrickItem");
-        
         foreach (TrickData data in Globals.tricks)
         {
             UnityEngine.GameObject itemSlot = UnityEngine.GameObject.Instantiate(itemSlotPrefab) as UnityEngine.GameObject;
             itemSlot.transform.parent = TrickItemsLayout.transform;
-            itemSlot.transform.localScale = UnityEngine.Vector3.one;
+            itemSlot.transform.localScale = UnityEngine.Vector3.one;            
+                        
             if (!data.IsInUse())
             {
-                TrickItem trickItem = (UnityEngine.GameObject.Instantiate(itemPrefab) as UnityEngine.GameObject).GetComponent<TrickItem>();                
+                TrickItem trickItem = (UnityEngine.GameObject.Instantiate(itemPrefab) as UnityEngine.GameObject).GetComponent<TrickItem>();
+                trickItem.trickData = data;
+                if (Globals.self.tricksBought.Contains(data.nameKey))
+                {
+                    trickItem.Buy();
+                }
+                else
+                {
+                    trickItem.GetComponent<UnityEngine.UI.Image>().sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/" + data.nameKey + "_icon_disabled");
+                }
                 trickItem.rt.parent = itemSlot.transform;
                 trickItem.rt.localScale = UnityEngine.Vector3.one;
                 trickItem.rt.localPosition = UnityEngine.Vector3.zero;
-                trickItem.name = data.nameKey;
-                trickItem.GetComponent<UnityEngine.UI.Image>().sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/" + data.nameKey + "_icon_disabled");
-                trickItem.trickData = data;
+                trickItem.name = data.nameKey;                
                 trickItem.CheckIfUnlock();
-                trickItem.CheckIfPurchased();
-                
-                trickItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => Globals.canvasForMagician.OpenItemDescriptionUI(trickItem));
-                trickItem.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => Globals.magician.CastMagic(trickItem.trickData));                
                 trickItem.slotInPack = itemSlot;
                 trickItemsInPack.Add(trickItem);
-            }
+            }            
             trickSlots.Add(itemSlot);
         }
     }
@@ -63,8 +66,12 @@
         return -1;
     }
 
+    public UnityEngine.GameObject GetEmptyItemSlot()
+    {
+        int slotIdx = GetEmptyItemSlotIdx();
+        return trickSlots[slotIdx];        
+    }
     
-
     public void SwichPanel()
     {
         if (OutFitsLayout.gameObject.activeSelf)
@@ -100,7 +107,6 @@
             trickItemsInPack.Clear();
             gameObject.SetActive(false);
             Globals.canvasForMagician.TrickDescParent.gameObject.SetActive(false);
-            Globals.canvasForMagician.equipBtn.gameObject.SetActive(true);
             Globals.canvasForMagician.draggingItemFinger.gameObject.SetActive(false);
             TutorialLevelController controller = (Globals.LevelController as TutorialLevelController);
             if (controller != null)

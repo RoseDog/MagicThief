@@ -10,7 +10,7 @@
     public void Awake()
     {
         btn = GetComponent<UnityEngine.UI.Button>();
-        btn.onClick.AddListener(() => ShowBuyTrickSlotMsgBox());
+        btn.onClick.AddListener(() => TrickSlotClicked());
         index = System.Convert.ToInt32(gameObject.name);
         cashCost = Globals.getChildGameObject<MultiLanguageUIText>(gameObject, "CashCost");
         
@@ -23,20 +23,40 @@
     {
         data = d;
         cashCost.text = data.price.ToString();
-        if (data.bought || index == 0)
+        if(data.statu != "-1")
         {
             Buy();
-        }
+            if (data.statu != "0")
+            {
+                // Slot里的魔术道具
+                UnityEngine.GameObject itemPrefab = UnityEngine.Resources.Load<UnityEngine.GameObject>("UI/TrickItem");
+                TrickData trickData = Globals.GetTrickByName(data.statu);
+                TrickItem trickItem = (UnityEngine.GameObject.Instantiate(itemPrefab) as UnityEngine.GameObject).GetComponent<TrickItem>();
+                trickItem.trickData = trickData;                
+                trickItem.name = trickData.nameKey;
+                trickItem.Buy();
+                trickItem.PutItemInUse(this);
+                trickItem.CheckIfUnlock();
+            }            
+        }        
     }
 
-    public void ShowBuyTrickSlotMsgBox()
+    public void TrickSlotClicked()
     {
-        if(!Globals.magician.Stealing && !data.bought)
+        if(!Globals.magician.Stealing)
         {
-            Globals.MessageBox(
-            Globals.languageTable.GetText("sure_to_buy_slot", new System.String[] { data.price.ToString() }),
-            () => ClickToBuyTrickSlot(),
-            true);
+            // 如果是锁住的，询问是否购买
+            if (data.statu == "-1")
+            {
+                Globals.MessageBox(
+                    Globals.languageTable.GetText("sure_to_buy_slot", new System.String[] { data.price.ToString() }),
+                    () => ClickToBuyTrickSlot(),true);
+            }
+            // 否则打开装备界面
+            else if (!Globals.canvasForMagician.equips.gameObject.activeSelf)
+            {
+                Globals.canvasForMagician.OpenEquipUI();
+            }            
         }        
     }
 
@@ -44,13 +64,13 @@
     {
         if (Globals.canvasForMagician.ChangeCash(-data.price))
         {
+            Globals.self.TrickSlotBought(data);
             Buy();
         }
     }
 
     public void Buy()
-    {
-        data.bought = true;
+    {        
         cashCost.gameObject.SetActive(false);
         lockImage.gameObject.SetActive(false);
     }    

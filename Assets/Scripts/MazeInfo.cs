@@ -31,24 +31,23 @@
     
     public void ClickToUpgradeMaze()
     {
-        if (Globals.canvasForMagician.ChangeCash(-Globals.mazeLvDatas[Globals.CurrentMazeLevel + 1].price))
+        if (Globals.canvasForMagician.ChangeCash(-Globals.mazeLvDatas[Globals.self.currentMazeLevel + 1].price))
         {
-            Globals.CurrentMazeLevel++;
+            Globals.self.currentMazeLevel++;
             UpgradeMaze();            
         }
     }
 
     public void UpgradeMaze()
-    {
-        isUpgradingMaze = true;
-        if (Globals.CurrentMazeLevel == 1)
+    {        
+        if (Globals.self.currentMazeLevel == 1)
         {
-            Globals.Assert(Globals.TutorialLevelIdx == Globals.TutorialLevel.InitMyMaze);
+            Globals.Assert(Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.InitMyMaze);
             Globals.canvasForMyMaze.InitMazeBtnClicked();
         }
         else
         {
-            Globals.iniFileName = "MyMaze_" + Globals.CurrentMazeLevel.ToString();            
+            isUpgradingMaze = true;             
             Globals.maze.UnRegisterGuardArrangeEvent();
             Globals.maze.ClearMaze();
             Globals.maze.Start();
@@ -60,9 +59,9 @@
     public void UpdateMazeInfo()
     {                
         // 0级迷宫代表还没有通过创建迷宫的教程。没有迷宫的状态
-        MazeIcon.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/maze_" + Globals.CurrentMazeLevel.ToString());
-        MazeLv.text = Globals.CurrentMazeLevel.ToString();
-        if (Globals.CurrentMazeLevel == Globals.mazeLvDatas.Count - 1)
+        
+        MazeLv.text = Globals.self.currentMazeLevel.ToString();
+        if (Globals.self.currentMazeLevel == Globals.mazeLvDatas.Count - 1)
         {
             UpgradeBtn.gameObject.SetActive(false);
             Lock.gameObject.SetActive(true);
@@ -70,17 +69,19 @@
             LockMsg.gameObject.SetActive(true);
             Room.gameObject.SetActive(false);
             Globals.languageTable.SetText(LockMsg,"top_maze");
+            MazeIcon.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/maze_" + (Globals.self.currentMazeLevel-1).ToString());
         }
         else
         {
-            Room.text = Globals.languageTable.GetText("room") + ":" + Globals.mazeLvDatas[Globals.CurrentMazeLevel].roomSupport
-                + " + " + (Globals.mazeLvDatas[Globals.CurrentMazeLevel + 1].roomSupport - Globals.mazeLvDatas[Globals.CurrentMazeLevel].roomSupport).ToString();
-            
-            if (Globals.roseCount >= Globals.mazeLvDatas[Globals.CurrentMazeLevel + 1].roseRequire)
+            MazeIcon.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/maze_" + Globals.self.currentMazeLevel.ToString());
+            Room.text = Globals.languageTable.GetText("room") + ":" + Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport
+                + " + " + (Globals.mazeLvDatas[Globals.self.currentMazeLevel + 1].roomSupport - Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport).ToString();
+
+            if (Globals.self.roseCount >= Globals.mazeLvDatas[Globals.self.currentMazeLevel + 1].roseRequire)
             {
                 UpgradeBtn.gameObject.SetActive(true);
-                UpgradePrice.text = Globals.mazeLvDatas[Globals.CurrentMazeLevel + 1].price.ToString();
-                if (Globals.cashAmount < Globals.mazeLvDatas[Globals.CurrentMazeLevel + 1].price)
+                UpgradePrice.text = Globals.mazeLvDatas[Globals.self.currentMazeLevel + 1].price.ToString();
+                if (Globals.self.cashAmount < Globals.mazeLvDatas[Globals.self.currentMazeLevel + 1].price)
                 {
                     UpgradePrice.color = UnityEngine.Color.red;
                 }
@@ -97,7 +98,7 @@
                 RoseIcon.gameObject.SetActive(true);
                 LockMsg.gameObject.SetActive(true);
                 Globals.languageTable.SetText(LockMsg,
-                    "reach_rose_count_will_unlock", new System.String[] { Globals.mazeLvDatas[Globals.CurrentMazeLevel + 1].roseRequire.ToString() });
+                    "reach_rose_count_will_unlock", new System.String[] { Globals.mazeLvDatas[Globals.self.currentMazeLevel + 1].roseRequire.ToString() });
             }
         }
         

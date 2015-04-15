@@ -10,12 +10,13 @@
     {
         rt = GetComponent<UnityEngine.RectTransform>();
         itemButton = GetComponent<UnityEngine.UI.Button>();
-        LockImage = Globals.getChildGameObject(gameObject, "Lock");
+        LockImage = Globals.getChildGameObject(gameObject, "Lock");        
     }
 
     public void Start()
     {
-        CheckIfPurchased();
+        itemButton.onClick.AddListener(() => Globals.canvasForMagician.OpenItemDescriptionUI(this));
+        itemButton.onClick.AddListener(() => Globals.magician.CastMagic(trickData));
     }
 
     public void OnBeginDrag(UnityEngine.EventSystems.PointerEventData data)
@@ -65,37 +66,44 @@
                 TrickItem itemInDraggingDownSlot = Globals.canvasForMagician.draggingDownSlot.GetComponentInChildren<TrickItem>();
                 if (itemInDraggingDownSlot != null)
                 {
-                    PutItemBackInPack(itemInDraggingDownSlot, slotInPack);
+                    PutItemBackInPack(itemInDraggingDownSlot);
                 }
-                trickData.Use(Globals.canvasForMagician.draggingDownSlot.index);
-                Globals.tricksInUse.Add(this);
-                Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();
-                rt.pivot = new UnityEngine.Vector2(0.0f, 0.0f);
-                rt.position = Globals.canvasForMagician.draggingDownSlot.transform.position;
-                rt.parent = Globals.canvasForMagician.draggingDownSlot.transform;
-                Globals.canvasForMagician.equips.trickItemsInPack.Remove(this);
-                Globals.canvasForMagician.draggingDownSlot.powerCost.text = trickData.powerCost.ToString();
+                PutItemInUse(Globals.canvasForMagician.draggingDownSlot);
+                Globals.self.AddUsingTrick(trickData.nameKey, 
+                    Globals.canvasForMagician.draggingDownSlot.data.idx);
+                Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();                                                
                 Globals.canvasForMagician.draggingDownSlot.PointerExit();
+                Globals.canvasForMagician.equips.trickItemsInPack.Remove(this);
             }
             else if (Globals.canvasForMagician.equips.gameObject.activeSelf)
-            {
-                if (slotInPack == null)
-                {
-                    int slotIdx = Globals.canvasForMagician.equips.GetEmptyItemSlotIdx();
-                    slotInPack = Globals.canvasForMagician.equips.trickSlots[slotIdx];
-                    Globals.canvasForMagician.equips.trickItemsInPack.Insert(slotIdx, this);
-                }
-                PutItemBackInPack(this, slotInPack);                
+            {                
+                Globals.canvasForMagician.equips.trickItemsInPack.Insert(Globals.GetTrickIdx(trickData.nameKey), this);
+                PutItemBackInPack(this);                
             }
         }        
     }
 
-    void PutItemBackInPack(TrickItem item, UnityEngine.GameObject slotInPack)
+    public void PutItemInUse(TrickSlot slot)
     {
-        item.trickData.Unuse();
-        Globals.tricksInUse.Remove(this);
+        trickData.Use(slot.index);
+        rt.parent = slot.transform;
+        rt.anchoredPosition = UnityEngine.Vector3.zero;
+        rt.localScale = UnityEngine.Vector3.one;
+        slot.powerCost.text = trickData.powerCost.ToString();
+    }
+
+    void PutItemBackInPack(TrickItem item)
+    {
+        UnityEngine.GameObject slotInPack =
+            Globals.canvasForMagician.equips.trickSlots[Globals.GetTrickIdx(item.trickData.nameKey)];
+
+        if (item.trickData.IsInUse())
+        {
+            Globals.self.RemoveUsingTrick(item.trickData.nameKey, item.trickData.slotIdxInUsingPanel);
+            item.trickData.Unuse();
+        }
+                
         Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();
-        item.rt.pivot = new UnityEngine.Vector2(0.5f, 0.5f);
         item.rt.parent = slotInPack.transform;
         item.rt.anchoredPosition = UnityEngine.Vector3.zero;
     }
@@ -106,21 +114,6 @@
         {
             DestroyObject(LockImage);            
         }                        
-    }
-
-    public void CheckIfPurchased()
-    {
-        //UnityEngine.UI.ColorBlock colors = itemButton.colors;
-        if (!trickData.bought)
-        {
-            //colors.normalColor = new UnityEngine.Color(0.2f,0.2f,0.2f,1);
-        }
-        else
-        {
-            //colors.normalColor = UnityEngine.Color.white;
-            GetComponent<UnityEngine.UI.Image>().sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/" + trickData.nameKey + "_icon");
-        }
-        //itemButton.colors = colors;
     }
 
     public void Buy()

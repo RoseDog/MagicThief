@@ -28,15 +28,15 @@
 
 	public void UpdateInfo()
     {
-        MazeLvData mazeData = Globals.mazeLvDatas[Globals.CurrentMazeLevel];
-        if (Globals.CurrentMazeLevel != 0)
+        MazeLvData mazeData = Globals.mazeLvDatas[Globals.self.currentMazeLevel];
+        if (Globals.self.currentMazeLevel != 0)
         {
             Globals.Assert(Globals.maze.noOfRoomsToPlace == mazeData.safeBoxCount);
         }
         capacity.text = Globals.languageTable.GetText("capacity") + ":" + Globals.safeBoxLvDatas[0].capacity;
-        if (Globals.safeBoxDatas.Count >= mazeData.safeBoxCount)
+        if (Globals.self.safeBoxDatas.Count >= mazeData.safeBoxCount)
         {
-            if (Globals.CurrentMazeLevel == Globals.mazeLvDatas.Count - 1)
+            if (Globals.self.currentMazeLevel == Globals.mazeLvDatas.Count - 1)
             {
                 AddBtn.gameObject.SetActive(false);
                 capacity.gameObject.SetActive(false);
@@ -50,14 +50,14 @@
                 Lock.gameObject.SetActive(true);
                 LockMsg.gameObject.SetActive(true);
                 Globals.languageTable.SetText(LockMsg,
-                    "upgrade_maze_to_add_safe_box", new System.String[] { (Globals.CurrentMazeLevel + 1).ToString() });
+                    "upgrade_maze_to_add_safe_box", new System.String[] { (Globals.self.currentMazeLevel + 1).ToString() });
             }            
         }
-        else if (Globals.safeBoxDatas.Count < mazeData.safeBoxCount)
+        else if (Globals.self.safeBoxDatas.Count < mazeData.safeBoxCount)
         {            
             AddBtn.gameObject.SetActive(true);
             AddPrice.text = Globals.buySafeBoxPrice.ToString();
-            if (Globals.cashAmount < Globals.buySafeBoxPrice)
+            if (Globals.self.cashAmount < Globals.buySafeBoxPrice)
             {
                 AddPrice.color = UnityEngine.Color.red;
             }

@@ -74,5 +74,6 @@
         jumpSequence = null;
         actor.moving.canMove = true;
         Globals.canvasForMagician.tricksInUsingPanel.gameObject.SetActive(true);
+        actor.ChangeLife(-40);
     }
 }

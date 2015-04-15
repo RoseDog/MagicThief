@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Pathfinding.RVO;
 
 
 /** AI controller specifically made for the spider robot.
@@ -120,7 +119,7 @@ public class GuardMoving : AIPath
             }                        
         }
 
-        if (Globals.PLAY_RECORDS && mage && Globals.replay.magePositions.Count != 0)
+        if (Globals.replay_key != "" && mage && Globals.replay.magePositions.Count != 0)
         {
             transform.position = Globals.replay.magePositions[0];
             Globals.replay.magePositions.RemoveAt(0);

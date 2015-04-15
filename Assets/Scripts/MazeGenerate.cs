@@ -8,9 +8,8 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     public float GetCellSideLength()
     {
         return cell_side_length;
-    }
-    [UnityEngine.HideInInspector]
-    public int randSeedCacheWhenEditLevel;    
+    }    
+    
 
     [UnityEngine.Range(0, 30)]
     public int Y_CELLS_COUNT;
@@ -266,12 +265,20 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         public Room(int XCount, int YCount)
         {
             X_CELLS_COUNT = XCount;
-            Y_CELLS_COUNT = YCount;
+            Y_CELLS_COUNT = YCount;            
         }
 
         public void SetLocation(Cell location)
         {
-            upper_left = location;            
+            upper_left = location;
+            for (int x = 0; x < X_CELLS_COUNT; ++x)
+            {
+                for (int y = 0; y < Y_CELLS_COUNT; ++y)
+                {
+                    Cell cell = Globals.maze.GetCell(upper_left.y + y, upper_left.x + x);
+                    cell.room = this;
+                }
+            }
         }
 
         public bool IsContain(Cell cell)
@@ -777,47 +784,60 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         }        
     }
     
-    public void PlaceLamp()
+    GuardData guardToPlace;
+    int chestIdxA = 0;
+    public void PlaceRandGuard(GuardData guard)
     {
-        // 优先放箱子附近
-        if (LAMPS_COUNT > 0)
+        guardToPlace = guard;
+                
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < 1.5f)
         {
-            int lampsToPlace = LAMPS_COUNT;
-            for (int idx = 0; idx < chests.Count; ++idx)
+            // 放箱子附近
+            Guard g = null;
+            UnityEngine.Vector3 pos = chests[chestIdxA].locate.room.GetRandomRoomPosition();
+            if (guardToPlace.name == "lamp")
             {
-                Globals.CreateGuard(Globals.GetGuardData("lamp"), pathFinder.GetNearestUnwalkableNode(chests[idx].transform.position));
-                --lampsToPlace;
-                if (lampsToPlace == 0)
-                {
-                    return;
-                }
+                g = Globals.CreateGuard(guardToPlace, pathFinder.GetNearestUnwalkableNode(pos));
             }
-
-            // 然后放路中间。Chests的顺序是按逆时针方向排列的。
-            int a = 0;
-            while (lampsToPlace != 0)
+            else
             {
-                int b = a + 1;
-                b = b % chests.Count;
-                if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.3f)
-                {
-                    Chest chestA = chests[a];
-                    Chest chestB = chests[b];
-                    Pathfinding.Path p = Pathfinding.ABPath.Construct(chestA.transform.position, chestB.transform.position, null);
-                    p.callback += OnPathBetweenTwoChest;
-                    AstarPath.StartPath(p);
-                    --lampsToPlace;
-                }
-                ++a;
-                a = a % chests.Count;
+                g = Globals.CreateGuard(guardToPlace, pathFinder.GetNearestWalkableNode(pos));
             }
+            g.BeginPatrol();            
         }
+        else
+        {
+            int b = chestIdxA + 1;
+            b = b % chests.Count;
+            // 放路中间。Chests的顺序是按逆时针方向排列的。    
+            Chest chestA = chests[chestIdxA];
+            Chest chestB = chests[b];
+            Pathfinding.Path p = Pathfinding.ABPath.Construct(chestA.transform.position, chestB.transform.position, null);
+            p.callback += OnPathBetweenTwoChest;
+            AstarPath.StartPath(p);
+        }
+
+        ++chestIdxA;
+        chestIdxA = chestIdxA % chests.Count; 
     }
 
     public void OnPathBetweenTwoChest(Pathfinding.Path p)
     {
-        UnityEngine.Vector3 midpos = p.vectorPath[p.vectorPath.Count/2];
-        Globals.CreateGuard(Globals.GetGuardData("lamp"), pathFinder.GetNearestUnwalkableNode(midpos));
+        float pos_ratio = UnityEngine.Random.Range(0.3f, 0.7f);
+        UnityEngine.Vector3 midpos = p.vectorPath[(int)(p.vectorPath.Count * pos_ratio)];
+        Guard g = null;
+        if (guardToPlace.name == "lamp")
+        {
+            g = Globals.CreateGuard(guardToPlace, pathFinder.GetNearestUnwalkableNode(midpos));
+        }
+        else
+        {
+            g = Globals.CreateGuard(guardToPlace, pathFinder.GetNearestWalkableNode(midpos));
+        }
+        
+        g.BeginPatrol();
+        System.String content = g.gameObject.name + " Created";
+        Globals.record("testReplay", content);
     }   
 
 
@@ -882,13 +902,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         pathFinder.GenerateGridGraph();
         // 宝箱
         PlaceChests();
-
-        if ((Globals.LevelController as MyMazeLevelController) == null)
-        {
-            PlaceGemsAtBoarder();
-            PlaceLamp();
-        }        
-
+        
         rayCastPlane = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
         rayCastPlane.transform.localPosition = new UnityEngine.Vector3(0, Globals.FLOOR_HEIGHT, 0);
         rayCastPlane.transform.localScale = new UnityEngine.Vector3(1000, 1000, 0.2f);
@@ -1244,6 +1258,11 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     // Use this for initialization
     public void Start()
     {
+        if (!Globals.socket.FromLogin && !Globals.socket.IsReady)
+        {
+            return;
+        }
+
         Globals.LevelController.BeforeGenerateMaze();
                 
         cells = new Cell[Y_CELLS_COUNT, X_CELLS_COUNT];
@@ -1364,5 +1383,23 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                 light.enemiesInLight.Remove(obj);
             }
         }
+    }
+
+    public bool IsAnyGuardSpotMagician()
+    {
+        foreach (Guard guard in guards)
+        {            
+            if (guard.eye != null)
+            {
+                foreach(UnityEngine.GameObject spottedEnemy in guard.eye.enemiesInEye)
+                {
+                    if (spottedEnemy == Globals.magician.gameObject)
+                    {
+                        return true;
+                    }
+                }
+            }            
+        }
+        return false;
     }
 }

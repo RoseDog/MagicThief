@@ -1,7 +1,7 @@
 ﻿public class Building : Actor 
 {
     public City city;
-    public IniFile buildingAchive;
+    public BuildingData data;
 	public virtual void Choosen()
     {
 

@@ -12,6 +12,14 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
     public UnityEngine.Sprite[] _sprites;
     public Actor _actor;
     public bool initialized = false;
+    public void Awake()
+    {
+        _actor = GetComponentInParent<Actor>();
+        if(_actor == null)
+        {
+            Play("moving");
+        }        
+    }
     public void init()
     {
         initialized = true;
@@ -39,9 +47,17 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
 //             _sprites.Add(animFrames);
 //         }
         _actor = GetComponentInParent<Actor>();
-        _actor.gameObject.name = Globals.StripCloneString(_actor.gameObject.name);
-        UnityEngine.Debug.Log(_actor.gameObject.name);
-        _sprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Avatar/" + _actor.gameObject.name + "_Sprite");        
+        if (_actor != null)
+        {
+            _actor.gameObject.name = Globals.StripCloneString(_actor.gameObject.name);
+            UnityEngine.Debug.Log(_actor.gameObject.name);
+            _sprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Avatar/" + _actor.gameObject.name + "_Sprite");
+        }
+        else
+        {
+            _sprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Avatar/" + gameObject.name + "_Sprite");
+            CreateAnimationByName("moving");            
+        }        
     }
 
     public void CreateAnimationByName(System.String name, float speed = 1.0f, bool clampForever = false)
@@ -170,7 +186,16 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
                 }
                 
                 System.Collections.Generic.List<UnityEngine.Sprite> spriteList = anim.spriteList;
-                _actor.spriteRenderer.sprite = spriteList[frameIdx];
+                if (_actor)
+                {
+                    _actor.spriteRenderer.sprite = spriteList[frameIdx];
+                }
+                else
+                {
+                    GetComponent<UnityEngine.UI.Image>().sprite = spriteList[frameIdx];
+                    GetComponent<UnityEngine.UI.Image>().rectTransform.sizeDelta = spriteList[frameIdx].rect.size;
+                }
+                
                 frameIdx++;
                 
                 frameCount = 0;                                

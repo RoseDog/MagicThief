@@ -9,6 +9,7 @@ public class Cell : Actor
     public int x;
     public MazeGenerate maze;
     public Chest chest;
+    public MazeGenerate.Room room;
     public bool Visited
     {
         get { return visited; }

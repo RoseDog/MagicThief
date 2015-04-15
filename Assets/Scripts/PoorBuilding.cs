@@ -3,6 +3,8 @@
     UnityEngine.RectTransform poorsNeedMoneyTip;
     UnityEngine.RectTransform helpMark;
     UnityEngine.UI.Button yesBtn;
+    UnityEngine.UI.Text costText;
+    float cost = 1000;
     UnityEngine.UI.Button noBtn;
     UnityEngine.Vector3 tipScaleCache;
     UnityEngine.Vector3 markScaleCache;
@@ -17,6 +19,8 @@
         helpMark.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => HelpMarkClicked());
         yesBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(gameObject, "Yes");
         yesBtn.onClick.AddListener(() => YesBtnClicked());
+        costText = Globals.getChildGameObject<UnityEngine.UI.Text>(yesBtn.gameObject, "cost");
+        costText.text = cost.ToString("F0");
         noBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(gameObject, "No");
         noBtn.onClick.AddListener(() => NoBtnClicked());
     }
@@ -55,10 +59,11 @@
     }
 
     public void YesBtnClicked()
-    {
-        Globals.AddRoseBuilding(buildingAchive);
-        city.DestroyPoorBuilding(buildingAchive);
-        city.BornBuilding(buildingAchive, "Props/RoseBuilding");
+    {        
+        if (Globals.canvasForMagician.ChangeCash(-cost))
+        {
+            Globals.self.TurnPoorToRose(data);
+        }                
     }
 
     public void NoBtnClicked()

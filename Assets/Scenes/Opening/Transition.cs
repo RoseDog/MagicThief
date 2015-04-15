@@ -3,7 +3,9 @@ public class Transition : Actor
 {
 	public UnityEngine.Material cookShadersCover;
 	private UnityEngine.GameObject cookShadersObject;
-	
+    Cocos2dAction fadeInAction;
+    Cocos2dAction fadeOutAction;
+    float duration = 0.8f;
 	public override void Awake()
 	{
         base.Awake();
@@ -55,12 +57,11 @@ public class Transition : Actor
             RemoveAction(ref fadeInAction);
         }
         Location();
-        fadeOutAction = new Sequence(new FadeTo(cookShadersObject.renderer, 0, 1, 1.5f), new FunctionCall(action));
+        fadeOutAction = new Sequence(new FadeTo(cookShadersObject.renderer, 0, 1, duration), new FunctionCall(action));
         AddAction(fadeOutAction);
 	}
 
-    Cocos2dAction fadeInAction;
-    Cocos2dAction fadeOutAction;
+    
     public void BlackIn(UnityEngine.Events.UnityAction action = null)
 	{
         if (cookShadersObject == null)
@@ -73,7 +74,7 @@ public class Transition : Actor
             RemoveAction(ref fadeOutAction);
         }
         Location();
-        fadeInAction = new Sequence(new FadeTo(cookShadersObject.renderer, 1, 0, 1.5f), new FunctionCall(action));
+        fadeInAction = new Sequence(new FadeTo(cookShadersObject.renderer, 1, 0, duration), new FunctionCall(action));
         AddAction(fadeInAction);
 	}    
 }

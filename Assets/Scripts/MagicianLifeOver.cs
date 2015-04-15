@@ -6,6 +6,12 @@
         actor.spriteSheet.AddAnimationEvent("die", -1, () => DownOnFloor());
     }
 
+    public override void Excute()
+    {
+        base.Excute();
+        (Globals.LevelController as TutorialLevelController).canvasForStealing.gameObject.SetActive(false);
+    }
+
     void DownOnFloor()
     {
         actor.spriteSheet.Play("down_on_floor");
@@ -20,8 +26,7 @@
 
     void Escape()
     {
-        Globals.cameraFollowMagician.target = null;
-        //Globals.cameraFollowMagician.StaringMagician((actor as Magician).escape.duration - 0.8f);        
+        Globals.cameraFollowMagician.target = null;                
         actor.SleepThenCallFunction((actor as Magician).escape.duration,
             () => Globals.LevelController.AfterMagicianLifeOverEscaped());
         (actor as Magician).escape.Excute();

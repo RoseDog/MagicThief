@@ -7,6 +7,7 @@
     UnityEngine.Vector3 posWhenFlyBegin;
     UnityEngine.Vector3 scaleWhenFlyBegin;
     Number numberFlyTo;
+    public float speed = 0.1f;
 
     public void ToCashNumber(bool rotate)
     {
@@ -66,15 +67,21 @@
             float scaleNow = scaleOnScreen + (1.0f - scaleOnScreen) * disRatio;
             transform.localScale = scaleWhenFlyBegin * scaleNow;
 
-            transform.localPosition += (destination - transform.localPosition) * 0.1f;
+            transform.localPosition += (destination - transform.localPosition) * speed;
 
             if (disNow < 0.01f)
             {
                 DestroyImmediate(gameObject);
                 if (Globals.magician.LifeCurrent > 0)
                 {
-                    numberFlyTo.Add(numberDelta);
-                    Globals.LevelController.MagicianGotCash(numberDelta);
+                    if (Globals.replay_key == "")
+                    {
+                        numberFlyTo.Add(numberDelta);
+                    }                    
+                    if ((Globals.LevelController as TutorialLevelController) != null)
+                    {
+                        Globals.LevelController.MagicianGotCash(numberDelta);
+                    }                    
                 }
                 break;
             }

@@ -25,28 +25,29 @@
 
     public override void BeforeGenerateMaze()
     {
-        // 进入游戏之前从服务器读取关卡信息
-        // 这里应该解析服务器的该信息
-        if (Globals.TutorialLevelIdx == Globals.TutorialLevel.Over && Globals.CurrentMazeLevel == 0)
-        {
-            Globals.CurrentMazeLevel = 1;
-        }        
-        
         if (Globals.canvasForMyMaze.enhanceDefenseUI.mazeInfo.isUpgradingMaze)
         {
-            Globals.ReadMazeIniFile(Globals.iniFileName, true);
-            Globals.maze.randSeedCacheWhenEditLevel = (int)System.DateTime.Now.Ticks;
-            UnityEngine.Random.seed = Globals.maze.randSeedCacheWhenEditLevel;            
+            Globals.self.currentMazeRandSeedCache = (int)System.DateTime.Now.Ticks;
+            Globals.self.UpgradeMaze();
+            Globals.canvasForMyMaze.enhanceDefenseUI.mazeInfo.isUpgradingMaze = false;
         }
+        Globals.iniFileName = "MyMaze_" + Globals.self.currentMazeLevel.ToString();
+        Globals.ReadMazeIniFile(Globals.iniFileName, Globals.self.currentMazeRandSeedCache);
         base.BeforeGenerateMaze();
-    }    
+    }
+
+    public override IniFile GetGuardsIniFile()
+    {
+        IniFile ini = new IniFile();
+        ini.loadFromText(Globals.self.summonedGuardsStr);
+        return ini;
+    }
 
     public override void MazeFinished()
     {
         Globals.cameraFollowMagician.camera.enabled = true;
         base.MazeFinished();
-        // to do : 把关卡信息保存到服务器上
-
+        
         Globals.canvasForMyMaze.ShowUnclickedGuardsRedPointsOnEnhanceDefBtn();
 
         if (Globals.maze.guards.Count != 0)
@@ -68,9 +69,9 @@
         Globals.canvasForMagician.SetLifeVisible(false);
         Globals.canvasForMagician.HideTricksPanel();
         Globals.maze.SetRestrictToCamera(Globals.cameraFollowMagician);
-        Globals.maze.RegistGuardArrangeEvent();                        
-        
-        if (Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
+        Globals.maze.RegistGuardArrangeEvent();
+
+        if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
         {
             // 上次教程未完的时候放下来的守卫
             Globals.maze.ClearGuards();
@@ -97,13 +98,15 @@
         }
         else
         {
-            for (int idx = 0; idx < Globals.safeBoxDatas.Count; ++idx)
+            SyncWithChestData(Globals.self);
+            
+            for (int idx = 0; idx < Globals.self.guardsHired.Count; ++idx)
             {
-                Globals.maze.chests[idx].data = Globals.safeBoxDatas[idx];
-                Globals.maze.chests[idx].Visible(true);
-            }        
-
-            Globals.Assert(Globals.TutorialLevelIdx == Globals.TutorialLevel.Over);
+                System.String guardname = Globals.self.guardsHired[idx];
+                Globals.GetGuardData(guardname).hired = true;
+            }
+            
+            Globals.Assert(Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.Over);
             Globals.canvasForMyMaze.TutorialEnd();
         }
     }
@@ -216,12 +219,13 @@
     public override void GuardCreated(Guard guard)
     {
         base.GuardCreated(guard);
-        guard.InitArrangeUI();        
+        guard.InitArrangeUI();
+        Globals.canvasForMyMaze.CheckRoomFullUses();
     }
 
     public override void GuardDestroyed(Guard guard)
     {
-        if(Globals.TutorialLevelIdx != Globals.TutorialLevel.Over)
+        if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
         {
 			if(!IsInvoking("FingerDraggingAnimation"))
 			{
@@ -231,6 +235,7 @@
         }
         Globals.canvasForMyMaze.btnEnhanceDef.gameObject.SetActive(true);
         base.GuardDestroyed(guard);
+        Globals.canvasForMyMaze.CheckRoomFullUses();
     }
 
     public override void GuardChoosen(Guard guard)
@@ -244,7 +249,7 @@
 		Globals.Assert (Globals.maze.draggingGuard == null);
         lastGuard = guard;
 
-        if (Globals.TutorialLevelIdx != Globals.TutorialLevel.Over && currentThief.currentAction != currentThief.lifeOver)
+        if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over && currentThief.currentAction != currentThief.lifeOver)
         {
             Globals.cameraFollowMagician.MoveToPoint(currentThief.transform.position, Globals.cameraMoveDuration);
             currentThief.InStealing();
@@ -320,7 +325,7 @@
 
     public UnityEngine.Vector3 AddSafeBox()
     {        
-        SafeBoxData data = Globals.AddSafeBox();
+        SafeBoxData data = Globals.self.AddSafeBox();
         UnityEngine.Vector3 falling_pos = UnityEngine.Vector3.zero;
         foreach (Chest chest in Globals.maze.chests)
         {
@@ -336,35 +341,7 @@
             }            
         }
         
-        PutCashInBox();
+        PutCashInBox(Globals.self);
         return falling_pos;
-    }
-
-    public void PutCashInBox()
-    {
-        // 给safebox分配金钱
-        float cash = Globals.cashAmount;
-        int box_count = Globals.safeBoxDatas.Count;
-        while (box_count > 0)
-        {
-            float average_cash = cash / box_count;
-            SafeBoxData box_data = Globals.safeBoxDatas[box_count - 1];
-            float cash_limit = Globals.safeBoxLvDatas[box_data.Lv].capacity;
-            float cash_put_in = 0;
-            if (cash_limit >= average_cash)
-            {
-                cash_put_in = average_cash;
-            }
-            else
-            {
-                cash_put_in = cash_limit;
-            }
-            cash -= cash_put_in;
-            box_data.cashInBox = cash_put_in;
-            --box_count;
-        }
-
-        Globals.cashAmount = Globals.AccumulateCashInBox();
-        Globals.canvasForMagician.UpdateCash();
-    }
+    }    
 }

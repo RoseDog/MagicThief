@@ -8,10 +8,11 @@ public class GoldPoper : Actor
     ParticleSystem[] systems;
 
 	public void InitParticleTex(int gold)
-	{
+    {
+        int digit_count = 5;
 		if (systems == null)
-		{
-			systems = new ParticleSystem[3];
+		{            
+            systems = new ParticleSystem[digit_count];
 			ParticleSystem[] temp = GetComponentsInChildren<ParticleSystem>();
 			foreach (ParticleSystem sys in temp)
 			{
@@ -27,15 +28,23 @@ public class GoldPoper : Actor
 				{
 					systems[2] = sys;
 				}
+                else if (sys.gameObject.name.Equals("1000"))
+                {
+                    systems[3] = sys;
+                }
+                else if (sys.gameObject.name.Equals("10000"))
+                {
+                    systems[4] = sys;
+                }
 			}
 		}
 
-		for (int i = 0; i < 3; ++i )
+        for (int i = 0; i < digit_count; ++i)
 		{
 			systems[i].gameObject.SetActive(false);
 		}
 
-		string value = ((int)gold).ToString();
+		string value = gold.ToString();
         for (int i = 0; i < value.Length; ++i)
         {
             string s = value[i].ToString();
@@ -54,12 +63,15 @@ public class GoldPoper : Actor
 
     public void _Pop()
     {
-        foreach (ParticleSystem sys in systems)
+        if(chest.goldLast > 1)
         {
-            sys.Emit(1);
-        }
+            foreach (ParticleSystem sys in systems)
+            {
+                sys.Emit(1);
+            }
 
-        chest.LostGold();        
+            chest.LostGold();        
+        }        
     }
 
     public void StopPop()

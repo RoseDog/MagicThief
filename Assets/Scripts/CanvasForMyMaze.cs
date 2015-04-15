@@ -46,11 +46,10 @@
 
         RedPointsOnEnchanceDefBtn = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "RedPointsOnEnchanceDefBtn").GetComponentInChildren<UnityEngine.UI.Text>();
 
-        MazeRoomNumerBg = Globals.getChildGameObject(gameObject, "MazeRoomNumerBg");
+        MazeRoomNumerBg = Globals.getChildGameObject(btnEnhanceDef.gameObject, "MazeRoomNumerBg");
         MazeRoomNumber = Globals.getChildGameObject<LifeNumber>(MazeRoomNumerBg, "MazeRoomNumber");
 
         room_not_full_used = Globals.getChildGameObject(gameObject, "room_not_full_used");
-        room_not_full_used.SetActive(false);
     }
 	// Use this for initialization
 	public override void Start () 
@@ -91,6 +90,7 @@
     {
         btnEnhanceDef.gameObject.SetActive(false);
         enhanceDefenseUI.Open();
+        room_not_full_used.SetActive(false);
     }
 
     public void InitMazeBtnClicked()
@@ -111,12 +111,7 @@
     void ShowTutorialEndMsgBox()
     {
         Globals.MessageBox(Globals.languageTable.GetText("property_is_safe_now"), () => TutorialEnd());
-//         if (!UnityEngine.Application.isMobilePlatform)
-//         {
-//             Globals.SaveMazeIniFile(Globals.iniFileName);
-//         }
-
-        ++Globals.TutorialLevelIdx;
+        Globals.self.AdvanceTutorial();
     }
 
     public void TutorialEnd()
@@ -141,11 +136,11 @@
 
     public void ShowUnclickedGuardsRedPointsOnEnhanceDefBtn()
     {
-        MazeLvData mazeData = Globals.mazeLvDatas[Globals.CurrentMazeLevel];
+        MazeLvData mazeData = Globals.mazeLvDatas[Globals.self.currentMazeLevel];
         if (!mazeData.playerEverClickGuards)
         {
             RedPointsOnEnchanceDefBtn.transform.parent.gameObject.SetActive(true);
-            RedPointsOnEnchanceDefBtn.text = mazeData.lockGuardsName.Count.ToString();            
+            RedPointsOnEnchanceDefBtn.text = mazeData.lockGuardsName.Length.ToString();            
         }
         else
         {
@@ -157,7 +152,7 @@
     {
         int roomTemp = roomConsumed;
         roomTemp += delta;
-        if (roomTemp > Globals.mazeLvDatas[Globals.CurrentMazeLevel].roomSupport)
+        if (roomTemp > Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport)
         {
             Globals.tipDisplay.Msg("not_enough_room");
             return false;
@@ -165,16 +160,20 @@
         else
         {
             roomConsumed = roomTemp;
-            MazeRoomNumber.UpdateCurrentLife(roomTemp, Globals.mazeLvDatas[Globals.CurrentMazeLevel].roomSupport);
-            if (roomTemp == Globals.mazeLvDatas[Globals.CurrentMazeLevel].roomSupport)
-            {
-                room_not_full_used.SetActive(false);
-            }
-            else
-            {
-                room_not_full_used.SetActive(true);
-            }
+            MazeRoomNumber.UpdateCurrentLife(roomTemp, Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport);            
             return true;
+        }
+    }
+
+    public void CheckRoomFullUses()
+    {
+        if (roomConsumed == Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport)
+        {
+            room_not_full_used.SetActive(false);
+        }
+        else
+        {
+            room_not_full_used.SetActive(true);
         }
     }
 }

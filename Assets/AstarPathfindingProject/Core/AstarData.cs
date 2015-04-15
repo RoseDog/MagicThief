@@ -24,16 +24,10 @@ namespace Pathfinding {
 			}
 		}
 		
-#region Fields
-		[System.NonSerialized]
-		public NavMeshGraph navmesh; 	/**< Shortcut to the first NavMeshGraph. Updated at scanning time. This is the only reference to NavMeshGraph in the core pathfinding scripts */
-		
+#region Fields		
 		[System.NonSerialized]
 		public GridGraph gridGraph;		/**< Shortcut to the first GridGraph. Updated at scanning time. This is the only reference to GridGraph in the core pathfinding scripts */
-		
-		[System.NonSerialized]
-		public PointGraph pointGraph;		/**< Shortcut to the first PointGraph. Updated at scanning time. This is the only reference to PointGraph in the core pathfinding scripts */
-		
+				
 		[System.NonSerialized]
 		/** Holds temporary path data for pathfinders.
 		 * One array for every thread.
@@ -220,9 +214,7 @@ namespace Pathfinding {
 		 * But these references ease the use of the system, so I decided to keep them. It is the only reference to specific graph types in the pathfinding core.\n
 		 */
 		public void UpdateShortcuts () {
-			navmesh = (NavMeshGraph)FindGraphOfType (typeof(NavMeshGraph));
 			gridGraph = (GridGraph)FindGraphOfType (typeof(GridGraph));
-			pointGraph = (PointGraph)FindGraphOfType (typeof(PointGraph));
 		}
 		
 		public void LoadFromCache () {

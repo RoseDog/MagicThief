@@ -21,10 +21,10 @@ public class Spot : GuardAction
         if (target == null)
         {
             target = magician.transform;
-            if (target == Globals.magician.transform && Globals.magician.hypnosis.data.slotIdxInUsingPanel != -1)
-            {
-                guard.ShowTrickBtns();
-            }
+//             if (target == Globals.magician.transform && Globals.magician.hypnosis.data.IsInUse())
+//             {
+//                 guard.ShowTrickBtns();
+//             }
             Excute();
             if (goChasing)
             {
