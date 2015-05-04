@@ -48,9 +48,8 @@
             // 如果是锁住的，询问是否购买
             if (data.statu == "-1")
             {
-                Globals.MessageBox(
-                    Globals.languageTable.GetText("sure_to_buy_slot", new System.String[] { data.price.ToString() }),
-                    () => ClickToBuyTrickSlot(),true);
+                MsgBox msgbox = Globals.MessageBox("",() => ClickToBuyTrickSlot(),true);
+                Globals.languageTable.SetText(msgbox.msgBoxText, "sure_to_buy_slot", new System.String[] { data.price.ToString() });
             }
             // 否则打开装备界面
             else if (!Globals.canvasForMagician.equips.gameObject.activeSelf)

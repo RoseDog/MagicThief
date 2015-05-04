@@ -2,7 +2,7 @@
 {
     public System.Collections.Generic.List<UnityEngine.Sprite> spriteList;
     public System.Collections.Generic.Dictionary<int, UnityEngine.Events.UnityAction> events;
-    public float speed;
+    public double speed;
     public bool clampForever;
 }
 
@@ -14,11 +14,7 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
     public bool initialized = false;
     public void Awake()
     {
-        _actor = GetComponentInParent<Actor>();
-        if(_actor == null)
-        {
-            Play("moving");
-        }        
+        
     }
     public void init()
     {
@@ -55,12 +51,12 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
         }
         else
         {
+            gameObject.name = Globals.StripCloneString(gameObject.name);
             _sprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Avatar/" + gameObject.name + "_Sprite");
-            CreateAnimationByName("moving");            
         }        
     }
 
-    public void CreateAnimationByName(System.String name, float speed = 1.0f, bool clampForever = false)
+    public void CreateAnimationByName(System.String name, double speed = 1.0f, bool clampForever = false)
     {
         if (!initialized)
         {            
@@ -87,7 +83,7 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
 
     public void CreateAnimationBySprites(
         System.Collections.Generic.List<UnityEngine.Sprite> sprites, 
-        System.String name, float speed = 1.0f, bool clampForever = false)
+        System.String name, double speed = 1.0f, bool clampForever = false)
     {        
         System.Collections.Generic.List<UnityEngine.Sprite> animation = new System.Collections.Generic.List<UnityEngine.Sprite>();
         SpriteAnim anim = new SpriteAnim();
@@ -118,7 +114,7 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
             * (1.0f / GetAnimationSpeed(name)));
     }
 
-    public float GetAnimationSpeed(System.String name)
+    public double GetAnimationSpeed(System.String name)
     {
         return _animationList[name].speed;
     }
@@ -163,7 +159,7 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
         if (_currentAnim != "")
         {
             SpriteAnim anim = _animationList[_currentAnim];
-            float scaledFrame = frameCount * anim.speed;
+            double scaledFrame = frameCount * anim.speed;
             if (scaledFrame > 6)
             {
                 if (anim.events.ContainsKey(frameIdx-1))
@@ -192,8 +188,12 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
                 }
                 else
                 {
-                    GetComponent<UnityEngine.UI.Image>().sprite = spriteList[frameIdx];
-                    GetComponent<UnityEngine.UI.Image>().rectTransform.sizeDelta = spriteList[frameIdx].rect.size;
+                    UnityEngine.UI.Image image = GetComponent<UnityEngine.UI.Image>();
+                    if (image)
+                    {
+                        image.sprite = spriteList[frameIdx];
+                        image.rectTransform.sizeDelta = spriteList[frameIdx].rect.size;
+                    }                               
                 }
                 
                 frameIdx++;

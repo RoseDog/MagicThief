@@ -9,25 +9,50 @@
     public System.Collections.Generic.List<Building> buildings = new System.Collections.Generic.List<Building>();
     UnityEngine.GameObject canvasForCity;
     public UIMover cityEventsOpenBtn;
-    public CityEventsWindow eventsWindow;    
+    public UIMover rankOpenBtn;
+    public CityEventsWindow eventsWindow;
+    public RanksWindow ranksWindow;    
     public override void Awake()
     {
         base.Awake();                   
-        canvasForCity = UnityEngine.GameObject.Find("CanvasForCity");        
-        cityEventsOpenBtn = Globals.getChildGameObject<UIMover>(canvasForCity, "CityEventsOpenBtn");        
+        canvasForCity = UnityEngine.GameObject.Find("CanvasForCity");
+        mainCanvas = canvasForCity.GetComponent<UnityEngine.Canvas>();
+        cityEventsOpenBtn = Globals.getChildGameObject<UIMover>(canvasForCity, "CityEventsOpenBtn");
+        rankOpenBtn = Globals.getChildGameObject<UIMover>(canvasForCity, "RankOpenBtn");
         eventsWindow = Globals.getChildGameObject<CityEventsWindow>(canvasForCity, "CityEventsWindow");
         eventsWindow.city = this;
+        
+        ranksWindow = Globals.getChildGameObject<RanksWindow>(canvasForCity, "RanksWindow");
+        ranksWindow.viewRankPlayer = Globals.getChildGameObject<ViewRankPlayer>(canvasForCity, "ViewRankPlayer");
+        ranksWindow.viewRankPlayer.city = this;
 
         // 如果教程结束了，就显示自己的家，否则就显示第一个目标建筑
         firstTarget = UnityEngine.GameObject.Find("FirstTarget");
         firstTarget.GetComponent<Building>().city = this;
         myMazeBuilding = UnityEngine.GameObject.Find("MyMazeBuilding");
-        myMazeBuilding.GetComponent<MyMazeBuilding>().city = this;        
-    }    
+        myMazeBuilding.GetComponent<MyMazeBuilding>().city = this;
+
+        if (Globals.buildingSprites == null)
+        {
+            Globals.buildingSprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("City Night/city-0");
+        }
+    }
+
+    public UnityEngine.Sprite GetBuildingSprite(System.String sprite_name)
+    {
+        foreach (UnityEngine.Sprite sprite in Globals.buildingSprites)
+        {
+            if(sprite.name == sprite_name)
+            {
+                return sprite;
+            }
+        }
+        return null;
+    }
 
     public override void Start()
     {
-        if (!Globals.socket.FromLogin && !Globals.socket.IsReady)
+        if (!Globals.socket.IsFromLogin() && !Globals.socket.IsReady())
         {
             return;
         }
@@ -41,7 +66,13 @@
         Globals.EnableAllInput(true);
         Globals.canvasForMagician.RoseNumberBg.SetActive(true);
         Globals.canvasForMagician.SetLifeVisible(false);
-        Globals.canvasForMagician.HideTricksPanel();
+        Globals.canvasForMagician.SetPowerVisible(true);
+        Globals.canvasForMagician.SetCashVisible(true);
+        Globals.canvasForMagician.SetRoseVisible(true);
+        Globals.canvasForMagician.ShowTricksPanel();
+        Globals.magician.ResetLifeAndPower(Globals.self);
+                
+        ranksWindow.viewRankPlayer.OnTouchUpOutside(null);
         if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.Over)
         {            
             firstTarget.SetActive(false);
@@ -57,26 +88,16 @@
 
             // 显示出城市事件列表的按钮
             cityEventsOpenBtn.BeginMove(Globals.uiMoveAndScaleDuration);
+            rankOpenBtn.BeginMove(Globals.uiMoveAndScaleDuration);
 
             // 录像
-            foreach (System.Collections.DictionaryEntry entry in Globals.self.replays)
+            AddReplaysToEventWindow(Globals.self.defReplays);
+            AddReplaysToEventWindow(Globals.self.atkReplays);
+
+            // 排行榜
+            foreach(PlayerInfo playOnRank in Globals.playersOnRank)
             {
-                ReplayData replay = entry.Value as ReplayData;
-
-                CityEvent ce = null;
-                if (replay.thief == Globals.self.name)
-                {
-                    ce = eventsWindow.AddEvent(Globals.languageTable.GetText("you_stole_others_event",
-                    new System.String[] { replay.guard }), replay.everClicked);
-                }
-                else
-                {
-                    ce = eventsWindow.AddEvent(Globals.languageTable.GetText("stolen_by_others_event",
-                    new System.String[] { replay.thief }), replay.everClicked);
-                }                                
-
-                UnityEngine.UI.Button eventBtn = ce.GetComponent<UnityEngine.UI.Button>();
-                eventBtn.onClick.AddListener(() => eventsWindow.ReplayEventBtnClicked(replay, ce));
+                ranksWindow.AddRecord(playOnRank);
             }
         }
         else
@@ -93,6 +114,29 @@
             finger.Evt_Up += OnDragFingerUp;
         }
         Globals.UpdateUnclickedRedPointsText(eventsWindow.unclickedCount);
+    }
+
+    public void AddReplaysToEventWindow(System.Collections.Hashtable replays)
+    {
+        foreach (System.Collections.DictionaryEntry entry in replays)
+        {
+            ReplayData replay = entry.Value as ReplayData;
+
+            CityEvent ce = null;
+            if (replay.thief.name == Globals.self.name)
+            {
+                ce = eventsWindow.AddEvent(replay.everClicked);
+                Globals.languageTable.SetText(ce.uiText, "you_stole_others_event", new System.String[] { replay.guard.name });
+            }
+            else
+            {
+                ce = eventsWindow.AddEvent(replay.everClicked);
+                Globals.languageTable.SetText(ce.uiText,"stolen_by_others_event",new System.String[] { replay.thief.name });
+            }
+
+            UnityEngine.UI.Button eventBtn = ce.GetComponent<UnityEngine.UI.Button>();
+            eventBtn.onClick.AddListener(() => eventsWindow.ReplayEventBtnClicked(replay, ce));
+        }
     }
 
     public void OnDestroy()
@@ -118,6 +162,19 @@
         buildings.Add(newbuilding);
         buildings.Remove(building);
         DestroyObject(building.gameObject);
+
+        if (newbuilding.data.type == "Target")
+        {
+            if (newbuilding.data.isPvP)
+            {
+                newbuilding.spriteRenderer.sprite = GetBuildingSprite("city-0_2");
+            }
+            else
+            {
+                newbuilding.spriteRenderer.sprite = GetBuildingSprite("city-0_4");
+            }
+        }
+        
         return newbuilding;
     }
 
@@ -137,7 +194,12 @@
     public void RoseGrow(BuildingData data)
     {
         Building b = GetBuilding(data);
-        (b as RoseBuilding).RoseGrow();
+        // 这里是不是服务器有bug，会在timer结束之后多发一次rose grow？
+        RoseBuilding rose_b = b as RoseBuilding;
+        if (rose_b != null)
+        {
+            rose_b.RoseGrow();
+        }        
     }
 
     public void RoseBuildingEnd(BuildingData data)
@@ -226,5 +288,18 @@
             building.Choosen();
             choosenBuilding = building;
         }
+    }
+
+    public void Exit()
+    {
+        cityEventsOpenBtn.Goback(Globals.uiMoveAndScaleDuration);
+        rankOpenBtn.Goback(Globals.uiMoveAndScaleDuration);
+        eventsWindow.CloseBtnClcked();
+        ranksWindow.CloseBtnClcked();
+    }
+
+    public void DestroyRosePickTip(UnityEngine.GameObject RosePickedTip)
+    {
+        DestroyObject(RosePickedTip);
     }
 }

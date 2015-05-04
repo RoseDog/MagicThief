@@ -1,65 +1,68 @@
 ﻿public class GuardAlertSound : Actor 
 {
-    public UnityEngine.SphereCollider waveCollider;
     public UnityEngine.GameObject wave;
     Guard owner;
-    float oneWaveDuration;
-    public float radiusMax;
-    float radiusLimit;
-    UnityEngine.ParticleSystem waveParticle;
+    double oneWaveDuration;
+    double radiusStart;
+    double radiusLimit;    
     bool onlyOneWave = false;
+    UnityEngine.GameObject wave_prefab;
     public override void Awake()
     {        
         base.Awake();
         owner = GetComponentInParent<Guard>();
-        UnityEngine.GameObject wave_prefab = UnityEngine.Resources.Load("Avatar/DogBark/barkSoundWave") as UnityEngine.GameObject;
+        wave_prefab = UnityEngine.Resources.Load("Avatar/DogBark/barkSoundWave") as UnityEngine.GameObject;        
+    }
+
+    void CreateOneWave()
+    {
+        radiusStart = 1;
+        radiusLimit = 10;
+
         wave = UnityEngine.GameObject.Instantiate(wave_prefab) as UnityEngine.GameObject;
         wave.GetComponent<BarkSoundWave>().owner = owner;
-        waveCollider = wave.GetComponent<UnityEngine.SphereCollider>();
+        
         if (owner)
         {
             wave.transform.position = owner.transform.position;
             wave.transform.SetParent(owner.transform);
-            radiusMax = waveCollider.radius / owner.transform.localScale.x;
+            radiusLimit /= owner.transform.transform.localScale.x;
+            radiusStart /= owner.transform.transform.localScale.x;
             onlyOneWave = false;
         }
         else
         {
+            wave.transform.position = transform.position;
             onlyOneWave = true;
-            radiusMax = waveCollider.radius * 2.0f;
         }
-        
-        wave.transform.localScale = UnityEngine.Vector3.one;                
-        waveCollider.enabled = false;
-        waveParticle = wave.GetComponent<UnityEngine.ParticleSystem>();        
+
+        wave.transform.localScale = UnityEngine.Vector3.one;
         oneWaveDuration = 30;
     }
 
-    System.Collections.IEnumerator Waving()
+    public System.Collections.IEnumerator Waving()
     {
-        waveCollider.enabled = true;
         int start_frame = UnityEngine.Time.frameCount;
-        waveParticle.Emit(1);
+        CreateOneWave();
         while (true)
         {
-            UnityEngine.ParticleSystem.Particle[] particles = new UnityEngine.ParticleSystem.Particle[1];
-            waveParticle.GetParticles(particles);
-            waveCollider.radius = UnityEngine.Mathf.Lerp(waveParticle.startSize, radiusLimit, (UnityEngine.Time.frameCount - start_frame) / (float)oneWaveDuration);
+            float scale = UnityEngine.Mathf.Lerp((float)radiusStart, (float)radiusLimit, (UnityEngine.Time.frameCount - start_frame) / (float)oneWaveDuration);
+            wave.transform.localScale = new UnityEngine.Vector3(scale, scale, scale);
             System.String content = "Alert Sound radius";
-            content += waveCollider.radius.ToString("F5");
+            content += scale.ToString("F5");
             Globals.record("testReplay", content);
             if (UnityEngine.Time.frameCount - start_frame > oneWaveDuration)
             {
-                if (onlyOneWave)
-                {
-                    DestroyObject(gameObject);
-                    DestroyObject(wave.gameObject);
+                DestroyObject(wave.gameObject);
+                wave = null;
+                if (!onlyOneWave)
+                {                                        
+                    start_frame = UnityEngine.Time.frameCount;
+                    CreateOneWave();
                 }
                 else
                 {
-                    start_frame = UnityEngine.Time.frameCount;
-                    waveCollider.radius = waveParticle.startSize;
-                    waveParticle.Emit(1);
+                    DestroyObject(gameObject);
                 }                
             }
             yield return null;
@@ -72,32 +75,28 @@
         base.Start();        
     }
 
-	public void SpotAlert()
+	public void StartAlert()
     {
-        radiusLimit = radiusMax;        
-        StartCoroutine(Waving());        
-    }
-
-    public void StopSpotAlert()
-    {
-        StopAlert();
+        if (wave == null)
+        {
+            StartCoroutine(Waving());
+        }        
     }
 
     public void ChaseAlert()
     {
-        radiusLimit = radiusMax;
+        
         //StartCoroutine(Waving());
     }
 
-    public void StopChaseAlert()
-    {
-        StopAlert();
-    }
 
     public void StopAlert()
     {
-        waveParticle.Stop();
         StopAllCoroutines();
-        waveCollider.enabled = false;
+        if (wave != null)
+        {
+            DestroyObject(wave.gameObject);
+            wave = null;
+        }        
     }
 }

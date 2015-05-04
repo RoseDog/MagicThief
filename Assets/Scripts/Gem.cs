@@ -1,7 +1,7 @@
 ﻿public class Gem : Actor 
 {
     FlyToScreenNumber fly;
-    public int cashValue = 1000;
+    int cash = 300;
     
 	public override void Awake () 
     {
@@ -27,7 +27,7 @@
         transform.localPosition = transform.localPosition - new UnityEngine.Vector3(0,0,0.6f);
         gameObject.layer = 26;
         AddAction(new MoveTo(transform, transform.localPosition + new UnityEngine.Vector3(0.0f, 2.0f, 0.0f), floatDuration));
-        fly.numberDelta = cashValue;
+        fly.numberDelta = cash;
         SleepThenCallFunction(floatDuration + 5, ()=>FlyOff());
     }
 

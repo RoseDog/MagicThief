@@ -8,6 +8,7 @@ public class Guard : Actor, System.IComparable<Guard>
     public Spot spot;
     public GuardAttack atk;
     public RushAtMagician rushAt;
+    public Explode explode;
     public WanderingLostTarget wandering;
     public BackToBirthCell backing;
     public UnityEngine.Canvas canvasForCommandBtns;
@@ -28,7 +29,7 @@ public class Guard : Actor, System.IComparable<Guard>
     UnityEngine.GameObject defenderArrangeUIPrefab;
     UnityEngine.GameObject challengerTricksUIPrefab;
 
-    public UnityEngine.GameObject guardedGemHolder = null;
+    public Chest guardedChest = null;
 
     public GuardData data;
     int idx;
@@ -49,6 +50,7 @@ public class Guard : Actor, System.IComparable<Guard>
         distraction = GetComponent<Distraction>();
         beenHypnosised = GetComponent<BeenHypnosised>();
         wakeFromHypnosised = GetComponent<WakeUp>();
+        explode = GetComponent<Explode>();
         Globals.maze.guards.Add(this);
 
         idx = Globals.maze.guards.Count;
@@ -66,11 +68,8 @@ public class Guard : Actor, System.IComparable<Guard>
     }
 
     public override void Start()
-    {
-        if(Globals.DEBUG_REPLAY)
-        {
-            gameObject.name += idx.ToString();
-        }        
+    {        
+        //gameObject.name += idx.ToString();
         base.Start();
     }
 
@@ -80,7 +79,12 @@ public class Guard : Actor, System.IComparable<Guard>
         {
             currentAction.Stop();
         }
-        Globals.maze.guards.Remove(this);        
+        HideBtns();
+        // My Maze里的守卫会在这之前被踢出数组
+        if (Globals.maze.guards.Contains(this))
+        {
+            Globals.maze.guards.Remove(this);
+        }        
     }
 
     public void InitArrangeUI()
@@ -93,13 +97,13 @@ public class Guard : Actor, System.IComparable<Guard>
         challengerTricksUIPrefab = UnityEngine.Resources.Load("Avatar/TricksOnGuard") as UnityEngine.GameObject;        
     }
 
-    public void FindGuardedGem()
+    public void FindGuardedChest()
     {
         // 找到自己在守护的那颗宝石
         if (patrol != null)
         {
             // 找出最远的视野
-            float fovMaxDistance = UnityEngine.Mathf.NegativeInfinity;
+            double fovMaxDistance = UnityEngine.Mathf.NegativeInfinity;
             if (eye.fovMaxDistance > fovMaxDistance)
             {
                 fovMaxDistance = eye.fovMaxDistance;
@@ -108,14 +112,18 @@ public class Guard : Actor, System.IComparable<Guard>
             // 先用简单的算法。如果四个巡逻点以及出生点中，其中一个点距离宝石小于了fovMaxDistance，那这颗宝石就是这个守卫在守护的宝石，
             System.Collections.Generic.List<UnityEngine.Vector3> poses = new System.Collections.Generic.List<UnityEngine.Vector3>(patrol.routePoses);
             poses.Add(Globals.GetPathNodePos(birthNode));
-            foreach (UnityEngine.GameObject gem in Globals.maze.gemHolders)
+            foreach (Chest chest in Globals.maze.chests)
             {
+                if(!chest.IsVisible())
+                {
+                    continue;
+                }
                 foreach (UnityEngine.Vector3 pos in poses)
                 {
-                    float dis = UnityEngine.Vector3.Distance(pos, gem.transform.position);
-                    if (dis < fovMaxDistance)
+                    double dis = UnityEngine.Vector3.Distance(pos, chest.transform.position);
+                    if (dis < fovMaxDistance + (chest.collider as UnityEngine.BoxCollider).size.x * 0.5f * transform.localScale.x)
                     {
-                        guardedGemHolder = gem;
+                        guardedChest = chest;
                         break;
                         // to do: 找到最近的那一颗宝石
                         // fovMaxDistance = dis;
@@ -146,6 +154,10 @@ public class Guard : Actor, System.IComparable<Guard>
         if (currentAction != null)
         {
             currentAction.Stop();
+        }
+        if(eye != null)
+        {
+            EnableEyes(false);
         }        
         Globals.maze.choosenGuard = this;
     }
@@ -157,6 +169,10 @@ public class Guard : Actor, System.IComparable<Guard>
         StopTint();
         HideBtns();
         BeginPatrol();
+        if (eye != null)
+        {
+            EnableEyes(true);
+        }        
         Globals.maze.choosenGuard = null;        
     }
 
@@ -212,14 +228,8 @@ public class Guard : Actor, System.IComparable<Guard>
 
     public void CancelHireBtnClicked()
     {
-        HideBtns();
-        if ((Globals.LevelController as MyMazeLevelController) != null)
-        {
-            Globals.canvasForMyMaze.ChangeMazeRoom(-data.roomConsume);
-        }
-        
-        Globals.DestroyGuard(this);
-        Globals.self.UploadGuards();
+        HideBtns();                
+        Globals.DestroyGuard(this);      
     }
 
     public void GuardInfoBtnClicked()
@@ -394,26 +404,33 @@ public class Guard : Actor, System.IComparable<Guard>
 
     public void SpotEnemy(UnityEngine.GameObject gameObj)
     {
+        int spotDuration = 0;
+        if (gameObj.layer == 11)
+        {
+            spotDuration = 80;
+            spot.SpotMagician(gameObj, true, spotDuration);
+        }
+        else if (gameObj.layer == 20)
+        {
+            spotDuration = 20;
+            spot.SpotMagician(gameObj, bGoChaseDove, spotDuration);
+        }
+    }
+
+    public void CheckChest(UnityEngine.GameObject gameObj)
+    {
         // 如果是宝石，检查是否被偷
-        if (realiseGemLost != null &&
+        if (guardedChest != null &&
+            realiseGemLost != null &&
             realiseGemLost != currentAction &&
             spot.target == null &&
-            gameObj == guardedGemHolder)
+            gameObj.GetComponent<Chest>() == guardedChest)
         {
-            if (gameObject.layer == 24 && gameObj.GetComponentInChildren<Gem>() == null)
+            if (gameObj.GetComponent<Chest>().goldLast < 1)
             {
                 realiseGemLost.Excute();
                 return;
             }
-        }
-        
-        if (gameObj.layer == 11)
-        {
-            spot.SpotMagician(gameObj, true);
-        }
-        else if (gameObj.layer == 20)
-        {
-            spot.SpotMagician(gameObj, bGoChaseDove);
         }
     }
 
@@ -447,7 +464,7 @@ public class Guard : Actor, System.IComparable<Guard>
         magicianDir.z = 0;
         UnityEngine.Vector3 faceDir = moving.currentDir;
         faceDir.z = 0;
-        float angle = UnityEngine.Vector3.Angle(magicianDir, faceDir);
+        double angle = UnityEngine.Vector3.Angle(magicianDir, faceDir);
         if (angle < 90 && angle > -90)
         {
             // 而且中间没有任何墙体挡住

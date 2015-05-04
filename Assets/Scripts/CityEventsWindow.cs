@@ -1,4 +1,4 @@
-﻿public class CityEventsWindow : Actor 
+﻿public class CityEventsWindow : CustomEventTrigger 
 {
     public System.Collections.Generic.List<CityEvent> cityEvents = new System.Collections.Generic.List<CityEvent>();    
     UnityEngine.GameObject eventPrefab;
@@ -26,7 +26,7 @@
     public void ReplayEventBtnClicked(ReplayData replay, CityEvent ce)
     {
         Globals.languageTable.SetText(cash_back_then,"cash_back_then",
-            new System.String[] { replay.cashAmount.ToString("F0") });
+            new System.String[] { replay.guard.cashAmount.ToString("F0") });
         Globals.languageTable.SetText(stealing_cash, "stealing_cash",
             new System.String[] { replay.StealingCash.ToString("F0") });        
         ReplayDetail.parent = ce.gameObject.transform;
@@ -42,27 +42,29 @@
 
     public void ReplayClicked(ReplayData replay)
     {
-        Globals.replay_key = replay.date.ToString();
-        CloseBtnClcked();        
+        Globals.playingReplay = replay;
+        Globals.thiefPlayer = replay.thief;
+        Globals.guardPlayer = replay.guard;
+        city.Exit();        
         Globals.asyncLoad.ToLoadSceneAsync("Tutorial_Levels");
     }
    
     public CityEvent AddEvent(Building building)
     {
-        CityEvent ce = AddEvent(building.data.targetName, building.data.everClickedTarget);
+        CityEvent ce = AddEvent(building.data.everClickedTarget);
+        Globals.languageTable.SetText(ce.uiText, "new_target_event",new System.String[] { building.data.targetName });
+        ce.name = building.data.targetName;
         UnityEngine.UI.Button eventBtn = ce.GetComponent<UnityEngine.UI.Button>();
         eventBtn.onClick.AddListener(() => EventBtnClicked(eventBtn));
         return ce;
     }
 
-    public CityEvent AddEvent(System.String text, bool everClicked)
+    public CityEvent AddEvent(bool everClicked)
     {
         CityEvent ce = (Instantiate(eventPrefab) as UnityEngine.GameObject).GetComponent<CityEvent>();
         UnityEngine.RectTransform ceTransform = ce.GetComponent<UnityEngine.RectTransform>();
         ceTransform.SetParent(transform);
-        ceTransform.localScale = new UnityEngine.Vector3(1, 1, 1);
-        Globals.languageTable.SetText(ce.uiText, text);
-        ce.name = text;
+        ceTransform.localScale = new UnityEngine.Vector3(1, 1, 1);        
         ce.newText.enabled = !everClicked;
         cityEvents.Add(ce);        
 
@@ -125,5 +127,10 @@
     {
         GetComponent<UIMover>().Goback(Globals.uiMoveAndScaleDuration);
         ReplayDetail.localScale = UnityEngine.Vector3.zero;
+    }
+
+    public override void OnTouchUpOutside(Finger f)
+    {
+        base.OnTouchUpOutside(f);
     }
 }

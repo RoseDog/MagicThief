@@ -261,7 +261,11 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     {
         public Cell upper_left;
         public int Y_CELLS_COUNT;
-        public int X_CELLS_COUNT;        
+        public int X_CELLS_COUNT;
+        public System.Collections.Generic.List<Cell> walls = new System.Collections.Generic.List<Cell>();
+        public System.Collections.Generic.List<Cell> doors = new System.Collections.Generic.List<Cell>();
+        public System.Collections.Generic.List<Cell> couldBeDoors = new System.Collections.Generic.List<Cell>();
+        public System.Collections.Generic.List<UnityEngine.Vector3> doorsPositions = new System.Collections.Generic.List<UnityEngine.Vector3>();
         public Room(int XCount, int YCount)
         {
             X_CELLS_COUNT = XCount;
@@ -475,7 +479,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 
     public static Room CreateRoom(int minXCellsCount, int maxXCellsCount, int minZCellsCount, int maxZCellsCount)
     {
-        return new Room(UnityEngine.Random.Range(minXCellsCount, maxXCellsCount), UnityEngine.Random.Range(minZCellsCount, maxZCellsCount));
+        return new Room(UnityEngine.Random.Range(minXCellsCount, maxXCellsCount+1), UnityEngine.Random.Range(minZCellsCount, maxZCellsCount+1));
     }
 
     public int CalculateRoomPlacementScore(Cell upper_left_cell, Room room)
@@ -519,8 +523,13 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                         {
                             roomPlacementScore += 100;
                         }
-                            
                 }
+            }
+
+            // 完全不与任何走廊相连或重合
+            if (roomPlacementScore == 0)
+            {
+                roomPlacementScore = int.MaxValue;
             }
 
             return roomPlacementScore;
@@ -541,66 +550,97 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         // 左上
         Cell cell = GetCell(upper_left_cell.y, upper_left_cell.x);
         cell.CreateFloor();
-        //cell.SealCorridor(Globals.NORTH);
-        //cell.SealCorridor(Globals.WEST);
         cell.DestroyWall(Globals.EAST);
         cell.DestroyWall(Globals.SOUTH);
+        room.walls.Add(cell);
+        if (cell.AdjacentCellInDirectionIsCorridor(Globals.NORTH) || cell.AdjacentCellInDirectionIsCorridor(Globals.WEST))
+        {
+            room.couldBeDoors.Add(cell);
+        }
 
         // 右上
         cell = GetCell(upper_left_cell.y, upper_left_cell.x + room.X_CELLS_COUNT - 1);
         cell.CreateFloor();
-        //cell.SealCorridor(Globals.NORTH);
-        //cell.SealCorridor(Globals.EAST);
         cell.DestroyWall(Globals.WEST);
         cell.DestroyWall(Globals.SOUTH);
+        room.walls.Add(cell);
+        if (cell.AdjacentCellInDirectionIsCorridor(Globals.EAST) || cell.AdjacentCellInDirectionIsCorridor(Globals.NORTH))
+        {
+            room.couldBeDoors.Add(cell);
+        }
 
         // 左下
         cell = GetCell(upper_left_cell.y + room.Y_CELLS_COUNT - 1, upper_left_cell.x);
         cell.CreateFloor();
-        //cell.SealCorridor(Globals.SOUTH);
-        //cell.SealCorridor(Globals.WEST);
         cell.DestroyWall(Globals.EAST);
         cell.DestroyWall(Globals.NORTH);
+        room.walls.Add(cell);
+        if (cell.AdjacentCellInDirectionIsCorridor(Globals.WEST) || cell.AdjacentCellInDirectionIsCorridor(Globals.SOUTH))
+        {
+            room.couldBeDoors.Add(cell);
+        }
 
         // 右下
         cell = GetCell(upper_left_cell.y + room.Y_CELLS_COUNT - 1, upper_left_cell.x + room.X_CELLS_COUNT - 1);
-        cell.CreateFloor();
-        //cell.SealCorridor(Globals.SOUTH);
-        //cell.SealCorridor(Globals.EAST);
+        cell.CreateFloor();        
         cell.DestroyWall(Globals.WEST);
         cell.DestroyWall(Globals.NORTH);
+        room.walls.Add(cell);
+        if (cell.AdjacentCellInDirectionIsCorridor(Globals.EAST) || cell.AdjacentCellInDirectionIsCorridor(Globals.SOUTH))
+        {
+            room.couldBeDoors.Add(cell);
+        }
 
         // 第一行和最后一行，留下南北墙
         for (int x = 1; x < room.X_CELLS_COUNT - 1; x++)
         {
             cell = GetCell(upper_left_cell.y + room.Y_CELLS_COUNT - 1, upper_left_cell.x + x);
+            room.walls.Add(cell);
             cell.CreateFloor();
-            //cell.SealCorridor(Globals.SOUTH);
             cell.DestroyWall(Globals.NORTH);
             cell.DestroyWall(Globals.EAST);
             cell.DestroyWall(Globals.WEST);
+
+            if (cell.AdjacentCellInDirectionIsCorridor(Globals.SOUTH))
+            {
+                room.couldBeDoors.Add(cell);
+            }
+
             cell = GetCell(upper_left_cell.y, upper_left_cell.x + x);
+            room.walls.Add(cell);
             cell.CreateFloor();
-            //cell.SealCorridor(Globals.NORTH);
             cell.DestroyWall(Globals.SOUTH);
             cell.DestroyWall(Globals.EAST);
             cell.DestroyWall(Globals.WEST);
+
+            if (cell.AdjacentCellInDirectionIsCorridor(Globals.NORTH))
+            {
+                room.couldBeDoors.Add(cell);
+            }
         }
         // 第一列和最后一列，留下东西墙
         for (int y = 1; y < room.Y_CELLS_COUNT - 1; y++)
         {
             cell = GetCell(upper_left_cell.y + y, upper_left_cell.x + room.X_CELLS_COUNT - 1);
+            room.walls.Add(cell);
             cell.CreateFloor();
-            //cell.SealCorridor(Globals.EAST);
+            if (cell.AdjacentCellInDirectionIsCorridor(Globals.EAST))
+            {
+                room.couldBeDoors.Add(cell);
+            }
             cell.DestroyWall(Globals.WEST);
             cell.DestroyWall(Globals.NORTH);
             cell.DestroyWall(Globals.SOUTH);
             cell = GetCell(upper_left_cell.y + y, upper_left_cell.x);
+            room.walls.Add(cell);
             cell.CreateFloor();
             cell.DestroyWall(Globals.EAST);
-            //cell.SealCorridor(Globals.WEST);
             cell.DestroyWall(Globals.NORTH);
             cell.DestroyWall(Globals.SOUTH);
+            if (cell.AdjacentCellInDirectionIsCorridor(Globals.WEST))
+            {
+                room.couldBeDoors.Add(cell);
+            }
         }
 
         // Loop for each cell in the room center
@@ -617,6 +657,68 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                 current_room_cell.DestroyWall(Globals.NORTH);
                 current_room_cell.DestroyWall(Globals.SOUTH);
             }
+        }
+
+        // 统计出口。注意，四个角如果只剩一面墙，就已经是开门的情况了。其他的要完全没有墙才是门。
+        for (int i = 0; i < room.walls.Count; ++i)
+        {
+            Cell wall_cell = room.walls[i];
+            if(i < 4 && wall_cell.WallCount() < 2)
+            {
+                room.doors.Add(wall_cell);
+            }
+            else if (wall_cell.WallCount() == 0)
+            {
+                room.doors.Add(wall_cell);
+            }
+        }
+        // 如果一扇门都没有，随机选择一面墙来开门
+        if (room.doors.Count == 0)
+        {
+            Cell door = room.couldBeDoors[UnityEngine.Random.Range(0, room.couldBeDoors.Count)];
+            foreach(System.String dir in Globals.DIRECTIONS)
+            {
+                if (door.HasWallInDirection(dir) && door.AdjacentCellInDirectionIsCorridor(dir))
+                {
+                    door.DestroyWall(dir);
+                    room.doors.Add(door);
+                    break;
+                }
+            }
+            
+        }
+
+
+
+        // 第一行和最后一行，留下南北墙
+        for (int x = 0; x < room.X_CELLS_COUNT; x++)
+        {
+            cell = GetCell(upper_left_cell.y, upper_left_cell.x + x);
+            if (!cell.HasWallInDirection(Globals.NORTH))
+            {
+                room.doorsPositions.Add(cell.GetFloorPos() + new UnityEngine.Vector3(0,cell_side_length*0.5f,0));
+            }            
+
+            cell = GetCell(upper_left_cell.y + room.Y_CELLS_COUNT - 1, upper_left_cell.x + x);
+            if (!cell.HasWallInDirection(Globals.SOUTH))
+            {
+                room.doorsPositions.Add(cell.GetFloorPos() - new UnityEngine.Vector3(0, cell_side_length * 0.5f, 0));
+            }            
+        }
+        // 第一列和最后一列，留下东西墙
+        for (int y = 0; y < room.Y_CELLS_COUNT; y++)
+        {
+            cell = GetCell(upper_left_cell.y + y, upper_left_cell.x + room.X_CELLS_COUNT - 1);
+            if (!cell.HasWallInDirection(Globals.EAST))
+            {
+                room.doorsPositions.Add(cell.GetFloorPos() + new UnityEngine.Vector3(cell_side_length * 0.5f, 0,0));
+            }            
+
+            cell = GetCell(upper_left_cell.y + y, upper_left_cell.x);
+            if (!cell.HasWallInDirection(Globals.WEST))
+            {
+                room.doorsPositions.Add(cell.GetFloorPos() - new UnityEngine.Vector3(cell_side_length * 0.5f, 0,0));
+            }            
         }
 
         if(Globals.SHOW_ROOMS)
@@ -725,8 +827,9 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     {
         UnityEngine.GameObject gem_prefab = UnityEngine.Resources.Load("Props/purple diamond base") as UnityEngine.GameObject;
         UnityEngine.GameObject gem = UnityEngine.GameObject.Instantiate(gem_prefab) as UnityEngine.GameObject;
+        float offset = cell_side_length / 4.0f;
         UnityEngine.Vector3 gem_pos = cell.GetFloorPos() +
-            new UnityEngine.Vector3(UnityEngine.Random.Range(-cell_side_length / 3.0f, cell_side_length / 3.0f), UnityEngine.Random.Range(-cell_side_length / 3.0f, cell_side_length / 3.0f), 0);
+            new UnityEngine.Vector3(UnityEngine.Random.Range(-offset, offset), UnityEngine.Random.Range(-offset, offset), 0);
         gem.transform.position = gem_pos;
         gem.gameObject.name = "Gem" + gemHolders.Count.ToString();
         gemHolders.Add(gem);
@@ -783,57 +886,64 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             }            
         }        
     }
-    
-    GuardData guardToPlace;
+
+
+    public System.Collections.Generic.List<GuardData> guardsToPlace = new System.Collections.Generic.List<GuardData>();
     int chestIdxA = 0;
     public void PlaceRandGuard(GuardData guard)
     {
-        guardToPlace = guard;
-                
-        if (UnityEngine.Random.Range(0.0f, 1.0f) < 1.5f)
+        guardsToPlace.Add(guard);
+        // 灯先不要放路中间
+        if (guard.name == "lamp")
         {
-            // 放箱子附近
-            Guard g = null;
             UnityEngine.Vector3 pos = chests[chestIdxA].locate.room.GetRandomRoomPosition();
-            if (guardToPlace.name == "lamp")
-            {
-                g = Globals.CreateGuard(guardToPlace, pathFinder.GetNearestUnwalkableNode(pos));
-            }
-            else
-            {
-                g = Globals.CreateGuard(guardToPlace, pathFinder.GetNearestWalkableNode(pos));
-            }
-            g.BeginPatrol();            
+            Globals.CreateGuard(guard, pathFinder.GetNearestUnwalkableNode(pos));
         }
         else
         {
-            int b = chestIdxA + 1;
-            b = b % chests.Count;
-            // 放路中间。Chests的顺序是按逆时针方向排列的。    
-            Chest chestA = chests[chestIdxA];
-            Chest chestB = chests[b];
-            Pathfinding.Path p = Pathfinding.ABPath.Construct(chestA.transform.position, chestB.transform.position, null);
-            p.callback += OnPathBetweenTwoChest;
-            AstarPath.StartPath(p);
-        }
+            Guard g = null;
+            UnityEngine.Vector3 pos;
+            // 除了灯以外的守卫，其他守卫有一定几率在路中间
+            if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.5f)
+            {
+                // 放箱子附近
+                pos = chests[chestIdxA].locate.GetRandFloorPos();
+            }
+            else
+            {
+                // 放路中间。Chests的顺序是按逆时针方向排列的。    
+//                 int b = chestIdxA + 1;
+//                 b = b % chests.Count;
+//                 
+//                 Chest chestA = chests[chestIdxA];
+//                 Chest chestB = chests[b];
+//                 Pathfinding.Path p = Pathfinding.ABPath.Construct(chestA.transform.position, chestB.transform.position, null);
+//                 p.callback += OnPathBetweenTwoChest;
+//                 AstarPath.StartPath(p);
 
+                // 放在房间门口
+                int doors_count = chests[chestIdxA].locate.room.doorsPositions.Count;
+
+                pos = chests[chestIdxA].locate.room.doorsPositions[UnityEngine.Random.Range(0, doors_count)];
+
+                float offset_limit = cell_side_length * 0.3f;
+                pos += new UnityEngine.Vector3(UnityEngine.Random.Range(-offset_limit, offset_limit), UnityEngine.Random.Range(-offset_limit, offset_limit), 0.0f);
+            }
+            g = Globals.CreateGuard(guard, pathFinder.GetNearestWalkableNode(pos));
+            g.BeginPatrol();
+        }
+        
         ++chestIdxA;
         chestIdxA = chestIdxA % chests.Count; 
     }
 
     public void OnPathBetweenTwoChest(Pathfinding.Path p)
     {
+        GuardData guard = guardsToPlace[0];
+        guardsToPlace.RemoveAt(0);
         float pos_ratio = UnityEngine.Random.Range(0.3f, 0.7f);
         UnityEngine.Vector3 midpos = p.vectorPath[(int)(p.vectorPath.Count * pos_ratio)];
-        Guard g = null;
-        if (guardToPlace.name == "lamp")
-        {
-            g = Globals.CreateGuard(guardToPlace, pathFinder.GetNearestUnwalkableNode(midpos));
-        }
-        else
-        {
-            g = Globals.CreateGuard(guardToPlace, pathFinder.GetNearestWalkableNode(midpos));
-        }
+        Guard g = Globals.CreateGuard(guard, pathFinder.GetNearestWalkableNode(midpos));
         
         g.BeginPatrol();
         System.String content = g.gameObject.name + " Created";
@@ -849,8 +959,18 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             Room room = CreateRoom(minRoomXCellsCount, maxRoomXCellsCount, minRoomZCellsCount, maxRoomZCellsCount);
             int bestRoomPlacementScore = int.MaxValue;
             Cell bestRoomPlacementCell = null;
+//             foreach (Cell currentRoomPlacementCell in CorridorCellLocations)
+//             {
+//                 int currentRoomPlacementScore = CalculateRoomPlacementScore(currentRoomPlacementCell, room);
+// 
+//                 if (currentRoomPlacementScore < bestRoomPlacementScore)
+//                 {
+//                     bestRoomPlacementScore = currentRoomPlacementScore;
+//                     bestRoomPlacementCell = currentRoomPlacementCell;
+//                 }
+//             }
 
-            foreach (Cell currentRoomPlacementCell in CorridorCellLocations)
+            foreach (Cell currentRoomPlacementCell in Globals.maze.EveryCells)
             {
                 int currentRoomPlacementScore = CalculateRoomPlacementScore(currentRoomPlacementCell, room);
 
@@ -860,6 +980,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                     bestRoomPlacementCell = currentRoomPlacementCell;
                 }
             }
+
 
             // Create room at best room placement cell
             if (bestRoomPlacementCell != null)
@@ -1022,59 +1143,59 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         fingerDownOnMap = null;
         return true;
     }
-
-    System.Collections.Generic.List<UnityEngine.GameObject> tempGems = new System.Collections.Generic.List<UnityEngine.GameObject>();
-    System.Collections.Generic.List<Pathfinding.Path> tempPathes = new System.Collections.Generic.List<Pathfinding.Path>();
-    System.Collections.Generic.List<UnityEngine.GameObject> gemsSequence = new System.Collections.Generic.List<UnityEngine.GameObject>();
-    System.Collections.Generic.List<UnityEngine.GameObject> sequenceNumbers = new System.Collections.Generic.List<UnityEngine.GameObject>();
-    void FindNearestGem(UnityEngine.Vector3 pathBeginPos)
-    {
-        for (ushort idx = 0; idx < tempGems.Count; ++idx)
-        {
-            UnityEngine.GameObject gem = tempGems[idx];
-            Pathfinding.Path p = Pathfinding.ABPath.Construct(pathBeginPos, gem.transform.position, null);
-            p.callback += OnPathToGemComplete;
-            p.gem = gem;
-            AstarPath.StartPath(p);
-        }
-    }
-
-    void OnPathToGemComplete(Pathfinding.Path p)
-    {
-        tempPathes.Add(p);
-        if (tempPathes.Count == tempGems.Count)
-        {
-            float shortest = UnityEngine.Mathf.Infinity;
-            UnityEngine.GameObject nearestGem = null;
-            for(int idx = 0; idx < tempPathes.Count; ++idx)
-            {
-                Pathfinding.Path path = tempPathes[idx];
-                float length = path.GetTotalLength();
-                if (length < shortest)
-                {
-                    shortest = length;
-                    nearestGem = path.gem;
-                }
-            }
-            tempGems.Remove(nearestGem);
-            gemsSequence.Add(nearestGem);
-            // 路径以全部生成，标记出数字
-            if (gemsSequence.Count == gemHolders.Count)
-            {
-                for (int idx = 0; idx < gemsSequence.Count; ++idx)
-                {
-                    UnityEngine.GameObject gem = gemsSequence[idx];
-                    UnityEngine.GameObject number_prefab = UnityEngine.Resources.Load("UI/TargetNumber") as UnityEngine.GameObject;
-                    UnityEngine.GameObject number = UnityEngine.GameObject.Instantiate(number_prefab) as UnityEngine.GameObject;
-                    number.transform.position = gem.transform.position + new UnityEngine.Vector3(0,1,0);
-                    number.GetComponentInChildren<UnityEngine.UI.Text>().text = idx.ToString();
-                    sequenceNumbers.Add(number);
-                }
-            }
-            tempPathes.Clear();
-            FindNearestGem(nearestGem.transform.position);
-        }
-    }
+// 
+//     System.Collections.Generic.List<UnityEngine.GameObject> tempGems = new System.Collections.Generic.List<UnityEngine.GameObject>();
+//     System.Collections.Generic.List<Pathfinding.Path> tempPathes = new System.Collections.Generic.List<Pathfinding.Path>();
+//     System.Collections.Generic.List<UnityEngine.GameObject> gemsSequence = new System.Collections.Generic.List<UnityEngine.GameObject>();
+//     System.Collections.Generic.List<UnityEngine.GameObject> sequenceNumbers = new System.Collections.Generic.List<UnityEngine.GameObject>();
+//     void FindNearestGem(UnityEngine.Vector3 pathBeginPos)
+//     {
+//         for (ushort idx = 0; idx < tempGems.Count; ++idx)
+//         {
+//             UnityEngine.GameObject gem = tempGems[idx];
+//             Pathfinding.Path p = Pathfinding.ABPath.Construct(pathBeginPos, gem.transform.position, null);
+//             p.callback += OnPathToGemComplete;
+//             p.gem = gem;
+//             AstarPath.StartPath(p);
+//         }
+//     }
+// 
+//     void OnPathToGemComplete(Pathfinding.Path p)
+//     {
+//         tempPathes.Add(p);
+//         if (tempPathes.Count == tempGems.Count)
+//         {
+//             float shortest = UnityEngine.Mathf.Infinity;
+//             UnityEngine.GameObject nearestGem = null;
+//             for(int idx = 0; idx < tempPathes.Count; ++idx)
+//             {
+//                 Pathfinding.Path path = tempPathes[idx];
+//                 double length = path.GetTotalLength();
+//                 if (length < shortest)
+//                 {
+//                     shortest = (float)length;
+//                     nearestGem = path.gem;
+//                 }
+//             }
+//             tempGems.Remove(nearestGem);
+//             gemsSequence.Add(nearestGem);
+//             // 路径以全部生成，标记出数字
+//             if (gemsSequence.Count == gemHolders.Count)
+//             {
+//                 for (int idx = 0; idx < gemsSequence.Count; ++idx)
+//                 {
+//                     UnityEngine.GameObject gem = gemsSequence[idx];
+//                     UnityEngine.GameObject number_prefab = UnityEngine.Resources.Load("UI/TargetNumber") as UnityEngine.GameObject;
+//                     UnityEngine.GameObject number = UnityEngine.GameObject.Instantiate(number_prefab) as UnityEngine.GameObject;
+//                     number.transform.position = gem.transform.position + new UnityEngine.Vector3(0,1,0);
+//                     number.GetComponentInChildren<UnityEngine.UI.Text>().text = idx.ToString();
+//                     sequenceNumbers.Add(number);
+//                 }
+//             }
+//             tempPathes.Clear();
+//             FindNearestGem(nearestGem.transform.position);
+//         }
+//     }
 
     public Guard draggingGuard;
     public Chest choosenChest;
@@ -1087,7 +1208,9 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 
         fingerDownOnMap = sender as Finger;
         // guard fov , guard, dog fov
-        int mask = 1 << 10 | 1 << 13 |1 << 27;
+        //int mask = 1 << 10 | 1 << 13 |1 << 27 | ;
+        // HeadOnMiniMap
+        int mask = 1 << 28;
         Guard guard = Globals.FingerRayToObj<Guard>(
             Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), mask, fingerDownOnMap.nowPosition);
         if (guard != null && (guard.currentAction == null || guard.currentAction == guard.patrol))
@@ -1258,7 +1381,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     // Use this for initialization
     public void Start()
     {
-        if (!Globals.socket.FromLogin && !Globals.socket.IsReady)
+        if (!Globals.socket.IsFromLogin() && !Globals.socket.IsReady())
         {
             return;
         }
@@ -1328,9 +1451,12 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     {
         foreach(Chest chest in chests)
         {
-            chest.Visible(false);
-            chest.data = null;
+            if (chest != null)
+            {
+                DestroyObject(chest.gameObject);
+            }            
         }
+        chests.Clear();
         foreach(UnityEngine.GameObject holder in gemHolders)
         {
             DestroyObject(holder);
@@ -1367,9 +1493,9 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     public void GuardsTargetVanish(UnityEngine.GameObject obj)
     {
         foreach (Guard guard in guards)
-        {
+        {            
             if (guard.spot != null && guard.spot.target == obj.transform)
-            {
+            {                
                 guard.RemoveAction(ref guard.spot.outVisionCountDown);
                 guard.wandering.Excute();
             }

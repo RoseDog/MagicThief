@@ -11,63 +11,52 @@ public class Spot : GuardAction
     {
         base.Awake();
     }
-    public void SpotMagician(GameObject magician, bool goChasing)
+    public void SpotMagician(GameObject magician, bool goChasing, int spotDuration)
     {
         if (outVisionCountDown != null)
         {
             guard.RemoveAction(ref outVisionCountDown);
         }
 
-        if (target == null)
-        {
+        if (target != magician.transform)
+        {            
+            base.Excute();
             target = magician.transform;
-//             if (target == Globals.magician.transform && Globals.magician.hypnosis.data.IsInUse())
-//             {
-//                 guard.ShowTrickBtns();
-//             }
-            Excute();
+            guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Alert);
+
+            guard.spriteSheet.Play("idle");
+            guard.FaceTarget(target);
+            guard.moving.ClearPath();
+            guard.moving.canMove = false;
+            Debug.Log("spot");
+            if (guard.alertSound)
+            {
+                // 狗叫的时候视野会打开迷雾            
+                guard.eye.SetLayer(10);
+                guard.alertSound.StartAlert();
+            }
+
+            System.String content = gameObject.name;
+            content += " spot";
+            Globals.record("testReplay", content);
             if (goChasing)
             {
-                chaseCountDown = guard.SleepThenCallFunction(80, () => BeginChase());
+                chaseCountDown = guard.SleepThenCallFunction(spotDuration, () => BeginChase());
             }
-        }        
+        }
+        
 
         if(goChasing && guard.currentAction == guard.wandering)
         {
             BeginChase();
-        }
-
-        System.String content = gameObject.name;
-        content += " enter vision";
-        Globals.record("testReplay", content);
-    }
-
-    public override void Excute()
-    {
-        base.Excute();
-        guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Alert);
-
-        guard.spriteSheet.Play("idle");
-        guard.FaceTarget(target);        
-        guard.moving.ClearPath();
-        guard.moving.canMove = false;
-        Debug.Log("spot");        
-        if (guard.alertSound)
-        {
-            // 狗叫的时候视野会打开迷雾            
-            guard.eye.SetLayer(10);
-            guard.alertSound.SpotAlert();
-        }
-
-        System.String content = gameObject.name;
-        content += " spot";
-        Globals.record("testReplay", content);
-    }
+        }        
+    }   
 
     public void Update()
     {
         if(guard.currentAction == this)
         {
+            // 更新守卫的视野体，但是并不发送消息，不触发任何事件
             guard.eye.CastRays(target.position - guard.transform.position, false);
         }
     }
@@ -84,7 +73,7 @@ public class Spot : GuardAction
 
     public void EnemyOutVision(int outVisionTime)
     {
-        UnityEngine.Debug.Log("enemy out vision");
+         UnityEngine.Debug.Log("enemy out vision");
         
         if (!target.GetComponent<Actor>().inLight)
         {
@@ -98,8 +87,9 @@ public class Spot : GuardAction
 
     public void LostTarget()
     {
-        // rushAt最后会调用Wandering。防止重复调用。
-        if (guard.chase == guard.currentAction)
+        // 1.rushAt最后会调用Wandering。防止重复调用。
+        // 2.丢失鸽子的情况
+        if (guard.chase == guard.currentAction || guard.spot == guard.currentAction)
         {
             guard.wandering.Excute();
         }

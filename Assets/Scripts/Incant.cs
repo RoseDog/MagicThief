@@ -58,15 +58,15 @@
             UnityEngine.Vector3 horDir = actor.transform.position - hitInfo.point;            
             horDir.y = 0;
             
-            float magnitude = horDir.magnitude;
+            double magnitude = horDir.magnitude;
             // 拉开一定距离的时候才起作用
             if (magnitude > 1.0f)
             {
-                float rate = UnityEngine.Mathf.Clamp01(magnitude / 3.0f);
+                double rate = UnityEngine.Mathf.Clamp01((float)magnitude / 3.0f);
                 bReadyToReleaseDove = true;
                 actor.transform.forward = horDir;
-                actor.anim["A_Attack_2"].time = 0.2f * rate;
-                float flyDistance = 15.0f * rate;
+                actor.anim["A_Attack_2"].time = 0.2f * (float)rate;
+                double flyDistance = 15.0f * rate;
                 //dove.ShowFlyPath(horDir, flyDistance);
             }            
             else

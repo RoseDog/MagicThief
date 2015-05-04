@@ -19,7 +19,7 @@ public class FOV2DVisionCone : UnityEngine.MonoBehaviour
     UnityEngine.Vector2[] newUV;
     int[] newTriangles;
     UnityEngine.Mesh mesh;
-    UnityEngine.MeshRenderer meshRenderer;
+    public UnityEngine.MeshRenderer meshRenderer;
     
 	int i;
 	int v;

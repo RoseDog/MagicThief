@@ -23,6 +23,9 @@
         LifeCurrent = LifeAmount;
         spriteSheet.CreateAnimationByName("idle");
         spriteSheet.CreateAnimationByName("moving");
+        // BeenPressDown用的
+        spriteSheet.CreateAnimationByName("disguise");
+        spriteSheet.CreateAnimationByName("down_on_floor");
     }
 
     public void ShowTipToShowMazeBtn()
@@ -59,34 +62,23 @@
         TipAnotherThief.gameObject.SetActive(false);
     }
 
-    public Chest targetChest;
-    System.Collections.Generic.List<UnityEngine.GameObject> cubes = new System.Collections.Generic.List<UnityEngine.GameObject>();
+    public Chest targetChest;    
     public void AimAtTargetChest(Chest chest)
     {
-        ClearRouteCubes();
         targetChest = chest;
         ShowPathToPoint(targetChest.transform.position);               
     }
-
-    void ClearRouteCubes()
-    {
-        foreach (UnityEngine.GameObject cube in cubes)
-        {
-            DestroyObject(cube);
-        }
-        cubes.Clear();
-    }
+    
 
     public override void InStealing()
     {
-        base.InStealing();
-        HidePath();
+        base.InStealing();        
         moving.canMove = true;
     }
 
     public override void OutStealing()
     {
-        ClearRouteCubes();
+        HidePath();
         moving.canMove = false;        
         base.OutStealing();
     }

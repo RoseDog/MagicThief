@@ -17,12 +17,30 @@
     {        
         EnterName = Globals.getChildGameObject<UnityEngine.UI.InputField>(gameObject, "EnterName");
         PlaceHolder = Globals.getChildGameObject<MultiLanguageUIText>(gameObject, "PlaceHolder");
-        
-        EnterName.onValueChange.AddListener((str) => OnValueChange(str));
         DiveInBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(gameObject, "DiveInBtn");
-        DiveInBtn.onClick.AddListener(()=>Submit());
-        DiveInBtn.enabled = false;
-        Globals.transition.BlackIn();        
+
+        if (System.IO.File.Exists(UnityEngine.Application.persistentDataPath + "/name.txt"))
+        {
+            System.IO.StreamReader stream = new System.IO.StreamReader(UnityEngine.Application.persistentDataPath + "/name.txt",
+               System.Text.Encoding.UTF8);
+            EnterName.text = stream.ReadLine();
+            stream.Close();
+        }
+        
+        if (EnterName.text == "")
+        {
+            EnterName.onValueChange.AddListener((str) => OnValueChange(str));
+            DiveInBtn.onClick.AddListener(() => Submit());
+            DiveInBtn.enabled = false;
+            Globals.transition.BlackIn();        
+        }
+        else
+        {
+            EnterName.gameObject.SetActive(false);
+            PlaceHolder.gameObject.SetActive(false);
+            DiveInBtn.gameObject.SetActive(false);
+            Invoke("Submit", 3.0f);
+        }                        
 	}
 
     void OnValueChange(System.String str)
@@ -40,8 +58,13 @@
     }
 	    
     public void Submit()
-    {        
+    {
+        if (Globals.socket.ws.ReadyState != WebSocketSharp.WebSocketState.Connecting)
+        {
+            Globals.socket.ws.ConnectAsync();
+        }
         Globals.socket.OpenWaitingUI();
+        Globals.self.name = EnterName.text;
         Globals.socket.Send("login" + Globals.self.separator + EnterName.text + Globals.self.separator + UnityEngine.SystemInfo.deviceUniqueIdentifier);
     }    
 }

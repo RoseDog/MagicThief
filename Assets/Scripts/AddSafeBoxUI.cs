@@ -33,7 +33,8 @@
         {
             Globals.Assert(Globals.maze.noOfRoomsToPlace == mazeData.safeBoxCount);
         }
-        capacity.text = Globals.languageTable.GetText("capacity") + ":" + Globals.safeBoxLvDatas[0].capacity;
+        Globals.languageTable.SetText(capacity,"capacity",
+            new System.String[] { Globals.safeBoxLvDatas[0].capacity.ToString() });
         if (Globals.self.safeBoxDatas.Count >= mazeData.safeBoxCount)
         {
             if (Globals.self.currentMazeLevel == Globals.mazeLvDatas.Count - 1)

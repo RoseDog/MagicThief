@@ -112,11 +112,7 @@
             if (controller != null)
             {
                 Globals.maze.RegistChallengerEvent();
-            }
-            else
-            {
-                Globals.canvasForMagician.tricksInUsingPanel.gameObject.SetActive(false);
-            }
+            }          
         }        
     }
 }

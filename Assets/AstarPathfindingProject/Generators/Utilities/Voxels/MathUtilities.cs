@@ -23,15 +23,15 @@ namespace Pathfinding {
 			return (a & (1 << b)) >> b;
 		}
 		
-		public static Color IntToColor (int i, float a) {
+		public static Color IntToColor (int i, double a) {
 			int	r = Bit(i, 1) + Bit(i, 3) * 2 + 1;
 			int	g = Bit(i, 2) + Bit(i, 4) * 2 + 1;
 			int	b = Bit(i, 0) + Bit(i, 5) * 2 + 1;
-			return new Color (r*0.25F,g*0.25F,b*0.25F,a);
+            return new Color(r * 0.25F, g * 0.25F, b * 0.25F, (float)a);
 		}
 	
 		//For the real value, divide by 2
-		public static float TriangleArea2 (Vector3 a, Vector3 b, Vector3 c) {
+		public static double TriangleArea2 (Vector3 a, Vector3 b, Vector3 c) {
 			return Mathf.Abs (a.x*b.z+b.x*c.z+c.x*a.z-a.x*c.z-c.x*b.z-b.x*a.z);
 		}
 		
@@ -39,7 +39,7 @@ namespace Pathfinding {
 		//	return Mathf.Abs (a.x*b.y+b.x*c.y+c.x*a.y-a.x*c.y-c.x*b.y-b.x*a.y);
 		//}
 		
-		public static float TriangleArea (Vector3 a, Vector3 b, Vector3 c) {
+		public static double TriangleArea (Vector3 a, Vector3 b, Vector3 c) {
 			return (b.x-a.x)*(c.z-a.z)-(c.x-a.x)*(b.z-a.z);
 		}
 		
@@ -48,12 +48,12 @@ namespace Pathfinding {
 			
 		//}
 		
-		public static float Min (float a, float b, float c) {
+		public static double Min (double a, double b, double c) {
 			a = a < b ? a : b;
 			return a < c ? a : c;
 		}
 		
-		public static float Max (float a, float b, float c) {
+		public static double Max (double a, double b, double c) {
 			a = a > b ? a : b;
 			return a > c ? a : c;
 		}
@@ -70,23 +70,23 @@ namespace Pathfinding {
 			return a < d ? a : d;
 		}
 		
-		public static float Max (float a, float b, float c, float d) {
+		public static double Max (double a, double b, double c, double d) {
 			a = a > b ? a : b;
 			a = a > c ? a : c;
 			return a > d ? a : d;
 		}
 		
-		public static float Min (float a, float b, float c, float d) {
+		public static double Min (double a, double b, double c, double d) {
 			a = a < b ? a : b;
 			a = a < c ? a : c;
 			return a < d ? a : d;
 		}
 		
-		public static string ToMillis (float v) {
+		public static string ToMillis (double v) {
 			return (v*1000).ToString ("0");
 		}
 		
-		public static float lastStartTime;
+		public static double lastStartTime;
 		public static void StartTimer () {
 			lastStartTime = Time.realtimeSinceStartup;
 		}
@@ -95,8 +95,8 @@ namespace Pathfinding {
 			Debug.Log (label+", process took "+ToMillis(Time.realtimeSinceStartup-lastStartTime)+"ms to complete");
 		}	
 		
-		public static float lastAdditiveTimerStart;
-		public static float additiveTimer;
+		public static double lastAdditiveTimerStart;
+		public static double additiveTimer;
 		public static void StartTimerAdditive (bool reset) {
 			if (reset) {
 				additiveTimer = 0;
@@ -115,15 +115,15 @@ namespace Pathfinding {
 			lastAdditiveTimerStart = Time.realtimeSinceStartup;
 		}
 		
-		public static void CopyVector (float[] a, int i, Vector3 v) {
+		public static void CopyVector (double[] a, int i, Vector3 v) {
 			a[i] = v.x;
 			a[i+1] = v.y;
 			a[i+2] = v.z;
 		}
 		
-		public static int ClipPoly(float[] vIn, int n, float[] vOut, float pnx, float pnz, float pd)
+		public static int ClipPoly(double[] vIn, int n, double[] vOut, double pnx, double pnz, double pd)
 		{
-		        float[] d = new float[12];
+		        double[] d = new double[12];
 		        
 		        for (int i = 0; i < n; ++i)
 		                d[i] = pnx*vIn[i*3+0] + pnz*vIn[i*3+2] + pd;
@@ -135,7 +135,7 @@ namespace Pathfinding {
 		                bool inb = d[i] >= 0;
 		                if (ina != inb)
 		                {
-		                        float s = d[j] / (d[j] - d[i]);
+		                        double s = d[j] / (d[j] - d[i]);
 		                        vOut[m*3+0] = vIn[j*3+0] + (vIn[i*3+0] - vIn[j*3+0])*s;
 		                        vOut[m*3+1] = vIn[j*3+1] + (vIn[i*3+1] - vIn[j*3+1])*s;
 		                        vOut[m*3+2] = vIn[j*3+2] + (vIn[i*3+2] - vIn[j*3+2])*s;
@@ -152,9 +152,9 @@ namespace Pathfinding {
 		        return m;
 		}
 		
-		public static int ClipPolygon (float[] vIn, int n, float[] vOut, float multi, float offset, int axis) {
+		public static int ClipPolygon (double[] vIn, int n, double[] vOut, double multi, double offset, int axis) {
 			
-			float[] d = new float[n];
+			double[] d = new double[n];
 			
 			for (int i=0;i<n;i++) {
 				d[i] = multi*vIn[i*3+axis]+offset;
@@ -173,7 +173,7 @@ namespace Pathfinding {
 					int i3 = i*3;
 					int j3 = j*3;
 					
-					float s = d[j] / (d[j] - d[i]);
+					double s = d[j] / (d[j] - d[i]);
 					
 					vOut[m3+0] = vIn[j3+0] + (vIn[i3+0]-vIn[j3+0])*s;
 					vOut[m3+1] = vIn[j3+1] + (vIn[i3+1]-vIn[j3+1])*s;
@@ -201,9 +201,9 @@ namespace Pathfinding {
 			return m;
 		}
 		
-		public static int ClipPolygonY (float[] vIn, int n, float[] vOut, float multi, float offset, int axis) {
+		public static int ClipPolygonY (double[] vIn, int n, double[] vOut, double multi, double offset, int axis) {
 			
-			float[] d = new float[n];
+			double[] d = new double[n];
 			
 			for (int i=0;i<n;i++) {
 				d[i] = multi*vIn[i*3+axis]+offset;
@@ -235,9 +235,9 @@ namespace Pathfinding {
 			return m;
 		}
 		
-		public static int ClipPolygon (Vector3[] vIn, int n, Vector3[] vOut, float multi, float offset, int axis) {
+		public static int ClipPolygon (Vector3[] vIn, int n, Vector3[] vOut, double multi, double offset, int axis) {
 			
-			float[] d = new float[n];
+			double[] d = new double[n];
 			
 			for (int i=0;i<n;i++) {
 				d[i] = multi*vIn[i][axis]+offset;
@@ -252,9 +252,9 @@ namespace Pathfinding {
 				bool curr = d[i] >= 0;
 				
 				if (prev != curr) {
-					float s = d[j] / (d[j] - d[i]);
-					
-					vOut[m] = vIn[j] + (vIn[i]-vIn[j])*s;
+					double s = d[j] / (d[j] - d[i]);
+
+                    vOut[m] = vIn[j] + (vIn[i] - vIn[j]) * (float)s;
 					m++;
 				}
 				
@@ -267,41 +267,41 @@ namespace Pathfinding {
 			return m;
 		}
 		
-		public static bool IntersectXAxis (out Vector3 intersection,Vector3 start1,Vector3 dir1,float x) {
+		public static bool IntersectXAxis (out Vector3 intersection,Vector3 start1,Vector3 dir1,double x) {
 				
-			float den = dir1.x;
+			double den = dir1.x;
 			
 			if (den == 0) {
 				intersection = Vector3.zero;
 				return false;
 			}
 			
-			float nom = x-start1.x;
+			double nom = x-start1.x;
 			
-			float u = nom/den;
+			double u = nom/den;
 			
-			u = Mathf.Clamp01 (u);
-			
-			intersection = start1 + dir1*u;
+			u = Globals.Clamp(u,0,1);
+
+            intersection = start1 + dir1 * (float)u;
 			return true;
 		}
 		
-		public static bool IntersectZAxis (out Vector3 intersection,Vector3 start1,Vector3 dir1,float z) {
+		public static bool IntersectZAxis (out Vector3 intersection,Vector3 start1,Vector3 dir1,double z) {
 				
-			float den = -dir1.z;
+			double den = -dir1.z;
 			
 			if (den == 0) {
 				intersection = Vector3.zero;
 				return false;
 			}
 			
-			float nom = start1.z-z;
+			double nom = start1.z-z;
 			
-			float u = nom/den;
+			double u = nom/den;
 			
-			u = Mathf.Clamp01 (u);
-			
-			intersection = start1 + dir1*u;
+			u = Globals.Clamp(u,0,1);
+
+            intersection = start1 + dir1 * (float)u;
 			return true;
 		}
 	}

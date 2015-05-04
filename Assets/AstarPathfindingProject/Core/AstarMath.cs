@@ -11,7 +11,7 @@ namespace Pathfinding {
 	 * \ingroup utils
 	 */
 	class AstarSplines {
-		public static Vector3 CatmullRom(Vector3 previous,Vector3 start, Vector3 end, Vector3 next, float elapsedTime) {
+		public static Vector3 CatmullRom(Vector3 previous,Vector3 start, Vector3 end, Vector3 next, double elapsedTime) {
 			// References used:
 			// p.266 GemsV1
 			//
@@ -21,9 +21,9 @@ namespace Pathfinding {
 			// bias and tension controls:
 			// http://local.wasp.uwa.edu.au/~pbourke/miscellaneous/interpolation/
 		
-			float percentComplete = elapsedTime;
-			float percentCompleteSquared = percentComplete * percentComplete;
-			float percentCompleteCubed = percentCompleteSquared * percentComplete;
+			double percentComplete = elapsedTime;
+			double percentCompleteSquared = percentComplete * percentComplete;
+			double percentCompleteCubed = percentCompleteSquared * percentComplete;
 			
 			/*return previous * (-0.5F*percentCompleteCubed +
 							 percentCompleteSquared -
@@ -40,25 +40,25 @@ namespace Pathfinding {
 					tension*percentCompleteSquared);*/
 					
 			return 
-			previous * (-0.5F*percentCompleteCubed +
+			previous * (float)(-0.5D*percentCompleteCubed +
 							 percentCompleteSquared -
-							 0.5F*percentComplete) +
+							 0.5D*percentComplete) +
 							 
-			start * 
-				(1.5F*percentCompleteCubed +
-				-2.5F*percentCompleteSquared + 1.0F) +
+			start *
+                (float)(1.5 * percentCompleteCubed +
+				-2.5*percentCompleteSquared + 1.0) +
 				
-			end * 
-				(-1.5F*percentCompleteCubed +
-				2.0F*percentCompleteSquared +
-				0.5F*percentComplete) +
+			end *
+                (float)(-1.5 * percentCompleteCubed +
+				2.0*percentCompleteSquared +
+				0.5*percentComplete) +
 				
-			next * 
-				(0.5F*percentCompleteCubed -
-				0.5F*percentCompleteSquared);
+			next *
+                (float)(0.5 * percentCompleteCubed -
+				0.5*percentCompleteSquared);
 		}
 		
-		public static Vector3 CatmullRomOLD (Vector3 previous,Vector3 start, Vector3 end, Vector3 next, float elapsedTime) {
+		public static Vector3 CatmullRomOLD (Vector3 previous,Vector3 start, Vector3 end, Vector3 next, double elapsedTime) {
 			// References used:
 			// p.266 GemsV1
 			//
@@ -68,20 +68,20 @@ namespace Pathfinding {
 			// bias and tension controls:
 			// http://local.wasp.uwa.edu.au/~pbourke/miscellaneous/interpolation/
 		
-			float percentComplete = elapsedTime;
-			float percentCompleteSquared = percentComplete * percentComplete;
-			float percentCompleteCubed = percentCompleteSquared * percentComplete;
+			double percentComplete = elapsedTime;
+			double percentCompleteSquared = percentComplete * percentComplete;
+			double percentCompleteCubed = percentCompleteSquared * percentComplete;
 		
-			return previous * (-0.5F*percentCompleteCubed +
+			return previous * (float)(-0.5*percentCompleteCubed +
 							 percentCompleteSquared -
-							 0.5F*percentComplete) +
-			start * (1.5F*percentCompleteCubed +
-					 -2.5F*percentCompleteSquared + 1.0F) +
-			end * (-1.5F*percentCompleteCubed +
-					 2.0F*percentCompleteSquared +
-					 0.5F*percentComplete) +
-			next * (0.5F*percentCompleteCubed -
-					0.5F*percentCompleteSquared);
+							 0.5*percentComplete) +
+            start * (float)(1.5 * percentCompleteCubed +
+					 -2.5*percentCompleteSquared + 1.0) +
+            end * (float)(-1.5 * percentCompleteCubed +
+					 2.0*percentCompleteSquared +
+					 0.5*percentComplete) +
+            next * (float)(0.5 * percentCompleteCubed -
+					0.5*percentCompleteSquared);
 		}
 	}
 	
@@ -107,17 +107,17 @@ namespace Pathfinding {
 	    {
 	        Vector3 lineDirection = Vector3.Normalize(lineEnd-lineStart);
 	        
-	        float closestPoint = Vector3.Dot((point-lineStart),lineDirection); //Vector3.Dot(lineDirection,lineDirection);
-	        return lineStart+(closestPoint*lineDirection);
+	        double closestPoint = Vector3.Dot((point-lineStart),lineDirection); //Vector3.Dot(lineDirection,lineDirection);
+	        return lineStart+((float)closestPoint*lineDirection);
 	    }
 	 
-	 	public static float NearestPointFactor (Vector3 lineStart, Vector3 lineEnd, Vector3 point)
+	 	public static double NearestPointFactor (Vector3 lineStart, Vector3 lineEnd, Vector3 point)
 	    {
 	    	Vector3 lineDirection = lineEnd-lineStart;
-	    	float magn = lineDirection.magnitude;
-			lineDirection /= magn;
+	    	double magn = lineDirection.magnitude;
+			lineDirection /= (float)magn;
 	        
-	        float closestPoint = Vector3.Dot((point-lineStart),lineDirection); //Vector3.Dot(lineDirection,lineDirection);
+	        double closestPoint = Vector3.Dot((point-lineStart),lineDirection); //Vector3.Dot(lineDirection,lineDirection);
 	        return closestPoint / magn;
 	    }
 	    
@@ -129,8 +129,8 @@ namespace Pathfinding {
 	        Vector3 fullDirection = lineEnd-lineStart;
 	        Vector3 lineDirection = Vector3.Normalize(fullDirection);
 	        
-	        float closestPoint = Vector3.Dot((point-lineStart),lineDirection); //WASTE OF CPU POWER - This is always ONE -- Vector3.Dot(lineDirection,lineDirection);
-	        return lineStart+(Mathf.Clamp(closestPoint,0.0f,fullDirection.magnitude)*lineDirection);
+	        double closestPoint = Vector3.Dot((point-lineStart),lineDirection); //WASTE OF CPU POWER - This is always ONE -- Vector3.Dot(lineDirection,lineDirection);
+	        return lineStart+((float)Globals.Clamp(closestPoint,0.0,fullDirection.magnitude)*lineDirection);
 	    }
 	    
 		/** Returns the closest point on the line segment on the XZ plane. The line is NOT treated as infinite.
@@ -146,19 +146,19 @@ namespace Pathfinding {
 	        Vector3 lineDirection = Vector3.Normalize(fullDirection2);
 	        //lineDirection.y = 0;
 			
-	        float closestPoint = Vector3.Dot((point-lineStart),lineDirection); //WASTE OF CPU POWER - This is always ONE -- Vector3.Dot(lineDirection,lineDirection);
-	        return lineStart+(Mathf.Clamp(closestPoint,0.0f,fullDirection2.magnitude)*lineDirection);
+	        double closestPoint = Vector3.Dot((point-lineStart),lineDirection); //WASTE OF CPU POWER - This is always ONE -- Vector3.Dot(lineDirection,lineDirection);
+	        return lineStart+((float)Globals.Clamp(closestPoint,0.0,fullDirection2.magnitude)*lineDirection);
 	    }
 		
 	    /** Returns the approximate shortest distance between x,z and the line p-q. The line is considered infinite. This function is not entirely exact, but it is about twice as fast as DistancePointSegment2. */
-	    public static float DistancePointSegment (int x,int z, int px, int pz, int qx, int qz) {
+	    public static double DistancePointSegment (int x,int z, int px, int pz, int qx, int qz) {
 	    	
-	    	float pqx = (float)(qx - px);
-			float pqz = (float)(qz - pz);
-			float dx = (float)(x - px);
-			float dz = (float)(z - pz);
-			float d = pqx*pqx + pqz*pqz;
-			float t = pqx*dx + pqz*dz;
+	    	double pqx = (double)(qx - px);
+			double pqz = (double)(qz - pz);
+			double dx = (double)(x - px);
+			double dz = (double)(z - pz);
+			double d = pqx*pqx + pqz*pqz;
+			double t = pqx*dx + pqz*dz;
 			if (d > 0)
 				t /= d;
 			if (t < 0)
@@ -185,7 +185,7 @@ namespace Pathfinding {
 	    }*/
 	    
 	    /** Returns the distance between x,z and the line p-q. The line is considered infinite. */
-	    public static float DistancePointSegment2 (int x,int z, int px, int pz, int qx, int qz) {
+	    public static double DistancePointSegment2 (int x,int z, int px, int pz, int qx, int qz) {
 	    	
 	    	Vector3 p = new Vector3 (x,0,z);
 	    	
@@ -196,35 +196,29 @@ namespace Pathfinding {
 	    }
 	   
 	    /** Returns the distance between c and the line a-b. The line is considered infinite. */
-	    public static float DistancePointSegment2 (Vector3 a, Vector3 b, Vector3 p) {
+	    public static double DistancePointSegment2 (Vector3 a, Vector3 b, Vector3 p) {
 	    	
-	    	float bax = b.x - a.x;
-	    	float baz = b.z - a.z;
+	    	double bax = b.x - a.x;
+	    	double baz = b.z - a.z;
 	    	
-	    	float area = Mathf.Abs (bax * (p.z - a.z) - (p.x - a.x) * baz);
+	    	double area = System.Math.Abs (bax * (p.z - a.z) - (p.x - a.x) * baz);
 	    	
-	    	float d = bax*bax+baz*baz;
+	    	double d = bax*bax+baz*baz;
 	    	
 	    	if (d > 0) {
-	    		return area / Mathf.Sqrt (d);
+                return area / System.Math.Sqrt(d);
 	    	}
 	    	
 	    	return (a-p).magnitude;
 	    }
 	    
 	    /** Returns the squared distance between c and the line a-b. The line is not considered infinite. */
-	    public static float DistancePointSegmentStrict (Vector3 a, Vector3 b, Vector3 p) {
+	    public static double DistancePointSegmentStrict (Vector3 a, Vector3 b, Vector3 p) {
 	    	
 	    	Vector3 nearest = NearestPointStrict (a,b,p);
 			return (nearest-p).sqrMagnitude;
 	    }
-	    
-		/** Returns a point on a hermite curve. Slow start and slow end, fast in the middle */
-		public static float Hermite(float start, float end, float value) {
-			
-			return Mathf.Lerp(start, end, value * value * (3.0f - 2.0f * value));
-		}
-		
+	  
 		/** Returns a point on a cubic bezier curve. \a t is clamped between 0 and 1 */
 		public static Vector3 CubicBezier (Vector3 p0,Vector3 p1,Vector3 p2,Vector3 p3, float t) {
 			t = Mathf.Clamp01 (t);
@@ -233,25 +227,25 @@ namespace Pathfinding {
 		}
 		
 		/** Maps a value between startMin and startMax to be between 0 and 1 */
-		public static float MapTo (float startMin,float startMax, float value) {
+		public static double MapTo (double startMin,double startMax, double value) {
 			value -= startMin;
 			value /= (startMax-startMin);
-			value = Mathf.Clamp01 (value);
+			value = Globals.Clamp(value,0,1);
 			return value;
 		}
 		
 		/** Maps a value (0...1) to be between targetMin and targetMax */
-		public static float MapToRange (float targetMin,float targetMax, float value) {
+		public static double MapToRange (double targetMin,double targetMax, double value) {
 			value *= (targetMax-targetMin);
 			value += targetMin;
 			return value;
 		}
 		
 		/** Maps a value between startMin and startMax to be between targetMin and targetMax */
-		public static float MapTo (float startMin,float startMax, float targetMin, float targetMax, float value) {
+		public static double MapTo (double startMin,double startMax, double targetMin, double targetMax, double value) {
 			value -= startMin;
 			value /= (startMax-startMin);
-			value = Mathf.Clamp01 (value);
+            value = Globals.Clamp(value,0,1);
 			value *= (targetMax-targetMin);
 			value += targetMin;
 			return value;
@@ -307,13 +301,13 @@ namespace Pathfinding {
 		}
 	
 		/** Distance between two points on the XZ plane */
-		public static float MagnitudeXZ (Vector3 a, Vector3 b) {
+		public static double MagnitudeXZ (Vector3 a, Vector3 b) {
 			Vector3 delta = a-b;
-			return (float)Math.Sqrt (delta.x*delta.x+delta.z*delta.z);
+			return (double)Math.Sqrt (delta.x*delta.x+delta.z*delta.z);
 		}
 		
 		/** Squared distance between two points on the XZ plane */
-		public static float SqrMagnitudeXZ (Vector3 a, Vector3 b) {
+		public static double SqrMagnitudeXZ (Vector3 a, Vector3 b) {
 			Vector3 delta = a-b;
 			return delta.x*delta.x+delta.z*delta.z;
 		}
@@ -325,7 +319,7 @@ namespace Pathfinding {
 			return i;
 		}
 		
-		public static float Abs (float a) {
+		public static double Abs (double a) {
 			if (a < 0) {
 				return -a;
 			}
@@ -339,7 +333,7 @@ namespace Pathfinding {
 			return a;
 		}
 		
-		public static float Min (float a, float b) {
+		public static double Min (double a, double b) {
 			return a < b ? a : b;
 		}
 		
@@ -351,7 +345,7 @@ namespace Pathfinding {
 			return a < b ? a : b;
 		}
 		
-		public static float Max (float a, float b) {
+		public static double Max (double a, double b) {
 			return a > b ? a : b;
 		}
 		
@@ -367,7 +361,7 @@ namespace Pathfinding {
 			return a > b ? a : b;
 		}
 		
-		public static float Sign (float a) {
+		public static double Sign (double a) {
 			return a < 0 ? -1F : 1F;
 		}
 		
@@ -375,7 +369,7 @@ namespace Pathfinding {
 			return a < 0 ? -1 : 1;
 		}
 		
-		public static float Clamp (float a, float b, float c) {
+		public static double Clamp (double a, double b, double c) {
 			return a > c ? c : a < b ? b : a;
 		}
 		
@@ -383,7 +377,7 @@ namespace Pathfinding {
 			return a > c ? c : a < b ? b : a;
 		}
 		
-		public static float Clamp01 (float a) {
+		public static double Clamp01 (double a) {
 			return a > 1 ? 1 : a < 0 ? 0 : a;
 		}
 		
@@ -391,14 +385,10 @@ namespace Pathfinding {
 			return a > 1 ? 1 : a < 0 ? 0 : a;
 		}
 		
-		public static float Lerp (float a,float b, float t) {
+		public static double Lerp (double a,double b, double t) {
 			return a + (b-a)*(t > 1 ? 1 : t < 0 ? 0 : t);
 		}
-		
-		public static int RoundToInt (float v) {
-			return (int)(v+0.5F);
-		}
-		
+
 		public static int RoundToInt (double v) {
 			return (int)(v+0.5D);
 		}
@@ -416,7 +406,7 @@ namespace Pathfinding {
 			//a.x*b.z+b.x*c.z+c.x*a.z-a.x*c.z-c.x*b.z-b.x*a.z;
 		}
 		
-		public static float TriangleArea2 (Vector3 a, Vector3 b, Vector3 c) {
+		public static double TriangleArea2 (Vector3 a, Vector3 b, Vector3 c) {
 			return (b.x - a.x) * (c.z - a.z) - (c.x - a.x) * (b.z - a.z);
 			//return a.x*b.z+b.x*c.z+c.x*a.z-a.x*c.z-c.x*b.z-b.x*a.z;
 		}
@@ -426,7 +416,7 @@ namespace Pathfinding {
 			//a.x*b.z+b.x*c.z+c.x*a.z-a.x*c.z-c.x*b.z-b.x*a.z;
 		}
 		
-		public static float TriangleArea (Vector3 a, Vector3 b, Vector3 c) {
+		public static double TriangleArea (Vector3 a, Vector3 b, Vector3 c) {
 			return (b.x - a.x) * (c.z - a.z) - (c.x - a.x) * (b.z - a.z);
 			//return a.x*b.z+b.x*c.z+c.x*a.z-a.x*c.z-c.x*b.z-b.x*a.z;
 		}
@@ -480,7 +470,7 @@ namespace Pathfinding {
 		 * Will return true even if the points are colinear or very slightly counter-clockwise
 		 * (if the signed area of the triangle formed by the points has an area less than or equals to float.Epsilon) */
 		public static bool IsClockwiseMargin (Vector3 a, Vector3 b, Vector3 c) {
-			return (b.x-a.x)*(c.z-a.z)-(c.x-a.x)*(b.z-a.z) <= float.Epsilon;
+			return (b.x-a.x)*(c.z-a.z)-(c.x-a.x)*(b.z-a.z) <= double.Epsilon;
 		}
 		
 		/** Returns if the points a in a clockwise order */
@@ -515,16 +505,16 @@ namespace Pathfinding {
 			Vector3 dir1 = end1-start1;
 			Vector3 dir2 = end2-start2;
 			
-			float den = dir2.z*dir1.x - dir2.x * dir1.z;
+			double den = dir2.z*dir1.x - dir2.x * dir1.z;
 			
 			if (den == 0) {
 				return false;
 			}
 			
-			float nom = dir2.x*(start1.z-start2.z)- dir2.z*(start1.x-start2.x);
-			float nom2 = dir1.x*(start1.z-start2.z) - dir1.z * (start1.x - start2.x);
-			float u = nom/den;
-			float u2 = nom2/den;
+			double nom = dir2.x*(start1.z-start2.z)- dir2.z*(start1.x-start2.x);
+			double nom2 = dir1.x*(start1.z-start2.z) - dir1.z * (start1.x - start2.x);
+			double u = nom/den;
+			double u2 = nom2/den;
 		
 			if (u < 0F || u > 1F || u2 < 0F || u2 > 1F) {
 				return false;
@@ -541,17 +531,17 @@ namespace Pathfinding {
 		 */
 		public static Vector3 IntersectionPointOptimized (Vector3 start1, Vector3 dir1, Vector3 start2, Vector3 dir2) {
 			
-			float den = dir2.z*dir1.x - dir2.x * dir1.z;
+			double den = dir2.z*dir1.x - dir2.x * dir1.z;
 			
 			if (den == 0) {
 				return start1;
 			}
 			
-			float nom = dir2.x*(start1.z-start2.z)- dir2.z*(start1.x-start2.x);
+			double nom = dir2.x*(start1.z-start2.z)- dir2.z*(start1.x-start2.x);
 			
-			float u = nom/den;
+			double u = nom/den;
 			
-			return start1 + dir1*u;
+			return start1 + dir1*(float)u;
 		}
 		
 		/** Intersection point between two infinite lines.
@@ -559,19 +549,19 @@ namespace Pathfinding {
 		 */
 		public static Vector3 IntersectionPointOptimized (Vector3 start1, Vector3 dir1, Vector3 start2, Vector3 dir2, out bool intersects) {
 			
-			float den = dir2.z*dir1.x - dir2.x * dir1.z;
+			double den = dir2.z*dir1.x - dir2.x * dir1.z;
 			
 			if (den == 0) {
 				intersects = false;
 				return start1;
 			}
 			
-			float nom = dir2.x*(start1.z-start2.z)- dir2.z*(start1.x-start2.x);
+			double nom = dir2.x*(start1.z-start2.z)- dir2.z*(start1.x-start2.x);
 			
-			float u = nom/den;
+			double u = nom/den;
 			
 			intersects = true;
-			return start1 + dir1*u;
+            return start1 + dir1 * (float)u;
 		}
 	
 		/** Returns the intersection factors for line 1 and line 2. The intersection factors is a distance along the line \a start - \a end where the other line intersects it.\n
@@ -579,7 +569,7 @@ namespace Pathfinding {
 		 * \code intersectionPoint2 = start2 + factor2 * (end2-start2) \endcode
 		 * Lines are treated as infinite.\n
 		 * false is returned if the lines are parallel and true if they are not */
-		public static bool IntersectionFactor (Vector3 start1, Vector3 end1, Vector3 start2, Vector3 end2, out float factor1, out float factor2) {
+		public static bool IntersectionFactor (Vector3 start1, Vector3 end1, Vector3 start2, Vector3 end2, out double factor1, out double factor2) {
 			
 			Vector3 dir1 = end1-start1;
 			Vector3 dir2 = end2-start2;
@@ -588,7 +578,7 @@ namespace Pathfinding {
 			//Debug.DrawRay (start1,dir1,rnd);
 			//Debug.DrawRay (start2,dir2,rnd);
 			
-			float den = dir2.z*dir1.x - dir2.x * dir1.z;
+			double den = dir2.z*dir1.x - dir2.x * dir1.z;
 			
 			if (den == 0) {
 				factor1 = 0;
@@ -596,11 +586,11 @@ namespace Pathfinding {
 				return false;
 			}
 			
-			float nom = dir2.x*(start1.z-start2.z)- dir2.z*(start1.x-start2.x);
-			float nom2 = dir1.x*(start1.z-start2.z) - dir1.z * (start1.x - start2.x);
+			double nom = dir2.x*(start1.z-start2.z)- dir2.z*(start1.x-start2.x);
+			double nom2 = dir1.x*(start1.z-start2.z) - dir1.z * (start1.x - start2.x);
 			
-			float u = nom/den;
-			float u2 = nom2/den;
+			double u = nom/den;
+			double u2 = nom2/den;
 			
 			factor1 = u;
 			factor2 = u2;
@@ -615,7 +605,7 @@ namespace Pathfinding {
 		 * \code intersectionPoint = start1 + intersectionFactor * (end1-start1) \endcode.
 		 * Lines are treated as infinite.\n
 		 * -1 is returned if the lines are parallel (note that this is a valid return value if they are not parallel too) */
-		public static float IntersectionFactor (Vector3 start1, Vector3 end1, Vector3 start2, Vector3 end2) {
+		public static double IntersectionFactor (Vector3 start1, Vector3 end1, Vector3 start2, Vector3 end2) {
 			
 			Vector3 dir1 = end1-start1;
 			Vector3 dir2 = end2-start2;
@@ -624,15 +614,15 @@ namespace Pathfinding {
 			//Debug.DrawRay (start1,dir1,rnd);
 			//Debug.DrawRay (start2,dir2,rnd);
 			
-			float den = dir2.z*dir1.x - dir2.x * dir1.z;
+			double den = dir2.z*dir1.x - dir2.x * dir1.z;
 			
 			if (den == 0) {
 				return -1;
 			}
 			
-			float nom = dir2.x*(start1.z-start2.z)- dir2.z*(start1.x-start2.x);
+			double nom = dir2.x*(start1.z-start2.z)- dir2.z*(start1.x-start2.x);
 			
-			float u = nom/den;
+			double u = nom/den;
 			
 			//Debug.DrawLine (start2,end2,Color.magenta);
 			//Debug.DrawRay (start1,dir1*5,Color.green);
@@ -655,21 +645,21 @@ namespace Pathfinding {
 			//Debug.DrawRay (start1,dir1,rnd);
 			//Debug.DrawRay (start2,dir2,rnd);
 			
-			float den = dir2.z*dir1.x - dir2.x * dir1.z;
+			double den = dir2.z*dir1.x - dir2.x * dir1.z;
 			
 			if (den == 0) {
 				intersects = false;
 				return start1;
 			}
 			
-			float nom = dir2.x*(start1.z-start2.z)- dir2.z*(start1.x-start2.x);
+			double nom = dir2.x*(start1.z-start2.z)- dir2.z*(start1.x-start2.x);
 			
-			float u = nom/den;
+			double u = nom/den;
 			
 			//Debug.DrawLine (start2,end2,Color.magenta);
 			//Debug.DrawRay (start1,dir1*5,Color.green);
 			intersects = true;
-			return start1 + dir1*u;
+            return start1 + dir1 * (float)u;
 		}
 		
 		/** Returns the intersection point between the two lines. Lines are treated as infinite. \a start1 is returned if the lines are parallel */
@@ -688,21 +678,21 @@ namespace Pathfinding {
 			//Debug.DrawRay (start1,dir1,rnd);
 			//Debug.DrawRay (start2,dir2,rnd);
 			
-			float den = dir2.y*dir1.x - dir2.x * dir1.y;
+			double den = dir2.y*dir1.x - dir2.x * dir1.y;
 			
 			if (den == 0) {
 				intersects = false;
 				return start1;
 			}
 			
-			float nom = dir2.x*(start1.y-start2.y)- dir2.y*(start1.x-start2.x);
+			double nom = dir2.x*(start1.y-start2.y)- dir2.y*(start1.x-start2.x);
 			
-			float u = nom/den;
+			double u = nom/den;
 			
 			//Debug.DrawLine (start2,end2,Color.magenta);
 			//Debug.DrawRay (start1,dir1*5,Color.green);
 			intersects = true;
-			return start1 + dir1*u;
+            return start1 + dir1 * (float)u;
 		}
 		
 		/** Returns the intersection point between the two line segments.
@@ -716,17 +706,17 @@ namespace Pathfinding {
 			//Debug.DrawRay (start1,dir1,rnd);
 			//Debug.DrawRay (start2,dir2,rnd);
 			
-			float den = dir2.z*dir1.x - dir2.x * dir1.z;
+			double den = dir2.z*dir1.x - dir2.x * dir1.z;
 			
 			if (den == 0) {
 				intersects = false;
 				return start1;
 			}
 			
-			float nom = dir2.x*(start1.z-start2.z)- dir2.z*(start1.x-start2.x);
-			float nom2 = dir1.x*(start1.z-start2.z) - dir1.z * (start1.x - start2.x);
-			float u = nom/den;
-			float u2 = nom2/den;
+			double nom = dir2.x*(start1.z-start2.z)- dir2.z*(start1.x-start2.x);
+			double nom2 = dir1.x*(start1.z-start2.z) - dir1.z * (start1.x - start2.x);
+			double u = nom/den;
+			double u2 = nom2/den;
 		
 			if (u < 0F || u > 1F || u2 < 0F || u2 > 1F) {
 				intersects = false;
@@ -737,7 +727,7 @@ namespace Pathfinding {
 			//Debug.DrawLine (start2,end2,Color.magenta);
 			//Debug.DrawRay (start1,dir1*5,Color.green);
 			intersects = true;
-			return start1 + dir1*u;
+            return start1 + dir1 * (float)u;
 		}
 		
 		public static List<Vector3> hullCache = new List<Vector3>();
@@ -818,7 +808,7 @@ namespace Pathfinding {
 		}
 		
 		/** Dot product of two vectors. \todo Why is this function defined here? */
-		public static float Dot (Vector3 lhs, Vector3 rhs)
+		public static double Dot (Vector3 lhs, Vector3 rhs)
 		{
 			return
 					lhs.x * rhs.x +
@@ -861,10 +851,10 @@ namespace Pathfinding {
 			
 			int c = 0;
 			for (int p=0;p<path.Length-1;p++) {
-				float step = 1.0F/Mathf.Pow (2,subdivisions);
+				double step = 1.0F/Mathf.Pow (2,subdivisions);
 				
-				for (float i=0;i<1.0F;i+=step) {
-					path2[c] = Vector3.Lerp (path[p],path[p+1],Mathf.SmoothStep (0,1, i));
+				for (double i=0;i<1.0;i+=step) {
+					path2[c] = Vector3.Lerp (path[p],path[p+1],Mathf.SmoothStep (0,1, (float)i));
 					c++;
 				}
 			}
@@ -889,15 +879,15 @@ namespace Pathfinding {
 		    Vector3 edge1 = tr2 - tr0;
 		    Vector3 v0 = tr0 - point;
 		
-		    float a = Vector3.Dot (edge0,edge0);//edge0.dot( edge0 ); //Equals to sqrMagnitude
-		    float b = Vector3.Dot (edge0, edge1 );
-		    float c = Vector3.Dot (edge1, edge1 ); //Equals to sqrMagnitude
-		    float d = Vector3.Dot (edge0, v0 );
-		    float e = Vector3.Dot (edge1, v0 );
+		    double a = Vector3.Dot (edge0,edge0);//edge0.dot( edge0 ); //Equals to sqrMagnitude
+		    double b = Vector3.Dot (edge0, edge1 );
+		    double c = Vector3.Dot (edge1, edge1 ); //Equals to sqrMagnitude
+		    double d = Vector3.Dot (edge0, v0 );
+		    double e = Vector3.Dot (edge1, v0 );
 		
-		    float det = a*c - b*b;
-		    float s = b*e - c*d;
-		    float t = b*d - a*e;
+		    double det = a*c - b*b;
+		    double s = b*e - c*d;
+		    double t = b*d - a*e;
 		
 		    if ( s + t < det )
 		    {
@@ -929,7 +919,7 @@ namespace Pathfinding {
 		        }
 		        else
 		        {
-		            float invDet = 1.0F / det;
+		            double invDet = 1.0F / det;
 		            s *= invDet;
 		            t *= invDet;
 		        }
@@ -938,12 +928,12 @@ namespace Pathfinding {
 		    {
 		        if ( s < 0.0F )
 		        {
-		            float tmp0 = b+d;
-		            float tmp1 = c+e;
+		            double tmp0 = b+d;
+		            double tmp1 = c+e;
 		            if ( tmp1 > tmp0 )
 		            {
-		                float numer = tmp1 - tmp0;
-		                float denom = a-2*b+c;
+		                double numer = tmp1 - tmp0;
+		                double denom = a-2*b+c;
 		                s = Mathfx.Clamp01 ( numer/denom);
 		                t = 1-s;
 		            }
@@ -957,8 +947,8 @@ namespace Pathfinding {
 		        {
 		            if ( a+d > b+e )
 		            {
-		                float numer = c+e-b-d;
-		                float denom = a-2*b+c;
+		                double numer = c+e-b-d;
+		                double denom = a-2*b+c;
 		                s = Mathfx.Clamp01 ( numer/denom);
 		                t = 1-s;
 		            }
@@ -970,14 +960,14 @@ namespace Pathfinding {
 		        }
 		        else
 		        {
-		            float numer = c+e-b-d;
-		            float denom = a-2*b+c;
+		            double numer = c+e-b-d;
+		            double denom = a-2*b+c;
 		            s = Mathfx.Clamp01 ( numer/denom);
 		            t = 1.0F - s;
 		        }
 		    }
-			
-			return tr0 + s * edge0 + t * edge1;
+
+            return tr0 + (float)s * edge0 + (float)t * edge1;
 		}
 	}
 }

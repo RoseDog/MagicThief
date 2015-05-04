@@ -101,27 +101,6 @@ public class IniFile
     /// </summary>
     /// <param name="key">Name of property</param>
     /// <param name="value">New value</param>
-    public void set(string key, float value)
-    {
-        set(key, value, "");
-    }
-
-    /// <summary>
-    /// Set value of property and add comment. It will create new property if absent.
-    /// </summary>
-    /// <param name="key">Name of property</param>
-    /// <param name="value">New value</param>
-    /// <param name="comment">Comment for property</param>
-    public void set(string key, float value, string comment)
-    {
-        set(key, value.ToString("F3"), comment);
-    }
-
-    /// <summary>
-    /// Set value of property. It will create new property if absent.
-    /// </summary>
-    /// <param name="key">Name of property</param>
-    /// <param name="value">New value</param>
     public void set(string key, double value)
     {
         set(key, value, "");
@@ -135,7 +114,7 @@ public class IniFile
     /// <param name="comment">Comment for property</param>
     public void set(string key, double value, string comment)
     {
-        set(key, value.ToString(), comment);
+        set(key, value.ToString("F5"), comment);
     }
 
     /// <summary>
@@ -213,26 +192,6 @@ public class IniFile
         try
         {
             return Convert.ToInt32(value);
-        }
-        catch (Exception)
-        {
-            return defaultValue;
-        }
-    }
-
-    /// <summary>
-    /// Returns the value of property.
-    /// </summary>
-    /// <returns>Value of property.</returns>
-    /// <param name="key">Name of property</param>
-    /// <param name="defaultValue">Default value if property absent</param>
-    public float get(string key, float defaultValue)
-    {
-        string value = get(key);
-
-        try
-        {
-            return Convert.ToSingle(value);
         }
         catch (Exception)
         {

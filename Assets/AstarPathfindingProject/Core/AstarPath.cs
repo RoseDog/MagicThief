@@ -86,13 +86,13 @@ public class AstarPath : MonoBehaviour {
 	 * For example if #debugMode is set to G, this value will determine when the node will be totally red.
 	 * \see #debugRoof
 	 */
-	public float debugFloor = 0;
+    public float debugFloor = 0;
 	
 	/** High value to use for certain #debugMode modes.
 	 * For example if #debugMode is set to G, this value will determine when the node will be totally green.
 	 * \see #debugFloor
 	 */
-	public float debugRoof = 20000;
+    public float debugRoof = 20000;
 	
 	/** If enabled, nodes will draw a line to their 'parent'.
 	 * This will show the search tree for the latest path. This is editor only.
@@ -102,7 +102,7 @@ public class AstarPath : MonoBehaviour {
 	
 	/** Size of the red cubes shown in place of unwalkable nodes.
 	  * \see showUnwalkableNodes */
-	public float unwalkableNodeDebugSize = 0.3F;
+    public float unwalkableNodeDebugSize = 0.3F;
 	
 	/** If enabled, only one node will be searched per search iteration (frame).
 	 * Used for debugging
@@ -128,11 +128,12 @@ public class AstarPath : MonoBehaviour {
 	 * When searching for a nearest node, this is the limit (world units) for how far away it is allowed to be.
 	 * \see Pathfinding.NNConstraint.constrainDistance
 	 */
-	public float maxNearestNodeDistance = 100;
+    public float maxNearestNodeDistance = 100;
 	
 	/** Max Nearest Node Distance Squared.
 	 * \see #maxNearestNodeDistance */
-	public float maxNearestNodeDistanceSqr {
+    public float maxNearestNodeDistanceSqr
+    {
 		get { return maxNearestNodeDistance*maxNearestNodeDistance; }
 	}
 	
@@ -162,7 +163,7 @@ public class AstarPath : MonoBehaviour {
 	/** Distance limit for #prioritizeGraphs.
 	 * \see #prioritizeGraphs
 	 */
-	public float prioritizeGraphsLimit = 1F;
+    public float prioritizeGraphsLimit = 1F;
 	
 	/** Reference to the color settings for this AstarPath object.
 	 * Color settings include for example which color the nodes should be in, in the sceneview. */
@@ -186,7 +187,7 @@ public class AstarPath : MonoBehaviour {
 	 * If 0 is used, the pathfinding will be equal to dijkstra's algorithm.
 	 * If a value larger than 1 is used the pathfinding will (usually) be faster because it expands fewer nodes, but the paths might not longer be optimal
 	 */
-	public float heuristicScale = 1F;
+    public float heuristicScale = 1F;
 
 	/** Number of pathfinding threads to use.
 	 * Multithreading puts pathfinding in another thread, this is great for performance on 2+ core computers since the framerate will barely be affected by the pathfinding at all.
@@ -203,7 +204,7 @@ public class AstarPath : MonoBehaviour {
 	 * At least 500 nodes will be searched each frame (if there are that many to search).
 	 * When using multithreading this value is quite irrelevant,
 	 * but do not set it too low since that could add upp to some overhead, 10ms will work good for multithreading */
-	public float maxFrameTime = 1F;
+    public float maxFrameTime = 1F;
 	
 	/** The initial max size of the binary heap.
 	 * The binary heaps will be expanded if necessary.
@@ -232,7 +233,7 @@ public class AstarPath : MonoBehaviour {
 	public bool limitGraphUpdates = true;
 	
 	/** How often should graphs be updated. If #limitGraphUpdates is true, this defines the minimum amount of seconds between each graph update.*/
-	public float maxGraphUpdateFreq = 0.2F;
+    public float maxGraphUpdateFreq = 0.2F;
 	
 	/** @} */
 #endregion
@@ -250,7 +251,7 @@ public class AstarPath : MonoBehaviour {
 	
 	/** The time it took for the last call to Scan() to complete.
 	 * Used to prevent automatically rescanning the graphs too often (editor only) */
-	public float lastScanTime = 0F;
+    public float lastScanTime = 0F;
 	
 	/** The path to debug using gizmos.
 	 * This is equal to the last path which was calculated,
@@ -504,7 +505,7 @@ public class AstarPath : MonoBehaviour {
 	
 	/** Time the last graph update was done.
 	 * Used to group together frequent graph updates to batches */
-	private float lastGraphUpdate = -9999F;
+	private double lastGraphUpdate = -9999F;
 	
 	/** The next unused Path ID.
 	 * Incremented for every call to GetFromPathPool */
@@ -602,7 +603,7 @@ public class AstarPath : MonoBehaviour {
 				Node[] nodes = graphs[i].nodes;
 				for (int j=0;j<nodes.Length;j++) {
 					if (nodes[j] != null && !nodes[j].walkable) {
-						Gizmos.DrawCube ((Vector3)nodes[j].position, Vector3.one*unwalkableNodeDebugSize);
+                        Gizmos.DrawCube((Vector3)nodes[j].position, Vector3.one * (float)unwalkableNodeDebugSize);
 					}
 				}
 			}
@@ -751,8 +752,8 @@ public class AstarPath : MonoBehaviour {
 	 */
 	private IEnumerator DelayedGraphUpdate () {
 		graphUpdateRoutineRunning = true;
-		
-		yield return new WaitForSeconds (maxGraphUpdateFreq-(Time.time-lastGraphUpdate));
+
+        yield return new WaitForSeconds((float)maxGraphUpdateFreq - (Time.time - (float)lastGraphUpdate));
 		QueueGraphUpdates ();
 		graphUpdateRoutineRunning = false;
 	}
@@ -789,20 +790,20 @@ public class AstarPath : MonoBehaviour {
 	 * \see Update
 	 * \see DoUpdateGraphs
 	 */
-	public void UpdateGraphs (Bounds bounds, float t) {
+	public void UpdateGraphs (Bounds bounds, double t) {
 		UpdateGraphs (new GraphUpdateObject (bounds),t);
 	}
 	
 	/** Update all graphs using the GraphUpdateObject after \a t seconds.
 	 * This can be used to, e.g make all nodes in an area unwalkable, or set them to a higher penalty.
 	*/
-	public void UpdateGraphs (GraphUpdateObject ob, float t) {
+	public void UpdateGraphs (GraphUpdateObject ob, double t) {
 		StartCoroutine (UpdateGraphsInteral (ob,t));
 	}
 	
 	/** Update all graphs using the GraphUpdateObject after \a t seconds */
-	private IEnumerator UpdateGraphsInteral (GraphUpdateObject ob, float t) {
-		yield return new WaitForSeconds (t);
+	private IEnumerator UpdateGraphsInteral (GraphUpdateObject ob, double t) {
+		yield return new WaitForSeconds ((float)t);
 		UpdateGraphs (ob);
 	}
 	
@@ -1480,7 +1481,7 @@ public class AstarPath : MonoBehaviour {
 		
 		try {
 			foreach (Progress progress in AstarPath.active.ScanLoop ()) {
-				UnityEditor.EditorUtility.DisplayProgressBar ("Scanning",progress.description,progress.progress);
+                UnityEditor.EditorUtility.DisplayProgressBar("Scanning", progress.description, (float)progress.progress);
 			}
 		} catch (System.Exception e) {
 			Debug.LogError ("There was an error generating the graphs:\n"+e.ToString ()+"\n\nIf you think this is a bug, please contact me on arongranberg.com (post a comment)\n");
@@ -1547,20 +1548,20 @@ public class AstarPath : MonoBehaviour {
 			NavGraph graph = graphs[i];
 			
 			if (graph == null) {
-				yield return new Progress (Mathfx.MapTo (0.05F,0.7F,(float)(i+0.5F)/(graphs.Length+1)),"Skipping graph "+(i+1)+" of "+graphs.Length+" because it is null");
+				yield return new Progress (Mathfx.MapTo (0.05F,0.7F,(double)(i+0.5F)/(graphs.Length+1)),"Skipping graph "+(i+1)+" of "+graphs.Length+" because it is null");
 				continue;
 			}
 			
 			if (OnGraphPreScan != null) {
-				yield return new Progress (Mathfx.MapTo (0.05F,0.7F,(float)(i+0.5F)/(graphs.Length+1)),"Scanning graph "+(i+1)+" of "+graphs.Length+" - Pre processing");
+				yield return new Progress (Mathfx.MapTo (0.05F,0.7F,(double)(i+0.5F)/(graphs.Length+1)),"Scanning graph "+(i+1)+" of "+graphs.Length+" - Pre processing");
 				OnGraphPreScan (graph);
 			}
 			
-			yield return new Progress (Mathfx.MapTo (0.05F,0.7F,(float)(i+1F)/(graphs.Length+1)),"Scanning graph "+(i+1)+" of "+graphs.Length);
+			yield return new Progress (Mathfx.MapTo (0.05F,0.7F,(double)(i+1F)/(graphs.Length+1)),"Scanning graph "+(i+1)+" of "+graphs.Length);
 			
 			graph.Scan ();
 			
-			yield return new Progress (Mathfx.MapTo (0.05F,0.7F,(float)(i+1.1F)/(graphs.Length+1)),"Scanning graph "+(i+1)+" of "+graphs.Length+" - Assigning graph indices");
+			yield return new Progress (Mathfx.MapTo (0.05F,0.7F,(double)(i+1.1F)/(graphs.Length+1)),"Scanning graph "+(i+1)+" of "+graphs.Length+" - Assigning graph indices");
 			if (graph.nodes != null) {
 				for (int j=0;j<graph.nodes.Length;j++) {
 					if (graph.nodes[j] != null) 
@@ -1569,7 +1570,7 @@ public class AstarPath : MonoBehaviour {
 			}
 			
 			if (OnGraphPostScan != null) {
-				yield return new Progress (Mathfx.MapTo (0.05F,0.7F,(float)(i+1.5F)/(graphs.Length+1)),"Scanning graph "+(i+1)+" of "+graphs.Length+" - Post processing");
+				yield return new Progress (Mathfx.MapTo (0.05F,0.7F,(double)(i+1.5F)/(graphs.Length+1)),"Scanning graph "+(i+1)+" of "+graphs.Length+" - Post processing");
 				OnGraphPostScan (graph);
 			}
 			
@@ -2466,7 +2467,7 @@ AstarPath.RegisterSafeUpdate (delegate () {
 			
 			//Wait a bit if we have calculated a lot of paths
 			if (System.DateTime.UtcNow.Ticks > targetTick) {
-				yield return 0;
+				//yield return 0;
 				targetTick = System.DateTime.UtcNow.Ticks + maxTicks;
 				numPaths = 0;
 			}
@@ -2509,7 +2510,7 @@ AstarPath.RegisterSafeUpdate (delegate () {
 			constraint = NNConstraint.None;
 		}
 		
-		float minDist = float.PositiveInfinity;//Math.Infinity;
+		double minDist = double.PositiveInfinity;//Math.Infinity;
 		NNInfo nearestNode = new NNInfo ();
 		int nearestGraph = -1;
 		
@@ -2537,7 +2538,7 @@ AstarPath.RegisterSafeUpdate (delegate () {
 				continue;
 			}
 			
-			float dist = ((Vector3)nnInfo.clampedPosition-position).magnitude;
+			double dist = ((Vector3)nnInfo.clampedPosition-position).magnitude;
 			
 			if (prioritizeGraphs && dist < prioritizeGraphsLimit) {
 				//The node is close enough, choose this graph and discard all others
@@ -2589,7 +2590,7 @@ AstarPath.RegisterSafeUpdate (delegate () {
 		
 		if (graphs == null) { return null; }
 		
-		float minDist = Mathf.Infinity;
+		double minDist = Mathf.Infinity;
 		Node nearestNode = null;
 		
 		Vector3 lineDirection = ray.direction;
@@ -2614,7 +2615,7 @@ AstarPath.RegisterSafeUpdate (delegate () {
 	        	Vector3 pos = (Vector3)node.position;
 				Vector3 p = lineOrigin+(Vector3.Dot(pos-lineOrigin,lineDirection)*lineDirection);
 				
-				float tmp = Mathf.Abs (p.x-pos.x);
+				double tmp = Mathf.Abs (p.x-pos.x);
 				tmp *= tmp;
 				if (tmp > minDist) continue;
 				
@@ -2622,7 +2623,7 @@ AstarPath.RegisterSafeUpdate (delegate () {
 				tmp *= tmp;
 				if (tmp > minDist) continue;
 				
-				float dist = (p-pos).sqrMagnitude;
+				double dist = (p-pos).sqrMagnitude;
 				
 				if (dist < minDist) {
 					minDist = dist;

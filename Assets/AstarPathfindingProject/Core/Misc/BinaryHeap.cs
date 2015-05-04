@@ -265,7 +265,7 @@ endif
 		private NodeRun[] binaryHeap; 
 		public int numberOfItems; 
 		
-		public float growthFactor = 2;
+		public double growthFactor = 2;
 		
 		public BinaryHeapM ( int numberOfElements ) { 
 			binaryHeap = new NodeRun[numberOfElements]; 

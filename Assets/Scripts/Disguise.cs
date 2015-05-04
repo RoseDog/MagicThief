@@ -1,6 +1,6 @@
 ﻿public class Disguise : MagicianTrickAction 
 {
-    float speedCache;
+    double speedCache;
     UnityEngine.GameObject FakeGuard_prefab;
     UnityEngine.GameObject FakeGuard;
     UnityEngine.GameObject TrickTimerPrefab;
@@ -58,9 +58,10 @@
         stopAction = actor.SleepThenCallFunction(data.duration, () => Stop());
         actor.moving.canMove = true;
 
+        // 易容可以逃脱狗和Armed
         foreach (Guard guard in Globals.maze.guards)
         {
-            if ((guard as Dog) != null && guard.spot.target != null)
+            if (guard.data.name != "guard" && guard.spot.target == actor.transform)
             {
                 guard.wandering.Excute();
             }

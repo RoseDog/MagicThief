@@ -1,5 +1,5 @@
 ﻿[UnityEngine.RequireComponent(typeof(UnityEngine.EventSystems.EventTrigger))]
-public class CustomEventTrigger : UnityEngine.MonoBehaviour
+public class CustomEventTrigger : Actor
 {
     public UnityEngine.EventSystems.EventTrigger eventTrigger = null;
     public UnityEngine.UI.Button btn;
@@ -7,8 +7,9 @@ public class CustomEventTrigger : UnityEngine.MonoBehaviour
     public bool dragging = false;
     public bool inside = false;
 
-    public virtual void Awake()
+    public override void Awake()
     {
+        base.Awake();
         eventTrigger = gameObject.GetComponent<UnityEngine.EventSystems.EventTrigger>();
         Globals.AddEventTrigger(eventTrigger, OnBeginDrag, UnityEngine.EventSystems.EventTriggerType.BeginDrag);
         Globals.AddEventTrigger(eventTrigger, OnEndDrag, UnityEngine.EventSystems.EventTriggerType.EndDrag);
@@ -20,8 +21,9 @@ public class CustomEventTrigger : UnityEngine.MonoBehaviour
         rectTransform = GetComponent<UnityEngine.RectTransform>();        
     }
 
-    public void Update()
+    public override void Update()
     {
+        base.Update();
         Finger finger = Globals.input.GetFingerByID(0);
         if (finger.IsUp())
         {

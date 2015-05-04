@@ -8,6 +8,8 @@
     AddSafeBoxUI addSafeBox;
     UnityEngine.UI.Text RedPointsOnGuardsTab;
     UnityEngine.UI.Text RedPointsOnSafeboxTab;
+    public UnityEngine.GameObject SummonGuardTip;
+    public UIMover GuardTabPointer;
     public override void Awake()
     {
         base.Awake();
@@ -26,12 +28,16 @@
 
         RedPointsOnGuardsTab = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "RedPointsOnGuardsTab").GetComponentInChildren<UnityEngine.UI.Text>();
         RedPointsOnSafeboxTab = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "RedPointsOnSafeboxTab").GetComponentInChildren<UnityEngine.UI.Text>();
+
+        SummonGuardTip = Globals.getChildGameObject(gameObject, "SummonGuardTip");
+        SummonGuardTip.gameObject.SetActive(false);
+        GuardTabPointer = Globals.getChildGameObject<UIMover>(gameObject, "GuardTabPointer");
     }
 
     public void Start()
     {
         hireGuards.gameObject.SetActive(false);
-        addSafeBox.gameObject.SetActive(false);
+        addSafeBox.gameObject.SetActive(false);        
     }
 
     public void Open()
@@ -40,6 +46,18 @@
         mazeInfo.UpdateMazeInfo();
         hireGuards.UpdateGuardsInfo();
         addSafeBox.UpdateInfo();
+
+        if (!hireGuards.gameObject.activeSelf && 
+            Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.InitMyMaze && 
+            Globals.self.currentMazeLevel == 1)
+        {
+            GuardTabPointer.gameObject.SetActive(true);
+            GuardTabPointer.Jump();
+        }
+        else
+        {
+            GuardTabPointer.gameObject.SetActive(false);
+        }
 
         MazeLvData mazeData = Globals.mazeLvDatas[Globals.self.currentMazeLevel];
         if (!mazeData.playerEverClickGuards)
@@ -84,7 +102,7 @@
 
             Globals.mazeLvDatas[Globals.self.currentMazeLevel].playerEverClickGuards = true;
             Globals.canvasForMyMaze.RedPointsOnEnchanceDefBtn.transform.parent.gameObject.SetActive(false);
-            guardsTab.image.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/SelectedTabBtn");
+            guardsTab.image.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/SelectedTabBtn");            
         }
         else if (tabBtn == safeboxTab)
         {
@@ -92,7 +110,28 @@
 
             Globals.mazeLvDatas[Globals.self.currentMazeLevel].playerEverClickSafebox = true;            
             safeboxTab.image.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/SelectedTabBtn");
-        }     
+        }
+
+
+        if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.InitMyMaze && Globals.self.currentMazeLevel == 1)
+        {
+            if (tabBtn == guardsTab)
+            {
+                GuardTabPointer.gameObject.SetActive(false);
+                SummonGuardTip.gameObject.SetActive(true);
+                SummonGuardTip.GetComponentInChildren<UIMover>().Jump();
+            }
+            else
+            {
+                GuardTabPointer.gameObject.SetActive(true);
+                SummonGuardTip.gameObject.SetActive(false);
+            }            
+        }
+        else
+        {
+            SummonGuardTip.gameObject.SetActive(false);
+        }
+        
 
         hireGuards.prevBtn.gameObject.SetActive(hireGuards.gameObject.activeSelf);
         hireGuards.nextBtn.gameObject.SetActive(hireGuards.gameObject.activeSelf);

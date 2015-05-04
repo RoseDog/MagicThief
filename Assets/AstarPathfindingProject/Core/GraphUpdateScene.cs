@@ -39,7 +39,7 @@ public class GraphUpdateScene : GraphModifier {
 	 * Useful when all points are laid out on a plane but you still need a bounds with a height greater than zero since a
 	 * zero height graph update object would usually result in no nodes being updated.
 	 */
-	public float minBoundsHeight = 1;
+	public double minBoundsHeight = 1;
 	[HideInInspector]
 	/** Penalty to add to nodes.
 	 * Be careful when setting negative values since if a node get's a negative penalty it will underflow and instead get
@@ -85,7 +85,7 @@ public class GraphUpdateScene : GraphModifier {
 	public bool lockToY = false;
 	[HideInInspector]
 	/** if #lockToY is enabled lock all points to this value */
-	public float lockToYValue = 0;
+	public double lockToYValue = 0;
 	
 #if ConfigureTagsAsMultiple
 	/** Sets the value of the changed tags. This is a bitmask */
@@ -161,7 +161,7 @@ public class GraphUpdateScene : GraphModifier {
 		if (points == null) return;
 		
 		for (int i=0;i<points.Length;i++)
-			points[i].y = lockToYValue;
+            points[i].y = (float)lockToYValue;
 	}
 	
 	/** Apply the update.
@@ -198,7 +198,7 @@ public class GraphUpdateScene : GraphModifier {
 		shape.points = worldPoints;
 		
 		Bounds b = shape.GetBounds ();
-		if (b.size.y < minBoundsHeight) b.size = new Vector3(b.size.x,minBoundsHeight,b.size.z);
+        if (b.size.y < minBoundsHeight) b.size = new Vector3(b.size.x, (float)minBoundsHeight, b.size.z);
 		
 		GraphUpdateObject guo = new GraphUpdateObject (b);
 		guo.shape = shape;

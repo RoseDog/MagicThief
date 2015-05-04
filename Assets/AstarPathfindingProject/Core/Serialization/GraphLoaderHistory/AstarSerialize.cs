@@ -862,8 +862,8 @@ namespace Pathfinding {
 			} else if (type == typeof (string)) {
 				string st = (string)value;
 				stream.Write (st);
-			} else if (type == typeof (float)) {
-				stream.Write ((float)value);
+			} else if (type == typeof (double)) {
+				stream.Write ((double)value);
 			} else if (type == typeof (bool)) {
 				stream.Write ((bool)value);
 			} else if (type == typeof (Vector3)) {
@@ -1089,7 +1089,7 @@ namespace Pathfinding {
 				ob = stream.ReadInt32 ();
 			} else if (type == typeof (string)) {
 				ob = stream.ReadString ();
-			} else if (type == typeof (float)) {
+			} else if (type == typeof (double)) {
 				ob = stream.ReadSingle ();
 			} else if (type == typeof (bool)) {
 				ob = stream.ReadBoolean ();

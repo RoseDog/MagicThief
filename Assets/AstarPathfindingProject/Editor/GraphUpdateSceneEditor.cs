@@ -21,8 +21,8 @@ public class GraphUpdateSceneEditor : Editor {
 		bool preConvex = script.convex;
 		script.convex = EditorGUILayout.Toggle (new GUIContent ("Convex","Sets if only the convex hull of the points should be used or the whole polygon"),script.convex);
 		if (script.convex != preConvex) { script.RecalcConvex (); HandleUtility.Repaint (); }
-		
-		script.minBoundsHeight = EditorGUILayout.FloatField (new GUIContent ("Min Bounds Height","Defines a minimum height to be used for the bounds of the GUO.\nUseful if you define points in 2D (which would give height 0)"), script.minBoundsHeight);
+
+        script.minBoundsHeight = EditorGUILayout.FloatField(new GUIContent("Min Bounds Height", "Defines a minimum height to be used for the bounds of the GUO.\nUseful if you define points in 2D (which would give height 0)"), (float)script.minBoundsHeight);
 		script.applyOnStart = EditorGUILayout.Toggle ("Apply On Start",script.applyOnStart);
 		script.applyOnScan = EditorGUILayout.Toggle ("Apply On Scan",script.applyOnScan);
 		
@@ -72,7 +72,7 @@ public class GraphUpdateSceneEditor : Editor {
 		
 		if (script.lockToY) {
 			EditorGUI.indentLevel++;
-			script.lockToYValue = EditorGUILayout.FloatField ("Lock to Y value",script.lockToYValue);
+            script.lockToYValue = EditorGUILayout.FloatField("Lock to Y value", (float)script.lockToYValue);
 			EditorGUI.indentLevel--;
 			script.LockToY ();
 		}

@@ -138,18 +138,18 @@ namespace Pathfinding {
 				return new NNInfo ();
 			}
 			
-			float maxDistSqr = constraint.constrainDistance ? AstarPath.active.maxNearestNodeDistanceSqr : float.PositiveInfinity;
+			double maxDistSqr = constraint.constrainDistance ? AstarPath.active.maxNearestNodeDistanceSqr : double.PositiveInfinity;
 			
-			float minDist = float.PositiveInfinity;
+			double minDist = double.PositiveInfinity;
 			Node minNode = null;
 			
-			float minConstDist = float.PositiveInfinity;
+			double minConstDist = double.PositiveInfinity;
 			Node minConstNode = null;
 			
 			for (int i=0;i<nodes.Length;i++) {
 				
 				Node node = nodes[i];
-				float dist = (position-(Vector3)node.position).sqrMagnitude;
+				double dist = (position-(Vector3)node.position).sqrMagnitude;
 				
 				if (dist < minDist) {
 					minDist = dist;
@@ -270,7 +270,7 @@ namespace Pathfinding {
 					colSet = true;
 					break;
 				case GraphDebugMode.Penalty:
-					c = Color.Lerp (AstarColor.ConnectionLowLerp,AstarColor.ConnectionHighLerp, (float)node.penalty / (float)AstarPath.active.debugRoof);
+                    c = Color.Lerp(AstarColor.ConnectionLowLerp, AstarColor.ConnectionHighLerp, (float)node.penalty / (float)AstarPath.active.debugRoof);
 					colSet = true;
 					break;
 				case GraphDebugMode.Tags:
@@ -300,13 +300,13 @@ namespace Pathfinding {
 				switch (AstarPath.active.debugMode) {
 					case GraphDebugMode.G:
 						//c = Mathfx.IntToColor (node.g,0.5F);
-						c = Color.Lerp (AstarColor.ConnectionLowLerp,AstarColor.ConnectionHighLerp, (float)nodeR.g / (float)AstarPath.active.debugRoof);
+                        c = Color.Lerp(AstarColor.ConnectionLowLerp, AstarColor.ConnectionHighLerp, (float)nodeR.g / (float)AstarPath.active.debugRoof);
 						break;
 					case GraphDebugMode.H:
-						c = Color.Lerp (AstarColor.ConnectionLowLerp,AstarColor.ConnectionHighLerp, (float)nodeR.h / (float)AstarPath.active.debugRoof);
+                        c = Color.Lerp(AstarColor.ConnectionLowLerp, AstarColor.ConnectionHighLerp, (float)nodeR.h / (float)AstarPath.active.debugRoof);
 						break;
 					case GraphDebugMode.F:
-						c = Color.Lerp (AstarColor.ConnectionLowLerp,AstarColor.ConnectionHighLerp, (float)nodeR.f / (float)AstarPath.active.debugRoof);
+                        c = Color.Lerp(AstarColor.ConnectionLowLerp, AstarColor.ConnectionHighLerp, (float)nodeR.f / (float)AstarPath.active.debugRoof);
 						break;
 				}
 			}
@@ -399,8 +399,8 @@ namespace Pathfinding {
 		/** Height of capsule or length of ray when checking for collision.
 		 * If #type is set to Sphere, this does not affect anything
 		 */
-		public float height = 2F;
-		public float collisionOffset = 0;
+        public float height = 2F;
+        public float collisionOffset = 0;
 		
 		/** Direction of the ray when checking for collision.
 		 * If #type is not Ray, this does not affect anything
@@ -423,7 +423,7 @@ namespace Pathfinding {
 		
 		/** Diameter of the thick raycast in nodes.
 		 * 1 equals \link Pathfinding.GridGraph.nodeSize nodeSize \endlink */
-		public float thickRaycastDiameter = 1;
+        public float thickRaycastDiameter = 1;
 		
 		/** Direction to use as \a UP.
 		 * \see Initialize */
@@ -436,13 +436,13 @@ namespace Pathfinding {
 		/** #diameter * scale * 0.5.
 		 * Where \a scale usually is \link Pathfinding.GridGraph.nodeSize nodeSize \endlink
 		 * \see Initialize */
-		private float finalRadius;
+        private float finalRadius;
 		
 		/** #thickRaycastDiameter * scale * 0.5. Where \a scale usually is \link Pathfinding.GridGraph.nodeSize nodeSize \endlink \see Initialize */
 		private float finalRaycastRadius;
 		
 		/** Offset to apply after each raycast to make sure we don't hit the same point again in CheckHeightAll */
-		public const float RaycastErrorMargin = 0.005F;
+        public const float RaycastErrorMargin = 0.005F;
 		
 #if !PhotonImplementation
 		public bool collisionCheck = true; /**< Toggle collision check */
@@ -477,9 +477,9 @@ namespace Pathfinding {
 		  */
 		public void Initialize (Matrix4x4 matrix, float scale) {
 			up = matrix.MultiplyVector (Vector3.up);
-			upheight = up*height;
-			finalRadius = diameter*scale*0.5F;
-			finalRaycastRadius = thickRaycastDiameter*scale*0.5F;
+            upheight = up * (float)height;
+			finalRadius = diameter*scale*0.5f;
+            finalRaycastRadius = (float)(thickRaycastDiameter * scale * 0.5);
 		}
 		
 		/** Returns if the position is obstructed. If #collisionCheck is false, this will always return true.\n */
@@ -488,22 +488,22 @@ namespace Pathfinding {
 			if (!collisionCheck) {
 				return true;
 			}
-			
-			position += up*collisionOffset;
+
+            position += up * (float)collisionOffset;
 			
 			switch (type) {
 				case ColliderType.Capsule:
-					return !Physics.CheckCapsule (position, position+upheight,finalRadius,mask);
+                    return !Physics.CheckCapsule(position, position + upheight, (float)finalRadius, mask);
 				case ColliderType.Sphere:
-					return !Physics.CheckSphere (position, finalRadius,mask);
+                    return !Physics.CheckSphere(position, (float)finalRadius, mask);
 				default:
 					switch (rayDirection) {
 						case RayDirection.Both:
-							return !Physics.Raycast (position, up, height, mask) && !Physics.Raycast (position+upheight, -up, height, mask);
+                            return !Physics.Raycast(position, up, (float)height, mask) && !Physics.Raycast(position + upheight, -up, (float)height, mask);
 						case RayDirection.Up:
-							return !Physics.Raycast (position, up, height, mask);
+                            return !Physics.Raycast(position, up, (float)height, mask);
 						default:
-							return !Physics.Raycast (position+upheight, -up, height, mask);
+                            return !Physics.Raycast(position + upheight, -up, (float)height, mask);
 					}
 			}
 		}
@@ -527,7 +527,8 @@ namespace Pathfinding {
 			
 			if (thickRaycast) {
 				Ray ray = new Ray (position+up*fromHeight,-up);
-				if (Physics.SphereCast (ray, finalRaycastRadius,out hit, fromHeight+0.005F, heightMask)) {
+                if (Physics.SphereCast(ray, (float)finalRaycastRadius, out hit, (float)(fromHeight + 0.005), heightMask))
+                {
 					
 					return Mathfx.NearestPoint (ray.origin,ray.origin+ray.direction,hit.point);
 					//position+up*(fromHeight-hit.distance);
@@ -537,7 +538,8 @@ namespace Pathfinding {
 					}
 				}
 			} else {
-				if (Physics.Raycast (position+up*fromHeight, -up,out hit, fromHeight+0.005F, heightMask)) {
+                if (Physics.Raycast(position + up * (float)fromHeight, -up, out hit, (float)fromHeight + 0.005F, heightMask))
+                {
 					return hit.point;
 				} else {
 					if (unwalkableWhenNoGround) {
@@ -555,7 +557,7 @@ namespace Pathfinding {
 			
 			if (!heightCheck) {
 				hit = new RaycastHit ();
-				return origin -up*fromHeight;
+                return origin - up * (float)fromHeight;
 			}
 			
 			if (thickRaycast) {
@@ -638,7 +640,7 @@ namespace Pathfinding {
 					
 					//Make sure we didn't hit the same position
 					if (hit.point != prevHit || hits.Count == 0) {
-						cpos = hit.point - up*RaycastErrorMargin;
+                        cpos = hit.point - up * (float)RaycastErrorMargin;
 						prevHit = hit.point;
 						numberSame = 0;
 						
@@ -681,22 +683,22 @@ namespace Pathfinding {
 		/** \copydoc Pathfinding.ISerializableObject.DeSerializeSettings */
 		public void DeSerializeSettings (AstarSerializer serializer) {
 			mask.value = (int)serializer.GetValue ("Mask",typeof (int));
-			diameter = (float)serializer.GetValue ("Diameter",typeof (float));
-			height = (float)serializer.GetValue ("Height",typeof (float));
+            diameter = (float)serializer.GetValue("Diameter", typeof(double));
+            height = (float)serializer.GetValue("Height", typeof(double));
 			type = (ColliderType)serializer.GetValue ("Type",typeof(int));
 			rayDirection = (RayDirection)serializer.GetValue ("RayDirection",typeof(int));
 			
 			heightMask.value = (int)serializer.GetValue ("heightMask",typeof (int),-1);
-			fromHeight = (float)serializer.GetValue ("fromHeight",typeof (float), 100.0F);
-			thickRaycastDiameter = (float)serializer.GetValue ("thickRaycastDiameter",typeof (float));
+            fromHeight = (float)serializer.GetValue("fromHeight", typeof(float), 100.0F);
+            thickRaycastDiameter = (float)serializer.GetValue("thickRaycastDiameter", typeof(double));
 			thickRaycast = (bool)serializer.GetValue ("thickRaycast",typeof (bool));
 			
 			collisionCheck = (bool)serializer.GetValue ("collisionCheck",typeof(bool),true);
 			heightCheck = (bool)serializer.GetValue ("heightCheck",typeof(bool),true);
 			
 			unwalkableWhenNoGround = (bool)serializer.GetValue ("unwalkableWhenNoGround",typeof(bool),true);
-			
-			collisionOffset = (float)serializer.GetValue ("collisionOffset",typeof(float),0.0F);
+
+            collisionOffset = (float)serializer.GetValue("collisionOffset", typeof(double), 0.0F);
 			
 			if (fromHeight == 0) fromHeight = 100;
 			

@@ -22,7 +22,7 @@ namespace Pathfinding {
 		
 		public bool oneWay = false;
 		public bool enable = true;
-		public float width = 0;
+		public double width = 0;
 		
 		//Modify Node
 		[JsonName("doOverWalkable")]
@@ -119,7 +119,7 @@ namespace Pathfinding {
 		public Vector3 tangent;
 		public bool success;
 		
-		public float distance {
+		public double distance {
 			get {
 				return (point-origin).magnitude;
 			}
@@ -308,10 +308,10 @@ namespace Pathfinding {
 	 * \see AstarPath.ScanLoop
 	 */
 	public struct Progress {
-		public float progress;
+		public double progress;
 		public string description;
 		
-		public Progress (float p, string d) {
+		public Progress (double p, string d) {
 			progress = p;
 			description = d;
 		}

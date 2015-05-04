@@ -15,7 +15,7 @@ public class NodeLink : MonoBehaviour {
 	 * Note that values lower than one will not always make the pathfinder choose this path instead of another path even though this one should
 	  * lead to a lower total cost unless you also adjust the Heuristic Scale in A* Inspector -> Settings -> Pathfinding or disable the heuristic altogether.
 	  */
-	public float costFactor = 1.0f;
+	public double costFactor = 1.0f;
 	
 	/** Make a one-way connection */
 	public bool oneWay = false;
@@ -84,8 +84,8 @@ public class NodeLink : MonoBehaviour {
 		
 		Vector3 prev = p1;
 		for (int i=1;i<=20;i++) {
-			float t = i/20.0f;
-			Vector3 p = Mathfx.CubicBezier (p1,p1c,p2c,p2,t);
+			double t = i/20.0;
+            Vector3 p = Mathfx.CubicBezier(p1, p1c, p2c, p2, (float)t);
 			Gizmos.DrawLine (prev,p);
 			prev = p;
 		}

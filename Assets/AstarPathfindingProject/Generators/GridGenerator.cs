@@ -124,7 +124,7 @@ A grid graph will update that area and a small margin around it equal to \link P
 		/** Use heigh raycasting normal for max slope calculation.
 		 * True if #maxSlope is less than 90 degrees.
 		 */
-		public bool useRaycastNormal { get { return System.Math.Abs (90-maxSlope) > float.Epsilon; }}
+		public bool useRaycastNormal { get { return System.Math.Abs (90-maxSlope) > double.Epsilon; }}
 		
 		/** Erosion of the graph.
 		 * The graph can be eroded after calculation.
@@ -190,7 +190,7 @@ A grid graph will update that area and a small margin around it equal to \link P
 		[JsonMember]
 		public bool penaltyAngle = false;
 		[JsonMember]
-		public float penaltyAngleFactor = 100F;
+		public float penaltyAngleFactor = 100;
 		
 		/** Holds settings for using a texture as source for a grid graph.
 		 * Texure data can be used for fine grained control over how the graph will look.
@@ -242,7 +242,7 @@ A grid graph will update that area and a small margin around it equal to \link P
 			public bool enabled = false;
 			
 			public Texture2D source = null;
-			public float[] factors = new float[3];
+			public double[] factors = new double[3];
 			public ChannelUse[] channels = new ChannelUse[3];
 			
 #if !UNITY_3_3
@@ -292,19 +292,19 @@ A grid graph will update that area and a small margin around it equal to \link P
 			}
 			
 			/** Applies a value to the node using the specified ChannelUse */
-			void ApplyChannel (Node node, int x, int z, int value, ChannelUse channelUse, float factor) {
+			void ApplyChannel (Node node, int x, int z, int value, ChannelUse channelUse, double factor) {
 				switch (channelUse) {
 				case ChannelUse.Penalty:
-					node.penalty += (uint)Mathf.RoundToInt (value*factor);
+                        node.penalty += (uint)Mathf.RoundToInt(value * (float)factor);
 					break;
 				case ChannelUse.Position:
-					node.position.y = Mathf.RoundToInt (value*factor*Int3.Precision);
+                    node.position.y = Mathf.RoundToInt(value * (float)factor * Int3.Precision);
 					break;
 				case ChannelUse.WalkablePenalty:
 					if (value == 0) {
 						node.walkable = false;
 					} else {
-						node.penalty += (uint)Mathf.RoundToInt ((value-1)*factor);
+                        node.penalty += (uint)Mathf.RoundToInt((value - 1) * (float)factor);
 					}
 					break;
 				}
@@ -331,9 +331,9 @@ A grid graph will update that area and a small margin around it equal to \link P
 			public void DeSerializeSettings (AstarSerializer serializer) {
 				enabled = (bool)serializer.GetValue ("enabled",typeof(bool));
 				source = (Texture2D)serializer.GetUnityReferenceValue ("source",typeof(Texture2D));
-				factors = new float[3];
+				factors = new double[3];
 				for (int i=0;i<factors.Length;i++) {
-					factors[i] = (float)serializer.GetValue ("factor"+i,typeof(float),1F);
+					factors[i] = (double)serializer.GetValue ("factor"+i,typeof(double),1F);
 				}
 				
 				channels = new ChannelUse[3];
@@ -358,7 +358,7 @@ A grid graph will update that area and a small margin around it equal to \link P
 		/** Updates #size from #width, #depth and #nodeSize values. Also \link GenerateMatrix generates a new matrix \endlink.
 		 * \note This does not rescan the graph, that must be done with Scan */
 		public void UpdateSizeFromWidthDepth () {
-			unclampedSize = new Vector2 (width,depth)*nodeSize;
+            unclampedSize = new Vector2(width, depth) * (float)nodeSize;
 			GenerateMatrix ();
 		}
 		
@@ -372,12 +372,12 @@ A grid graph will update that area and a small margin around it equal to \link P
 			size.y *= Mathf.Sign (size.y);
 			
 			//Clamp the nodeSize at 0.1
-			nodeSize = Mathf.Clamp (nodeSize,size.x/1024F,Mathf.Infinity);//nodeSize < 0.1F ? 0.1F : nodeSize;
-			nodeSize = Mathf.Clamp (nodeSize,size.y/1024F,Mathf.Infinity);
-			
-			size.x = size.x < nodeSize ? nodeSize : size.x;
+            nodeSize = Mathf.Clamp(nodeSize, size.x / 1024F, Mathf.Infinity);//nodeSize < 0.1F ? 0.1F : nodeSize;
+            nodeSize = Mathf.Clamp(nodeSize, size.y / 1024F, Mathf.Infinity);
+
+            size.x = size.x < (float)nodeSize ? (float)nodeSize : size.x;
 			//size.y = size.y < 0.1F ? 0.1F : size.y;
-			size.y = size.y < nodeSize ? nodeSize : size.y;
+            size.y = size.y < (float)nodeSize ? (float)nodeSize : size.y;
 			
 			
 			boundsMatrix.SetTRS (center,Quaternion.Euler (rotation),new Vector3 (aspectRatio,1,1));
@@ -417,10 +417,11 @@ A grid graph will update that area and a small margin around it equal to \link P
 			
 			position = inverseMatrix.MultiplyPoint3x4 (position);
 			
-			float xf = position.x-0.5F;
-			float zf = position.z-0.5f;
-			int x = Mathf.Clamp (Mathf.RoundToInt (xf)  , 0, width-1);
-			int z = Mathf.Clamp (Mathf.RoundToInt (zf)  , 0, depth-1);
+			double xf = position.x-0.5F;
+			double zf = position.z-0.5f;
+
+			int x = Mathf.Clamp (Mathf.RoundToInt ((float)xf)  , 0, width-1);
+			int z = Mathf.Clamp (Mathf.RoundToInt ((float)zf)  , 0, depth-1);
 			
 			NNInfo nn = new NNInfo(nodes[z*width+x]);
 			//Set clamped position
@@ -447,7 +448,7 @@ A grid graph will update that area and a small margin around it equal to \link P
 			Node node = nodes[x+z*width];
 			
 			Node minNode = null;
-			float minDist = float.PositiveInfinity;
+			double minDist = double.PositiveInfinity;
 			int overlap = getNearestForceOverlap;
 			
 			if (constraint.Suitable (node)) {
@@ -464,8 +465,8 @@ A grid graph will update that area and a small margin around it equal to \link P
 			//int counter = 0;
 			
 			
-			float maxDist = constraint.constrainDistance ? AstarPath.active.maxNearestNodeDistance : float.PositiveInfinity;
-			float maxDistSqr = maxDist*maxDist;
+			double maxDist = constraint.constrainDistance ? AstarPath.active.maxNearestNodeDistance : double.PositiveInfinity;
+			double maxDistSqr = maxDist*maxDist;
 			
 			//for (int w = 1; w < getNearestForceLimit;w++) {
 			for (int w = 1;;w++) {
@@ -485,7 +486,7 @@ A grid graph will update that area and a small margin around it equal to \link P
 					if (nx < 0 || nz < 0 || nx >= width || nz >= depth) continue;
 					anyInside = true;
 					if (constraint.Suitable (nodes[nx+nz2])) {
-						float dist = ((Vector3)nodes[nx+nz2].position-globalPosition).sqrMagnitude;
+						double dist = ((Vector3)nodes[nx+nz2].position-globalPosition).sqrMagnitude;
 						//Debug.DrawRay (nodes[nx+nz2].position,Vector3.up*dist,Color.cyan);counter++;
 						if (dist < minDist && dist < maxDistSqr) { minDist = dist; minNode = nodes[nx+nz2]; }
 					}
@@ -498,7 +499,7 @@ A grid graph will update that area and a small margin around it equal to \link P
 					if (nx < 0 || nz < 0 || nx >= width || nz >= depth) continue;
 					anyInside = true;
 					if (constraint.Suitable (nodes[nx+nz2])) {
-						float dist = ((Vector3)nodes[nx+nz2].position-globalPosition).sqrMagnitude;
+						double dist = ((Vector3)nodes[nx+nz2].position-globalPosition).sqrMagnitude;
 						//Debug.DrawRay (nodes[nx+nz2].position,Vector3.up*dist,Color.cyan);counter++;
 						if (dist < minDist && dist < maxDistSqr) { minDist = dist; minNode = nodes[nx+nz2]; }
 					}
@@ -511,7 +512,7 @@ A grid graph will update that area and a small margin around it equal to \link P
 					if (nx < 0 || nz < 0 || nx >= width || nz >= depth) continue;
 					anyInside = true;
 					if (constraint.Suitable (nodes[nx+nz*width])) {
-						float dist = ((Vector3)nodes[nx+nz*width].position-globalPosition).sqrMagnitude;
+						double dist = ((Vector3)nodes[nx+nz*width].position-globalPosition).sqrMagnitude;
 						//Debug.DrawRay (nodes[nx+nz*width].position,Vector3.up*dist,Color.cyan);counter++;
 						if (dist < minDist && dist < maxDistSqr) { minDist = dist; minNode = nodes[nx+nz*width]; }
 					}
@@ -523,7 +524,7 @@ A grid graph will update that area and a small margin around it equal to \link P
 					if (nx < 0 || nz < 0 || nx >= width || nz >= depth) continue;
 					anyInside = true;
 					if (constraint.Suitable (nodes[nx+nz*width])) {
-						float dist = ((Vector3)nodes[nx+nz*width].position-globalPosition).sqrMagnitude;
+						double dist = ((Vector3)nodes[nx+nz*width].position-globalPosition).sqrMagnitude;
 						//Debug.DrawRay (nodes[nx+nz*width].position,Vector3.up*dist,Color.cyan);counter++;
 						if (dist < minDist && dist < maxDistSqr) { minDist = dist; minNode = nodes[nx+nz*width]; }
 					}
@@ -726,15 +727,15 @@ A grid graph will update that area and a small margin around it equal to \link P
 				
 				if (hit.normal != Vector3.zero) {
 					//Take the dot product to find out the cosinus of the angle it has (faster than Vector3.Angle)
-					float angle = Vector3.Dot (hit.normal.normalized,collision.up);
+					double angle = Vector3.Dot (hit.normal.normalized,collision.up);
 					
 					//Add penalty based on normal
 					if (penaltyAngle && resetPenalty) {
-						node.penalty += (uint)Mathf.RoundToInt ((1F-angle)*penaltyAngleFactor);
+                        node.penalty += (uint)Mathf.RoundToInt((1F - (float)angle) * penaltyAngleFactor);
 					}
 					
 					//Max slope in cosinus
-					float cosAngle = Mathf.Cos (maxSlope*Mathf.Deg2Rad);
+					double cosAngle = Mathf.Cos (maxSlope*Mathf.Deg2Rad);
 					
 					//Check if the slope is flat enough to stand on
 					if (angle < cosAngle) {
@@ -1630,19 +1631,19 @@ A grid graph will update that area and a small margin around it equal to \link P
 			}
 			
 			Vector3 dir = _b-_a;
-			float magn = dir.magnitude;
+			double magn = dir.magnitude;
 			
 			if (magn == 0) {
 				//Zero length line
 				return false;
 			}
 			
-			float sampleLength = 0.2F;
+			double sampleLength = 0.2F;
 			
-			float newMagn = nodeSize * sampleLength;
+			double newMagn = nodeSize * sampleLength;
 			newMagn -= nodeSize * 0.02F;
-			
-			dir = (dir / magn) * newMagn;
+
+            dir = (dir / (float)magn) * (float)newMagn;
 			
 			//Floor to int, number of samples on the line
 			int its = (int)(magn / newMagn);
@@ -2003,7 +2004,7 @@ A grid graph will update that area and a small margin around it equal to \link P
 					node.SetGridIndex (gridIndex);
 					
 					
-					float yPos = 0;
+					double yPos = 0;
 					
 					//if (serializer.mask == AstarSerializer.SMask.SaveNodePositions) {
 						//Needs to multiply with precision factor because the position will be scaled by Int3.Precision later (Vector3 --> Int3 conversion)
@@ -2013,8 +2014,8 @@ A grid graph will update that area and a small margin around it equal to \link P
 						yPos = serializer.readerStream.ReadInt32 ();
 					}
 					//}
-					
-					node.position = (Int3)matrix.MultiplyPoint3x4 (new Vector3 (x+0.5F,yPos,z+0.5F));
+
+                    node.position = (Int3)matrix.MultiplyPoint3x4(new Vector3(x + 0.5F, (float)yPos, z + 0.5F));
 				}
 			}
 
@@ -2070,25 +2071,25 @@ A grid graph will update that area and a small margin around it equal to \link P
 			
 			rotation = (Vector3)serializer.GetValue ("rotation",typeof(Vector3));
 			
-			nodeSize = (float)serializer.GetValue ("nodeSize",typeof(float));
+			nodeSize = (float)serializer.GetValue ("nodeSize",typeof(double));
 			
 			collision = (GraphCollision)serializer.GetValue ("collision",typeof(GraphCollision));
 			
 			center = (Vector3)serializer.GetValue ("center",typeof(Vector3));
 			
-			maxClimb = (float)serializer.GetValue ("maxClimb",typeof(float));
+			maxClimb = (float)serializer.GetValue ("maxClimb",typeof(double));
 			maxClimbAxis = (int)serializer.GetValue ("maxClimbAxis",typeof(int),1);
-			maxSlope = (float)serializer.GetValue ("maxSlope",typeof(float),90.0F);
+			maxSlope = (float)serializer.GetValue ("maxSlope",typeof(double),90.0F);
 			
 			erodeIterations = (int)serializer.GetValue ("erodeIterations",typeof(int));
 			
 			penaltyAngle = 			(bool)serializer.GetValue ("penaltyAngle",typeof(bool));
-			penaltyAngleFactor = 	(float)serializer.GetValue ("penaltyAngleFactor",typeof(float));
+			penaltyAngleFactor = 	(float)serializer.GetValue ("penaltyAngleFactor",typeof(double));
 			penaltyPosition = 		(bool)serializer.GetValue ("penaltyPosition",typeof(bool));
-			penaltyPositionOffset = (float)serializer.GetValue ("penaltyPositionOffset",typeof(float));
-			penaltyPositionFactor = (float)serializer.GetValue ("penaltyPositionFactor",typeof(float));
+			penaltyPositionOffset = (float)serializer.GetValue ("penaltyPositionOffset",typeof(double));
+			penaltyPositionFactor = (float)serializer.GetValue ("penaltyPositionFactor",typeof(double));
 			
-			aspectRatio = (float)serializer.GetValue ("aspectRatio",typeof(float),1F);
+			aspectRatio = (float)serializer.GetValue ("aspectRatio",typeof(double),1F);
 			
 			textureData			=	serializer.GetValue ("textureData",typeof(TextureData)) as TextureData;
 			if (textureData == null) textureData = new TextureData ();

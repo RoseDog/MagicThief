@@ -3,18 +3,21 @@
     [UnityEngine.HideInInspector]
     float fade = 1.0f;
     [UnityEngine.HideInInspector]
-    int wait = 100;
+    int wait = 180;
     UnityEngine.UI.Text tip;
     
     public override void Awake()
     {
-        base.Awake();
-        tip = GetComponentInChildren<UnityEngine.UI.Text>();        
+        base.Awake();                
         UpdateAlpha(0);
     }
 
     public void Show(System.String text)
     {
+        if (tip == null)
+        {
+            tip = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "Text");
+        }
         gameObject.SetActive(true);
         Globals.languageTable.SetText(tip, text);
         AddAction(new Sequence(new FadeUI(this, 0, 1, fade), new SleepFor(wait),

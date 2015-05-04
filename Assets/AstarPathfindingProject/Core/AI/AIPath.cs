@@ -61,32 +61,32 @@ public class AIPath : MonoBehaviour {
 	/** Maximum velocity.
 	 * This is the maximum speed in world units per second.
 	 */
-	public float speed = 3;
+	public double speed = 3;
 	
 	/** Rotation speed.
 	 * Rotation is calculated using Quaternion.SLerp. This variable represents the damping, the higher, the faster it will be able to rotate.
 	 */
     [UnityEngine.HideInInspector]
-	public float turningSpeed = 5;
+	public double turningSpeed = 5;
 	
 	/** Distance from the target point where the AI will start to slow down.
 	 * Note that this doesn't only affect the end point of the path
  	 * but also any intermediate points, so be sure to set #forwardLook and #pickNextWaypointDist to a higher value than this
  	 */
     [UnityEngine.HideInInspector]
-	public float slowdownDistance = 0.6F;
+	public double slowdownDistance = 0.6F;
 	
 	/** Determines within what range it will switch to target the next waypoint in the path */
-	public float pickNextWaypointDist = 2;
+	public double pickNextWaypointDist = 2;
 	
 	/** Target point is Interpolated on the current segment in the path so that it has a distance of #forwardLook from the AI.
 	  * See the detailed description of AIPath for an illustrative image */
-	public float forwardLook = 1;
+	public double forwardLook = 1;
 	
 	/** Distance to the end point to consider the end of path to be reached.
 	 * When this has been reached, the AI will not move anymore until the target changes and OnTargetReached will be called.
 	 */
-	public float endReachedDistance = 0.2F;
+	public double endReachedDistance = 0.2F;
 	
 	/** Do a closest point on path check when receiving path callback.
 	 * Usually the AI has moved a bit between requesting the path, and getting it back, and there is usually a small gap between the AI
@@ -97,7 +97,7 @@ public class AIPath : MonoBehaviour {
 	 */
 	public bool closestOnPathCheck = true;
 	
-	protected float minMoveScale = 0.05F;
+	protected double minMoveScale = 0.05F;
 	
 	/** Cached Seeker component */
 	protected Seeker seeker;
@@ -292,9 +292,9 @@ public class AIPath : MonoBehaviour {
 		if (closestOnPathCheck) {
 			Vector3 p1 = p.startPoint;
 			Vector3 p2 = GetFeetPosition ();
-			float magn = Vector3.Distance (p1,p2);
+			double magn = Vector3.Distance (p1,p2);
 			Vector3 dir = p2-p1;
-			dir /= magn;
+			dir /= (float)magn;
 			int steps = (int)(magn/pickNextWaypointDist);
 			for (int i=0;i<steps;i++) {
 				CalculateVelocity (p1,speed);
@@ -341,9 +341,9 @@ public class AIPath : MonoBehaviour {
 	 * Filled in by #CalculateVelocity */
 	protected Vector3 targetDirection;
 	
-	protected float XYSqrMagnitude (Vector3 a, Vector3 b) {
-		float dx = b.x-a.x;
-		float dy = b.y-a.y;
+	protected double XYSqrMagnitude (Vector3 a, Vector3 b) {
+		double dx = b.x-a.x;
+		double dy = b.y-a.y;
 		return dx*dx + dy*dy;
 	}
 	
@@ -359,7 +359,7 @@ public class AIPath : MonoBehaviour {
 	 * /see targetDirection
 	 * /see currentWaypointIndex
 	 */
-	protected Vector3 CalculateVelocity (Vector3 currentPosition, float s) {
+	protected Vector3 CalculateVelocity (Vector3 currentPosition, double s) {
 //         currentPosition = new UnityEngine.Vector3(
 //             (float)System.Math.Round(currentPosition.x, 2),
 //             (float)System.Math.Round(currentPosition.y, 2),
@@ -390,7 +390,7 @@ public class AIPath : MonoBehaviour {
 		while (true) {
 			if (waypointIndex < vPath.Count-1) {
 				//There is a "next path segment"
-				float dist = XYSqrMagnitude (vPath[waypointIndex], currentPosition);
+				double dist = XYSqrMagnitude (vPath[waypointIndex], currentPosition);
 					//Mathfx.DistancePointSegmentStrict (vPath[currentWaypointIndex+1],vPath[currentWaypointIndex+2],currentPosition);
 				if (dist < pickNextWaypointDist*pickNextWaypointDist) {
 					waypointIndex++;
@@ -406,18 +406,18 @@ public class AIPath : MonoBehaviour {
 		Vector3 dir = vPath[waypointIndex] - vPath[waypointIndex-1];
 		//Vector3 targetPosition = CalculateTargetPoint (currentPosition,vPath[waypointIndex-1] , vPath[waypointIndex]);
         Vector3 targetPosition = CalculateMovingDir.Calculate(currentPosition, vPath[waypointIndex - 1], vPath[waypointIndex], forwardLook);
-        targetPosition = new UnityEngine.Vector3(
-            (float)System.Math.Round(targetPosition.x, 2),
-            (float)System.Math.Round(targetPosition.y, 2),
-            (float)System.Math.Round(targetPosition.z, 2));
+//         targetPosition = new UnityEngine.Vector3(
+//             (float)System.Math.Round(targetPosition.x, 2),
+//             (float)System.Math.Round(targetPosition.y, 2),
+//             (float)System.Math.Round(targetPosition.z, 2));
         
         
         dir = targetPosition-currentPosition;
         //dir = new Vector3(Globals.Floor(dir.x), Globals.Floor(dir.y), 0);
-        dir = new UnityEngine.Vector3(
-            (float)System.Math.Round(dir.x, 2),
-            (float)System.Math.Round(dir.y, 2),
-            0);
+//         dir = new UnityEngine.Vector3(
+//             (float)System.Math.Round(dir.x, 2),
+//             (float)System.Math.Round(dir.y, 2),
+//             0);
 		dir.z = 0;
 
 //         System.String record_content = gameObject.name;
@@ -428,7 +428,7 @@ public class AIPath : MonoBehaviour {
 //         record_content += " dir:" + dir.ToString("F5");
 //         Globals.record("testReplay", record_content);
 
-		float targetDist = dir.magnitude;
+		double targetDist = dir.magnitude;
 		
 		this.targetDirection = dir;
 		//this.targetPoint = targetPosition;
@@ -460,8 +460,7 @@ public class AIPath : MonoBehaviour {
 		Debug.DrawRay (GetFeetPosition(),forward*sp,Color.cyan);
 #endif
 
-
-        return dir.normalized * s;
+        return dir.normalized * (float)s;
 	}
 	
 	/** Rotates in the specified direction.
@@ -474,7 +473,7 @@ public class AIPath : MonoBehaviour {
         {
             Quaternion toTarget = Quaternion.LookRotation(dir);
 
-            rot = Quaternion.Slerp(rot, toTarget, turningSpeed * Time.fixedDeltaTime);
+            rot = Quaternion.Slerp(rot, toTarget, (float)turningSpeed * Time.fixedDeltaTime);
             Vector3 euler = rot.eulerAngles;
             euler.y = 90;
             euler.z = -90;
@@ -491,23 +490,24 @@ public class AIPath : MonoBehaviour {
 	 * The returned point will lie somewhere on the line segment.
 	 * \see #forwardLook
 	 * \todo This function uses .magnitude quite a lot, can it be optimized?
-	 */
+	 */    
+
 	protected Vector3 CalculateTargetPoint (Vector3 p, Vector3 a, Vector3 b) {
 		a.z = p.z;
 		b.z = p.z;
 		
-		float magn = (a-b).magnitude;
+		double magn = (a-b).magnitude;
 		if (magn == 0) return a;
 		
-		float closest = Mathfx.Clamp01 (Mathfx.NearestPointFactor (a, b, p));
-		Vector3 point = (b-a)*closest + a;
-		float distance = (point-p).magnitude;
+		double closest = Mathfx.Clamp01 (Mathfx.NearestPointFactor (a, b, p));
+		Vector3 point = (b-a)*(float)closest + a;
+		double distance = (point-p).magnitude;
 		
-		float lookAhead = Mathf.Clamp (forwardLook - distance, 0.0F, forwardLook);
+		double lookAhead = Globals.Clamp(forwardLook - distance, 0, forwardLook);
 		
-		float offset = lookAhead / magn;
-		offset = Mathf.Clamp (offset+closest,0.0F,1.0F);
-		return (b-a)*offset + a;
+		double offset = lookAhead / magn;
+        offset = Globals.Clamp(offset + closest, 0, 1);
+		return (b-a)*(float)offset + a;
 	}
 
     public void ClearPath()

@@ -339,7 +339,7 @@ while the end has not been found and no error has ocurred
 					if (System.DateTime.UtcNow.Ticks >= targetTick) {
 						
 						//Return instead of yield'ing, a separate function handles the yield (CalculatePaths)
-						return;
+						//return;
 					}
 					counter = 0;
 				}
@@ -456,13 +456,13 @@ while the end has not been found and no error has ocurred
 				return vectorPath[0]-point;
 			}
 			
-			float minDist = float.PositiveInfinity;//Mathf.Infinity;
+			double minDist = double.PositiveInfinity;//Mathf.Infinity;
 			int minSegment = 0;
 			
 			for (int i=0;i<vectorPath.Count-1;i++) {
 				
 				Vector3 closest = Mathfx.NearestPointStrict (vectorPath[i],vectorPath[i+1],point);
-				float dist = (closest-point).sqrMagnitude;
+				double dist = (closest-point).sqrMagnitude;
 				if (dist < minDist) {
 					minDist = dist;
 					minSegment = i;

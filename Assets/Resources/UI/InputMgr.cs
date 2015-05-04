@@ -358,7 +358,7 @@ public class InputMgr : MonoBehaviour
     {
         DontDestroyOnLoad(this);
         Globals.input = this;
-        UnityEngine.Application.targetFrameRate = 30;
+        UnityEngine.Application.targetFrameRate = 60;
         for (int idx = 0; idx < 3; ++idx)
         {
             Finger finger = new Finger(idx, this);
@@ -580,7 +580,7 @@ public class InputMgr : MonoBehaviour
 			}
 		}
 
-        Globals.replay.FrameFunc();
+        Globals.replaySystem.FrameFunc();
 	}	
 	
 	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)

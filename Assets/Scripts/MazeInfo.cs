@@ -44,10 +44,12 @@
         {
             Globals.Assert(Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.InitMyMaze);
             Globals.canvasForMyMaze.InitMazeBtnClicked();
+            Globals.canvasForMyMaze.ChangeMazeRoom(0);
         }
         else
         {
-            isUpgradingMaze = true;             
+            isUpgradingMaze = true;
+            Globals.self.summonedGuardsStr = "";
             Globals.maze.UnRegisterGuardArrangeEvent();
             Globals.maze.ClearMaze();
             Globals.maze.Start();
@@ -61,6 +63,8 @@
         // 0级迷宫代表还没有通过创建迷宫的教程。没有迷宫的状态
         
         MazeLv.text = Globals.self.currentMazeLevel.ToString();
+        Globals.languageTable.SetText(Room, "room",
+                new System.String[] { Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport.ToString() });
         if (Globals.self.currentMazeLevel == Globals.mazeLvDatas.Count - 1)
         {
             UpgradeBtn.gameObject.SetActive(false);
@@ -73,10 +77,7 @@
         }
         else
         {
-            MazeIcon.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/maze_" + Globals.self.currentMazeLevel.ToString());
-            Room.text = Globals.languageTable.GetText("room") + ":" + Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport
-                + " + " + (Globals.mazeLvDatas[Globals.self.currentMazeLevel + 1].roomSupport - Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport).ToString();
-
+            MazeIcon.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/maze_" + Globals.self.currentMazeLevel.ToString());                        
             if (Globals.self.roseCount >= Globals.mazeLvDatas[Globals.self.currentMazeLevel + 1].roseRequire)
             {
                 UpgradeBtn.gameObject.SetActive(true);
@@ -90,6 +91,9 @@
                     UpgradePrice.color = UnityEngine.Color.white;
                 }
                 Lock.gameObject.SetActive(false);
+
+                // 解锁了，显示出升级会增加的数值
+                Room.text = Room.text + " + " + (Globals.mazeLvDatas[Globals.self.currentMazeLevel + 1].roomSupport - Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport).ToString();
             }
             else
             {

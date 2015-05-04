@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace Pathfinding {
 	/** Base class for all path types */
 	public abstract class Path {
-        public GameObject gem;
+        public Chest chest;
 	
 #if ASTAR_POOL_DEBUG
 		private string pathTraceInfo = "";
@@ -80,12 +80,12 @@ namespace Pathfinding {
 		public List<Vector3> vectorPath;
 		
 		/** The max number of milliseconds per iteration (frame, in case of non-multithreading) */
-		protected float maxFrameTime;
+		protected double maxFrameTime;
 		
 		/** The node currently being processed */
 		protected NodeRun currentR;
 		
-		public float duration;			/**< The duration of this path in ms. How long it took to calculate the path */
+		public double duration;			/**< The duration of this path in ms. How long it took to calculate the path */
 		
 		/**< The number of frames/iterations this path has executed.
 		 * This is the number of frames when not using multithreading.
@@ -155,7 +155,7 @@ namespace Pathfinding {
 		public Heuristic heuristic;
 		
 		/** Scale of the heuristic values */
-		public float heuristicScale = 1F;
+		public double heuristicScale = 1F;
 		
 		/** ID of this path. Used to distinguish between different paths */
 #if ASTAR_MORE_PATH_IDS	
@@ -208,9 +208,9 @@ namespace Pathfinding {
 		 * Cache this rather than call this function every time since it will calculate the length every time, not just return a cached value.
 		 * \returns Total length of #vectorPath, if #vectorPath is null positive infinity is returned.
 		 */
-		public float GetTotalLength () {
-			if (vectorPath == null) return float.PositiveInfinity;
-			float tot = 0;
+		public double GetTotalLength () {
+			if (vectorPath == null) return double.PositiveInfinity;
+			double tot = 0;
 			for (int i=0;i<vectorPath.Count-1;i++) tot += Vector3.Distance (vectorPath[i],vectorPath[i+1]);
 			return tot;
 		}

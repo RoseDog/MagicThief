@@ -432,7 +432,7 @@ public class GridGraphEditor : GraphEditor, ISerializableGraphEditor {
 			
 			if (data.channels[i] != GridGraph.TextureData.ChannelUse.None) {
 				EditorGUI.indentLevel++;
-				data.factors[i] = EditorGUILayout.FloatField ("Factor",data.factors[i]);
+				data.factors[i] = EditorGUILayout.FloatField ("Factor",(float)data.factors[i]);
 				
 				string help = "";
 				switch (data.channels[i]) {

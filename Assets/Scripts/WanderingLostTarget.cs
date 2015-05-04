@@ -8,6 +8,10 @@ public class WanderingLostTarget : GuardAction
     public override void Excute()
     {
         base.Excute();
+        if (guard.alertSound != null)
+        {
+            guard.alertSound.StopAlert();
+        }
         Debug.Log("WanderingLostTarget:" + UnityEngine.Time.frameCount.ToString());
         if (guard.heardAlert != null)
         {
@@ -18,7 +22,6 @@ public class WanderingLostTarget : GuardAction
         guard.spot.target = null;
         guard.moving.target = null;
         guard.moving.canMove = false;
-        guard.HideBtns();
 
         if (eyeWandering == null)
         {
@@ -36,8 +39,7 @@ public class WanderingLostTarget : GuardAction
         
         if (call == null)
         {
-            call = guard.SleepThenCallFunction(250, () => GoOnPatrol());
-            
+            call = guard.SleepThenCallFunction(250, () => GoOnPatrol());            
         }
         else
         {

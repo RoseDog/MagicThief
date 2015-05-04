@@ -217,21 +217,21 @@ TextureImporter:
     21300424: disguise_4
     21300426: disguise_5
     21300428: Magician_Sprite_25
-    21300430: Hypnosis_0
-    21300432: Hypnosis_1
-    21300434: Hypnosis_2
-    21300436: Hypnosis_3
-    21300438: Hypnosis_4
-    21300440: Hypnosis_5
-    21300442: Hypnosis_6
-    21300444: Hypnosis_7
-    21300446: Hypnosis_8
-    21300448: Hypnosis_9
-    21300450: Hypnosis_10
-    21300452: Hypnosis_11
-    21300454: Hypnosis_12
-    21300456: Hypnosis_13
-    21300458: Hypnosis_14
+    21300430: 
+    21300432: 
+    21300434: 
+    21300436: 
+    21300438: 
+    21300440: 
+    21300442: 
+    21300444: 
+    21300446: 
+    21300448: TryEscape_8
+    21300450: TryEscape_9
+    21300452: Hypnosis_2
+    21300454: Hypnosis_3
+    21300456: Hypnosis_4
+    21300458: Hypnosis_5
     21300460: Magician_Sprite_41
     21300462: Magician_Sprite_42
     21300464: Magician_Sprite_43
@@ -398,6 +398,14 @@ TextureImporter:
     21300786: falling_failed_0
     21300788: die_2
     21300790: Magician_head
+    21300792: TryEscape_0
+    21300794: TryEscape_1
+    21300796: TryEscape_2
+    21300798: TryEscape_3
+    21300800: TryEscape_4
+    21300802: TryEscape_5
+    21300806: TryEscape_6
+    21300808: TryEscape_7
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -699,7 +707,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hypnosis_0
+    - name: TryEscape_0
       rect:
         serializedVersion: 2
         x: 14
@@ -709,7 +717,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hypnosis_1
+    - name: TryEscape_1
       rect:
         serializedVersion: 2
         x: 70
@@ -719,7 +727,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hypnosis_2
+    - name: TryEscape_2
       rect:
         serializedVersion: 2
         x: 124
@@ -729,7 +737,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hypnosis_3
+    - name: TryEscape_3
       rect:
         serializedVersion: 2
         x: 172
@@ -739,7 +747,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hypnosis_4
+    - name: TryEscape_4
       rect:
         serializedVersion: 2
         x: 228
@@ -749,7 +757,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hypnosis_5
+    - name: TryEscape_5
       rect:
         serializedVersion: 2
         x: 284
@@ -759,7 +767,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hypnosis_6
+    - name: 
       rect:
         serializedVersion: 2
         x: 336
@@ -769,7 +777,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hypnosis_7
+    - name: TryEscape_6
       rect:
         serializedVersion: 2
         x: 386
@@ -779,7 +787,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hypnosis_8
+    - name: TryEscape_7
       rect:
         serializedVersion: 2
         x: 439
@@ -789,7 +797,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hypnosis_9
+    - name: TryEscape_8
       rect:
         serializedVersion: 2
         x: 490
@@ -799,7 +807,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hypnosis_10
+    - name: TryEscape_9
       rect:
         serializedVersion: 2
         x: 555
@@ -809,7 +817,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hypnosis_11
+    - name: Hypnosis_2
       rect:
         serializedVersion: 2
         x: 15
@@ -819,7 +827,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hypnosis_12
+    - name: Hypnosis_3
       rect:
         serializedVersion: 2
         x: 89
@@ -829,7 +837,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hypnosis_13
+    - name: Hypnosis_4
       rect:
         serializedVersion: 2
         x: 156
@@ -839,7 +847,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Hypnosis_14
+    - name: Hypnosis_5
       rect:
         serializedVersion: 2
         x: 225

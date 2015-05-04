@@ -21,7 +21,7 @@ public class SmoothModifierEditor : Editor {
 			ob.uniformLength = EditorGUILayout.Toggle (new GUIContent ("Uniform Segment Length","Toggle to divide all lines in equal length segments"),ob.uniformLength);
 			
 			if (ob.uniformLength) {
-				ob.maxSegmentLength = EditorGUILayout.FloatField (new GUIContent ("Max Segment Length","The length of each segment in the smoothed path. A high value yields rough paths and low value yields very smooth paths, but is slower"),ob.maxSegmentLength);
+                ob.maxSegmentLength = EditorGUILayout.FloatField(new GUIContent("Max Segment Length", "The length of each segment in the smoothed path. A high value yields rough paths and low value yields very smooth paths, but is slower"), (float)ob.maxSegmentLength);
 				ob.maxSegmentLength = ob.maxSegmentLength < 0 ? 0 : ob.maxSegmentLength;
 			} else {
 				ob.subdivisions = EditorGUILayout.IntField (new GUIContent ("Subdivisions","The number of times to subdivide (divide in half) the path segments. [0...inf] (recommended [1...10])"),ob.subdivisions);
@@ -30,8 +30,8 @@ public class SmoothModifierEditor : Editor {
 			
 			ob.iterations = EditorGUILayout.IntField (new GUIContent ("Iterations","Number of times to apply smoothing"),ob.iterations);
 			ob.iterations = ob.iterations < 0 ? 0 : ob.iterations;
-			
-			ob.strength = EditorGUILayout.Slider (new GUIContent ("Strength","Determines how much smoothing to apply in each smooth iteration. 0.5 usually produces the nicest looking curves"),ob.strength,0.0F,1.0F);
+
+            ob.strength = EditorGUILayout.Slider(new GUIContent("Strength", "Determines how much smoothing to apply in each smooth iteration. 0.5 usually produces the nicest looking curves"), (float)ob.strength, 0.0F, 1.0F);
 			
 		} else if (ob.smoothType == SimpleSmoothModifier.SmoothType.OffsetSimple) {
 			
@@ -50,7 +50,7 @@ public class SmoothModifierEditor : Editor {
 			ob.bezierTangentLength = EditorGUILayout.FloatField (new GUIContent ("Tangent Length","Tangent length factor"),ob.bezierTangentLength);
 			
 		} else if (ob.smoothType == SimpleSmoothModifier.SmoothType.CurvedNonuniform) {
-			ob.maxSegmentLength = EditorGUILayout.FloatField (new GUIContent ("Max Segment Length","The length of each segment in the smoothed path. A high value yields rough paths and low value yields very smooth paths, but is slower"),ob.maxSegmentLength);
+            ob.maxSegmentLength = EditorGUILayout.FloatField(new GUIContent("Max Segment Length", "The length of each segment in the smoothed path. A high value yields rough paths and low value yields very smooth paths, but is slower"), (float)ob.maxSegmentLength);
 			ob.maxSegmentLength = ob.maxSegmentLength < 0 ? 0 : ob.maxSegmentLength;
 		} else {
 			DrawDefaultInspector ();

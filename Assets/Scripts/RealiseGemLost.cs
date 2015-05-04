@@ -1,21 +1,20 @@
 ﻿public class RealiseGemLost : GuardAction 
 {
-    System.Collections.Generic.List<Pathfinding.Path> tempPathes = new System.Collections.Generic.List<Pathfinding.Path>();    
-
+    System.Collections.Generic.List<Pathfinding.Path> tempPathes = new System.Collections.Generic.List<Pathfinding.Path>();
+    Cocos2dAction call;
     public override void Excute()
     {
         base.Excute();
         guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Suspicious);
-        guard.anim.CrossFade("atkReady");
-        guard.FaceTarget(guard.guardedGemHolder.transform);
+        guard.spriteSheet.Play("idle");
 
         // 找到最近的宝石
-        for (ushort idx = 0; idx < (Globals.LevelController as TutorialLevelController).unstolenGems.Count; ++idx)
+        for (ushort idx = 0; idx < (Globals.LevelController as TutorialLevelController).unstolenChests.Count; ++idx)
         {
-            UnityEngine.GameObject gem = (Globals.LevelController as TutorialLevelController).unstolenGems[idx];
-            Pathfinding.Path p = Pathfinding.ABPath.Construct(transform.position, gem.transform.position, null);
+            Chest chest = (Globals.LevelController as TutorialLevelController).unstolenChests[idx];
+            Pathfinding.Path p = Pathfinding.ABPath.Construct(transform.position, chest.transform.position, null);
             p.callback += OnPathToGemComplete;
-            p.gem = gem;
+            p.chest = chest;
             AstarPath.StartPath(p);
         }        
     }
@@ -24,33 +23,34 @@
     public void OnPathToGemComplete(Pathfinding.Path p)
     {
         tempPathes.Add(p);
-        if (tempPathes.Count == (Globals.LevelController as TutorialLevelController).unstolenGems.Count)
+        if (tempPathes.Count == (Globals.LevelController as TutorialLevelController).unstolenChests.Count)
         {
-            float shortest = UnityEngine.Mathf.Infinity;
-            UnityEngine.GameObject nearestGem = null;
+            double shortest = UnityEngine.Mathf.Infinity;
+            Chest nearestChest = null;
             for (int idx = 0; idx < tempPathes.Count; ++idx)
             {
                 Pathfinding.Path path = tempPathes[idx];
-                float length = path.GetTotalLength();
+                double length = path.GetTotalLength();
                 if (length < shortest)
                 {
                     shortest = length;
-                    nearestGem = path.gem;
+                    nearestChest = path.chest;
                 }
             }
             UnityEngine.Debug.Log("go to guard nearest gem");
-            guard.guardedGemHolder = nearestGem;
-            Pathfinding.Node birthNode = Globals.maze.pathFinder.GetSingleNode(nearestGem.transform.position, true);
+            guard.guardedChest = nearestChest;
+            Pathfinding.Node birthNode = Globals.maze.pathFinder.GetSingleNode(nearestChest.transform.position, true);
             guard.birthNode = birthNode;
             guard.patrol.InitPatrolRoute();
-            Invoke("BackToNewBirthNodePos", 1.5f);
+
+            call = guard.SleepThenCallFunction(70, () => BackToNewBirthNodePos());
             tempPathes.Clear();
         }        
     }
 
     public override void Stop()
     {
-        CancelInvoke("BackToNewBirthNodePos");
+        guard.RemoveAction(ref call);
         base.Stop();
     }
 

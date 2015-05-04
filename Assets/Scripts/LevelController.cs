@@ -36,7 +36,7 @@
             UnityEngine.GameObject.Instantiate(canvas_prefab);
         }
         // 这个是防止LevelPassed重复调用的，
-        levelPassed = false;
+        bIsPerfectStealing = false;
     }
 
     public virtual void BeforeGenerateMaze()
@@ -85,16 +85,18 @@
         Globals.cameraFollowMagician.OpenMinimap();
 	}
 
-    bool levelPassed = false;
+    protected bool bIsPerfectStealing = false;
+    protected int perfect_stealing_bonus = 3000;
+    protected int rose_bonus = 5;
     public virtual void MagicianGotCash(float value)
     {        
-        if (levelPassed)
+        if (bIsPerfectStealing)
         {
             return;
         }
-//         levelPassed = true;
-//         Invoke("LevelPassed", 0.5f);
-//         return;
+//        bIsPerfectStealing = true;
+//        Invoke("PerfectStealing", 0.5f);
+//        return;
 
         Gem[] gems = UnityEngine.GameObject.FindObjectsOfType<Gem>();        
         if (gems.Length == 0)
@@ -106,12 +108,12 @@
                     return;
                 }
             }
-            levelPassed = true;
-            Invoke("LevelPassed", 0.5f);
+            bIsPerfectStealing = true;
+            Invoke("PerfectStealing", 0.5f);
         }
     }
 
-    public virtual void LevelPassed()
+    public virtual void PerfectStealing()
     {
         
     }
@@ -190,7 +192,7 @@
                 // LightSource,FlyUp
                 else if (sprite.gameObject.layer == 21 || sprite.gameObject.layer == 26)
                 {
-                    sprite.sortingOrder = 1;
+                    sprite.sortingOrder = -1;
                 }
                 // HeadOnMiniMap
                 else if (sprite.gameObject.layer == 28)

@@ -7,7 +7,8 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
 	public bool raysGizmosEnabled;
 	//public float updateRate = 0.02f;	
 	public int fovAngle = 90;
-	public float fovMaxDistance = 15;    
+    public float fovMaxDistance = 15;
+    public float aural;
     public List<UnityEngine.RaycastHit> hits = new List<UnityEngine.RaycastHit>();
 
     public FOV2DVisionCone[] visionCones;	
@@ -45,12 +46,15 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
 
             // 8 ,wall
             // 11,magician
-            // 20,Dove
-            // 24,GemHolder
-            int cullingMask = 1 << 8 | 1 << 11 | 1 << 20 | 1 << 24;
-
+            // 20,Dove            
+            int cullingMask = 1 << 8 | 1 << 11 | 1 << 20;
+            
             _castRays(fovAngle, dir, fovMaxDistance, ref enemiesOutEyeTemp, visionCones[0], needMsg, cullingMask);
-            _castRays(360 - fovAngle + 10, dir, 0.8f, ref enemiesOutEyeTemp, visionCones[1], needMsg, cullingMask);
+            _castRays(360 - fovAngle + 10, dir, aural, ref enemiesOutEyeTemp, visionCones[1], needMsg, cullingMask);
+
+            // 14,Chest
+            cullingMask = 1 << 14;
+            _castRaysOnChest(fovAngle, dir, fovMaxDistance, ref enemiesOutEyeTemp, cullingMask);
 
             if (needMsg)
             {
@@ -69,9 +73,9 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
             // 8 ,wall
             // 13,guard
             // 20,Dove
-            // 24,GemHolder
-            int cullingMask = 1 << 8 | 1 << 13 | 1 << 20 | 1 << 24;
-            dir = UnityEngine.Vector3.one;
+            int cullingMask = 1 << 8 | 1 << 13 | 1 << 20;
+
+            dir = UnityEngine.Vector3.left;
             _castRays(fovAngle, dir, fovMaxDistance, ref enemiesOutEyeTemp, visionCones[0], false, cullingMask);
         }
         
@@ -96,7 +100,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
     {
         hits.Clear();
         float quality = 0.2f;
-        int numRays = (int)(angle * quality);        
+        int numRays = (int)(angle * quality);
         float currentAngle = angle / -2;
         for (int i = 0; i < numRays; i++)
         {
@@ -111,7 +115,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
             UnityEngine.RaycastHit hit = new UnityEngine.RaycastHit();
             
             //direction = new UnityEngine.Vector3(Globals.Floor2(direction.x), Globals.Floor2(direction.y), Globals.Floor2(direction.z));
-            rayLength = (float)System.Math.Round(rayLength,3);         
+            rayLength = (float)System.Math.Round(rayLength, 3);         
    
             if(i % 30 == 0)
             {
@@ -129,8 +133,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
             else if (needMsg)
             {
                 if (hit.collider.gameObject.layer == 11 ||
-                    hit.collider.gameObject.layer == 20 ||
-                    hit.collider.gameObject.layer == 24)
+                    hit.collider.gameObject.layer == 20)
                 {
                     if (!enemiesInEye.Contains(hit.collider.gameObject))
                     {
@@ -141,18 +144,54 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
                     {
                         guard.EnemyStayInEye(hit.collider.gameObject);
                     }
-                    enemiesOutEye.Remove(hit.collider.gameObject);
+                    enemiesOutEye.Remove(hit.collider.gameObject);                   
                 }
             }
             // mage fov
             if(gameObject.layer == 25)
             {
                 hit.point = hit.point + new UnityEngine.Vector3(0, 0.2f, 0);
-            }            
+            }
+            
             hits.Add(hit);
             currentAngle += 1f / quality;
         }
         cone.UpdateMesh(hits);
+    }
+
+    void _castRaysOnChest(float angle, UnityEngine.Vector3 dir, float rayLength,
+        ref System.Collections.Generic.List<UnityEngine.GameObject> enemiesOutEye,
+        int cullingMask)
+    {
+        float quality = 0.1f;
+        int numRays = (int)(angle * quality);
+        float currentAngle = angle / -2;
+        for (int i = 0; i < numRays; i++)
+        {
+            dir = dir.normalized;
+            dir = new UnityEngine.Vector3((float)System.Math.Round(dir.x, 3), (float)System.Math.Round(dir.y, 3), (float)System.Math.Round(dir.z, 3));
+            UnityEngine.Vector3 direction = UnityEngine.Quaternion.AngleAxis(currentAngle, UnityEngine.Vector3.back) * dir.normalized;
+            
+            UnityEngine.RaycastHit hit = new UnityEngine.RaycastHit();
+
+            
+            rayLength = (float)System.Math.Round(rayLength, 3);
+
+            UnityEngine.Vector3 rayOrigin = transform.position;
+            if (UnityEngine.Physics.Raycast(rayOrigin, direction, out hit, rayLength, cullingMask) == false)
+            {
+                hit.point = rayOrigin + (direction * rayLength);
+            }
+            else
+            {
+                if (!enemiesInEye.Contains(hit.collider.gameObject))
+                {
+                    enemiesInEye.Add(hit.collider.gameObject);
+                    guard.CheckChest(hit.collider.gameObject);
+                }                
+            }
+            currentAngle += 1f / quality;
+        }
     }
 	
 	void OnDrawGizmosSelected()
@@ -174,5 +213,14 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
         gameObject.layer = layer;
         visionCones[0].gameObject.layer = layer;
         visionCones[1].gameObject.layer = layer;
+    }
+
+    public void SetVisonConesVisible(bool visible)
+    {
+        if (visionCones.Length != 0)
+        {
+            visionCones[0].meshRenderer.enabled = visible;
+            visionCones[1].meshRenderer.enabled = visible;
+        }
     }
 }

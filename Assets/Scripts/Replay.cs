@@ -17,50 +17,30 @@
     public System.Collections.Generic.List<ClickRecord> clickRecords = new System.Collections.Generic.List<ClickRecord>();
     
     public int mage_falling_down_frame_no = -1;
-    int mage_escape_frame_no;
-
-    System.String safeBoxesStr;
-    System.String magePositionsStr;
+    
+    public System.Collections.Generic.List<int> mageTryEscapeFrameNos = new System.Collections.Generic.List<int>();
 
     public System.Collections.Generic.List<UnityEngine.Vector3> magePositions = new System.Collections.Generic.List<UnityEngine.Vector3>();
 
     public void Awake()
     {
-        Globals.replay = this;
+        Globals.replaySystem = this;
         ResetData();
     }
 
     public void ResetData()
     {
-        Globals.replay_key = "";
+        Globals.playingReplay = null;
         mage_falling_down_frame_no = -1;
-        mage_escape_frame_no = -1;
-        magePositionsStr = "";
-        safeBoxesStr = "";
+        mageTryEscapeFrameNos.Clear();
         trickRecords.Clear();
         clickRecords.Clear();
         magePositions.Clear();
-    }
-
-    public void RecordSafeboxes(PlayerInfo enemy)
-    {
-        if (Globals.replay_key == "")
-        {
-            safeBoxesStr = "";
-            for (int idx = 0; idx < enemy.safeBoxDatas.Count; ++idx)
-            {
-                safeBoxesStr += enemy.safeBoxDatas[idx].Lv.ToString();
-                if (idx != enemy.safeBoxDatas.Count-1)
-                {
-                    safeBoxesStr += ",";
-                }
-            }
-        }
-    }
+    } 
 
     public void RecordMagicCast(TrickData data)
     {
-        if (Globals.replay_key == "")
+        if (Globals.playingReplay == null)
         {
             TrickRecord record = new TrickRecord();
             record.frame_no = UnityEngine.Time.frameCount - frameBeginNo;
@@ -71,7 +51,7 @@
 
     public void RecordClick(UnityEngine.Ray ray)
     {
-        if (Globals.replay_key == "")
+        if (Globals.playingReplay == null)
         {
             ClickRecord record = new ClickRecord();
             record.frame_no = UnityEngine.Time.frameCount - frameBeginNo;
@@ -83,27 +63,23 @@
 
     public void RecordMagePosition(UnityEngine.Vector3 pos)
     {
-        if (Globals.replay_key == "")
+        if (Globals.playingReplay == null)
         {
-            if (magePositionsStr != "")
-            {
-                magePositionsStr += "_";
-            }
-            magePositionsStr += pos.ToString("F3");
+            magePositions.Add(pos);            
         }        
     }
 
-    public void RecordMagicianEscape()
+    public void RecordMagicianTryEscape()
     {
-        if (Globals.replay_key == "")
+        if (Globals.playingReplay == null)
         {
-            mage_escape_frame_no = UnityEngine.Time.frameCount - frameBeginNo;
+            mageTryEscapeFrameNos.Add(UnityEngine.Time.frameCount - frameBeginNo);
         }        
     }
 
     public void RecordMageFallingDown()
     {
-        if (Globals.replay_key == "")
+        if (Globals.playingReplay == null)
         {
             mage_falling_down_frame_no = UnityEngine.Time.frameCount - frameBeginNo;
         }
@@ -111,9 +87,7 @@
 
     public IniFile Pack()
     {
-        IniFile ini = Globals.SaveMazeIniFile("", Globals.LevelController.randSeedCache, Globals.self.stealingTarget.isPvP);
-
-        ini.set("SafeBoxes", safeBoxesStr);        
+        IniFile ini = new IniFile();
        
         System.String TrickRecords = "";
         foreach (TrickRecord record in trickRecords)
@@ -144,34 +118,32 @@
         ini.set("ClickRecords", ClickRecords);
         ini.set("mage_falling_down_frame_no", mage_falling_down_frame_no);
         mage_falling_down_frame_no = -1;
-        ini.set("mage_escape_frame_no", mage_escape_frame_no);
-        
 
-//         System.String magePositionsChars = "";
-//         foreach (UnityEngine.Vector3 pos in magePositions)
-//         {
-//             magePositionsChars += System.Text.Encoding.UTF8.GetString(Globals.ConvertVector3ToByteArray(pos));
-//         }        
-        ini.set("magePositions", magePositionsStr);
-        magePositionsStr = "";
-        magePositions.Clear();        
+
+        System.String tryEscapeNoStr = "";
+        for (int idx = 0; idx < mageTryEscapeFrameNos.Count;++idx )
+        {
+            int frame = mageTryEscapeFrameNos[idx];
+            tryEscapeNoStr += frame.ToString();
+            if (idx != mageTryEscapeFrameNos.Count-1)
+            {
+                tryEscapeNoStr += ",";
+            }
+        }
+        mageTryEscapeFrameNos.Clear();
+
+        ini.set("mageTryEscapeFrameNos", tryEscapeNoStr);
+
+
+        System.String magePositionsChars = System.Convert.ToBase64String(Globals.ConvertVector3ToByteArray(magePositions));                
+        ini.set("magePositions", magePositionsChars);
+        magePositions.Clear();
 
         return ini;        
     }
 
     public void Unpack(IniFile ini)
-    {        
-        Globals.ReadMazeIni(ini);
-
-        safeBoxesStr = ini.get("SafeBoxes");
-        System.String[] safe_data_str = safeBoxesStr.Split(',');
-        foreach(System.String data_str in safe_data_str)
-        {
-            SafeBoxData data = new SafeBoxData();
-            Globals.self.enemy.safeBoxDatas.Add(data);
-            data.Lv = System.Convert.ToInt32(data_str);
-        }
-        
+    {                
         System.String records_str = ini.get("TrickRecords");
         System.String[] temp;
         if (records_str != "")
@@ -205,22 +177,24 @@
         }
 
         mage_falling_down_frame_no = ini.get("mage_falling_down_frame_no", -1);
-        mage_escape_frame_no = ini.get("mage_escape_frame_no", -1);
-
-//         System.String magePositionsChars = ini.get("magePositions");
-//         var bytes = System.Text.Encoding.UTF8.GetBytes(magePositionsChars);
-//         magePositions = Globals.ConvertByteArrayToVector3List(bytes)        
-        magePositionsStr = ini.get("magePositions");
-        System.String[] posStrs = magePositionsStr.Split('_');
-        foreach (System.String pos_str in posStrs)
+        records_str = ini.get("mageTryEscapeFrameNos");
+        if (records_str != "")
         {
-            magePositions.Add(Globals.StringToVector3(pos_str));
+            temp = records_str.Split(',');
+            foreach (System.String frame_no_str in temp)
+            {                
+                mageTryEscapeFrameNos.Add(System.Convert.ToInt32(frame_no_str));
+            }
         }
+
+        System.String magePositionsChars = ini.get("magePositions");
+        var bytes = System.Convert.FromBase64String(magePositionsChars);
+        magePositions = Globals.ConvertByteArrayToVector3List(bytes);
     }
 
     public void FrameFunc()
     {
-        if (Globals.replay_key == "")
+        if (Globals.playingReplay == null)
         {
             return;
         }        
@@ -246,15 +220,25 @@
             (Globals.LevelController as TutorialLevelController).MagicianFallingDown();
         }
 
-        if (mage_escape_frame_no == UnityEngine.Time.frameCount - frameBeginNo)
+        if (mageTryEscapeFrameNos.Count != 0)
         {
-            (Globals.LevelController as TutorialLevelController).Leave();
-        }        
+            int try_escape_no = mageTryEscapeFrameNos[0];
+            while (try_escape_no == UnityEngine.Time.frameCount - frameBeginNo)
+            {
+                (Globals.LevelController as TutorialLevelController).LeaveBtnClicked();
+                mageTryEscapeFrameNos.RemoveAt(0);
+                if (mageTryEscapeFrameNos.Count == 0)
+                {
+                    break;
+                }
+                try_escape_no = mageTryEscapeFrameNos[0];
+            }
+        }          
     }
 
     void Update()
     {
-        if (Globals.replay_key == "")
+        if (Globals.playingReplay == null)
         {
             return;
         }  

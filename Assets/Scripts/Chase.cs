@@ -1,5 +1,7 @@
 ﻿public class Chase : GuardAction 
 {
+    Actor actor;
+    Magician mage;
     public override void Excute()
     {
         base.Excute();        
@@ -11,13 +13,16 @@
             guard.alertSound.ChaseAlert();
         }
         guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Alert);
-        UnityEngine.Debug.Log("chase");
+        UnityEngine.Debug.Log("chase");        
     }
 
     public void Update()
     {
         if(guard.currentAction == this)
-        {            
+        {
+            actor = guard.spot.target.GetComponent<Actor>();
+            mage = actor as Magician;
+
             if (guard.atk != null &&
                 UnityEngine.Vector3.Distance(guard.transform.position, guard.spot.target.position) < guard.data.atkShortestDistance*0.5f)
             {
@@ -25,8 +30,13 @@
             }
             else if (guard.rushAt != null&&
                 UnityEngine.Vector3.Distance(guard.transform.position, guard.spot.target.position) < guard.data.rushAtShortestDistance)
-            {
+            {                
                 guard.rushAt.Excute();
+            }
+            else if (mage != null && guard.explode != null &&
+                UnityEngine.Vector3.Distance(guard.transform.position, guard.spot.target.position) < guard.data.atkShortestDistance)
+            {
+                guard.explode.Excute();
             }
         }
     }
@@ -38,7 +48,7 @@
         {
             // 狗不叫的时候视野不能打开迷雾
             guard.eye.SetLayer(27);
-            guard.alertSound.StopChaseAlert();
+            guard.alertSound.StopAlert();
         }
         UnityEngine.Debug.Log("chase stop");
         guard.moving.canMove = false;

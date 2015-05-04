@@ -1,6 +1,6 @@
 ﻿public class Chest : Actor, System.IComparable<Chest>
 {
-    bool isMagicianNear = false;
+    public bool isMagicianNear = false;
     bool isPlayingBack = false;
     GoldPoper goldPoper = null;
     public float goldLast;
@@ -15,7 +15,9 @@
 
     UnityEngine.GameObject coinPrefab;
     UnityEngine.GameObject SafeboxUpgradeUIPrefab;
+    UnityEngine.GameObject SafeboxNotFinishedPrefab;
     UnityEngine.Canvas canvasForSafeboxBtns;
+    UnityEngine.GameObject SafeboxNotFinishedTip;
 
     public SafeBoxData data;
 
@@ -38,6 +40,8 @@
         base.Awake();
         coinPrefab = UnityEngine.Resources.Load("Props/GoldCoin") as UnityEngine.GameObject;
         SafeboxUpgradeUIPrefab = UnityEngine.Resources.Load("Avatar/CanvasOnSafebox") as UnityEngine.GameObject;
+        SafeboxNotFinishedPrefab = UnityEngine.Resources.Load("Misc/SafeboxNotFinished") as UnityEngine.GameObject;
+        
 
         unlockProgressSprite = Globals.getChildGameObject<UnityEngine.UI.Image>(gameObject, "progress");
         unlockProgressSprite.transform.parent.gameObject.SetActive(false);
@@ -62,19 +66,29 @@
         if (Globals.maze != null)
         {
             Globals.maze.chests.Remove(this);
-        }        
+        }
+
+        if (SafeboxNotFinishedTip != null)
+        {
+            Destroy(SafeboxNotFinishedTip);
+            SafeboxNotFinishedTip = null;
+        }
     }
 
     public void SyncWithData(SafeBoxData boxdata)
     {
         data = boxdata;
-        UnityEngine.GameObject effectPrefab = (UnityEngine.GameObject)UnityEngine.Resources.Load("Props/Chest/GoldPoper/GoldPoper", typeof(UnityEngine.GameObject));
-        goldPoper = (Instantiate(effectPrefab, transform.position + UnityEngine.Vector3.up * 0.5f, UnityEngine.Quaternion.identity) as UnityEngine.GameObject).GetComponent<GoldPoper>();
-        goldPoper.chest = this;
-        goldPoper.transform.localScale = new UnityEngine.Vector3(2.0f, 2.0f, 2.0f);
-        goldPoper.transform.parent = transform;
-        ResetGold();        
-        goldPoper.InitParticleTex((int)goldLostPersecond);
+        data.unlocked = true;
+        if (goldPoper == null)
+        {
+            UnityEngine.GameObject effectPrefab = (UnityEngine.GameObject)UnityEngine.Resources.Load("Props/Chest/GoldPoper/GoldPoper", typeof(UnityEngine.GameObject));
+            goldPoper = (Instantiate(effectPrefab, transform.position + UnityEngine.Vector3.up * 0.5f + new UnityEngine.Vector3(0, 0, -0.1f), UnityEngine.Quaternion.identity) as UnityEngine.GameObject).GetComponent<GoldPoper>();
+            goldPoper.chest = this;
+            goldPoper.transform.localScale = new UnityEngine.Vector3(2.0f, 2.0f, 2.0f);
+            goldPoper.transform.parent = transform;
+        }
+        
+        ResetGold();
         Visible(true);
     }
 
@@ -95,8 +109,18 @@
 
     void OnTriggerEnter(UnityEngine.Collider other)
     {
+        Magician mage = other.GetComponent<Magician>();
+        if (mage != null && mage.currentAction == mage.beenPressDown)
+        {
+            return;
+        }
         UnityEngine.Debug.Log("touch chest");
         isMagicianNear = true;
+        if (SafeboxNotFinishedTip != null)
+        {
+            Destroy(SafeboxNotFinishedTip);
+            SafeboxNotFinishedTip = null;
+        }
         if (goldLast > 1)
         {
             unlockProgressSprite.transform.parent.gameObject.SetActive(true);
@@ -112,7 +136,7 @@
         }
     }
 
-    void OnTriggerExit(UnityEngine.Collider other)
+    public void OnTriggerExit(UnityEngine.Collider other)
     {
         UnityEngine.Debug.Log("leave chest");
         isMagicianNear = false;
@@ -124,6 +148,14 @@
             if (spriteRenderer.sprite == openSprite)
             {
                 ChestClosed();
+            }
+
+            if (Globals.magician.Stealing && SafeboxNotFinishedTip == null)
+            {
+                SafeboxNotFinishedTip = UnityEngine.GameObject.Instantiate(SafeboxNotFinishedPrefab) as UnityEngine.GameObject;
+                SafeboxNotFinishedTip.GetComponent<UnityEngine.Canvas>().worldCamera = Globals.cameraFollowMagician.camera;
+                SafeboxNotFinishedTip.GetComponentInChildren<UIMover>().Jump();
+                SafeboxNotFinishedTip.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f);
             }            
         }
 
@@ -164,6 +196,12 @@
         goldLast -= goldLostPersecond;        
         if (goldLast < 1)
         {
+            if (SafeboxNotFinishedTip != null)
+            {
+                Destroy(SafeboxNotFinishedTip);
+                SafeboxNotFinishedTip = null;
+            }            
+
             foreach (UnityEngine.Renderer renderer in goldMeshes)
             {
                 renderer.gameObject.SetActive(false);
@@ -185,6 +223,7 @@
         goldLast = data.cashInBox;
         // 总共需要3sec偷完整个箱子
         goldLostPersecond = goldLast / 3.0f;
+        goldPoper.InitParticleTex((int)goldLostPersecond);
         foreach (UnityEngine.Renderer renderer in goldMeshes)
         {
             renderer.gameObject.SetActive(true);

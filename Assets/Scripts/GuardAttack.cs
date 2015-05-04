@@ -74,7 +74,11 @@
     {
         Actor targetMage = guard.spot.target.GetComponent<Actor>();
         Magician mage = targetMage as Magician;
-        if (targetMage.gameObject.layer == 11 && (mage == null || mage.currentAction == mage.beenPressDown))
+        if (mage == null)
+        {
+            return false;
+        }
+        if (mage.gameObject.layer == 11 && mage.currentAction == mage.beenPressDown)
         {
             return true;
         }
@@ -84,7 +88,8 @@
     public void checkIfHitTarget()
     {
         UnityEngine.Vector3 magicianDir = guard.spot.target.position - guard.transform.position;
-        if (!checkIfTargetPressDown())
+        Actor targetActor = guard.spot.target.GetComponent<Actor>();
+        if (!checkIfTargetPressDown() && !targetActor.IsLifeOver())
         {
             if (magicianDir.magnitude < guard.data.atkShortestDistance + 0.3f)
             {
@@ -94,11 +99,15 @@
                     faceDir = UnityEngine.Vector3.right;
                 }
                 faceDir.z = 0;
-                float angle = UnityEngine.Vector3.Angle(magicianDir, faceDir);
+                double angle = UnityEngine.Vector3.Angle(magicianDir, faceDir);
                 if (angle < 90 && angle > -90)
                 {
-                    guard.spot.target.GetComponent<Actor>().ChangeLife(-guard.data.attackValue);
-                    guard.spot.target.GetComponent<Actor>().FaceDir(magicianDir);
+                    targetActor.ChangeLife(-guard.data.attackValue);
+                    if (!targetActor.IsLifeOver())
+                    {
+                        targetActor.hitted.Excute();
+                    }                  
+                    targetActor.FaceDir(magicianDir);
                 }
             }
         }        

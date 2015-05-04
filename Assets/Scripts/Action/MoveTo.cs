@@ -190,7 +190,7 @@ public class EaseOut : Cocos2dAction
 		if(!completed)
 		{
             UnityEngine.Vector3 tempResult = UnityEngine.Vector3.zero;
-            float time = (Time.frameCount - _start_frame)/ (float)_duration;
+            float time = (Time.frameCount - _start_frame) / (float)_duration;
             
             // exponential 
             //float temp = time == 1 ? 1 : (-UnityEngine.Mathf.Pow(2, -10 * time / 1) + 1);
@@ -258,6 +258,7 @@ public class JumpTo : Cocos2dAction
 	}
 
 	// Update
+    public float jumpHeight;
 	public override void Update () {
 		
 		// Not completed
@@ -266,11 +267,11 @@ public class JumpTo : Cocos2dAction
             UnityEngine.Vector3 delta = _end - _start;
 
             float frac = (Time.frameCount - _start_frame) / (float)_duration;
-            float y = _height * 4 * frac * (1 - frac);
-            y += delta.y * frac;
+            jumpHeight = _height * 4 * frac * (1 - frac);
+            jumpHeight += delta.y * frac;
             float x = delta.x * frac;
 
-            _transform.localPosition = _start + new UnityEngine.Vector3(x,y);
+            _transform.localPosition = _start + new UnityEngine.Vector3(x, jumpHeight);
 			
 			// Reached target position
             if (_transform.localPosition == _end) EndAction();

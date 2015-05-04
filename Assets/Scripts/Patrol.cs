@@ -41,20 +41,20 @@ public class Patrol : GuardAction
         {
             // 如果是家里或者关卡编辑器，生成表示行走区域的方块
             UnityEngine.Vector3 nextNodePos = Globals.GetPathNodePos(node);
-            TutorialLevelController battleLevel = Globals.LevelController as TutorialLevelController;
-            if (battleLevel == null)
-            {
-                UnityEngine.GameObject cube = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
-                cube.transform.localScale = new UnityEngine.Vector3(nodeSize, nodeSize, 0.2f);
-                cube.transform.position = nextNodePos;
-                cube.transform.parent = transform;
-                cube.layer = 0;
-
-                patrolCubes.Add(cube);
-
-                UnityEngine.MeshRenderer meshRenderer = cube.GetComponentInChildren<UnityEngine.MeshRenderer>();
-                meshRenderer.material.SetColor("_Color", UnityEngine.Color.green);
-            }
+//             TutorialLevelController battleLevel = Globals.LevelController as TutorialLevelController;
+//             if (battleLevel == null)
+//             {
+//                 UnityEngine.GameObject cube = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
+//                 cube.transform.localScale = new UnityEngine.Vector3(nodeSize, nodeSize, 0.2f);
+//                 cube.transform.position = nextNodePos;
+//                 cube.transform.parent = transform;
+//                 cube.layer = 0;
+// 
+//                 patrolCubes.Add(cube);
+// 
+//                 UnityEngine.MeshRenderer meshRenderer = cube.GetComponentInChildren<UnityEngine.MeshRenderer>();
+//                 meshRenderer.material.SetColor("_Color", UnityEngine.Color.green);
+//             }
             
             if (direction == Globals.EAST)
             {

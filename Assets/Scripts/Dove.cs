@@ -6,7 +6,7 @@
     {
         base.Awake();
 
-        float rand = UnityEngine.Random.Range(0.0f, 1.0f);
+        double rand = UnityEngine.Random.Range(0.0f, 1.0f);
         if (rand < 0.25f)
         {
             animalName = "dove";
@@ -15,13 +15,13 @@
         {
             animalName = "fog";
             spriteSheet.transform.localPosition = UnityEngine.Vector3.zero;
-            moving.speed *= 0.3f;
+            moving.speed *= 0.7f;
         }
         else if (rand >= 0.4f && rand < 0.6f)
         {
             animalName = "chicken";
             spriteSheet.transform.localPosition = UnityEngine.Vector3.zero;
-            moving.speed *= 0.4f;
+            moving.speed *= 0.7f;
         }
         else if (rand >= 0.6f && rand < 0.8f)
         {
@@ -33,9 +33,9 @@
         {
             animalName = "mouse";
             spriteSheet.transform.localPosition = UnityEngine.Vector3.zero;
-            moving.speed *= 0.5f;
+            moving.speed *= 0.8f;
         }
-
+        
         spriteSheet.CreateAnimationByName(animalName + "_moving_left");
         spriteSheet.CreateAnimationByName(animalName + "_moving_down");
         spriteSheet.CreateAnimationByName(animalName + "_moving_up");
@@ -57,7 +57,7 @@
     System.String flyingDir;
     public override void Update()
     {
-        float angle = Globals.Angle(moving.currentDir, UnityEngine.Vector3.right);
+        double angle = Globals.Angle(moving.currentDir, UnityEngine.Vector3.right);
         if (angle >= 315 || angle < 45)
         {
             flyingDir = Globals.EAST;
@@ -91,7 +91,7 @@
 
     public override void OnTargetReached()
     {       
-        float farest = UnityEngine.Mathf.NegativeInfinity;
+        double farest = UnityEngine.Mathf.NegativeInfinity;
         UnityEngine.Vector3 destinationPosition = UnityEngine.Vector3.zero;
         System.String farestDir = "";
         System.Collections.Generic.List<System.String> dirs = 
@@ -101,7 +101,7 @@
         foreach (System.String dir in dirs)
         {
             UnityEngine.Vector3 endPos = GetFarestOnDir(dir);
-            float dis = UnityEngine.Vector3.Distance(endPos, transform.position);
+            double dis = UnityEngine.Vector3.Distance(endPos, transform.position);
             if (dis > farest)
             {
                 farest = dis;
@@ -117,7 +117,7 @@
     UnityEngine.Vector3 GetFarestOnDir(System.String direction)
     {
         Pathfinding.Node node = null;
-        UnityEngine.Vector3 nodePos = transform.position;        
+        UnityEngine.Vector3 nodePos = transform.position;
         float nodeSize = Globals.maze.pathFinder.graph.nodeSize;
         UnityEngine.Vector3 lastWalkablePos = nodePos;
         do

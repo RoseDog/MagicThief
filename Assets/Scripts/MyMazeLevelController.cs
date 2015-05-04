@@ -31,7 +31,15 @@
             Globals.self.UpgradeMaze();
             Globals.canvasForMyMaze.enhanceDefenseUI.mazeInfo.isUpgradingMaze = false;
         }
-        Globals.iniFileName = "MyMaze_" + Globals.self.currentMazeLevel.ToString();
+        if (Globals.self.currentMazeLevel == 0)
+        {
+            Globals.iniFileName = "MyMaze_1";
+        }
+        else
+        {
+            Globals.iniFileName = "MyMaze_" + Globals.self.currentMazeLevel.ToString();
+        }
+        
         Globals.ReadMazeIniFile(Globals.iniFileName, Globals.self.currentMazeRandSeedCache);
         base.BeforeGenerateMaze();
     }
@@ -62,11 +70,14 @@
             Globals.canvasForMyMaze.roomConsumed = 0;
             Globals.canvasForMyMaze.ChangeMazeRoom(0);
         }
+
+        Globals.canvasForMyMaze.CheckRoomFullUses();
         
         
         Globals.EnableAllInput(true);
         Globals.canvasForMagician.RoseNumberBg.SetActive(true);
         Globals.canvasForMagician.SetLifeVisible(false);
+        Globals.canvasForMagician.SetPowerVisible(false);
         Globals.canvasForMagician.HideTricksPanel();
         Globals.maze.SetRestrictToCamera(Globals.cameraFollowMagician);
         Globals.maze.RegistGuardArrangeEvent();
@@ -100,19 +111,19 @@
         {
             SyncWithChestData(Globals.self);
             
-            for (int idx = 0; idx < Globals.self.guardsHired.Count; ++idx)
-            {
-                System.String guardname = Globals.self.guardsHired[idx];
-                Globals.GetGuardData(guardname).hired = true;
-            }
-            
             Globals.Assert(Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.Over);
             Globals.canvasForMyMaze.TutorialEnd();
+        }
+        
+        for (int idx = 0; idx < Globals.self.guardsHired.Count; ++idx)
+        {
+            System.String guardname = Globals.self.guardsHired[idx];
+            Globals.GetGuardData(guardname).hired = true;
         }
     }
 
     public void ChestFallingStart()
-    {
+    {        
         AddAction(new Sequence(
             new SleepFor(10), new FunctionCall(() => AddSafeBox()),
             new SleepFor(chestFallingDuration + 30), new FunctionCall(() => AddSafeBox()),
@@ -127,13 +138,13 @@
     }
 
     void CreateNextThief()
-    {
+    {        
         // 出现窃贼
         UnityEngine.GameObject thief = UnityEngine.GameObject.Instantiate(thief_prefab) as UnityEngine.GameObject;
         currentThief = thief.GetComponent<TutorialThief>();
         
-        // 窃贼的目标
-        currentThief.transform.position = Globals.maze.entryOfMaze.GetFloorPos();
+        // 窃贼的位置
+        currentThief.transform.position = Globals.maze.chests[thiefIdx].locate.room.doors[0].GetFloorPos();
         // 绑定提示信息按钮的响应事件
         currentThief.BtnToShowMazeBtn.onClick.AddListener(() => Globals.canvasForMyMaze.ShowCreateMazeBtn());
         currentThief.RetryBtn.onClick.AddListener(() => Retry());
@@ -164,7 +175,7 @@
                     if (ShowDroppingProcess)
                     {                        
                         UnityEngine.Vector3 dir = UnityEngine.Vector3.zero;
-                        float directionRatio = UnityEngine.Random.Range(0.0f, 1.0f);
+                        double directionRatio = UnityEngine.Random.Range(0.0f, 1.0f);
                         if (directionRatio < 0.5f)
                         {
                             dir.x = piecesFarDis;
@@ -210,7 +221,8 @@
     public void ThiefAboutToMove()
     {
         UnityEngine.Debug.Log("ThiefAboutToMove");
-        currentThief.transform.position = Globals.maze.entryOfMaze.GetFloorPos();
+        currentThief.OutStealing();
+        currentThief.transform.position = Globals.maze.chests[thiefIdx].locate.room.doors[0].GetFloorPos();
         currentThief.AimAtTargetChest(Globals.maze.chests[thiefIdx]);
     }
 
@@ -224,18 +236,13 @@
     }
 
     public override void GuardDestroyed(Guard guard)
-    {
-        if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
-        {
-			if(!IsInvoking("FingerDraggingAnimation"))
-			{
-				InvokeRepeating("FingerDraggingAnimation", 0, 2.5f);
-                //Globals.canvasForMyMaze.FingerImageToDragGuard.gameObject.SetActive(true);
-			}
-        }
+    {        
         Globals.canvasForMyMaze.btnEnhanceDef.gameObject.SetActive(true);
+        Globals.canvasForMyMaze.ChangeMazeRoom(-guard.data.roomConsume);        
         base.GuardDestroyed(guard);
         Globals.canvasForMyMaze.CheckRoomFullUses();
+        Globals.maze.guards.Remove(guard);
+        Globals.self.UploadGuards();        
     }
 
     public override void GuardChoosen(Guard guard)
@@ -251,6 +258,7 @@
 
         if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over && currentThief.currentAction != currentThief.lifeOver)
         {
+            SyncWithChestData(Globals.self);
             Globals.cameraFollowMagician.MoveToPoint(currentThief.transform.position, Globals.cameraMoveDuration);
             currentThief.InStealing();
         }
@@ -280,7 +288,9 @@
                 guard.BeginPatrol();
             }           
         }
+        Globals.canvasForMyMaze.ChangeMazeRoom(-lastGuard.data.roomConsume);
         DestroyObject(lastGuard.gameObject);
+        
         Globals.canvasForMyMaze.btnEnhanceDef.gameObject.SetActive(true);
         currentThief.targetChest.ResetGold();
         currentThief.HideTip();
@@ -330,10 +340,8 @@
         foreach (Chest chest in Globals.maze.chests)
         {
             if(!chest.IsVisible())
-            {
-                data.unlocked = true;
-                chest.data = data;
-                chest.Visible(true);                
+            {                
+                chest.SyncWithData(data);
                 falling_pos = chest.transform.position;
                 Globals.cameraFollowMagician.MoveToPoint(falling_pos, Globals.cameraMoveDuration);
                 chest.Falling(chestFallingDuration);

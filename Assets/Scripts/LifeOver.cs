@@ -2,7 +2,7 @@
 {
     public override void Awake()
     {
-        base.Awake();
+        base.Awake();        
         actor.spriteSheet.CreateAnimationByName("die", 1.0f, true);
     }
     public override void Excute()
@@ -13,6 +13,7 @@
         actor.OutStealing();
         actor.controller.enabled = false;
         //actor.moving.GetSeeker().GetCurrentPath().Reset();        
+        actor.moving.canMove = false;
         actor.moving.ClearPath();
         actor.spriteSheet.Play("die");
         Globals.LevelController.MagicianLifeOver();

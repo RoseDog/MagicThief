@@ -2,11 +2,11 @@ fileFormatVersion: 2
 guid: a6f12075a03a25d4fb42ebe9c711edc4
 TextureImporter:
   fileIDToRecycleName:
-    21300000: tutorial_thief_0
-    21300002: tutorial_thief_1
-    21300004: tutorial_thief_2
+    21300000: disguise_0
+    21300002: disguise_2
+    21300004: disguise_3
     21300006: tutorial_thief_3
-    21300008: tutorial_thief_4
+    21300008: disguise_4
     21300010: tutorial_thief_5
     21300012: tutorial_thief_6
     21300014: tutorial_thief_7
@@ -14,7 +14,7 @@ TextureImporter:
     21300018: tutorial_thief_9
     21300020: tutorial_thief_10
     21300022: tutorial_thief_11
-    21300024: tutorial_thief_12
+    21300024: disguise_1
     21300026: tutorial_thief_13
     21300028: tutorial_thief_14
     21300030: tutorial_thief_15
@@ -33,7 +33,7 @@ TextureImporter:
     21300056: die_0
     21300058: die_1
     21300060: die_2
-    21300062: die_3
+    21300062: down_on_floor_0
     21300064: tutorial_thief_32
     21300066: tutorial_thief_33
     21300068: tutorial_thief_34
@@ -227,7 +227,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: tutorial_thief_0
+    - name: disguise_0
       rect:
         serializedVersion: 2
         x: 31
@@ -237,7 +237,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_1
+    - name: disguise_2
       rect:
         serializedVersion: 2
         x: 131
@@ -247,7 +247,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_2
+    - name: disguise_3
       rect:
         serializedVersion: 2
         x: 197
@@ -267,7 +267,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_4
+    - name: disguise_4
       rect:
         serializedVersion: 2
         x: 281
@@ -347,13 +347,13 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_12
+    - name: disguise_1
       rect:
         serializedVersion: 2
-        x: 112
-        y: 582
-        width: 6
-        height: 7
+        x: 70
+        y: 563
+        width: 51
+        height: 52
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -537,7 +537,7 @@ TextureImporter:
       alignment: 7
       pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: die_3
+    - name: down_on_floor_0
       rect:
         serializedVersion: 2
         x: 194

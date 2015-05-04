@@ -26,8 +26,8 @@
 
     void Escape()
     {
-        Globals.cameraFollowMagician.target = null;                
-        actor.SleepThenCallFunction((actor as Magician).escape.duration,
+        Globals.cameraFollowMagician.target = null;
+        actor.SleepThenCallFunction((actor as Magician).escape.GetDuration(),
             () => Globals.LevelController.AfterMagicianLifeOverEscaped());
         (actor as Magician).escape.Excute();
     }

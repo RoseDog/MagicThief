@@ -3,25 +3,30 @@
     Cocos2dAction jumpAction;
     public bool rushing = false;
 
-    int duration_stay_down_floor = 60;
-    float rushing_speed = 0.2f;
-    float pressing_mage_dis = 0.5f;
+    int duration_stay_down_floor = 100;
+    double rushing_speed = 0.7f;
+    double pressing_mage_dis = 0.5f;
+
+    UnityEngine.SpriteRenderer shadow;
+    Actor targetActor;
     public override void Awake()
     {
         base.Awake();
         guard.spriteSheet.CreateAnimationByName("walking");
         guard.spriteSheet.CreateAnimationByName("running");
 
-        guard.spriteSheet.CreateAnimationByName("takeoff");
+        guard.spriteSheet.CreateAnimationByName("takeoff",0.7f);
         guard.spriteSheet.AddAnimationEvent("takeoff", -1, ()=>JumpUp());
         guard.spriteSheet.CreateAnimationByName("rushing_at_magician", rushing_speed);
         guard.spriteSheet.AddAnimationEvent("rushing_at_magician",0,()=>Rushing());
         guard.spriteSheet.CreateAnimationByName("pushed_away", 1.0f, true);
         guard.spriteSheet.CreateAnimationByName("rushing_miss", 1.0f, true);
-        guard.spriteSheet.CreateAnimationByName("stand_up");
+        guard.spriteSheet.CreateAnimationByName("stand_up",0.8f);
         guard.spriteSheet.AddAnimationEvent("stand_up", -1, () => Stop());
 
         guard.spriteSheet.CreateAnimationByName("pressing_mage");
+
+        shadow = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(gameObject, "shadow");        
     }
 
     public override void Excute()
@@ -37,18 +42,21 @@
         System.String content = gameObject.name;
         content += " takeoff";
         Globals.record("testReplay", content);
+        shadow.gameObject.SetActive(false);
+        targetActor = guard.spot.target.GetComponent<Actor>();
     }
     UnityEngine.Vector3 rushingDir;
     void JumpUp()
     {
         UnityEngine.Debug.Log("JumpUp");
-        rushingDir = Globals.magician.transform.position - guard.transform.position;
-        jumpAction = new Sequence(new JumpTo(guard.transform, Globals.magician.transform.position, 1.0f,
+        rushingDir = guard.spot.target.position - guard.transform.position;
+        jumpAction = new Sequence(new JumpTo(guard.transform, targetActor.transform.position, 1.0f,
             guard.spriteSheet.GetAnimationLengthWithSpeed("rushing_at_magician") ),
-            new FunctionCall(()=>RushMiss()));
-        guard.AddAction(jumpAction);
+            new FunctionCall(()=>RushMiss()));        
+        guard.AddAction(jumpAction);       
+
         guard.spriteSheet.Play("rushing_at_magician");
-        //guard.EnableEyes(false);
+        guard.EnableEyes(false);        
     }
 
     void Rushing()
@@ -59,18 +67,21 @@
     public void Update()
     {
         if (rushing)
-        {
-            if (UnityEngine.Vector3.Distance(guard.transform.position, Globals.magician.transform.position) < pressing_mage_dis)
+        {            
+            if (!targetActor.IsLifeOver())
             {
-                rushing = false;
-                guard.RemoveAction(ref jumpAction);
-                guard.spriteSheet.Play("pressing_mage");
-                Globals.magician.beenPressDown.PressedByGuard(guard);
+                if (UnityEngine.Vector3.Distance(guard.transform.position, guard.spot.target.position) < pressing_mage_dis)
+                {
+                    rushing = false;
+                    guard.RemoveAction(ref jumpAction);
+                    guard.spriteSheet.Play("pressing_mage");
+                    targetActor.beenPressDown.PressedByGuard(guard);
 
-                System.String content = gameObject.name;
-                content += " pressing_mage";
-                Globals.record("testReplay", content);
-            }
+                    System.String content = gameObject.name;
+                    content += " pressing_mage";
+                    Globals.record("testReplay", content);
+                }
+            }            
         }
     }    
 
@@ -108,8 +119,9 @@
 
     void StandUp()
     {
+        shadow.gameObject.SetActive(true);
         UnityEngine.Debug.Log("StandUp");
-        //guard.EnableEyes(true);        
+        guard.EnableEyes(true);        
         guard.spriteSheet.Play("stand_up");
 
         System.String content = gameObject.name;
@@ -119,7 +131,19 @@
 
     public override void Stop()
     {
+        rushing = false;
+        shadow.gameObject.SetActive(true);        
+        if (jumpAction != null)
+        {
+            guard.RemoveAction(ref jumpAction);
+        }
+        
         base.Stop();
-        guard.wandering.Excute();
+        
+        if(guard.beenHypnosised.timer == null)
+        {
+            // 没被催眠打断的话，才执行这个动作
+            guard.wandering.Excute();
+        }        
     }
 }

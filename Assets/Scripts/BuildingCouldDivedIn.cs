@@ -28,7 +28,6 @@
     public virtual void DivedIn()
     {
         Unchoose();
-        city.cityEventsOpenBtn.Goback(Globals.uiMoveAndScaleDuration);
-        city.eventsWindow.GetComponent<UIMover>().Goback(Globals.uiMoveAndScaleDuration);
+        city.Exit();        
     }
 }

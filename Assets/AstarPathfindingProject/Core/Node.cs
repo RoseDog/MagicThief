@@ -250,7 +250,7 @@ namespace Pathfinding {
 		 * \param scale Scale of the heuristic
 		 * \param nodeR NodeRun object associated with this node.
 		 */
-		public void UpdateH (Int3 targetPosition, Heuristic heuristic, float scale, NodeRun nodeR) {		
+		public void UpdateH (Int3 targetPosition, Heuristic heuristic, double scale, NodeRun nodeR) {		
 			//Choose the correct heuristic, compute it and store it in the \a h variable
 			if (heuristic == Heuristic.None) {
 				nodeR.h = 0;

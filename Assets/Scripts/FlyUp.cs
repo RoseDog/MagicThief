@@ -39,6 +39,7 @@
     public override void Excute()
     {
         base.Excute();
+
         actor.moving.ClearPath();
         actor.moving.canMove = false;
         actor.gameObject.layer = 26;
@@ -47,11 +48,11 @@
         actor.AddAction(new MoveTo(shadow.transform, -up/2, actor.spriteSheet.GetAnimationLength("flyup")));
         actor.AddAction(new ScaleTo(shadow.transform, shadowScaleCache / 2, actor.spriteSheet.GetAnimationLength("flyup")));
         
-        actor.spriteSheet.Play("flyup");        
+        actor.spriteSheet.Play("flyup");
 
         destination = actor.transform.position;
 
-        Globals.canvasForMagician.tricksInUsingPanel.gameObject.SetActive(false);
+        Globals.canvasForMagician.HideTricksPanel();
 
         System.String content = gameObject.name;
         content += " Fly up";
@@ -74,7 +75,7 @@
             UnityEngine.Vector3 dir = (destination + up) - actor.transform.position;
             if (dir.magnitude > 0.1f)
             {
-                actor.controller.Move(dir.normalized * actor.moving.speed);
+                actor.controller.Move(dir.normalized * (float)actor.moving.speed);
                 actor.FaceDir(dir);
             }        
         }        
@@ -146,7 +147,7 @@
         actor.moving.canMove = true;
         actor.gameObject.layer = 11;
         actor.spriteRenderer.gameObject.layer = 11;
-        Globals.canvasForMagician.tricksInUsingPanel.gameObject.SetActive(true);
+        Globals.canvasForMagician.ShowTricksPanel();
 
         System.String content = gameObject.name;
         content += " Landed";

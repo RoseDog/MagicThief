@@ -7,7 +7,7 @@ public class GUIBarScript : MonoBehaviour {
 	//Declare variables
 
 	//for the CurrentValue, and the Value it will be after the update
-	private float CurrentValue;
+    private float CurrentValue;
     public float Value;
 
 	//FadeValue is current amount the bar is faded 
@@ -25,7 +25,7 @@ public class GUIBarScript : MonoBehaviour {
 	public Color TextColor;
 	public bool OverRideTextColorWithGradient = false;
 	public Font TextFont;
-	public float TextSize;
+    public float TextSize;
 	public Vector2 TextOffset;
 
 	//Carries the .png images to display the GUIBar
@@ -186,20 +186,10 @@ public class GUIBarScript : MonoBehaviour {
 
     public void SetNewValue(float V)
 	{
-		Value = V;
-	}	
-
-	public void SetNewValue(double V)
-	{
         Value = (float)V;
 	}
 
     public void SetNewValue(float V, float MV)
-	{
-		Value = V/MV;
-	}
-
-	public void SetNewValue(double V, double MV)
 	{
         Value = (float)V / (float)MV;
 	}

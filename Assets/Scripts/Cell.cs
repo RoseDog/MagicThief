@@ -248,7 +248,11 @@ public class Cell : Actor
         UnityEngine.GameObject floor = GetFloor();
         if (floor == null)
             throw new InvalidOperationException();
-        floor.renderer.material.shader = UnityEngine.Shader.Find("Mobile/Unlit (Supports Lightmap)");
+        UnityEngine.SpriteRenderer[] sprites = floor.GetComponentsInChildren<UnityEngine.SpriteRenderer>();
+        foreach(UnityEngine.SpriteRenderer sprite in sprites)
+        {
+            sprite.color = UnityEngine.Color.red;
+        }
     }
 
     public void CreateTorchLight()
@@ -296,6 +300,13 @@ public class Cell : Actor
     {
         UnityEngine.GameObject floor = GetFloor();
         return floor.transform.position/* + new UnityEngine.Vector3(0.0f, 0.0f, -Globals.FLOOR_HEIGHT)*/;
+    }
+
+    public UnityEngine.Vector3 GetRandFloorPos()
+    {
+        UnityEngine.GameObject floor = GetFloor();
+        float offset_limit = Globals.maze.GetCellSideLength() * 0.3f;
+        return floor.transform.position + new UnityEngine.Vector3(UnityEngine.Random.Range(-offset_limit, offset_limit), UnityEngine.Random.Range(-offset_limit, offset_limit), 0.0f);
     }
 
     public void HideEverythingExceptFloor()

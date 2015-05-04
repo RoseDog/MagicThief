@@ -10,7 +10,7 @@ public class TipDisplayManager : UnityEngine.MonoBehaviour
         tipPrefab = UnityEngine.Resources.Load("UI/Tip") as UnityEngine.GameObject;        
     }
 
-    public void Msg(string msg, float height_ratio = 0.5f, UnityEngine.Transform parent = null)
+    public void Msg(string msg, float height_ratio = 0.25f, UnityEngine.Transform parent = null)
     {
         Tip tip = (Instantiate(tipPrefab) as UnityEngine.GameObject).GetComponent<Tip>();
         UnityEngine.RectTransform tipTransform = tip.GetComponent<UnityEngine.RectTransform>();

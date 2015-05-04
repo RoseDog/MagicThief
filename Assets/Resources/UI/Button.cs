@@ -15,7 +15,7 @@ public class Button : MonoBehaviour
 
 	public Finger touchingFinger;
 
-	float longPushThreshold = 0.5f;
+	double longPushThreshold = 0.5f;
 
 	protected Rect defaultRect;                          // Default position / extents of the joystick graphic
 
@@ -23,7 +23,7 @@ public class Button : MonoBehaviour
 	protected Vector2 guiCenter;
 	protected Color originalColor;
 
-	float timeLastClick = UnityEngine.Mathf.NegativeInfinity;
+	double timeLastClick = UnityEngine.Mathf.NegativeInfinity;
 
 	string atkPreFix;
 

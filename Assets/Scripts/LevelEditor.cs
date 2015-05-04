@@ -4,6 +4,28 @@
     {
         base.Awake();
         mainCanvas = GetComponent<UnityEngine.Canvas>();
+
+        UnityEngine.Vector3 pos = new UnityEngine.Vector3(UnityEngine.Random.Range(0.0f, 10.0f), UnityEngine.Random.Range(0.0f, 10.0f), UnityEngine.Random.Range(0.0f, 10.0f));
+
+//         System.String str = System.Text.Encoding.UTF8.GetString(Globals.ConvertVector3ToByteArray(pos));        
+//         var bytes = System.Text.Encoding.UTF8.GetBytes(str);
+//         System.Collections.Generic.List<UnityEngine.Vector3> vecs = Globals.ConvertByteArrayToVector3List(bytes);
+//         UnityEngine.Vector3 pos2 = vecs[0];
+
+        var floatArray = new float[] { pos.x, pos.y, pos.z };
+
+        // create a byte array and copy the floats into it...
+        var byteArray = new byte[floatArray.Length * 4];
+        System.Buffer.BlockCopy(floatArray, 0, byteArray, 0, byteArray.Length);
+
+
+        System.String str = System.Convert.ToBase64String(byteArray);
+        var byteArray2 = System.Convert.FromBase64String(str);
+
+        UnityEngine.Vector3 vec = UnityEngine.Vector3.zero;
+        vec.x = System.BitConverter.ToSingle(byteArray2, 0 * 4);
+        vec.y = System.BitConverter.ToSingle(byteArray2, 1 * 4);
+        vec.z = System.BitConverter.ToSingle(byteArray2, 2 * 4);
     }
     public override void BeforeGenerateMaze()
     {
@@ -34,6 +56,7 @@
         {
             chest.Visible(true);
         }
+        Globals.maze.PlaceGemsAtBoarder();
     }
 
     public override void GuardCreated(Guard guard)

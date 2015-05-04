@@ -59,7 +59,7 @@
         {
             UnityEngine.Vector3 uiWorldPos = Globals.cameraFollowMagician.camera.ScreenToWorldPoint(numberScreenPos);
             UnityEngine.Vector3 destination = Globals.cameraFollowMagician.transform.InverseTransformPoint(uiWorldPos);
-            
+
             float disNow = UnityEngine.Vector3.Distance(destination, transform.localPosition);
             float dis = UnityEngine.Vector3.Distance(destination, posWhenFlyBegin);
             float disRatio = disNow / dis;
@@ -72,12 +72,9 @@
             if (disNow < 0.01f)
             {
                 DestroyImmediate(gameObject);
-                if (Globals.magician.LifeCurrent > 0)
-                {
-                    if (Globals.replay_key == "")
-                    {
-                        numberFlyTo.Add(numberDelta);
-                    }                    
+                if (Globals.magician.LifeCurrent > 0 && numberFlyTo.gameObject.activeSelf)
+                {                    
+                    numberFlyTo.Add(numberDelta);
                     if ((Globals.LevelController as TutorialLevelController) != null)
                     {
                         Globals.LevelController.MagicianGotCash(numberDelta);

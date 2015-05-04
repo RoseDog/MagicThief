@@ -51,23 +51,23 @@ public class AstarDebugger : MonoBehaviour {
 	
 	StringBuilder text = new StringBuilder ();
 	string cachedText;
-	float lastUpdate = -999;
+	double lastUpdate = -999;
 	
-	private float delayedDeltaTime = 1;
-	private float lastCollect = 0;
-	private float lastCollectNum = 0;
-	private float delta = 0;
-	private float lastDeltaTime = 0;
+	private double delayedDeltaTime = 1;
+	private double lastCollect = 0;
+	private double lastCollectNum = 0;
+	private double delta = 0;
+	private double lastDeltaTime = 0;
 	private int allocRate = 0;
 	private int lastAllocMemory = 0;
-	private float lastAllocSet = -9999;
+	private double lastAllocSet = -9999;
 	private int allocMem = 0;
 	private int collectAlloc = 0;
 	private int peakAlloc = 0;
 	
 	private int lastFrameCount = -1;
 	private int fpsDropCounterSize = 200;
-	private float[] fpsDrops;
+	private double[] fpsDrops;
 	
 	private Rect boxRect;
 	
@@ -77,7 +77,7 @@ public class AstarDebugger : MonoBehaviour {
 		
 		useGUILayout = false;
 		
-		fpsDrops = new float[fpsDropCounterSize];
+		fpsDrops = new double[fpsDropCounterSize];
 		
 		for (int i=0;i<fpsDrops.Length;i++) {
 			fpsDrops[i] = 1F / Time.deltaTime;
@@ -88,14 +88,7 @@ public class AstarDebugger : MonoBehaviour {
 	int maxNodePool = 0;
 	
 	PathTypeDebug[] debugTypes = new PathTypeDebug[] {
-		new PathTypeDebug ("ABPath", PathPool<ABPath>.GetSize, PathPool<ABPath>.GetTotalCreated)
-		,
-		new PathTypeDebug ("MultiTargetPath", PathPool<MultiTargetPath>.GetSize, PathPool<MultiTargetPath>.GetTotalCreated),
-		new PathTypeDebug ("RandomPath", PathPool<RandomPath>.GetSize, PathPool<RandomPath>.GetTotalCreated),
-		new PathTypeDebug ("FleePath", PathPool<FleePath>.GetSize, PathPool<FleePath>.GetTotalCreated),
-		new PathTypeDebug ("ConstantPath", PathPool<ConstantPath>.GetSize, PathPool<ConstantPath>.GetTotalCreated),
-		new PathTypeDebug ("FloodPath", PathPool<FloodPath>.GetSize, PathPool<FloodPath>.GetTotalCreated),
-		new PathTypeDebug ("FloodPathTracer", PathPool<FloodPathTracer>.GetSize, PathPool<FloodPathTracer>.GetTotalCreated)
+		new PathTypeDebug ("ABPath", PathPool<ABPath>.GetSize, PathPool<ABPath>.GetTotalCreated)		
 	};
 	
 	struct PathTypeDebug {
@@ -145,7 +138,7 @@ public class AstarDebugger : MonoBehaviour {
 		}
 		
 		if (lastFrameCount != Time.frameCount || !Application.isPlaying) {
-			fpsDrops[Time.frameCount % fpsDrops.Length] = Time.deltaTime != 0 ? 1F / Time.deltaTime : float.PositiveInfinity;
+			fpsDrops[Time.frameCount % fpsDrops.Length] = Time.deltaTime != 0 ? 1F / Time.deltaTime : double.PositiveInfinity;
 		}
 	}
 	
@@ -203,7 +196,7 @@ public class AstarDebugger : MonoBehaviour {
 				text.Append ("FPS".PadRight (25)).Append((1F/delayedDeltaTime).ToString ("0.0 fps"));
 				
 				
-				float minFps = Mathf.Infinity;
+				double minFps = Mathf.Infinity;
 				
 				for (int i=0;i<fpsDrops.Length;i++) if (fpsDrops[i] < minFps) minFps = fpsDrops[i];
 				

@@ -12,11 +12,13 @@
     {
         base.Excute();
         actor.moving.canMove = false;
+        Globals.canvasForMagician.TrickUsingHighlightOn(data);
     }
 
     public override void Stop()
     {
         base.Stop();
         actor.moving.canMove = true;
+        Globals.canvasForMagician.TrickUsingHighlightOff();
     }
 }

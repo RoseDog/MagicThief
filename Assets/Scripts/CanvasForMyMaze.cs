@@ -6,10 +6,10 @@
     public UnityEngine.UI.Button FingerImageToDragGuard;
     UnityEngine.Vector2 fingerImagePosCache;
 
-    public EnhanceDefenseUI enhanceDefenseUI;
+    public EnhanceDefenseUI enhanceDefenseUI;    
     UIMover ExitMazeBtn;
     
-    public UnityEngine.UI.Text unclickedTargetCount;
+    public UnityEngine.UI.Text unclickedCityEventCount;
     public UIMover TipBuyHereAsHome;
     public UIMover btnEnhanceDef;
 
@@ -26,7 +26,7 @@
         TipBuyHereAsHome = Globals.getChildGameObject<UIMover>(gameObject, "TipBuyHereAsHome");
         btnEnhanceDef = Globals.getChildGameObject<UIMover>(gameObject, "EnhanceDefenseBtn");
         btnEnhanceDef.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => ShowEnhanceMazeUI());
-        enhanceDefenseUI = Globals.getChildGameObject<EnhanceDefenseUI>(gameObject, "EnhanceDefenseUI");
+        enhanceDefenseUI = Globals.getChildGameObject<EnhanceDefenseUI>(gameObject, "EnhanceDefenseUI");        
         
         TipToClickCreateMaze = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "TipToClickCreateMaze").gameObject;        
         tip = Globals.getChildGameObject(TipToClickCreateMaze, "Tip").GetComponent<UnityEngine.UI.Text>();        
@@ -39,10 +39,9 @@
 //         FingerImageToDragGuard.gameObject.SetActive(false);
 //        fingerImagePosCache = FingerImageToDragGuard.GetComponent<UnityEngine.RectTransform>().anchoredPosition;
         ExitMazeBtn = Globals.getChildGameObject<UIMover>(gameObject, "ExitMazeBtn");
-        ExitMazeBtn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => ExitHomeMaze());
-        
-        
-        unclickedTargetCount = UnityEngine.GameObject.Find("UnclickedCount").GetComponent<UnityEngine.UI.Text>();
+        ExitMazeBtn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => GoToCity());
+
+        unclickedCityEventCount = Globals.getChildGameObject<UnityEngine.UI.Text>(ExitMazeBtn.gameObject, "UnclickedCount");
 
         RedPointsOnEnchanceDefBtn = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "RedPointsOnEnchanceDefBtn").GetComponentInChildren<UnityEngine.UI.Text>();
 
@@ -50,6 +49,7 @@
         MazeRoomNumber = Globals.getChildGameObject<LifeNumber>(MazeRoomNumerBg, "MazeRoomNumber");
 
         room_not_full_used = Globals.getChildGameObject(gameObject, "room_not_full_used");
+        room_not_full_used.gameObject.SetActive(false);
     }
 	// Use this for initialization
 	public override void Start () 
@@ -97,8 +97,8 @@
     {
         btnEnhanceDef.Goback(Globals.uiMoveAndScaleDuration);
         TipToClickCreateMaze.SetActive(false);
-        Globals.cameraFollowMagician.MoveToPoint(UnityEngine.Vector3.zero,
-            Globals.cameraMoveDuration);
+//         Globals.cameraFollowMagician.MoveToPoint(UnityEngine.Vector3.zero,
+//             Globals.cameraMoveDuration);
         myMaze.StartDropPieces();
     }
 
@@ -110,7 +110,7 @@
 
     void ShowTutorialEndMsgBox()
     {
-        Globals.MessageBox(Globals.languageTable.GetText("property_is_safe_now"), () => TutorialEnd());
+        Globals.MessageBox("property_is_safe_now", () => TutorialEnd());
         Globals.self.AdvanceTutorial();
     }
 
@@ -122,16 +122,18 @@
         btnEnhanceDef.BeginMove(Globals.uiMoveAndScaleDuration);        
         ExitMazeBtn.BeginMove(Globals.uiMoveAndScaleDuration);
         //进入MyMaze，HomeExit上面的红点根据new targets来更新        
-        Globals.UpdateUnclickedRedPointsText(unclickedTargetCount);
+        Globals.UpdateUnclickedRedPointsText(unclickedCityEventCount);
     }
 
-    public void ExitHomeMaze()
+    public void GoToCity()
     {
         Globals.asyncLoad.ToLoadSceneAsync("City");
 
         //Globals.selectGuard.mover.Goback(Globals.uiMoveAndScaleDuration);
         btnEnhanceDef.Goback(Globals.uiMoveAndScaleDuration);
         ExitMazeBtn.Goback(Globals.uiMoveAndScaleDuration);
+        Globals.cameraFollowMagician.CloseMinimap();
+        room_not_full_used.gameObject.SetActive(false);
     }
 
     public void ShowUnclickedGuardsRedPointsOnEnhanceDefBtn()
@@ -167,7 +169,8 @@
 
     public void CheckRoomFullUses()
     {
-        if (roomConsumed == Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport)
+        int roomSupport = Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport;
+        if (roomConsumed == roomSupport || roomSupport == 0)
         {
             room_not_full_used.SetActive(false);
         }

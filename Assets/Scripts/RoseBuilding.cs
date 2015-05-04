@@ -4,6 +4,7 @@
     UnityEngine.RectTransform roseBtn;
     UnityEngine.GameObject rosefly_prefab;
     UnityEngine.GameObject roseIcon_prefab;
+    UnityEngine.GameObject RosePickedTip_prefab;
     UnityEngine.Vector3 tipScaleCache;
     public override void Awake()
     {
@@ -16,6 +17,7 @@
 
         rosefly_prefab = UnityEngine.Resources.Load("Props/RoseFly") as UnityEngine.GameObject;
         roseIcon_prefab = UnityEngine.Resources.Load("Props/RoseIcon") as UnityEngine.GameObject;
+        RosePickedTip_prefab = UnityEngine.Resources.Load("Props/RosePickedTip") as UnityEngine.GameObject;
     }
 
     public override void Start()
@@ -43,7 +45,7 @@
         AddAction(new ScaleTo(peopleGivesYouRose.transform, UnityEngine.Vector3.zero, Globals.uiMoveAndScaleDuration / 3));
         base.Unchoose();
     }
-
+    
     public void RoseClicked()
     {
         UnityEngine.UI.Image[] rose_icons = roseBtn.gameObject.GetComponentsInChildren<UnityEngine.UI.Image>(true);
@@ -58,9 +60,30 @@
 
             DestroyObject(icon.gameObject);
         }
-        
+
+        int delta_before_change = Globals.self.GetPowerDelta();
         Globals.self.ChangeRoseCount(data.unpickedRose, data);
+        int delta_after_change = Globals.self.GetPowerDelta();
+
+        UnityEngine.GameObject RosePickedTip = UnityEngine.GameObject.Instantiate(RosePickedTip_prefab) as UnityEngine.GameObject;
+
+        RosePickedTip.GetComponent<UnityEngine.RectTransform>().anchoredPosition = transform.position;        
+        UIMover mover = RosePickedTip.GetComponent<UIMover>();
+
+        City city = Globals.LevelController as City;
+        city.AddAction(new Sequence(new EaseOut(mover.transform, mover.to + transform.position, 60), 
+            new FunctionCall(() => city.DestroyRosePickTip(RosePickedTip))));
+
+        Globals.languageTable.SetText(RosePickedTip.GetComponentInChildren<MultiLanguageUIText>(), "rose_pick_tip",
+            new System.String[] { data.unpickedRose.ToString(), (delta_after_change - delta_before_change).ToString() });
+        data.unpickedRose = 0;
+
+        Globals.magician.ResetLifeAndPower(Globals.self);
+
+        Globals.canvasForMagician.PowerNumber.UpdateText(Globals.magician.PowerCurrent, Globals.magician.PowerAmount + Globals.self.GetPowerDelta());
     }
+
+    
 
     public void RoseGrow()
     {

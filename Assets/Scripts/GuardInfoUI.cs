@@ -1,5 +1,6 @@
 ﻿public class GuardInfoUI : CustomEventTrigger
 {
+    UnityEngine.UI.Image GuardIcon;
     UnityEngine.UI.Text Name;
     UnityEngine.UI.Text Desc;
     UnityEngine.UI.Text StrengthNumber;
@@ -8,11 +9,13 @@
     public override void Awake()
     {
         base.Awake();
+        GuardIcon = Globals.getChildGameObject<UnityEngine.UI.Image>(gameObject, "GuardIcon");
         Name = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "Name");
         Desc = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "Desc");
         StrengthNumber = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "StrengthNumber");
         VisionNumber = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "VisionNumber");
         SpeedNumber = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "SpeedNumber");
+
     }
 
 	public void SetGuard(Guard guard)
@@ -24,18 +27,19 @@
         transform.parent.localScale = UnityEngine.Vector3.one;
         Globals.languageTable.SetText(Name, guard.name);
         Globals.languageTable.SetText(Desc, guard.name + "_desc");
+        GuardIcon.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/" + guard.data.name + "_hireInfoIcon");
         if (guard.patrol != null)
-        {
+        {            
             StrengthNumber.text = guard.data.attackValue.ToString();
             VisionNumber.text = guard.eye.fovMaxDistance.ToString();
-            SpeedNumber.text = guard.moving.speed.ToString();
+            SpeedNumber.text = System.Math.Round(guard.moving.speed * 100.0f).ToString();
         }
         else
         {
             StrengthNumber.gameObject.SetActive(false);
             VisionNumber.gameObject.SetActive(false);
             SpeedNumber.gameObject.SetActive(false);
-        }        
+        }      
     }
 
     public override void OnTouchUpOutside(Finger f)

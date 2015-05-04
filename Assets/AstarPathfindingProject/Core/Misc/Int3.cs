@@ -19,10 +19,10 @@ namespace Pathfinding
 		public const int Precision = 1000;
 		
 		/** #Precision as a float */
-		public const float FloatPrecision = 1000F;
+		public const double FloatPrecision = 1000F;
 		
 		/** 1 divided by #Precision */
-		public const float PrecisionFactor = 0.001F;
+		public const double PrecisionFactor = 0.001F;
 		
 		/* Factor to multiply cost with */
 		//public const float CostFactor = 0.01F;
@@ -68,7 +68,9 @@ namespace Pathfinding
 		}
 		
 		public static explicit operator Vector3 (Int3 ob) {
-			return new Vector3 (ob.x*PrecisionFactor,ob.y*PrecisionFactor,ob.z*PrecisionFactor);
+            return new Vector3(ob.x * (float)PrecisionFactor,
+                ob.y * (float)PrecisionFactor,
+                ob.z * (float)PrecisionFactor);
 		}
 		
 		public static Int3 operator - (Int3 lhs, Int3 rhs) {
@@ -93,7 +95,7 @@ namespace Pathfinding
 			return lhs;
 		}
 		
-		public static Int3 operator * (Int3 lhs, float rhs) {
+		public static Int3 operator * (Int3 lhs, double rhs) {
 			lhs.x = (int)System.Math.Round (lhs.x * rhs);
 			lhs.y = (int)System.Math.Round (lhs.y * rhs);
 			lhs.z = (int)System.Math.Round (lhs.z * rhs);
@@ -109,7 +111,7 @@ namespace Pathfinding
 			return lhs;
 		}
 		
-		public static Int3 operator / (Int3 lhs, float rhs) {
+		public static Int3 operator / (Int3 lhs, double rhs) {
 			lhs.x = (int)System.Math.Round (lhs.x / rhs);
 			lhs.y = (int)System.Math.Round (lhs.y / rhs);
 			lhs.z = (int)System.Math.Round (lhs.z / rhs);
@@ -130,7 +132,7 @@ namespace Pathfinding
 		}
 		
 		public Int3 NormalizeTo (int newMagn) {
-			float magn = magnitude;
+			double magn = magnitude;
 			
 			if (magn == 0) {
 				return this;
@@ -150,7 +152,7 @@ namespace Pathfinding
 		/** Returns the magnitude of the vector. The magnitude is the 'length' of the vector from 0,0,0 to this point. Can be used for distance calculations:
 		  * \code Debug.Log ("Distance between 3,4,5 and 6,7,8 is: "+(new Int3(3,4,5) - new Int3(6,7,8)).magnitude); \endcode
 		  */
-		public float magnitude {
+		public double magnitude {
 			get {
 				//It turns out that using doubles is just as fast as using ints with Mathf.Sqrt. And this can also handle larger numbers (possibly with small errors when using huge numbers)!
 				
@@ -158,7 +160,7 @@ namespace Pathfinding
 				double _y = y;
 				double _z = z;
 				
-				return (float)System.Math.Sqrt (_x*_x+_y*_y+_z*_z);
+				return (double)System.Math.Sqrt (_x*_x+_y*_y+_z*_z);
 				
 				//return Mathf.Sqrt (x*x+y*y+z*z);
 			}
@@ -174,13 +176,13 @@ namespace Pathfinding
 		}
 		
 		/** The magnitude in world units */
-		public float worldMagnitude {
+		public double worldMagnitude {
 			get {
 				double _x = x;
 				double _y = y;
 				double _z = z;
 				
-				return (float)System.Math.Sqrt (_x*_x+_y*_y+_z*_z)*PrecisionFactor;
+				return (double)System.Math.Sqrt (_x*_x+_y*_y+_z*_z)*PrecisionFactor;
 				
 				//Scale numbers down
 				/*float _x = x*PrecisionFactor;
@@ -191,12 +193,12 @@ namespace Pathfinding
 		}
 		
 		/** The squared magnitude of the vector */
-		public float sqrMagnitude {
+		public double sqrMagnitude {
 			get {
 				double _x = x;
 				double _y = y;
 				double _z = z;
-				return (float)(_x*_x+_y*_y+_z*_z);
+				return (double)(_x*_x+_y*_y+_z*_z);
 				//return x*x+y*y+z*z;
 			}
 		}
@@ -210,14 +212,14 @@ namespace Pathfinding
 		
 		/** To avoid number overflows. \deprecated Int3.magnitude now uses the same implementation */
 		[System.Obsolete ("Same implementation as .magnitude")]
-		public float safeMagnitude {
+		public double safeMagnitude {
 			get {
 				//Of some reason, it is faster to use doubles (almost 40% faster)
 				double _x = x;
 				double _y = y;
 				double _z = z;
 				
-				return (float)System.Math.Sqrt (_x*_x+_y*_y+_z*_z);
+				return (double)System.Math.Sqrt (_x*_x+_y*_y+_z*_z);
 				
 				//Scale numbers down
 				/*float _x = x*PrecisionFactor;
@@ -231,11 +233,11 @@ namespace Pathfinding
 		/** To avoid number overflows. The returned value is the squared magnitude of the world distance (i.e divided by Precision) 
 		 * \deprecated .sqrMagnitude is now per default safe (Int3.unsafeSqrMagnitude can be used for unsafe operations) */
 		[System.Obsolete (".sqrMagnitude is now per default safe (.unsafeSqrMagnitude can be used for unsafe operations)")]
-		public float safeSqrMagnitude {
+		public double safeSqrMagnitude {
 			get {
-				float _x = x*PrecisionFactor;
-				float _y = y*PrecisionFactor;
-				float _z = z*PrecisionFactor;
+				double _x = x*PrecisionFactor;
+				double _y = y*PrecisionFactor;
+				double _z = z*PrecisionFactor;
 				return _x*_x+_y*_y+_z*_z;
 			}
 		}

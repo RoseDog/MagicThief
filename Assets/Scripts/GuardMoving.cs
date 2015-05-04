@@ -26,10 +26,10 @@ public class GuardMoving : AIPath
     Guard guard;
     Magician mage;
     /** Minimum velocity for moving */
-    public float sleepVelocity = 0.4f;
+    public double sleepVelocity = 0.4f;
 
     [UnityEngine.HideInInspector]
-    public float heightOriginCache;
+    public double heightOriginCache;
 
     public UnityEngine.Vector3 currentDir;
 
@@ -89,7 +89,7 @@ public class GuardMoving : AIPath
             if (canMove)
             {
                 //Calculate desired velocity
-                float s = speed;
+                double s = speed;
                 if (guard != null && guard.currentAction == guard.patrol)
                 {
                     s *= 0.5f;
@@ -115,19 +115,19 @@ public class GuardMoving : AIPath
                         actor.FaceDir(velocity);
                     }
                 }
-                transform.position = new UnityEngine.Vector3(transform.position.x, transform.position.y, heightOriginCache);                
+                transform.position = new UnityEngine.Vector3(transform.position.x, transform.position.y, (float)heightOriginCache);                
             }                        
         }
 
-        if (Globals.replay_key != "" && mage && Globals.replay.magePositions.Count != 0)
+        if (Globals.playingReplay != null && mage && Globals.replaySystem.magePositions.Count != 0)
         {
-            transform.position = Globals.replay.magePositions[0];
-            Globals.replay.magePositions.RemoveAt(0);
+            transform.position = Globals.replaySystem.magePositions[0];
+            Globals.replaySystem.magePositions.RemoveAt(0);
         }
 
         if (mage)
         {
-            Globals.replay.RecordMagePosition(transform.position);
+            Globals.replaySystem.RecordMagePosition(transform.position);
         }
 
         if (canMove && needAnimation)

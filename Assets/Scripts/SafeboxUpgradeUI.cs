@@ -33,26 +33,49 @@
 
         transform.parent.localScale = UnityEngine.Vector3.one;
 
-        LvNumber.text = data.Lv.ToString();
+        LvNumber.text = (data.Lv+1).ToString();
 
-        CashInBoxNumber.text = data.cashInBox.ToString();
-        CapacityNumber.text = Globals.safeBoxLvDatas[data.Lv].capacity.ToString();
-        AddNumber.text = "+"+(Globals.safeBoxLvDatas[data.Lv + 1].capacity - Globals.safeBoxLvDatas[data.Lv].capacity).ToString();
+        CashInBoxNumber.text = ((int)data.cashInBox).ToString();
+        
 
-        if (data.Lv < Globals.self.currentMazeLevel-1)
+        if(data.owner == Globals.self)
         {
-            LockBg.gameObject.SetActive(false);
-            UpgradeBtn.gameObject.SetActive(true);            
-            PriceNumber.text = Globals.safeBoxLvDatas[data.Lv].price.ToString();
-            UpgradeBtn.onClick.AddListener(() => UpgradeBtnClicked(data));
+            CapacityNumber.text = Globals.safeBoxLvDatas[data.Lv].capacity.ToString();
+            UpdateAddNumber(data);
+
+            if (data.Lv < Globals.self.currentMazeLevel - 1)
+            {
+                LockBg.gameObject.SetActive(false);
+                UpgradeBtn.gameObject.SetActive(true);
+                PriceNumber.text = Globals.safeBoxLvDatas[data.Lv].price.ToString();
+                UpgradeBtn.onClick.AddListener(() => UpgradeBtnClicked(data));
+            }
+            else
+            {
+                LockBg.gameObject.SetActive(true);
+                
+                if (data.Lv + 1 < Globals.safeBoxLvDatas.Length)
+                {
+                    Globals.languageTable.SetText(LockMsg,
+                        "upgrade_maze_to_upgrade_safe_box", new System.String[] { (Globals.self.currentMazeLevel + 1).ToString() });                    
+                }
+                // 满级了
+                else
+                {
+                    Globals.languageTable.SetText(LockMsg,
+                        "top_safe_box", new System.String[] { (Globals.self.currentMazeLevel + 1).ToString() });
+                }         
+                UpgradeBtn.gameObject.SetActive(false);
+            }
         }
         else
         {
-            LockBg.gameObject.SetActive(true);
-            Globals.languageTable.SetText(LockMsg,
-                    "upgrade_maze_to_upgrade_safe_box", new System.String[] { (Globals.self.currentMazeLevel + 1).ToString() });
+            Desc.gameObject.SetActive(false);
+            LockBg.gameObject.SetActive(false);
             UpgradeBtn.gameObject.SetActive(false);
+            CapacityNumber.transform.parent.gameObject.SetActive(false);
         }
+        
     }
 
     void UpgradeBtnClicked(SafeBoxData data)
@@ -63,6 +86,18 @@
             Globals.self.UpgradeSafebox(data);
             (Globals.LevelController as MyMazeLevelController).PutCashInBox(Globals.self);
             SetSafebox(data);
+        }
+    }
+
+    void UpdateAddNumber(SafeBoxData data)
+    {
+        if (data.Lv + 1 < Globals.safeBoxLvDatas.Length)
+        {
+            AddNumber.text = "+" + (Globals.safeBoxLvDatas[data.Lv + 1].capacity - Globals.safeBoxLvDatas[data.Lv].capacity).ToString();
+        }
+        else
+        {
+            AddNumber.gameObject.SetActive(false);
         }
     }
 

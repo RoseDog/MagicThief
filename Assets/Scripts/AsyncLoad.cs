@@ -39,7 +39,11 @@
     {
         Next = nextLevelName;
         LastLevelName = UnityEngine.Application.loadedLevelName;
-//        Globals.magician.gameObject.SetActive(false);
+        if (Globals.magician != null)
+        {
+            Globals.magician.gameObject.SetActive(false);
+        }
+        
         UnityEngine.Application.LoadLevel("loading");
     }
 
@@ -61,7 +65,7 @@
             while(true)
             {
                 yield return new UnityEngine.WaitForSeconds(0.1f);
-                if(Globals.socket.IsReady)
+                if(Globals.socket.IsReady())
                 {
                     break;
                 }

@@ -8,7 +8,7 @@ public class Joystick : Button
 
 	public Vector2 position;                                // [-1, 1] in x,y
 
-	public float slideDisThreshold = 80.0f;
+    public float slideDisThreshold = 80.0f;
 	public float slideTimeThreshold = 0.5f;
 
     [HideInInspector]

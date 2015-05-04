@@ -17,6 +17,8 @@
     public LifeOver lifeOver;
     [UnityEngine.HideInInspector]
     public GuardMoving moving;
+    [UnityEngine.HideInInspector]
+    public BeenPressDown beenPressDown;
 
     [UnityEngine.HideInInspector]
     public UnityEngine.MeshRenderer[] meshRenderers;
@@ -58,6 +60,7 @@
         hitted = GetComponent<Hitted>();
         lifeOver = GetComponent<LifeOver>();
         moving = GetComponent<GuardMoving>();
+        beenPressDown = GetComponent<BeenPressDown>();
 
         eye = GetComponentInChildren<FOV2DEyes>();
 
@@ -223,8 +226,9 @@
         System.Collections.Generic.List<UnityEngine.Vector3> vectorPath = new System.Collections.Generic.List<UnityEngine.Vector3>();
         foreach (UnityEngine.Vector3 pos in p.vectorPath)
         {
-            vectorPath.Add(new UnityEngine.Vector3(
-                (float)System.Math.Round(pos.x, 3), (float)System.Math.Round(pos.y, 3), (float)System.Math.Round(pos.z, 3)));
+//             vectorPath.Add(new UnityEngine.Vector3(
+//                 (double)System.Math.Round(pos.x, 3), (double)System.Math.Round(pos.y, 3), (double)System.Math.Round(pos.z, 3)));
+            vectorPath.Add(pos);
         }
         p.vectorPath = vectorPath;
 
@@ -307,21 +311,6 @@
         Destroy(pathMesh);
     }
 
-    public virtual bool ChangePower(int delta)
-    {
-        int powerTemp = PowerCurrent;
-        powerTemp += delta;
-        if (powerTemp < 0)
-        {
-            Globals.tipDisplay.Msg("not_enough_power");
-            return false;
-        }
-        else
-        {
-            PowerCurrent = powerTemp;
-            return true;
-        }
-    }
 
     public virtual void ChangeLife(int delta)
     {
@@ -330,19 +319,9 @@
         if (LifeCurrent < UnityEngine.Mathf.Epsilon)
         {
             lifeOver.Excute();
-        }
-        else
-        {
-            hitted.Excute();
-        }
+        }        
     }
-
-    public virtual void ResetLifeAndPower()
-    {
-        LifeCurrent = LifeAmount;
-        PowerCurrent = PowerAmount;
-    }
-
+    
     public void FaceTarget(UnityEngine.Transform target)
     {
         UnityEngine.Vector3 dir = target.transform.position - transform.position;
@@ -351,7 +330,7 @@
 
     public void FaceDir(UnityEngine.Vector3 v)
     {
-        float angle = UnityEngine.Vector3.Angle(v, new UnityEngine.Vector3(1, 0, 0));
+        double angle = UnityEngine.Vector3.Angle(v, new UnityEngine.Vector3(1, 0, 0));
         if (angle < 90 || angle > 270)
         {
             transform.localEulerAngles = new UnityEngine.Vector3(0, 180, 0);

@@ -331,10 +331,10 @@ public class AdvancedSmooth : MonoModifier {
 			           +"\nLeft   - Right:	"+betaLeftRight
 			           +"\nLeft   - Left :	"+betaLeftLeft);*/
 			
-			turnList.Add (new Turn ((float)betaRightRight, this, 2));
-			turnList.Add (new Turn ((float)betaRightLeft, this, 3));
-			turnList.Add (new Turn ((float)betaLeftRight, this, 4));
-			turnList.Add (new Turn ((float)betaLeftLeft, this, 5));
+			turnList.Add (new Turn ((double)betaRightRight, this, 2));
+			turnList.Add (new Turn ((double)betaRightLeft, this, 3));
+			turnList.Add (new Turn ((double)betaLeftRight, this, 4));
+			turnList.Add (new Turn ((double)betaLeftLeft, this, 5));
 			
 		}
 		
@@ -342,8 +342,8 @@ public class AdvancedSmooth : MonoModifier {
 			
 			bool noRight = false, noLeft = false;
 			
-			float rightMagn = (prev-rightCircleCenter).magnitude;
-			float leftMagn  = (prev-leftCircleCenter).magnitude;
+			double rightMagn = (prev-rightCircleCenter).magnitude;
+			double leftMagn  = (prev-leftCircleCenter).magnitude;
 			
 			if (rightMagn < turningRadius)
 				noRight = true;
@@ -372,17 +372,17 @@ public class AdvancedSmooth : MonoModifier {
 			double betaLeft = noLeft ? 0 : CounterClockwiseAngle (gammaLeft, vaLeft);
 				
 			if (!noRight)
-				turnList.Add (new Turn ((float)betaRight,this,0));
+				turnList.Add (new Turn ((double)betaRight,this,0));
 			if (!noLeft)
-				turnList.Add (new Turn ((float)betaLeft,this,1));
+				turnList.Add (new Turn ((double)betaLeft,this,1));
 		}
 		
 		public override void TangentToPoint (List<Turn> turnList) {
 			
 			bool noRight = false, noLeft = false;
 			
-			float rightMagn = (next-rightCircleCenter).magnitude;
-			float leftMagn  = (next-leftCircleCenter).magnitude;
+			double rightMagn = (next-rightCircleCenter).magnitude;
+			double leftMagn  = (next-leftCircleCenter).magnitude;
 			
 			if (rightMagn < turningRadius)
 				noRight = true;
@@ -399,7 +399,7 @@ public class AdvancedSmooth : MonoModifier {
 				gammaRight = alfa - delta;
 				double betaRight = ClockwiseAngle (vaRight,gammaRight);
 				
-				turnList.Add (new Turn ((float)betaRight,this,6));
+				turnList.Add (new Turn ((double)betaRight,this,6));
 			}
 			
 			if (!noLeft) {
@@ -414,7 +414,7 @@ public class AdvancedSmooth : MonoModifier {
 				double betaLeft = CounterClockwiseAngle (vaLeft, gammaLeft);
 				
 				
-				turnList.Add (new Turn ((float)betaLeft,this,7));
+				turnList.Add (new Turn ((double)betaLeft,this,7));
 			}
 		}
 		
@@ -504,7 +504,7 @@ public class AdvancedSmooth : MonoModifier {
 			
 			beta = GetLengthFromAngle (beta,(circleCenter - current).magnitude);
 			
-			turnList.Add (new Turn ((float)beta,this, 0));
+			turnList.Add (new Turn ((double)beta,this, 0));
 		}
 		
 		public override void GetPath (Turn turn, List<Vector3> output) {
@@ -532,11 +532,11 @@ public class AdvancedSmooth : MonoModifier {
 		 * This can be used to favor certain turn types before others.\n
 		 * By for example setting this to -5, paths from this path constructor will be chosen
 		 * if there are no other paths more than 5 world units shorter than this one (as opposed to just any shorter path) */
-		public float constantBias = 0;
+		public double constantBias = 0;
 		
 		/** Bias to multiply the path lengths with. This can be used to favor certain turn types before others.
 		 * \see #constantBias */
-		public float factorBias =   1; 
+		public double factorBias =   1; 
 		
 		public static float turningRadius = 1.0F;
 	
@@ -581,7 +581,7 @@ public class AdvancedSmooth : MonoModifier {
 		
 		//Utilities 
 	
-		public void AddCircleSegment (double startAngle, double endAngle, bool clockwise, Vector3 center, List<Vector3> output, float radius) {
+		public void AddCircleSegment (double startAngle, double endAngle, bool clockwise, Vector3 center, List<Vector3> output, double radius) {
 			
 			double step = ThreeSixtyRadians / 100;
 			
@@ -609,16 +609,16 @@ public class AdvancedSmooth : MonoModifier {
 			//Add curve
 			if (clockwise) {
 				for (double i = startAngle; i < endAngle; i += step) {
-					output.Add (AngleToVector(i)*radius+center);
+                    output.Add(AngleToVector(i) * (float)radius + center);
 				}
 			} else {
 				for (double i = startAngle; i > endAngle; i -= step) {
-					output.Add (AngleToVector(i)*radius+center);
+                    output.Add(AngleToVector(i) * (float)radius + center);
 				}
 			}
 			
 			//Add last point
-			output.Add (AngleToVector(endAngle)*radius+center);
+            output.Add(AngleToVector(endAngle) * (float)radius + center);
 			
 		}
 		
@@ -632,19 +632,19 @@ public class AdvancedSmooth : MonoModifier {
 			
 			Vector3 prev = AngleToVector (startAngle)*(float)radius+center;
 			for (double i = startAngle+step; i < endAngle; i += step) {
-				Debug.DrawLine (prev, AngleToVector (i)*(float)radius+center);
+                Debug.DrawLine(prev, AngleToVector(i) * (float)radius + center);
 			}
-			
-			Debug.DrawLine (prev, AngleToVector (endAngle)*(float)radius+center);
+
+            Debug.DrawLine(prev, AngleToVector(endAngle) * (float)radius + center);
 		}
 		
 		public void DebugCircle (Vector3 center, double radius, Color color) {
 			
 			double step = ThreeSixtyRadians / 100;
-			Vector3 prePos = AngleToVector (-step)*(float)radius+center;
+            Vector3 prePos = AngleToVector(-step) * (float)radius + center;
 				
 			for (double i=0;i<ThreeSixtyRadians;i += step) {
-				Vector3 pos = AngleToVector (i)*(float)radius+center;
+                Vector3 pos = AngleToVector(i) * (float)radius + center;
 				Debug.DrawLine (prePos,pos,color);
 				prePos = pos;
 			}
@@ -666,7 +666,7 @@ public class AdvancedSmooth : MonoModifier {
 		}
 		
 		public Vector3 AngleToVector (double a) {
-			return new Vector3 ((float)Math.Cos (a),0,(float)Math.Sin (a));
+            return new Vector3((float)Math.Cos(a), 0, (float)Math.Sin(a));
 		}
 		
 		public double ToDegrees (double rad) {
@@ -687,18 +687,18 @@ public class AdvancedSmooth : MonoModifier {
 	//Turn class
 	/** \astarpro */
 	public struct Turn : IComparable<Turn> {
-		public float length;
+		public double length;
 		public int id;
 		
 		public TurnConstructor constructor;
 		
-		public float score {
+		public double score {
 			get {
 				return length*constructor.factorBias+constructor.constantBias;
 			}
 		}
 		
-		public Turn (float length, TurnConstructor constructor, int id = 0) {
+		public Turn (double length, TurnConstructor constructor, int id = 0) {
 			this.length = length;
 			this.id = id;
 			this.constructor = constructor;

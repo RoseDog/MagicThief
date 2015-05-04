@@ -1,5 +1,5 @@
 ﻿GuardCount=0
-randSeedCacheWhenEditLevel=1838017534
+randSeedCacheWhenEditLevel=1880175345
 Z_CELLS_COUNT=5
 X_CELLS_COUNT=3
 CHANGE_DIRECTION_MODIFIER=50
@@ -11,4 +11,4 @@ maxRoomXCellsCount=2
 minRoomZCellsCount=2
 maxRoomZCellsCount=2
 GEMS_COUNT=3
-LevelTipText=“你应该不讨厌钱吧？”
+LevelTipText=找到所有钻石

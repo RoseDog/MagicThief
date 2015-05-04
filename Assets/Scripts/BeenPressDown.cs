@@ -27,6 +27,13 @@
             timer.BeginCountDown(gameObject, duration, new UnityEngine.Vector3(0, 1.5f, 0));
 
             pushAwayAction = actor.SleepThenCallFunction(duration, () => PushGuardsAway());
+            foreach( Chest chest in Globals.maze.chests )
+            {
+                if (chest.isMagicianNear)
+                {
+                    chest.OnTriggerExit(actor.collider);
+                }
+            }
         }
         else
         {
@@ -35,7 +42,7 @@
             ((pushAwayAction as Sequence).actions[0] as SleepFor)._frameDuration = timer.GetLastFrameTime();
         }        
         guardsPressingMage.Add(guard);
-        Globals.canvasForMagician.tricksInUsingPanel.gameObject.SetActive(false);
+        Globals.canvasForMagician.HideTricksPanel();
     }
     Cocos2dAction stopCall;
     Cocos2dAction jumpSequence;
@@ -60,6 +67,7 @@
         {
             guard.rushAt.PushedAway();
         }
+        actor.ChangeLife(-guardsPressingMage[0].data.attackValue * guardsPressingMage.Count);
         guardsPressingMage.Clear();
 
         System.String content = gameObject.name;
@@ -72,8 +80,20 @@
         base.Stop();
         stopCall = null;
         jumpSequence = null;
-        actor.moving.canMove = true;
-        Globals.canvasForMagician.tricksInUsingPanel.gameObject.SetActive(true);
-        actor.ChangeLife(-40);
+        if(!actor.IsLifeOver())
+        {            
+            if(actor == Globals.magician)
+            {
+                // 教程中的盗贼被扑倒一次就不会逃跑了
+                actor.moving.canMove = true;
+                Globals.canvasForMagician.ShowTricksPanel();
+            }
+            else
+            {
+                actor.spriteSheet.Play("idle");
+            }
+        }
+        
+        guardsPressingMage.Clear();
     }
 }

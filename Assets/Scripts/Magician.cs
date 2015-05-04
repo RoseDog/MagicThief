@@ -1,14 +1,11 @@
 public class Magician : Actor
 {
-    public bool isMoving;    
-
-    public BattleUI battleUI;
-
+    public bool isMoving;
+    public TryEscape tryEscape;
     public Escape escape;
     public Victory victory;
     public Falling falling;
-    public Incant incant;
-    public BeenPressDown beenPressDown;
+    public Incant incant;    
         
     public Hypnosis hypnosis;
     public ShotLight shot;
@@ -23,18 +20,18 @@ public class Magician : Actor
         base.Awake();
         spriteSheet.CreateAnimationByName("idle");
         spriteSheet.CreateAnimationByName("moving");
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(this);
+        tryEscape = GetComponent<TryEscape>();
         escape = GetComponent<Escape>();
         victory = GetComponent<Victory>();
         falling = GetComponent<Falling>();
-        incant = GetComponent<Incant>();
-        beenPressDown = GetComponent<BeenPressDown>();
+        incant = GetComponent<Incant>();        
         
         TrickData trick = new TrickData();        
         trick.nameKey = "hypnosis";
         trick.descriptionKey = "hypnosis_desc";
         trick.duration = 350;
-        trick.powerCost = 20;
+        trick.powerCost = 25;
         trick.unlockRoseCount = 0;
         trick.price = 0;
         trick.bought = true;
@@ -45,19 +42,19 @@ public class Magician : Actor
         trick = new TrickData();
         trick.nameKey = "dove";
         trick.descriptionKey = "dove_desc";
-        trick.duration = 300;
-        trick.powerCost = 10;
-        trick.unlockRoseCount = 3;
-        trick.price = 1000;
+        trick.duration = 400;
+        trick.powerCost = 20;
+        trick.unlockRoseCount = 0;
+        trick.price = 300;
         Globals.tricks.Add(trick);
 
         trick = new TrickData();
         trick.nameKey = "disguise";
         trick.descriptionKey = "disguise_desc";
-        trick.duration = 300;
-        trick.powerCost = 30;
-        trick.unlockRoseCount = 10;
-        trick.price = 3000;
+        trick.duration = 500;
+        trick.powerCost = 35;
+        trick.unlockRoseCount = 0;
+        trick.price = 500;
         disguise = GetComponent<Disguise>();
         disguise.data = trick;
         Globals.tricks.Add(trick);
@@ -66,9 +63,20 @@ public class Magician : Actor
         trick.nameKey = "flash_grenade";
         trick.descriptionKey = "flash_grenade_desc";
         trick.duration = 0;
-        trick.powerCost = 3;
-        trick.unlockRoseCount = 3;
-        trick.price = 1000;        
+        trick.powerCost = 2;
+        trick.unlockRoseCount = 10;
+        trick.price = 10000;        
+        Globals.tricks.Add(trick);
+
+        trick = new TrickData();
+        trick.nameKey = "flyUp";
+        trick.descriptionKey = "flyUp_desc";
+        trick.duration = 300;
+        trick.powerCost = 35;
+        trick.unlockRoseCount = 30;
+        trick.price = 16000;
+        flyUp = GetComponent<FlyUp>();
+        flyUp.data = trick;
         Globals.tricks.Add(trick);
 
         trick = new TrickData();
@@ -76,22 +84,12 @@ public class Magician : Actor
         trick.descriptionKey = "shotLight_desc";
         trick.duration = 0;
         trick.powerCost = 10;
-        trick.unlockRoseCount = 3;
-        trick.price = 1000;
+        trick.unlockRoseCount = 50;
+        trick.price = 31000;
         shot = GetComponent<ShotLight>();
         shot.data = trick;
-        Globals.tricks.Add(trick);
-
-        trick = new TrickData();
-        trick.nameKey = "flyUp";
-        trick.descriptionKey = "flyUp_desc";
-        trick.duration = 300;
-        trick.powerCost = 1;
-        trick.unlockRoseCount = 10;
-        trick.price = 3000;
-        flyUp = GetComponent<FlyUp>();
-        flyUp.data = trick;
-        Globals.tricks.Add(trick);
+        Globals.tricks.Add(trick);                
+        
 
         moving.canMove = false;
         gameObject.name = "Magician";              
@@ -102,42 +100,42 @@ public class Magician : Actor
         PowerCurrent = PowerAmount;
 
         GuardData guard_data = new GuardData();
-        guard_data.name = "armed";
-        guard_data.price = 500;
-        guard_data.roomConsume = 3;
+        guard_data.name = "guard";
+        guard_data.price = 3500;
+        guard_data.roomConsume = 2;
         guard_data.magicianOutVisionTime = 250;
         guard_data.atkCd = 120;
-        guard_data.attackValue = 40;
+        guard_data.attackValue = 60;
         guard_data.atkShortestDistance = 1.5f;
-        guard_data.doveOutVisionTime = 100;
+        guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
         Globals.guardDatas.Add(guard_data);
 
         guard_data = new GuardData();
         guard_data.name = "dog";
-        guard_data.price = 120;
+        guard_data.price = 8000;
         guard_data.roomConsume = 1;
         guard_data.magicianOutVisionTime = 500;
-        guard_data.attackValue = 0;
-        guard_data.atkShortestDistance = 2.0f;
+        guard_data.attackValue = 40;
+        guard_data.atkShortestDistance = 1.0f;
         guard_data.doveOutVisionTime = 500;
         Globals.guardDatas.Add(guard_data);
 
         guard_data = new GuardData();
-        guard_data.name = "guard";
-        guard_data.price = 150;
-        guard_data.roomConsume = 2;
-        guard_data.magicianOutVisionTime = 250;
-        guard_data.atkCd = 120;
-        guard_data.attackValue = 20;
+        guard_data.name = "armed";
+        guard_data.price = 12000;
+        guard_data.roomConsume = 3;
+        guard_data.magicianOutVisionTime = 450;
+        guard_data.atkCd = 60;
+        guard_data.attackValue = 101;
         guard_data.atkShortestDistance = 1.5f;
-        guard_data.doveOutVisionTime = 100;
+        guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
         Globals.guardDatas.Add(guard_data);
 
         guard_data = new GuardData();
         guard_data.name = "lamp";
-        guard_data.price = 70000;
+        guard_data.price = 15000;
         guard_data.roomConsume = 1;        
         Globals.guardDatas.Add(guard_data);
 
@@ -148,25 +146,25 @@ public class Magician : Actor
         Globals.mazeLvDatas.Add(data);
 
         data = new MazeLvData();
-        data.roseRequire = 10;
-        data.price = 5000;
-        data.roomSupport = 10;
-        data.lockGuardsName = new System.String[] { "armed"};
+        data.roseRequire = 0;
+        data.price = 3000;
+        data.roomSupport = 8;
+        data.lockGuardsName = new System.String[] { "guard"};
         data.safeBoxCount = 3;
         Globals.mazeLvDatas.Add(data);
 
         data = new MazeLvData();
-        data.roseRequire = 30;
-        data.price = 10000;
-        data.roomSupport = 20;
-        data.lockGuardsName = new System.String[] { "dog","guard"};
+        data.roseRequire = 20;
+        data.price = 12000;
+        data.roomSupport = 15;
+        data.lockGuardsName = new System.String[] { "dog","armed"};
         data.safeBoxCount = 4;
         Globals.mazeLvDatas.Add(data);
 
         data = new MazeLvData();
         data.roseRequire = 50;
-        data.price = 10000;
-        data.roomSupport = 30;
+        data.price = 25000;
+        data.roomSupport = 23;
         data.lockGuardsName = new System.String[] { "lamp"};
         data.safeBoxCount = 5;
         Globals.mazeLvDatas.Add(data);
@@ -240,15 +238,15 @@ public class Magician : Actor
 
     public void CastMagic(TrickData data)
     {
-        Globals.replay.RecordMagicCast(data);
-
-        if (data.nameKey == "flash_grenade")
+        Globals.replaySystem.RecordMagicCast(data);
+        TutorialLevelController level = Globals.LevelController as TutorialLevelController;
+        if (level != null && data.nameKey == "flash_grenade")
         {
             if (!Stealing)
-            {
-                if (data.IsInUse())
+            {                
+                if (data.IsInUse() || Globals.playingReplay != null)
                 {
-                    UnityEngine.GameObject landingMark = (Globals.LevelController as TutorialLevelController).landingMark;
+                    UnityEngine.GameObject landingMark = level.landingMark;
                     if (landingMark.activeSelf)
                     {
                         if(ChangePower(-data.powerCost))
@@ -320,8 +318,8 @@ public class Magician : Actor
             {
                 UnityEngine.GameObject soundPrefab = UnityEngine.Resources.Load("Misc/GunSound") as UnityEngine.GameObject;
                 GuardAlertSound sound = (UnityEngine.GameObject.Instantiate(soundPrefab) as UnityEngine.GameObject).GetComponent<GuardAlertSound>();
-                sound.wave.transform.position = transform.position;                
-                sound.SpotAlert();
+                sound.transform.position = transform.position;
+                sound.StartAlert();                
             }
         }        
     }
@@ -378,18 +376,23 @@ public class Magician : Actor
         }       
     }
 
-    public override bool ChangePower(int delta)
+    public bool ChangePower(int delta)
     {
-        if (base.ChangePower(delta))
+        int powerTemp = PowerCurrent;
+        powerTemp += delta;
+        if (powerTemp < 0)
         {
-            Globals.canvasForMagician.PowerNumber.UpdateCurrentLife(PowerCurrent, PowerAmount);
-            return true;
-        }
-        else
-        {
+            Globals.tipDisplay.Msg("not_enough_power");
             return false;
         }
+        else
+        {            
+            PowerCurrent = powerTemp;
+            Globals.canvasForMagician.PowerNumber.UpdateCurrentLife(PowerCurrent, PowerAmount + Globals.thiefPlayer.GetPowerDelta());
+            return true;
+        }
     }
+
 
     public override void ChangeLife(int delta)
     {
@@ -397,15 +400,21 @@ public class Magician : Actor
         Globals.canvasForMagician.lifeNumber.UpdateCurrentLife(LifeCurrent, LifeAmount);
     }
 
-    public override void ResetLifeAndPower()
+    public void ResetLifeAndPower(PlayerInfo player)
     {
-        base.ResetLifeAndPower();
+        LifeCurrent = LifeAmount;        
         Globals.canvasForMagician.lifeNumber.UpdateText(LifeCurrent, LifeAmount);
-        Globals.canvasForMagician.PowerNumber.UpdateText(PowerCurrent, PowerAmount);
+        ResetPower(player);
+    }
+
+    public void ResetPower(PlayerInfo player)
+    {
+        PowerCurrent = PowerAmount + player.GetPowerDelta();
+        Globals.canvasForMagician.PowerNumber.UpdateText(PowerCurrent, PowerAmount + player.GetPowerDelta());
     }
 
     public void OnDestroy()
     {
-
+        UnityEngine.Debug.Log("Magician Destroyed");
     }
 }

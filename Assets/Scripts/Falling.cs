@@ -3,7 +3,7 @@
     public UnityEngine.Vector3 from;
     public UnityEngine.Vector3 to;
     [UnityEngine.HideInInspector]
-    public float duration;
+    public double duration;
     public override void Awake()
     {
         base.Awake();

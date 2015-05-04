@@ -5,13 +5,13 @@ public class FadeTo : Cocos2dAction
 {
     Renderer _renderer;
 	// duration
-	private float _duration = 1f;
+    private float _duration = 1f;
 	// start time
-	private float _start_time = 0f;
+    private float _start_time = 0f;
 	// start alpha
-	private float _start;
+    private float _start;
 	// end alpha
-	private float _end;
+    private float _end;
 	// parent color
 	private Color _color;
 	// parent material
@@ -68,13 +68,13 @@ public class FadeUI : Cocos2dAction
 {
     AlphaFadeUI _ui;
 	// duration
-	private float _duration = 1f;
+    private float _duration = 1f;
 	// start time
-	private float _start_time = 0f;
+    private float _start_time = 0f;
 	// start alpha
-	private float _start;
+    private float _start;
 	// end alpha
-	private float _end;
+    private float _end;
 	// parent color
 	private Color _color;
 	// parent material
@@ -106,7 +106,7 @@ public class FadeUI : Cocos2dAction
 		if(!completed)
 		{
 			// Change tmp color
-			float a = Mathf.Lerp(_start, _end, (Time.time - _start_time) / _duration);
+            float a = Mathf.Lerp(_start, _end, (Time.time - _start_time) / _duration);
 			
 			// Update material color
             _ui.UpdateAlpha(a);

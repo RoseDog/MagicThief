@@ -6,61 +6,58 @@
         new System.Collections.Generic.Dictionary<System.String, UnityEngine.Events.UnityAction<System.String[]>>();
     UnityEngine.GameObject WaitingForServer_prefab;
     UnityEngine.GameObject WaitingForServer;
-    public bool IsReady = true;
-    public bool FromLogin = false;
+    bool ready = true;
+    public bool IsReady() { return ready; }
+    public void SetReady(bool value) { ready = value; }
+    bool fromLoginScene = true;
+    public bool IsFromLogin() { return fromLoginScene; }
 	// Use this for initialization
     public void Awake()
     {
         Globals.socket = this;
         WaitingForServer_prefab = UnityEngine.Resources.Load("UI/WaitingForServer") as UnityEngine.GameObject;        
-        if(!FromLogin && UnityEngine.GameObject.FindObjectOfType<LevelEditor>()==null)
+        if(!fromLoginScene && UnityEngine.GameObject.FindObjectOfType<LevelEditor>()==null)
         {
-            IsReady = false;
+            ready = false;
         }
-    }
 
-	void Start () 
-    {
-        ws = new WebSocketSharp.WebSocket("ws://127.0.0.1:42788");
+        ws = new WebSocketSharp.WebSocket("ws://96.126.116.192:42788");
+        //ws = new WebSocketSharp.WebSocket("ws://127.0.0.1:42788");
 
         ws.OnMessage += OnMessage;
         ws.OnError += OnError;
         ws.OnClose += OnClose;
 
         ws.ConnectAsync();
-        Globals.socket.serverReplyActions.Add("login", (reply) => OnLoginReply(reply));
-        if(!FromLogin)
+
+        serverReplyActions.Add("login", (reply) => OnLoginReply(reply));
+        if (!fromLoginScene)
         {
             Invoke("Login", 0.5f);
         }        
+    }
+
+	void Start () 
+    {
+        
 	}
 
     void Login()
     {
-        System.String name = "d";
+        System.String name = "玫瑰狗";
         Send("login"+ Globals.self.separator + name + Globals.self.separator + UnityEngine.SystemInfo.deviceUniqueIdentifier);
         Globals.self.name = name;
-        Invoke("DownloadReady", 2.0f);
-    }
-
-    void DownloadReady()
-    {
-        Globals.socket.IsReady = true;
-    }
+    }    
 
     void OnLoginReply(System.String[] reply)
     {
         if (reply[0] == "ok")
-        {
+        {            
             Globals.self.SyncWithServer();
-            if (FromLogin)
-            {
-                Globals.asyncLoad._ToLoadingScene("Tutorial_Levels");
-            }
-            else
-            {
-                StartCoroutine("WaitingForSyncRead");
-            }
+            System.IO.StreamWriter stream = new System.IO.StreamWriter(UnityEngine.Application.persistentDataPath + "/name.txt",
+                false, System.Text.Encoding.UTF8);
+            stream.WriteLine(Globals.self.name);
+            stream.Close();            
         }
         else if (reply[0] == "duplicated")
         {
@@ -75,7 +72,7 @@
         while (true)
         {
             yield return new UnityEngine.WaitForSeconds(0.1f);
-            if (IsReady)
+            if (ready)
             {
                 break;
             }
@@ -164,13 +161,13 @@
     void ErrorInvoke(WebSocketSharp.ErrorEventArgs e)
     {
         CloseWaitingUI();
-        Globals.MessageBox("cannot_connect_server");
+        Globals.MessageBox("cannot_connect_server",() => BackToLoginScene());
     }
 
     void CloseInvoke(WebSocketSharp.CloseEventArgs e)
     {
         CloseWaitingUI();
-        Globals.MessageBox("cannot_connect_server");
+        Globals.MessageBox("cannot_connect_server", () => BackToLoginScene());
     }
 
     void MessageInvoke(System.String replyData)
@@ -184,5 +181,10 @@
         {
             serverReplyActions[protocol].Invoke(datas.ToArray());
         }
+    }
+
+    void BackToLoginScene()
+    {
+        UnityEngine.Application.LoadLevel("Login");
     }
 }

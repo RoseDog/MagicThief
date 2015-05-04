@@ -17,8 +17,8 @@
     public void Msg(System.String text, UnityEngine.Events.UnityAction yesAction = null, bool bNeedCancel = false)
     {        
         MsgBoxBG.UpdateAlpha(0);
-        MsgBoxBG.AddAction(new FadeUI(MsgBoxBG, 0, 1, 0.2f));        
-        msgBoxText.text = text;
+        MsgBoxBG.AddAction(new FadeUI(MsgBoxBG, 0, 1, 0.2f));
+        Globals.languageTable.SetText(msgBoxText, text);
 
         YesBtn.interactable = true;
         YesBtn.onClick.RemoveAllListeners();

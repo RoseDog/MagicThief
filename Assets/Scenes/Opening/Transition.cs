@@ -25,7 +25,7 @@ public class Transition : Actor
 		cookShadersObject.transform.parent = UnityEngine.Camera.main.transform;
         cookShadersObject.transform.localPosition = UnityEngine.Vector3.zero;        
         cookShadersObject.transform.localRotation = UnityEngine.Quaternion.identity;        
-        cookShadersObject.transform.localScale = new UnityEngine.Vector3(20, 10, 1);
+        cookShadersObject.transform.localScale = new UnityEngine.Vector3(40, 40, 1);
 	}
 
 	public override void Visible(bool visibility)

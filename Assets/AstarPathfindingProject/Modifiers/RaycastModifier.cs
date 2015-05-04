@@ -29,7 +29,7 @@ public class RaycastModifier : MonoModifier {
 	public bool useRaycasting = true;
 	public LayerMask mask = -1;
 	public bool thickRaycast = false;
-	public float thickRaycastRadius = 0;
+    public float thickRaycastRadius = 0;
 	public Vector3 raycastOffset = Vector3.zero;
 	
 	/** Use the exact points used to query the path. If false, the start and end points will be snapped to the node positions.*/

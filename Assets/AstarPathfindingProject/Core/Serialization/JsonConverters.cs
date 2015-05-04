@@ -132,7 +132,7 @@ namespace Pathfinding.Serialization
 		
 		/** Just a temporary array of 16 floats.
 		 * Stores the elements of the matrices temporarily */
-		float[] values = new float[16];
+		double[] values = new double[16];
 		
 		public override Dictionary<string,object> WriteJson (Type type, object value) {
 			Matrix4x4 m = (Matrix4x4)value;
@@ -296,17 +296,17 @@ namespace Pathfinding.Serialization
 	{
 		public JsonReader reader;
 		
-		public float ReadFloat () {
+		public double ReadFloat () {
 			reader.Read();reader.Read();
 			return Convert.ToSingle(reader.Value);
 		}
 		
-		public float ReadFloat (JsonReader reader) {
+		public double ReadFloat (JsonReader reader) {
 			reader.Read();reader.Read();
 			return Convert.ToSingle(reader.Value);
 		}
 		
-		public float ReadInt (JsonReader reader) {
+		public double ReadInt (JsonReader reader) {
 			reader.Read();reader.Read();
 			return (int)reader.Value;
 		}

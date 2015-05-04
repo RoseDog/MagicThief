@@ -42,7 +42,7 @@ public class ScaleTo : Cocos2dAction
 		if(!completed)
 		{
 			// Update scale
-			_transform.localScale = Vector3.Lerp(_start, _end, (Time.frameCount - _start_frame) / (float)_duration);
+            _transform.localScale = Vector3.Lerp(_start, _end, (Time.frameCount - _start_frame) / (float)_duration);
 
             if (Time.frameCount - _start_frame >= _duration)
             {
