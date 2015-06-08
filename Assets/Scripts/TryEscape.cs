@@ -1,11 +1,9 @@
 ﻿public class TryEscape : Action
 {
     int Duration = 100;
-    public override void Awake()
+    public void Start()
     {
-        base.Awake();
-        actor.spriteSheet.CreateAnimationByName("TryEscape", 0.5f);
-        actor.spriteSheet.AddAnimationEvent("TryEscape", -1, () => Successd());
+        actor.spriteSheet.AddAnimationEvent("TryEscape", -1, () => Escaped());
     }
     
     public override void Excute()
@@ -19,11 +17,11 @@
         }        
     }
 
-    void Successd()
+    void Escaped()
     {
         Stop();
         Globals.magician.OutStealing();
-        Globals.magician.escape.Excute();
-        (Globals.LevelController as TutorialLevelController).StealingOver();
+        Globals.magician.escape.Go("victoryEscape");
+        (Globals.LevelController as StealingLevelController).PvPEscaped();
     }
 }

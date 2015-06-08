@@ -23,17 +23,17 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("tricks", new System.String[] { "魔术", "Tricks" });
         table.Add("outfits", new System.String[] { "服装", "Outfits" });
         table.Add("hypnosis", new System.String[] { "催眠", "Hypnosis" });
-        table.Add("hypnosis_desc", new System.String[] { "对距离最近的人类守卫施行催眠，让守卫沉睡一小会儿。", "make a guard go to sleep" });
+        table.Add("hypnosis_desc", new System.String[] { "<color=orange>对距离最近的</color>人类守卫施行催眠。", "make a guard go to sleep" });
         table.Add("shotLight", new System.String[] { "魔术牌手枪", "Gun" });
-        table.Add("shotLight_desc", new System.String[] { "原地开枪可发出巨大声响，吸引守卫注意力。也可对机械萤火虫发射，魔术牌会卡在目标的关键部位使其一段时间内无法照明", "A fancy Gun" });
+        table.Add("shotLight_desc", new System.String[] { "可以原地开枪<color=orange>吸引守卫注意力。</color>\n可以<color=orange>破坏萤火虫。</color>", "A fancy Gun" });
         table.Add("disguise", new System.String[] { "易容", "Disguise" });
-        table.Add("disguise_desc", new System.String[] { "改变自己的容貌，守卫无法识破你。<color=red>任何时候易容都可以骗过机械狗和重装守卫\n在警卫发现你之后才进行易容将无法骗过警卫。</color>", "Disguise" });
+        table.Add("disguise_desc", new System.String[] { "魔术师以高超的手法进行乔装，让自己混进守卫之中。", "Disguise" });
         table.Add("flyUp", new System.String[] { "银翼的魔术师", "Glider" });
-        table.Add("flyUp_desc", new System.String[] { "展开长袍，利用空气动力将自己托到空中。", "Use a glider to fly" });
+        table.Add("flyUp_desc", new System.String[] { "可以<color=orange>瞬间脱离</color>守卫的追击。移动<color=orange>无视地形。</color>", "Use a glider to fly" });
         table.Add("dove", new System.String[] { "鸽子戏法", "Dove Trick" });
-        table.Add("dove_desc", new System.String[] { "放出小动物吸引守卫的注意力。<color=red>用来对付机械狗效果显著。</color>", "release animals to distract guards" });
+        table.Add("dove_desc", new System.String[] { "放出小动物吸引守卫的注意力。<color=orange>用来对付机械狗效果显著。</color>", "release animals to distract guards" });
         table.Add("flash_grenade", new System.String[] { "照明弹", "Flare" });
-        table.Add("flash_grenade_desc", new System.String[] { "<color=red>先设置降落点</color>，然后点击照明弹进行投掷，可驱散迷雾。<color=red>只能在潜入之前使用</color>", "Flare" });                       
+        table.Add("flash_grenade_desc", new System.String[] { "<color=orange>先设置降落点</color>，然后点击照明弹进行投掷，可驱散迷雾。<color=orange>只能在潜入之前使用</color>", "Flare" });                       
         table.Add("level_loading_progress", new System.String[] { "场景加载{0}%", "Level Loading:{0}%" });
         table.Add("power_cost", new System.String[] { "魔力消耗:{0}", "Power Cost:{0}" });
         table.Add("duration", new System.String[] { "持续时间:{0}", "Duration:{0}" });
@@ -61,6 +61,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("VR", new System.String[] { "VR潜入, Sphinx Entertainment", "VR潜入, Sphinx Entertainment" });
         table.Add("mark_of_the_ninja", new System.String[] { "忍者印记", "mark_of_the_ninja" });
         table.Add("stealth_inc", new System.String[] { "隐形公司", "stealth_inc" });
+        table.Add("crap_game", new System.String[] { "烂游戏", "crap_game" });
 
 
         table.Add("guard_cant_be_here", new System.String[] { "守卫不能放在这里", "Guard Can't be placed here" });
@@ -70,6 +71,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("city_events", new System.String[] { "城市事件", "City Events" });
         table.Add("my_maze", new System.String[] { "我的迷宫", "My Maze" });
         table.Add("dive_in", new System.String[] { "潜入", "Dive In" });
+        table.Add("spy", new System.String[] { "窥视", "Spy" });
         table.Add("target_tonight", new System.String[] { "你是个小偷，\n这是你今晚的目标", "you are a thief,\nthis is your target tonight" });
         table.Add("buy", new System.String[] { "购买", "Buy" });
         table.Add("not_enough_roses", new System.String[] { "魅力值不够", "not enough charm points" });
@@ -80,10 +82,10 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("guards", new System.String[] { "守卫", "Guards" });
         table.Add("maze", new System.String[] { "迷宫", "Maze" });
         table.Add("reach_rose_count_will_unlock", new System.String[] { "达到 {0} 魅力值即可解锁", "Reach {0} charm points will unlock" });// 中间的空格是给玫瑰图标留出来的        
-        table.Add("armed", new System.String[] { "重装守卫", "Armed Slug" });
-        table.Add("armed_desc", new System.String[] { "隐匿在黑暗中的执法者，对来犯的窃贼从不手软。<color=red>它的视野不会驱散迷雾。</color>", "Will go to guard another safe box when realise his own has been stolen." });
+        table.Add("armed", new System.String[] { "雇佣兵", "Armed Slug" });
+        table.Add("armed_desc", new System.String[] { "对来犯的窃贼从不手软。", "Will go to guard another safe box when realise his own has been stolen." });
         table.Add("guard", new System.String[] { "警卫", "Guard" });
-        table.Add("guard_desc", new System.String[] { "接受过良好教育的执法者。他们会奋力制服并活捉来犯的盗贼。<color=red>当发现自己守护的保险箱箱被偷的时候，会去支援其他保险箱的守卫工作。</color>", "guard description.." });
+        table.Add("guard_desc", new System.String[] { "接受过良好教育的执法者。他们会奋力制服并活捉来犯的盗贼。<color=red>当发现自己守护的保险箱箱被偷的时候，会去支援其他保险箱的守卫工作。\n它的视野不会驱散迷雾。</color>", "guard description.." });
         table.Add("dog", new System.String[] { "机械狗", "Dog" });
         table.Add("dog_desc", new System.String[] { "当发现异常情况会立刻发出警报，呼叫周围的守卫。不过智力不高，很容易把将各种会动的东西都当成追击的目标。\n<color=red>它的视野不会驱散迷雾。</color>\n<color=red>自爆攻击</color>", "Loyalty dog,  bark to call teammates around when spot anything unusual.not so smart, like to chase anything movable" });
         table.Add("lamp", new System.String[] { "机械萤火虫", "Lamp" });
@@ -194,6 +196,18 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("click_to_summon_guard", new System.String[] { "点击召唤守卫", "click_to_summon_guard" });
         table.Add("pve_intro", new System.String[] { "\"这里的主人是个臭名昭著的恶人，你决定拿走他的每一分钱！\"\n\n<color=white>必须成功才会更换目标</color>\n<color=white>潜入之后无法主动撤离</color>", "take every peny of him" });
         table.Add("pvp_intro", new System.String[] { "\"这个迷宫属于另一个玩家，你只有一次潜入的机会\"\n\n<color=white>偷取所有的金钱会有额外奖励</color>\n<color=white>潜入之后可以撤离</color>\n<color=white>潜入之后无论是否成功都会更换目标</color>", "another player, u got only one chance" });
+        table.Add("money_full", new System.String[] { "金钱已满", "money_full" });
+
+        table.Add("try_other_trick", new System.String[] { "任务失败，\n试试<color=red>其他魔术道具？\n或购买更多的槽？</color>", "try_other_trick" });
+
+        table.Add("who_is_your_target", new System.String[] { "“今晚谁会是你的目标呢？”", "who_is_your_target" });
+        table.Add("go_add_box", new System.String[] { "去买箱子", "go buy box" });
+        table.Add("add_box", new System.String[] { "增加箱子", "add box" });
+        table.Add("MP:", new System.String[] { "魔力值：", "MP:" });
+        table.Add("HP:", new System.String[] { "体力值：", "HP:" });
+        table.Add("buy_this", new System.String[] { "买下它", "buy_it" });
+        table.Add("open_fog", new System.String[] { "开启迷雾", "Fog" });
+        table.Add("close_fog", new System.String[] { "关闭迷雾", "Disable Fog" });        
    }    
 
     public void SetText(UnityEngine.UI.Text uiText, System.String key, System.String[] strings = null)

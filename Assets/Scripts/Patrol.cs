@@ -22,12 +22,11 @@ public class Patrol : GuardAction
         {
             //Call Start in base script (AIPath)
             // 找到四个方向上最远可以到达的走廊
-            AddTargetPosInDirection(Globals.EAST, 4);
-            AddTargetPosInDirection(Globals.SOUTH, 6);
-            AddTargetPosInDirection(Globals.WEST, 4);
-            AddTargetPosInDirection(Globals.NORTH, 6);
+            AddTargetPosInDirection(Globals.EAST, 3);
+            AddTargetPosInDirection(Globals.SOUTH, 4);
+            AddTargetPosInDirection(Globals.WEST, 3);
+            AddTargetPosInDirection(Globals.NORTH, 4);
         }
-        
 
         System.Diagnostics.Debug.Assert(routePoses.Count == 4);
 	}

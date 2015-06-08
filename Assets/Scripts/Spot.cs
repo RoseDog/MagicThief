@@ -11,17 +11,17 @@ public class Spot : GuardAction
     {
         base.Awake();
     }
-    public void SpotMagician(GameObject magician, bool goChasing, int spotDuration)
+    public void SpotMagician(GameObject newTar, bool goChasing, int spotDuration)
     {
         if (outVisionCountDown != null)
         {
             guard.RemoveAction(ref outVisionCountDown);
         }
-
-        if (target != magician.transform)
+        
+        if (guard.CheckIfChangeTarget(newTar))
         {            
             base.Excute();
-            target = magician.transform;
+            target = newTar.transform;
             guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Alert);
 
             guard.spriteSheet.Play("idle");

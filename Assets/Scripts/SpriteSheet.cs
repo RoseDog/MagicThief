@@ -56,6 +56,33 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
         }        
     }
 
+    int sprite_add_idx = 0;
+    public void AddAnim(System.String name, int frame_count, double speed = 1.0f, bool clampForever = false)
+    {
+        if (!initialized)
+        {
+            init();
+        }
+
+        System.Collections.Generic.List<UnityEngine.Sprite> animation = new System.Collections.Generic.List<UnityEngine.Sprite>();
+        SpriteAnim anim = new SpriteAnim();
+        anim.spriteList = new System.Collections.Generic.List<UnityEngine.Sprite>();
+        anim.events = new System.Collections.Generic.Dictionary<int, UnityEngine.Events.UnityAction>();
+        anim.speed = speed;
+        anim.clampForever = clampForever;
+
+        for (int i = 0; i < frame_count;++i )
+        {
+            anim.spriteList.Add(_sprites[sprite_add_idx]);
+            ++sprite_add_idx;
+            sprite_add_idx = sprite_add_idx%28;
+        }
+
+        _animationList.Add(name, anim);
+    }
+
+
+
     public void CreateAnimationByName(System.String name, double speed = 1.0f, bool clampForever = false)
     {
         if (!initialized)

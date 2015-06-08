@@ -4,12 +4,14 @@
     public System.Collections.Generic.List<UnityEngine.Events.UnityAction> threadTempActions = new System.Collections.Generic.List<UnityEngine.Events.UnityAction>();
     public System.Collections.Generic.Dictionary<System.String, UnityEngine.Events.UnityAction<System.String[]>> serverReplyActions =
         new System.Collections.Generic.Dictionary<System.String, UnityEngine.Events.UnityAction<System.String[]>>();
+    public System.Collections.Generic.List<System.String> msgCache = new System.Collections.Generic.List<System.String>();
+
     UnityEngine.GameObject WaitingForServer_prefab;
     UnityEngine.GameObject WaitingForServer;
     bool ready = true;
     public bool IsReady() { return ready; }
     public void SetReady(bool value) { ready = value; }
-    bool fromLoginScene = true;
+    bool fromLoginScene = false;
     public bool IsFromLogin() { return fromLoginScene; }
 	// Use this for initialization
     public void Awake()
@@ -21,12 +23,12 @@
             ready = false;
         }
 
-        ws = new WebSocketSharp.WebSocket("ws://96.126.116.192:42788");
-        //ws = new WebSocketSharp.WebSocket("ws://127.0.0.1:42788");
+        //ws = new WebSocketSharp.WebSocket("ws://96.126.116.192:42788");
+        ws = new WebSocketSharp.WebSocket("ws://127.0.0.1:42788");
 
         ws.OnMessage += OnMessage;
         ws.OnError += OnError;
-        ws.OnClose += OnClose;
+        ws.OnClose += OnClose;        
 
         ws.ConnectAsync();
 
@@ -34,8 +36,8 @@
         if (!fromLoginScene)
         {
             Invoke("Login", 0.5f);
-        }        
-    }
+        }
+    }    
 
 	void Start () 
     {
@@ -109,10 +111,14 @@
     }
     
     public void Send(System.String msg)
-    {
+    {        
         if (ws != null)
         {
-            ws.SendAsync(msg, OnSendComplete);        
+            msgCache.Add(msg);
+            if (msgCache.Count == 1)
+            {
+                ws.SendAsync(msg, OnSendComplete);
+            }            
         }        
     }
 
@@ -136,12 +142,13 @@
 
     void OnMessage(object sender, WebSocketSharp.MessageEventArgs e)
     {
+        UnityEngine.Debug.Log(e.Data);
         threadTempActions.Add(() => MessageInvoke(e.Data));
     }
 
     void OnError(object sender, WebSocketSharp.ErrorEventArgs e)
     {
-        UnityEngine.Debug.Log(e.Exception.Message);
+        UnityEngine.Debug.Log(e.Message);
         threadTempActions.Add(() => ErrorInvoke(e));
     }
 
@@ -155,6 +162,15 @@
     {
         if (complete)
         {
+            msgCache.RemoveAt(0);
+            if (msgCache.Count != 0)
+            {
+                ws.SendAsync(msgCache[0], OnSendComplete);
+            }            
+        }
+        else
+        {
+            Globals.MessageBox("Send Error", () => BackToLoginScene());
         }
     }
 
@@ -171,8 +187,7 @@
     }
 
     void MessageInvoke(System.String replyData)
-    {
-        UnityEngine.Debug.Log(replyData);
+    {        
         System.Collections.Generic.List<System.String> datas = 
             new System.Collections.Generic.List<System.String>(replyData.Split(Globals.self.separator.ToCharArray()));
         System.String protocol = datas[0];

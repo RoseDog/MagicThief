@@ -18,6 +18,7 @@
     UnityEngine.GameObject SafeboxNotFinishedPrefab;
     UnityEngine.Canvas canvasForSafeboxBtns;
     UnityEngine.GameObject SafeboxNotFinishedTip;
+    UnityEngine.GameObject head_on_minimap;
 
     public SafeBoxData data;
 
@@ -39,7 +40,7 @@
     {
         base.Awake();
         coinPrefab = UnityEngine.Resources.Load("Props/GoldCoin") as UnityEngine.GameObject;
-        SafeboxUpgradeUIPrefab = UnityEngine.Resources.Load("Avatar/CanvasOnSafebox") as UnityEngine.GameObject;
+        SafeboxUpgradeUIPrefab = UnityEngine.Resources.Load("Misc/CanvasOnSafebox") as UnityEngine.GameObject;
         SafeboxNotFinishedPrefab = UnityEngine.Resources.Load("Misc/SafeboxNotFinished") as UnityEngine.GameObject;
         
 
@@ -50,6 +51,9 @@
         openSprite = sprites[0];
         sprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Props/chest_closed");
         closedSprite = sprites[0];
+
+        head_on_minimap = Globals.getChildGameObject(gameObject, "head_on_minimap");
+        
 
         foreach (UnityEngine.Renderer renderer in renderers)
         {
@@ -200,7 +204,10 @@
             {
                 Destroy(SafeboxNotFinishedTip);
                 SafeboxNotFinishedTip = null;
-            }            
+            }
+
+            Destroy(head_on_minimap);
+            head_on_minimap = null;            
 
             foreach (UnityEngine.Renderer renderer in goldMeshes)
             {
@@ -211,7 +218,7 @@
         }
 
         // 在教程中，TutorialThief偷东西的时候，不生成往界面上飞的金币
-        TutorialLevelController controller = Globals.LevelController as TutorialLevelController;
+        StealingLevelController controller = Globals.LevelController as StealingLevelController;
         if (controller != null)
         {
             StartCoroutine(Coins());

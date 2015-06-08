@@ -4,11 +4,62 @@ require 'websocket-eventmachine-server'
 require 'yaml'
 PORT = (ARGV.shift || 42788).to_i
 
+class Numeric
+  def clamp min, max
+    [[self, max].min, min].max
+  end
+end
+
 class String
   def to_bool
     return true   if self == 'true'   || self == 'True' || self =~ (/(true|t|yes|y|1)$/i)
     return false  if self == 'false'  || self == 'False' || self.blank? || self =~ (/(false|f|no|n|0)$/i)
     raise ArgumentError.new("invalid value for Boolean: \"#{self}\"")
+  end
+end
+
+class UserFile
+  attr_accessor :name
+  attr_accessor :deviceID
+  attr_accessor :TutorialLevelIdx
+  attr_accessor :GetGem
+  attr_accessor :cashAmount
+  attr_accessor :roseCount
+  attr_accessor :currentMazeRandSeedCache
+  attr_accessor :currentMazeLevel
+  attr_accessor :safeBoxDatas
+  attr_accessor :tricksBought
+  attr_accessor :guardsHired
+  attr_accessor :guardsSummoned
+  attr_accessor :slotStatus
+  attr_accessor :isBot
+  attr_accessor :Buildings
+  attr_accessor :defReplays
+  attr_accessor :atkReplays
+  attr_accessor :beenStealingTimeStamp
+  attr_accessor :PvEProgress
+  def initialize(roseBuildingDuration, bornNewTargetDuration)
+    @name = ""
+    @deviceID = "-1"
+    @TutorialLevelIdx="GetGem"
+    @cashAmount = 0.0
+    @roseCount=0
+    @currentMazeRandSeedCache=Random.new_seed%10000000
+    @currentMazeLevel=0
+    @safeBoxDatas=["0","0"]
+    @tricksBought=[""]
+    @guardsHired=[]
+    @guardsSummoned=""
+    @slotStatus=["0","-1","-1"]
+    @isBot= false
+    @Buildings=[Building.new("1","None", roseBuildingDuration, bornNewTargetDuration),
+                  Building.new("2","None", roseBuildingDuration, bornNewTargetDuration),
+                  Building.new("3","None", roseBuildingDuration, bornNewTargetDuration),
+                  Building.new("4","None", roseBuildingDuration, bornNewTargetDuration)]
+    @defReplays=[]
+    @atkReplays=[]
+    @beenStealingTimeStamp=Time.new(1988)
+    @PvEProgress=0
   end
 end
 
@@ -28,6 +79,7 @@ class Building
   attr_accessor :targetName
   attr_accessor :isPvP
   attr_accessor :botLevelRandSeed
+  attr_accessor :PvELevelIdx
 
   def initialize(id, t, roseDuration, newTargetDuration)
     @posID = id
@@ -45,6 +97,7 @@ class Building
     @targetName = "poker_face"
     @isPvP = false
     @botLevelRandSeed = -1
+    @PvELevelIdx = -1
   end
 end
 
@@ -66,10 +119,18 @@ class Player
     @websocket = ws
     @seperator = '|'
     @timers = []
-    @roseBuildingDuration = 60
-    @roseGrowCycle = 0.25*60
+    #偷满是5朵玫瑰
+    @roseBuildingDuration = 62
+    @roseGrowCycle = 0.2*60
     @bornNewTargetDuration = 60
+    @userFile = UserFile.new(@roseBuildingDuration,@bornNewTargetDuration)
+  end
 
+  def send(msg)
+    EM.add_timer(0.1) do
+      @websocket.send(msg)
+      puts 'send ' + msg
+    end
   end
 
   def ReadPlayerFile(filename)
@@ -84,128 +145,107 @@ class Player
     deviceID = contents[1]
     if(File.exist?(userID+".yaml"))
       @userFile = ReadPlayerFile(userID+".yaml")
-      if(deviceID == @userFile["deviceID"])
-        @websocket.send(protocal_no + @seperator + "ok")
+      if(deviceID == @userFile.deviceID)
+        send(protocal_no + @seperator + "ok")
       else
-        @websocket.send(protocal_no + @seperator + "duplicated")
+        send(protocal_no + @seperator + "duplicated")
       end
     else
-      @websocket.send(protocal_no + @seperator + "ok")
-      NewFile(userID,deviceID)
+      send(protocal_no + @seperator + "ok")
+      @userFile.name = userID
+      @userFile.deviceID = deviceID
       SaveToFile(userID+".yaml", @userFile)
     end
   end
 
-  def NewFile(userID,deviceID)
-    @userFile ={
-        "name" => userID,
-        "deviceID"=> deviceID,
-        "TutorialLevelIdx"=>"GetGem",
-        "cashAmount"=>"0.0",
-        "roseCount"=>0,
-        "currentMazeRandSeedCache"=>(Random.new_seed%10000000).to_s,
-        "currentMazeLevel"=>"0",
-        "safeBoxDatas"=>["0","0"],
-        "tricksBought"=>["hypnosis"],
-        "guardsHired"=>["guard"],
-        "guardsSummoned"=>"",
-        "slotStatus"=>["0","-1","-1"],
-        "isBot"=> false,
-        "Buildings"=>[Building.new("1","None", @roseBuildingDuration, @bornNewTargetDuration),
-                      Building.new("2","None", @roseBuildingDuration, @bornNewTargetDuration),
-                      Building.new("3","None", @roseBuildingDuration, @bornNewTargetDuration),
-                      Building.new("4","None", @roseBuildingDuration, @bornNewTargetDuration)],
-        "defReplays"=>[],
-        "atkReplays"=>[],
-        "beenStealingTimeStamp"=>Time.new(1988)
-    }
-  end
-
   def SelfStealingInfo(protocal_no,contents)
-    @websocket.send(protocal_no + @seperator + StealingInfo(@userFile))
+    send(protocal_no + @seperator + StealingInfo(@userFile))
   end
 
   def StealingInfo(playerFile)
-    reply = playerFile["TutorialLevelIdx"] + "&" +
-        playerFile["cashAmount"] + "&" +
-        playerFile["roseCount"].to_s + "&" +
-        playerFile["currentMazeLevel"] + "&" +
-        playerFile["currentMazeRandSeedCache"]
+    reply = playerFile.TutorialLevelIdx + "&" +
+        playerFile.cashAmount.to_s + "&" +
+        playerFile.roseCount.to_s + "&" +
+        playerFile.currentMazeLevel.to_s + "&" +
+        playerFile.currentMazeRandSeedCache.to_s
     reply += "&"
-    playerFile["slotStatus"].each{ |slotStatu| reply += "," +"#{slotStatu}"}
+    playerFile.slotStatus.each{ |slotStatu| reply += "," +"#{slotStatu}"}
     reply += "&"
-    playerFile["safeBoxDatas"].each{ |boxLv| reply += "," + "#{boxLv}"}
+    playerFile.safeBoxDatas.each{ |boxLv| reply += "," + "#{boxLv}"}
     reply += "&"
-    playerFile["guardsHired"].each{ |guard| reply += "," + "#{guard}"}
-    reply += "&" + playerFile["guardsSummoned"].to_s
+    playerFile.guardsHired.each{ |guard| reply += "," + "#{guard}"}
+    reply += "&" + playerFile.guardsSummoned.to_s
     reply += "&"
-    playerFile["tricksBought"].each{ |trickname| reply += "," + "#{trickname}"}
-    reply += "&" + playerFile["isBot"].to_s
-    reply += "&" + playerFile["name"]
+    playerFile.tricksBought.each{ |trickname| reply += "," + "#{trickname}"}
+    reply += "&" + playerFile.isBot.to_s
+    reply += "&" + playerFile.name
+    reply += "&" + playerFile.PvEProgress.to_s
     reply
   end
 
   def UpgradeMaze(protocal_no,contents)
-    @userFile["currentMazeLevel"] = contents[0]
-    @userFile["currentMazeRandSeedCache"] = contents[1]
+    @userFile.currentMazeLevel = contents[0].to_i
+    @userFile.currentMazeRandSeedCache = contents[1].to_i
   end
 
   def TrickBought(protocal_no,contents)
-    @userFile["tricksBought"] << contents[0]
+    @userFile.tricksBought << contents[0]
   end
 
   def UsingTrick(protocal_no,contents)
     trickname = contents[0]
     slotIdx = contents[1].to_i
-    @userFile["slotStatus"][slotIdx] = trickname
+    @userFile.slotStatus[slotIdx] = trickname
   end
 
   def UnuseTrick(protocal_no,contents)
     trickname = contents[0]
     slotIdx = contents[1].to_i
-    @userFile["slotStatus"][slotIdx] = "0"
+    @userFile.slotStatus[slotIdx] = "0"
   end
 
   def SlotBought(protocal_no,contents)
     slotIdx = contents[0].to_i
-    @userFile["slotStatus"][slotIdx] = "0"
+    @userFile.slotStatus[slotIdx] = "0"
   end
 
   def Cash(protocal_no,contents)
-    @userFile["cashAmount"] = contents[0]
+    @userFile.cashAmount = contents[0].to_f
   end
 
   def PickRose(protocal_no,contents)
-    @userFile["roseCount"] += contents[0].to_i
+    @userFile.roseCount += contents[0].to_i
     # 收集玫瑰的时候，检查RoseBuilding的时间是否已经到了
     posID = contents[1]
     building = GetBuilding(posID)
     if building != nil
       building.unpickedRose = 0
-      if Time.now - building.roseGrowBeginTimeStamp > building.roseGrowLastDuration - @roseGrowCycle
+      #剩余时间
+      growLastDuration = building.roseGrowTotalDuration - (Time.now - building.roseGrowBeginTimeStamp)
+      if growLastDuration < @roseGrowCycle
         SendNone(building, @bornNewTargetDuration)
       end
     end
   end
 
   def AddSafebox(protocal_no,contents)
-    @userFile["safeBoxDatas"] << "0"
+    @userFile.safeBoxDatas << "0"
   end
 
   def UpgradeSafebox(protocal_no,contents)
     idx = contents[0].to_i
-    lv = @userFile["safeBoxDatas"][idx].to_i
+    lv = @userFile.safeBoxDatas[idx].to_i
     lv += 1
     puts lv
-    @userFile["safeBoxDatas"][idx] = lv.to_s
+    @userFile.safeBoxDatas[idx] = lv.to_s
   end
 
   def HireGuard(protocal_no,contents)
-    @userFile["guardsHired"] << contents[0]
+    @userFile.guardsHired << contents[0]
   end
 
   def UploadSummonedGuards(protocal_no,contents)
-    @userFile["guardsSummoned"] = contents[0]
+    @userFile.guardsSummoned = contents[0]
   end
 
   def ClickTarget(protocal_no,contents)
@@ -215,7 +255,7 @@ class Player
   end
 
   def GetBuilding(posID)
-    @userFile["Buildings"].each{ |building|
+    @userFile.Buildings.each{ |building|
       if posID == building.posID
         return building
       end
@@ -224,7 +264,7 @@ class Player
   end
 
   def GetTargetBuilding(target)
-    @userFile["Buildings"].each{ |building|
+    @userFile.Buildings.each{ |building|
       return building if (building.type == "Target" && building.targetName == target)
     }
     return nil
@@ -237,13 +277,13 @@ class Player
 
   def ClickReplay(protocal_no,contents)
     date = contents[0]
-    @userFile["defReplays"].each{ |replay|
+    @userFile.defReplays.each{ |replay|
       if date == replay.date
         replay.everClicked = "True"
         return
       end
     }
-    @userFile["atkReplays"].each{ |replay|
+    @userFile.atkReplays.each{ |replay|
       if date == replay.date
         replay.everClicked = "True"
         return
@@ -254,18 +294,23 @@ class Player
   def SendNewTarget(building)
     #随机选择一份敌人文档
     enemies = []
-    Dir.glob("*.yaml") do |player_achive_file|
-      player_achive_file = player_achive_file.encode('UTF-8')
-      enemyUserFile = ReadPlayerFile(player_achive_file)
-      enemies << enemyUserFile["name"] if (
-      !HasTargetBuilding(enemyUserFile["name"]) &&
-          enemyUserFile["name"] != @userFile["name"] &&
-          (enemyUserFile["roseCount"] - @userFile["roseCount"]).abs < 10 &&
-          Time.now - enemyUserFile["beenStealingTimeStamp"] > 10 * 60)
+    if @userFile.PvEProgress > 2 && (Random.rand(0.0...1.0) > 0.5)
+      Dir.glob("*.yaml") do |player_achive_file|
+        player_achive_file = player_achive_file.encode('UTF-8')
+        enemyUserFile = ReadPlayerFile(player_achive_file)
+        enemies << enemyUserFile.name if (
+        !HasTargetBuilding(enemyUserFile.name) &&
+            enemyUserFile.name != @userFile.name &&
+            (enemyUserFile.roseCount - @userFile.roseCount).abs < 10 &&
+            Time.now - enemyUserFile.beenStealingTimeStamp > 10 * 60 &&
+            enemyUserFile.TutorialLevelIdx == "Over")
+      end
     end
+
     if enemies.length != 0
       building.targetName = enemies[Random.rand(0..(enemies.length-1))]
       building.isPvP = true
+      building.PvELevelIdx = -1
     else
       targetNames = [
           "poker_face","cash_eye","cat_eye_lady","kaitokid","magic_thief",
@@ -275,6 +320,8 @@ class Player
       building.targetName = targetNames[Random.rand(0..(targetNames.length-1))]
       building.isPvP = false
       building.botLevelRandSeed = Random.new_seed%10000000
+      building.PvELevelIdx = @userFile.PvEProgress
+      @userFile.PvEProgress = @userFile.PvEProgress + 1
     end
 
     building.type = "Target"
@@ -283,11 +330,13 @@ class Player
     building.sendNewTargetTimer = nil
     building.everClickedTarget = false
 
-    @websocket.send("new_target" +
+    send("new_target" +
                         seperator + building.posID +
                         seperator + building.targetName +
                         seperator + building.isPvP.to_s +
-                        seperator + building.botLevelRandSeed.to_s)
+                        seperator + building.botLevelRandSeed.to_s +
+                        seperator + building.PvELevelIdx.to_s +
+                        seperator + @userFile.PvEProgress.to_s)
   end
 
   def SendNone(building, newTargetDuration)
@@ -296,7 +345,7 @@ class Player
     building.roseGrowLastDuration = 0
     building.bornNewTargetLastDuration = newTargetDuration
     building.targetName = ""
-    @websocket.send("roseBuildingEnd" + @seperator + building.posID)
+    send("roseBuildingEnd" + @seperator + building.posID)
     building.newTargetTimeStamp = Time.now
     building.sendNewTargetTimer = EM.add_timer(@bornNewTargetDuration) do
       SendNewTarget(building)
@@ -325,12 +374,14 @@ class Player
       building.roseGrowStopTimer = EM.add_timer(building.roseGrowLastDuration) do
         roseGrowStop(building)
       end
+    else
+      building.roseGrowLastDuration = 0
     end
   end
 
   def RoseGrow(building)
     building.unpickedRose += 1
-    @websocket.send("rose_grow" + seperator + building.posID)
+    send("rose_grow" + seperator + building.posID)
     building.roseGrowTimer = EM.add_timer(@roseGrowCycle) do
       RoseGrow(building)
     end
@@ -340,10 +391,11 @@ class Player
     EM.cancel_timer(building.roseGrowTimer)
     building.roseGrowTimer = nil
     building.roseGrowStopTimer = nil
+    building.roseGrowLastDuration = building.roseGrowTotalDuration - (Time.now - building.roseGrowBeginTimeStamp)
   end
 
   def DownloadBuildings(protocal_no,contents)
-    @userFile["Buildings"].each{ |building|
+    @userFile.Buildings.each{ |building|
       case building.type
         # 检查RoseBuilding是否该生成新的玫瑰
         when "Rose"
@@ -360,24 +412,25 @@ class Player
             end
           end
       end
-      @websocket.send("building" +
+      send("building" +
                           @seperator + building.posID +
                           @seperator + building.type +
                           @seperator + building.unpickedRose.to_s +
                           @seperator + building.everClickedTarget.to_s +
                           @seperator + building.targetName +
                           @seperator + building.isPvP.to_s +
-                          @seperator + building.botLevelRandSeed.to_s)
+                          @seperator + building.botLevelRandSeed.to_s +
+                          @seperator + building.PvELevelIdx.to_s)
     }
-    @websocket.send("buildings_ready")
+    send("buildings_ready")
   end
 
   def DownloadReplays(protocal_no,contents)
     reply = protocal_no
-    @userFile["defReplays"].each{ |replay|
-      @websocket.send("replay" + @seperator + PackReplay(replay))
+    @userFile.defReplays.each{ |replay|
+      send("replay" + @seperator + PackReplay(replay))
     }
-    @websocket.send("replays_ready")
+    send("replays_ready")
   end
 
   def PackReplay(replay)
@@ -401,32 +454,32 @@ class Player
     bIsPerfectStealing = contents[4].to_bool
     enemyCashBeforeSteal = 1.0
     # 如果是pvp，要扣除对方金钱
-    if !enemy.userFile["isBot"]
-      enemyCashBeforeSteal = enemy.userFile["cashAmount"].to_f
-      enemy.userFile["cashAmount"] = (enemyCashBeforeSteal - replay.StealingCash.to_f).to_s
-      enemy.userFile["beenStealingTimeStamp"] = Time.now
-      enemy.userFile["defReplays"] << replay
-      enemy.userFile["defReplays"].shift if enemy.userFile["defReplays"].length > 5
-      SaveToFile(enemy.userFile["name"] + ".yaml", enemy.userFile)
+    if !enemy.userFile.isBot
+      enemyCashBeforeSteal = enemy.userFile.cashAmount
+      enemy.userFile.cashAmount = (enemyCashBeforeSteal - replay.StealingCash.to_f).to_s
+      enemy.userFile.beenStealingTimeStamp = Time.now
+      enemy.userFile.defReplays << replay
+      enemy.userFile.defReplays.shift if enemy.userFile.defReplays.length > 5
+      SaveToFile(enemy.userFile.name + ".yaml", enemy.userFile)
     else
       # bot的金钱是客户端上传的
-      enemy.userFile["cashAmount"] = contents[5]
+      enemy.userFile.cashAmount = contents[5].to_f
       enemyCashBeforeSteal = contents[5].to_f
     end
 
-    @userFile["atkReplays"] << replay
-    @userFile["atkReplays"].shift if @userFile["atkReplays"].length > 5
+    @userFile.atkReplays << replay
+    @userFile.atkReplays.shift if @userFile.atkReplays.length > 5
 
-    @websocket.send("atk_replay" + seperator + PackReplay(replay))
-    stolen_cash_ratio = replay.StealingCash.to_f / enemyCashBeforeSteal
+    send("atk_replay" + seperator + PackReplay(replay))
+    stolen_cash_ratio =  (replay.StealingCash.to_f / enemyCashBeforeSteal).clamp(0.0, 1.0)
     buildingPosID = contents[6]
     building = GetBuilding(buildingPosID)
     building.roseGrowTotalDuration = @roseBuildingDuration * stolen_cash_ratio
     # 如果是玩家，偷窃0.2以上，刷新成收玫瑰，否则更换目标
-    if !enemy.userFile["isBot"]
-      if stolen_cash_ratio > 0.2
+    if !enemy.userFile.isBot
+      if stolen_cash_ratio > 0.4
         building.type = "Poor"
-        @websocket.send("new_poor" + seperator + buildingPosID)
+        send("new_poor" + seperator + buildingPosID)
       else
         SendNone(building, @bornNewTargetDuration * 2)
       end
@@ -434,7 +487,7 @@ class Player
     else #如果是Bot，必须完全偷完才刷新成玫瑰
       if bIsPerfectStealing
         building.type = "Poor"
-        @websocket.send("new_poor" + seperator + buildingPosID)
+        send("new_poor" + seperator + buildingPosID)
       end
     end
 
@@ -447,11 +500,11 @@ class Player
     building.type = "Rose"
     building.roseGrowBeginTimeStamp = Time.now
     RoseGrowBegin(building)
-    @websocket.send("new_rosebuilding" + seperator + buildingPosID)
+    send("new_rosebuilding" + seperator + buildingPosID)
   end
 
   def AdvanceTutorial(protocal_no,contents)
-    @userFile["TutorialLevelIdx"] = contents[0]
+    @userFile.TutorialLevelIdx = contents[0]
   end
 
   def DownloadRanks(protocal_no,contents)
@@ -459,12 +512,11 @@ class Player
     Dir.glob("*.yaml") do |player_achive_file|
       players << ReadPlayerFile(player_achive_file)
     end
-    players.sort! {|x, y| x["roseCount"] <=> y["roseCount"]}
+    players.sort! {|x, y| x.roseCount <=> y.roseCount}
     players.each{ |player|
-      @websocket.send("download_one_rank" + seperator + player["name"] + seperator + player["roseCount"].to_s)
+      send("download_one_rank" + seperator + player.name + seperator + player.roseCount.to_s)
       }
-    @websocket.send("download_ranks_over")
-    puts "send download_ranks_over"
+    send("download_ranks_over")
   end
 
   def DownloadOtherReplays(protocal_no,contents)
@@ -472,27 +524,25 @@ class Player
     name = contents[0].force_encoding('utf-8')
     Dir.glob("*.yaml") do |player_achive_file|
       other = ReadPlayerFile(player_achive_file)
-      if name == other["name"]
+      if name == other.name
         break
       end
     end
-    other["atkReplays"].each{ |replay|
-      @websocket.send("download_one_other_replay" + @seperator + PackReplay(replay))
+    other.atkReplays.each{ |replay|
+      send("download_one_other_replay" + @seperator + PackReplay(replay))
     }
-    @websocket.send("download_other_replays_over")
+    send("download_other_replays_over")
   end
 
   def Close
     if(@userFile != nil)
-      @userFile["Buildings"].each{ |building|
+      @userFile.Buildings.each{ |building|
         if building.roseGrowTimer != nil
           EM.cancel_timer(building.roseGrowTimer)
           building.roseGrowTimer = nil
         end
         if building.roseGrowStopTimer != nil
-          EM.cancel_timer(building.roseGrowStopTimer)
-          building.roseGrowStopTimer = nil
-          building.roseGrowLastDuration = @roseBuildingDuration - (Time.now - building.roseGrowBeginTimeStamp)
+          roseGrowStop(building)
         end
         if building.sendNewTargetTimer != nil
           EM.cancel_timer(building.sendNewTargetTimer)
@@ -500,7 +550,7 @@ class Player
           building.bornNewTargetLastDuration = @bornNewTargetDuration - (Time.now - building.newTargetTimeStamp)
         end
       }
-      SaveToFile(@userFile["name"] + ".yaml", @userFile)
+      SaveToFile(@userFile.name + ".yaml", @userFile)
     end
   end
 
@@ -516,89 +566,109 @@ EM::run do
   puts "start websocket server - port:#{PORT}"
   WebSocket::EventMachine::Server.start(:host => "0.0.0.0", :port => PORT) do |ws|
     ws.onopen do
-      sid = @channel.subscribe do |mes|
-        ws.send mes
-      end
-      puts "<#{sid}> connect"
-      @channel.push "hello new client <#{sid}>"
-      @player = Player.new(ws)
-      @enemy = nil
-      ws.onmessage do |msg|
-        contents = msg.to_s.split(@player.seperator)
-        puts "<#{sid}>" + contents.to_s
-        protocal_no = contents[0]
-        contents.shift
-        case protocal_no
-          when "login"
-            @player.Login(protocal_no,contents)
-          when "self_stealing_info"
-            @player.SelfStealingInfo(protocal_no,contents)
-          when "upgrade_maze"
-            @player.UpgradeMaze(protocal_no,contents)
-          when "using_trick"
-            @player.UsingTrick(protocal_no,contents)
-          when "unuse_trick"
-            @player.UnuseTrick(protocal_no,contents)
-          when "slot_bought"
-            @player.SlotBought(protocal_no,contents)
-          when "trick_bought"
-            @player.TrickBought(protocal_no,contents)
-          when "download_buildings"
-            @player.DownloadBuildings(protocal_no,contents)
-          when "download_replays"
-            @player.DownloadReplays(protocal_no,contents)
-          when "download_target"
-            @enemy = Player.new(ws)
-            targetName = contents[0]
-            isBot = contents[1].to_bool
-            buildingPosID = contents[2]
-            if !isBot
-              player_achive_file = player_achive_file
-              @enemy.userFile = @enemy.ReadPlayerFile((targetName + ".yaml").force_encoding('utf-8'))
-            else
-              @enemy.NewFile(targetName,"-1")
-              @enemy.userFile["TutorialLevelIdx"] = "Over"
-              @enemy.userFile["isBot"] = true
-              @enemy.userFile["currentMazeRandSeedCache"] = @player.GetBuilding(buildingPosID).botLevelRandSeed.to_s
-              @enemy.userFile["currentMazeLevel"] = @player.userFile["currentMazeLevel"]
-            end
-            @enemy.websocket.send("download_target" + @enemy.seperator + @enemy.StealingInfo(@enemy.userFile))
+        sid = @channel.subscribe do |mes|
+          ws.send mes
+        end
+        puts "<#{sid}> connect"
+        @channel.push "hello new client <#{sid}>"
+        @player = Player.new(ws)
+        @enemy = nil
+        ws.onmessage do |msg|
+          begin
+          contents = msg.to_s.split(@player.seperator)
+          puts "<#{sid}>" + contents.to_s
+          protocal_no = contents[0]
+          contents.shift
+          case protocal_no
+            when "login"
+              @player.Login(protocal_no,contents)
+            when "self_stealing_info"
+              @player.SelfStealingInfo(protocal_no,contents)
+            when "upgrade_maze"
+              @player.UpgradeMaze(protocal_no,contents)
+            when "using_trick"
+              @player.UsingTrick(protocal_no,contents)
+            when "unuse_trick"
+              @player.UnuseTrick(protocal_no,contents)
+            when "slot_bought"
+              @player.SlotBought(protocal_no,contents)
+            when "trick_bought"
+              @player.TrickBought(protocal_no,contents)
+            when "download_buildings"
+              @player.DownloadBuildings(protocal_no,contents)
+            when "download_replays"
+              @player.DownloadReplays(protocal_no,contents)
+            when "download_target"
+              @enemy = Player.new(ws)
+              targetName = contents[0]
+              isBot = contents[1].to_bool
+              buildingPosID = contents[2]
+              if !isBot
+                player_achive_file = player_achive_file
+                @enemy.userFile = @enemy.ReadPlayerFile((targetName + ".yaml").force_encoding('utf-8'))
+                if @enemy.userFile.cashAmount < 1000
+                  @enemy.userFile.cashAmount = 5000
+                end
+              else
+                @enemy.userFile.name = targetName
+                @enemy.userFile.TutorialLevelIdx = "Over"
+                @enemy.userFile.isBot = true
+                @enemy.userFile.currentMazeRandSeedCache = @player.GetBuilding(buildingPosID).botLevelRandSeed
+                @enemy.userFile.currentMazeLevel = @player.userFile.currentMazeLevel
+              end
+              @enemy.websocket.send("download_target" + @enemy.seperator + @enemy.StealingInfo(@enemy.userFile))
 
-          when "stealing_over"
-            @player.StealingOver(protocal_no,contents, @enemy)
-            @enemy = nil
-          when "cash"
-            @player.Cash(protocal_no,contents)
-          when "pick_rose"
-            @player.PickRose(protocal_no,contents)
-          when "add_safebox"
-            @player.AddSafebox(protocal_no,contents)
-          when "upgrade_safebox"
-            @player.UpgradeSafebox(protocal_no,contents)
-          when "hire_guard"
-            @player.HireGuard(protocal_no,contents)
-          when "upload_summoned_guards"
-            @player.UploadSummonedGuards(protocal_no,contents)
-          when "click_target"
-            @player.ClickTarget(protocal_no,contents)
-          when "click_replay"
-            @player.ClickReplay(protocal_no,contents)
-          when "poor_turn_to_rose"
-            @player.TurnToRoseBuilding(protocal_no,contents)
-          when "advance_tutorial"
-            @player.AdvanceTutorial(protocal_no,contents)
-          when "download_ranks"
-            @player.DownloadRanks(protocal_no,contents)
-          when "download_other_replays"
-            @player.DownloadOtherReplays(protocal_no,contents)
+            when "stealing_over"
+              @player.StealingOver(protocal_no,contents, @enemy)
+              @enemy = nil
+            when "cash"
+              @player.Cash(protocal_no,contents)
+            when "pick_rose"
+              @player.PickRose(protocal_no,contents)
+            when "add_safebox"
+              @player.AddSafebox(protocal_no,contents)
+            when "upgrade_safebox"
+              @player.UpgradeSafebox(protocal_no,contents)
+            when "hire_guard"
+              @player.HireGuard(protocal_no,contents)
+            when "upload_summoned_guards"
+              @player.UploadSummonedGuards(protocal_no,contents)
+            when "click_target"
+              @player.ClickTarget(protocal_no,contents)
+            when "click_replay"
+              @player.ClickReplay(protocal_no,contents)
+            when "poor_turn_to_rose"
+              @player.TurnToRoseBuilding(protocal_no,contents)
+            when "advance_tutorial"
+              @player.AdvanceTutorial(protocal_no,contents)
+            when "download_ranks"
+              @player.DownloadRanks(protocal_no,contents)
+            when "download_other_replays"
+              @player.DownloadOtherReplays(protocal_no,contents)
+          end
+          rescue Exception => e
+            file = File.new('ErrorLogs.txt',"a+:UTF-8")
+            file.write(@player.userFile.name) if @player.userFile != nil
+            file.write("\n")
+            file.write(Time.now.to_s)
+            file.write("\n")
+            file.write(e.backtrace.join("\n"))
+            file.write(e.message)
+            file.write("\n")
+            file.write("\n")
+            file.write("\n")
+            file.close
+            puts e.backtrace
+            puts e.message
+            ws.close
+          end
+        end
+        ws.onclose do
+          @player.Close
+          puts "<#{sid}> disconnected"
+          @channel.unsubscribe sid
+          @channel.push "<#{sid}> disconnected"
         end
       end
-      ws.onclose do
-        @player.Close
-        puts "<#{sid}> disconnected"
-        @channel.unsubscribe sid
-        @channel.push "<#{sid}> disconnected"
-      end
-    end
   end
 end

@@ -9,9 +9,9 @@
         guard.spriteSheet.Play("idle");
 
         // 找到最近的宝石
-        for (ushort idx = 0; idx < (Globals.LevelController as TutorialLevelController).unstolenChests.Count; ++idx)
+        for (ushort idx = 0; idx < (Globals.LevelController as StealingLevelController).unstolenChests.Count; ++idx)
         {
-            Chest chest = (Globals.LevelController as TutorialLevelController).unstolenChests[idx];
+            Chest chest = (Globals.LevelController as StealingLevelController).unstolenChests[idx];
             Pathfinding.Path p = Pathfinding.ABPath.Construct(transform.position, chest.transform.position, null);
             p.callback += OnPathToGemComplete;
             p.chest = chest;
@@ -23,7 +23,7 @@
     public void OnPathToGemComplete(Pathfinding.Path p)
     {
         tempPathes.Add(p);
-        if (tempPathes.Count == (Globals.LevelController as TutorialLevelController).unstolenChests.Count)
+        if (tempPathes.Count == (Globals.LevelController as StealingLevelController).unstolenChests.Count)
         {
             double shortest = UnityEngine.Mathf.Infinity;
             Chest nearestChest = null;

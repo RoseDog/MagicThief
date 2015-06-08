@@ -26,10 +26,7 @@ public class GuardMoving : AIPath
     Guard guard;
     Magician mage;
     /** Minimum velocity for moving */
-    public double sleepVelocity = 0.4f;
-
-    [UnityEngine.HideInInspector]
-    public double heightOriginCache;
+    public double sleepVelocity = 0.4f;    
 
     public UnityEngine.Vector3 currentDir;
 
@@ -40,7 +37,7 @@ public class GuardMoving : AIPath
         actor = GetComponent<Actor>();
         guard = actor as Guard;
         mage = actor as Magician;
-        heightOriginCache = transform.position.z;
+        
         base.Awake();
 
 //        animation["moving"].speed = animationSpeed;
@@ -92,7 +89,7 @@ public class GuardMoving : AIPath
                 double s = speed;
                 if (guard != null && guard.currentAction == guard.patrol)
                 {
-                    s *= 0.5f;
+                    s *= 0.3f;
                 }
                 UnityEngine.Vector3 dir = CalculateVelocity(GetFeetPosition(), s);
 
@@ -115,7 +112,7 @@ public class GuardMoving : AIPath
                         actor.FaceDir(velocity);
                     }
                 }
-                transform.position = new UnityEngine.Vector3(transform.position.x, transform.position.y, (float)heightOriginCache);                
+                transform.position = new UnityEngine.Vector3(transform.position.x, transform.position.y, (float)actor.heightOriginCache);                
             }                        
         }
 
@@ -159,9 +156,6 @@ public class GuardMoving : AIPath
             }
             else
             {
-
-                //Fade in walking animation
-                //actor.anim.CrossFade("moving");
                 if (actor.spriteSheet != null)
                 {
                     if (actor.spriteSheet.HasAnimation("walking"))

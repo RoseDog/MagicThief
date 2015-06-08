@@ -205,7 +205,7 @@
             while (record.frame_no == UnityEngine.Time.frameCount - frameBeginNo)
             {
                 UnityEngine.Ray ray = new UnityEngine.Ray(record.ray_origin, record.ray_direction);
-                (Globals.LevelController as TutorialLevelController).RayOnMap(ray);
+                (Globals.LevelController as StealingLevelController).RayOnMap(ray);
                 clickRecords.RemoveAt(0);
                 if (clickRecords.Count == 0)
                 {
@@ -217,7 +217,7 @@
 
         if (mage_falling_down_frame_no == UnityEngine.Time.frameCount - frameBeginNo)
         {
-            (Globals.LevelController as TutorialLevelController).MagicianFallingDown();
+            (Globals.LevelController as StealingLevelController).MagicianFallingDown();
         }
 
         if (mageTryEscapeFrameNos.Count != 0)
@@ -225,7 +225,7 @@
             int try_escape_no = mageTryEscapeFrameNos[0];
             while (try_escape_no == UnityEngine.Time.frameCount - frameBeginNo)
             {
-                (Globals.LevelController as TutorialLevelController).LeaveBtnClicked();
+                (Globals.LevelController as StealingLevelController).LeaveBtnClicked();
                 mageTryEscapeFrameNos.RemoveAt(0);
                 if (mageTryEscapeFrameNos.Count == 0)
                 {

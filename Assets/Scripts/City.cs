@@ -11,7 +11,9 @@
     public UIMover cityEventsOpenBtn;
     public UIMover rankOpenBtn;
     public CityEventsWindow eventsWindow;
-    public RanksWindow ranksWindow;    
+    public RanksWindow ranksWindow;
+    public UnityEngine.UI.Text whoIsYourTarget;
+    UIMover go_add_box;
     public override void Awake()
     {
         base.Awake();                   
@@ -19,6 +21,8 @@
         mainCanvas = canvasForCity.GetComponent<UnityEngine.Canvas>();
         cityEventsOpenBtn = Globals.getChildGameObject<UIMover>(canvasForCity, "CityEventsOpenBtn");
         rankOpenBtn = Globals.getChildGameObject<UIMover>(canvasForCity, "RankOpenBtn");
+        whoIsYourTarget = Globals.getChildGameObject<UnityEngine.UI.Text>(canvasForCity, "who_is_your_target");
+        whoIsYourTarget.gameObject.SetActive(false);
         eventsWindow = Globals.getChildGameObject<CityEventsWindow>(canvasForCity, "CityEventsWindow");
         eventsWindow.city = this;
         
@@ -36,6 +40,16 @@
         {
             Globals.buildingSprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("City Night/city-0");
         }
+
+        go_add_box = Globals.getChildGameObject<UIMover>(canvasForCity, "go_add_box");
+        go_add_box.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => GoAddBox());
+        go_add_box.gameObject.SetActive(false);
+    }
+
+    public void GoAddBox()
+    {
+        Exit();
+        Globals.asyncLoad.ToLoadSceneAsync("MyMaze");
     }
 
     public UnityEngine.Sprite GetBuildingSprite(System.String sprite_name)
@@ -65,7 +79,7 @@
         }
         Globals.EnableAllInput(true);
         Globals.canvasForMagician.RoseNumberBg.SetActive(true);
-        Globals.canvasForMagician.SetLifeVisible(false);
+        Globals.canvasForMagician.SetLifeVisible(true);
         Globals.canvasForMagician.SetPowerVisible(true);
         Globals.canvasForMagician.SetCashVisible(true);
         Globals.canvasForMagician.SetRoseVisible(true);
@@ -102,6 +116,7 @@
         }
         else
         {
+            //whoIsYourTarget.gameObject.SetActive(false);
             firstTarget.SetActive(true);
             myMazeBuilding.SetActive(false);
         }
@@ -114,6 +129,8 @@
             finger.Evt_Up += OnDragFingerUp;
         }
         Globals.UpdateUnclickedRedPointsText(eventsWindow.unclickedCount);
+        
+        MoneyFull(Globals.canvasForMagician.money_full.activeSelf);
     }
 
     public void AddReplaysToEventWindow(System.Collections.Hashtable replays)
@@ -296,10 +313,23 @@
         rankOpenBtn.Goback(Globals.uiMoveAndScaleDuration);
         eventsWindow.CloseBtnClcked();
         ranksWindow.CloseBtnClcked();
+        go_add_box.gameObject.SetActive(false);
+        //whoIsYourTarget.gameObject.SetActive(false);
     }
 
     public void DestroyRosePickTip(UnityEngine.GameObject RosePickedTip)
     {
         DestroyObject(RosePickedTip);
+    }
+
+    public override void MoneyFull(bool full)
+    {
+        base.MoneyFull(full);
+        go_add_box.gameObject.SetActive(full);
+        if(full)
+        {
+            go_add_box.ClearAllActions();
+            go_add_box.Jump();
+        }
     }
 }

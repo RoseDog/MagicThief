@@ -115,6 +115,7 @@ public class BuildingData
     public bool everClickedTarget = false;
     public bool isPvP;
     public int levelRandSeed;
+    public int PvELevelIdx;
 }
 
 public class ReplayData
@@ -146,8 +147,10 @@ public class PlayerInfo
     public int roseCount = 10000;
     
     public int currentMazeRandSeedCache;    
-
     public int currentMazeLevel = 0;
+
+    public int pveProgress;
+
     public System.Collections.Generic.List<SafeBoxData> safeBoxDatas = new System.Collections.Generic.List<SafeBoxData>();
     public System.Collections.Generic.List<System.String> tricksBought = new System.Collections.Generic.List<System.String>();
     public System.Collections.Generic.List<TrickUsingSlotData> slotsDatas = new System.Collections.Generic.List<TrickUsingSlotData>();
@@ -257,7 +260,7 @@ public class PlayerInfo
                     TutorialLevelIdx == TutorialLevel.GetAroundGuard || 
                     TutorialLevelIdx == TutorialLevel.FirstTrick)
                 {
-                    Globals.asyncLoad._ToLoadingScene("Tutorial_Levels");
+                    Globals.asyncLoad._ToLoadingScene("StealingLevel");
                 }
                 else if (TutorialLevelIdx == TutorialLevel.FirstTarget || TutorialLevelIdx == TutorialLevel.Over)
                 {
@@ -322,6 +325,8 @@ public class PlayerInfo
         isBot = System.Convert.ToBoolean(reply[10]);
 
         name = reply[11];
+
+        pveProgress = System.Convert.ToInt32(reply[12]);
     }
 
     void BuildingsOver(System.String[] reply)
@@ -331,7 +336,6 @@ public class PlayerInfo
    
     void ReplaysOver(System.String[] reply)
     {
-        UnityEngine.Debug.Log("ReplaysOver:Ready");
         Globals.socket.Send("download_ranks");
     }
     
@@ -376,6 +380,7 @@ public class PlayerInfo
         building.targetName = reply[4];
         building.isPvP = System.Convert.ToBoolean(reply[5]);
         building.levelRandSeed = System.Convert.ToInt32(reply[6]);
+        building.PvELevelIdx = System.Convert.ToInt32(reply[7]);        
     }
 
     public void RoseGrow(System.String[] reply)
@@ -408,6 +413,8 @@ public class PlayerInfo
         data.targetName = reply[1];
         data.isPvP = System.Convert.ToBoolean(reply[2]);
         data.levelRandSeed = System.Convert.ToInt32(reply[3]);
+        data.PvELevelIdx = System.Convert.ToInt32(reply[4]);
+        pveProgress = System.Convert.ToInt32(reply[5]);
         City city = Globals.LevelController as City;
         if (city != null && city.buildings.Count != 0)
         {
@@ -616,6 +623,12 @@ public class PlayerInfo
             Globals.guardPlayer.name = stealingTarget.targetName;
             Globals.guardPlayer.isBot = !data.isPvP;
             Globals.guardPlayer.currentMazeRandSeedCache = stealingTarget.levelRandSeed;
+
+            if (Globals.guardPlayer.isBot)
+            {
+                Globals.iniFileName = "pve_" + data.PvELevelIdx.ToString();
+            }
+
             DownloadOtherPlayer(Globals.guardPlayer, data);
         }
     }
@@ -644,29 +657,24 @@ public class PlayerInfo
 
     public void StealingOver(float StealingCash, int PerfectStealingBonus, bool bIsPerfectStealing)
     {        
-        // 不在播放录像，而且的确潜入开始了的，上传这次潜入
-        if (Globals.playingReplay == null && Globals.replaySystem.mage_falling_down_frame_no != -1)
-        {
-            ReplayData replay = new ReplayData();
-            replay.date = System.DateTime.Now;            
-            replay.StealingCash = StealingCash;
-            replay.ini = Globals.replaySystem.Pack();
-            replay.everClicked = false;
-            
-            Globals.socket.Send(
-                "stealing_over" + separator +
-                replay.date + separator +                                
-                replay.StealingCash.ToString("F0") + separator +                
-                replay.ini.toString() + separator +
-                replay.everClicked.ToString() + separator +
-                bIsPerfectStealing.ToString() + separator +
-                Globals.guardPlayer.cashAmount.ToString() + separator +
-                stealingTarget.posID);
+        ReplayData replay = new ReplayData();
+        replay.date = System.DateTime.Now;
+        replay.StealingCash = StealingCash;
+        replay.ini = Globals.replaySystem.Pack();
+        replay.everClicked = false;
 
-            Globals.canvasForMagician.ChangeCash(StealingCash + PerfectStealingBonus);
-            Globals.transition.BlackOut(() => (Globals.LevelController as TutorialLevelController).Newsreport());
-        
-        }                
+        Globals.socket.Send(
+            "stealing_over" + separator +
+            replay.date + separator +
+            replay.StealingCash.ToString("F0") + separator +
+            replay.ini.toString() + separator +
+            replay.everClicked.ToString() + separator +
+            bIsPerfectStealing.ToString() + separator +
+            Globals.guardPlayer.cashAmount.ToString() + separator +
+            stealingTarget.posID);
+
+        Globals.canvasForMagician.ChangeCash(StealingCash + PerfectStealingBonus);
+        Globals.transition.BlackOut(() => (Globals.LevelController as StealingLevelController).Newsreport());
     }
 
     public void OneAtkReplay(System.String[] reply)
@@ -752,11 +760,8 @@ public class Globals
     public static System.Collections.Generic.List<TrickData> tricks = new System.Collections.Generic.List<TrickData>();
     public static System.Collections.Generic.List<MazeLvData> mazeLvDatas = new System.Collections.Generic.List<MazeLvData>();
     public static System.Collections.Generic.List<GuardData> guardDatas = new System.Collections.Generic.List<GuardData>();    
-    public static int buySafeBoxPrice = 3000;
-    public static SafeBoxLvData[] safeBoxLvDatas = new SafeBoxLvData[] { 
-        new SafeBoxLvData(2000, 5000), 
-        new SafeBoxLvData(5000, 8000), 
-        new SafeBoxLvData(10000, 15000) };
+    public static int buySafeBoxPrice;
+    public static SafeBoxLvData[] safeBoxLvDatas = null;
 
     
     public static BuildingData currentStealingTargetBuildingData;
@@ -905,6 +910,7 @@ public class Globals
         Globals.maze.GEMS_COUNT = ini.get("GEMS_COUNT", 0);
         Globals.maze.LAMPS_COUNT = ini.get("LAMPS_COUNT", 0);
         Globals.maze.LevelTipText = ini.get("LevelTipText");
+        Globals.maze.CASH = ini.get("CASH",0);
         return ini;
     }
 
@@ -936,6 +942,7 @@ public class Globals
         ini.set("GEMS_COUNT", Globals.maze.GEMS_COUNT);
         ini.set("LAMPS_COUNT", Globals.maze.LAMPS_COUNT);        
         ini.set("LevelTipText", Globals.maze.LevelTipText);
+        ini.set("CASH", Globals.maze.CASH);
 
         if (mazeIniFileName != "")
         {

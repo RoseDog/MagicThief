@@ -4,7 +4,8 @@
     Guard owner;
     double oneWaveDuration;
     double radiusStart;
-    double radiusLimit;    
+    double radiusLimit = 20;
+    double radius;
     bool onlyOneWave = false;
     UnityEngine.GameObject wave_prefab;
     public override void Awake()
@@ -14,19 +15,24 @@
         wave_prefab = UnityEngine.Resources.Load("Avatar/DogBark/barkSoundWave") as UnityEngine.GameObject;        
     }
 
+    public void SetRadius(double radius)
+    {
+        radiusLimit = radius;
+    }
+
     void CreateOneWave()
     {
         radiusStart = 1;
-        radiusLimit = 10;
+        radius = radiusLimit;
 
         wave = UnityEngine.GameObject.Instantiate(wave_prefab) as UnityEngine.GameObject;
-        wave.GetComponent<BarkSoundWave>().owner = owner;
+        //wave.GetComponent<BarkSoundWave>().owner = owner;
         
         if (owner)
         {
             wave.transform.position = owner.transform.position;
             wave.transform.SetParent(owner.transform);
-            radiusLimit /= owner.transform.transform.localScale.x;
+            radius /= owner.transform.transform.localScale.x;
             radiusStart /= owner.transform.transform.localScale.x;
             onlyOneWave = false;
         }
@@ -46,7 +52,7 @@
         CreateOneWave();
         while (true)
         {
-            float scale = UnityEngine.Mathf.Lerp((float)radiusStart, (float)radiusLimit, (UnityEngine.Time.frameCount - start_frame) / (float)oneWaveDuration);
+            float scale = UnityEngine.Mathf.Lerp((float)radiusStart, (float)radius, (UnityEngine.Time.frameCount - start_frame) / (float)oneWaveDuration);
             wave.transform.localScale = new UnityEngine.Vector3(scale, scale, scale);
             System.String content = "Alert Sound radius";
             content += scale.ToString("F5");

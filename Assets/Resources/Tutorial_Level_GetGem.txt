@@ -10,5 +10,5 @@ minRoomXCellsCount=2
 maxRoomXCellsCount=2
 minRoomZCellsCount=2
 maxRoomZCellsCount=2
-GEMS_COUNT=3
+GEMS_COUNT=2
 LevelTipText=找到所有钻石

@@ -11,27 +11,46 @@ public class MagicThiefCamera : Actor
     public UnityEngine.Transform target;
     public UnityEngine.GameObject MiniMapPlane;
     public UnityEngine.GameObject viewportFrame;
+    float plane_width;
+    float plane_height;
+    UnityEngine.Rect MiniMapRect;
+    float zCache;
     public virtual void Awake()
     {
+        base.Awake();
         Globals.cameraFollowMagician = this;
         MiniMapPlane = Globals.getChildGameObject(gameObject, "MiniMapPlane");
+        float view_port_height = camera.orthographicSize;
+        float view_port_width = camera.orthographicSize * UnityEngine.Screen.width / UnityEngine.Screen.height;
+        plane_width = 11.0f * MiniMapPlane.transform.localScale.x;
+        plane_height = 11.0f * MiniMapPlane.transform.localScale.z;
+        MiniMapPlane.transform.localPosition = new UnityEngine.Vector3(
+            view_port_width - plane_width * 0.5f,
+            view_port_height - plane_height * 0.5f,
+            MiniMapPlane.transform.localPosition.z);
+        MiniMapRect = new UnityEngine.Rect();
+        UnityEngine.Vector3 plane_screen_pos = camera.WorldToScreenPoint(MiniMapPlane.transform.localPosition);
+        MiniMapRect.center = plane_screen_pos;
+
+        float plane_screen_width = 2f*(UnityEngine.Screen.width - plane_screen_pos.x);
+        float plane_screen_height = 2f * (UnityEngine.Screen.height - plane_screen_pos.y);
+
+        MiniMapRect.xMin = plane_screen_pos.x - plane_screen_width * 0.5f;
+        MiniMapRect.yMin = plane_screen_pos.y - plane_screen_height * 0.5f;
+        MiniMapRect.xMax = plane_screen_pos.x + plane_screen_width * 0.5f;
+        MiniMapRect.yMax = plane_screen_pos.y + plane_screen_height * 0.5f;        
         MiniMapPlane.SetActive(false);
         viewportFrame = Globals.getChildGameObject(gameObject, "viewport-frame");
         viewportFrame.SetActive(false);
-        base.Awake();
+
+        zCache = transform.localPosition.z;
     }
 
     public void OpenMinimap()
     {
         MiniMapPlane.SetActive(true);
-        float view_port_height = camera.orthographicSize;
-        float view_port_width = camera.orthographicSize * UnityEngine.Screen.width / UnityEngine.Screen.height;
-        float plane_width = 11.0f * MiniMapPlane.transform.localScale.x;
-        MiniMapPlane.transform.localPosition = new UnityEngine.Vector3(
-            view_port_width - plane_width * 0.5f,
-            view_port_height - plane_width * 0.5f,
-            MiniMapPlane.transform.localPosition.z);
         viewportFrame.SetActive(true);
+        
     }
 
     public void CloseMinimap()
@@ -93,18 +112,56 @@ public class MagicThiefCamera : Actor
         enabled = false;
     }
 
-    public void DragToMove(Finger finger)
+    Finger fingerOnMiniMap;
+    public bool CheckFingerDownOnMiniMap(Finger finger)
     {
-		// two fingers touch , drag camaera not allowed
-		Finger finger0 = Globals.input.GetFingerByID(0);
-		Finger finger1 = Globals.input.GetFingerByID(1);
-		if (!(finger0.enabled && finger1.enabled))
-		{
-			UnityEngine.Vector2 finger_move_delta = finger.MovmentDelta();
+        UnityEngine.Vector3 finger_pos = camera.ScreenToWorldPoint(finger.nowPosition);
+        if (MiniMapPlane.activeSelf && MiniMapRect.Contains(finger.nowPosition))
+        {
+            fingerOnMiniMap = finger;
+            DragOnMiniMap(fingerOnMiniMap);
+            return true;
+        }
+        return false;
+    }
+
+    public bool CheckFingerUpOnMiniMap(Finger finger)
+    {
+        if (fingerOnMiniMap != null)
+        {
+            fingerOnMiniMap = null;
+            return true;
+        }
+        return false;
+    }
+
+    public void DragToMove(Finger finger)
+    {      
+        // two fingers touch , drag camaera not allowed
+        Finger finger0 = Globals.input.GetFingerByID(0);
+        Finger finger1 = Globals.input.GetFingerByID(1);
+        if (!(finger0.enabled && finger1.enabled))
+        {
+            UnityEngine.Vector2 finger_move_delta = finger.MovmentDelta();
             UnityEngine.Vector3 movementDirection = -finger_move_delta;
-			transform.position += movementDirection * dragCamSpeed;
+            transform.position += movementDirection * dragCamSpeed;
             transform.position = RestrictPosition(transform.position);
-		}
+        }
+    }
+
+    public void DragOnMiniMap(Finger finger)
+    {
+        UnityEngine.Vector3 finger_pos = camera.ScreenToWorldPoint(finger.nowPosition);
+        if (fingerOnMiniMap != null)
+        {
+            if (MiniMapRect.Contains(finger.nowPosition))
+            {
+                float x_ratio = (finger.nowPosition.x - MiniMapRect.xMin) / MiniMapRect.width;
+                float y_ratio = (finger.nowPosition.y - MiniMapRect.yMin) / MiniMapRect.height;
+                UnityEngine.Vector2 xyPos = Globals.maze.GetMiniMapProjectPosition(x_ratio, y_ratio);
+                transform.position = new UnityEngine.Vector3(xyPos.x, xyPos.y, zCache);
+            }
+        }
     }
 
     public override void Update()
@@ -113,7 +170,7 @@ public class MagicThiefCamera : Actor
         if (bStaring)
         {
             //transform.LookAt(Globals.magician.transform.position + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f));           
-            transform.position = Globals.magician.transform.position + new UnityEngine.Vector3(0,0, -1.0f);
+            transform.position = Globals.magician.transform.position + new UnityEngine.Vector3(0, 0, zCache);
         }
         else if (target != null)
         {
@@ -126,7 +183,7 @@ public class MagicThiefCamera : Actor
     {
         pos.x = UnityEngine.Mathf.Clamp(pos.x, restriction_x.x, restriction_x.y);
         pos.y = UnityEngine.Mathf.Clamp(pos.y, restriction_y.x, restriction_y.y);
-        pos.z = -1.0f;
+        pos.z = zCache;
         return pos;
     }
 }

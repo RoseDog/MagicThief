@@ -1,9 +1,7 @@
 ﻿public class Hitted : Action 
 {    
-    public override void Awake()
+    public void Start()
     {
-        base.Awake();
-        actor.spriteSheet.CreateAnimationByName("hitted");
         actor.spriteSheet.AddAnimationEvent("hitted", -1, () => hitteAnimEnd());
     }
 	public override void Excute()
@@ -19,5 +17,9 @@
         UnityEngine.Debug.Log("hitteAnimEnd");
         Stop();
         actor.moving.canMove = true;
+        if (actor.LifeCurrent < UnityEngine.Mathf.Epsilon)
+        {
+            actor.lifeOver.Excute();
+        }        
     }    
 }

@@ -6,7 +6,7 @@ public class Guard : Actor, System.IComparable<Guard>
     public Patrol patrol;
     public Chase chase;
     public Spot spot;
-    public GuardAttack atk;
+    public Attack atk;
     public RushAtMagician rushAt;
     public Explode explode;
     public WanderingLostTarget wandering;
@@ -24,7 +24,8 @@ public class Guard : Actor, System.IComparable<Guard>
 
     [UnityEngine.HideInInspector]
     public bool walkable;
-    
+
+    public bool inFog;
 
     UnityEngine.GameObject defenderArrangeUIPrefab;
     UnityEngine.GameObject challengerTricksUIPrefab;
@@ -39,7 +40,7 @@ public class Guard : Actor, System.IComparable<Guard>
         patrol = GetComponent<Patrol>();
         chase = GetComponent<Chase>();
         spot = GetComponent<Spot>();
-        atk = GetComponent<GuardAttack>();
+        atk = GetComponent<Attack>();
         rushAt = GetComponent<RushAtMagician>();
         wandering = GetComponent<WanderingLostTarget>();
         realiseGemLost = GetComponent<RealiseGemLost>();
@@ -59,10 +60,10 @@ public class Guard : Actor, System.IComparable<Guard>
         walkable = true;
         bGoChaseDove = false;
         base.Awake();
-
-        spriteSheet.CreateAnimationByName("idle");
+        
         if(moving != null)
         {
+            spriteSheet.CreateAnimationByName("idle");
             spriteSheet.CreateAnimationByName("moving");
         }        
     }
@@ -89,12 +90,12 @@ public class Guard : Actor, System.IComparable<Guard>
 
     public void InitArrangeUI()
     {
-        defenderArrangeUIPrefab = UnityEngine.Resources.Load("Avatar/CanvasOnGuard") as UnityEngine.GameObject;        
+        defenderArrangeUIPrefab = UnityEngine.Resources.Load("Misc/CanvasOnGuard") as UnityEngine.GameObject;        
     }
 
     public void InitTricksUI()
     {
-        challengerTricksUIPrefab = UnityEngine.Resources.Load("Avatar/TricksOnGuard") as UnityEngine.GameObject;        
+        challengerTricksUIPrefab = UnityEngine.Resources.Load("Misc/TricksOnGuard") as UnityEngine.GameObject;        
     }
 
     public void FindGuardedChest()
@@ -160,6 +161,8 @@ public class Guard : Actor, System.IComparable<Guard>
             EnableEyes(false);
         }        
         Globals.maze.choosenGuard = this;
+
+        transform.position = new UnityEngine.Vector3(transform.position.x, transform.position.y, (float)(heightOriginCache - 0.6f));
     }
 
     public void Unchoose()
@@ -173,7 +176,7 @@ public class Guard : Actor, System.IComparable<Guard>
         {
             EnableEyes(true);
         }        
-        Globals.maze.choosenGuard = null;        
+        Globals.maze.choosenGuard = null;
     }
 
     [UnityEngine.HideInInspector]
@@ -417,6 +420,11 @@ public class Guard : Actor, System.IComparable<Guard>
         }
     }
 
+    public virtual bool CheckIfChangeTarget(UnityEngine.GameObject newTar)
+    {
+        return spot.target != newTar.transform;
+    }
+
     public void CheckChest(UnityEngine.GameObject gameObj)
     {
         // 如果是宝石，检查是否被偷
@@ -527,5 +535,14 @@ public class Guard : Actor, System.IComparable<Guard>
             return 1;
         }
         return -1;
+    }
+
+    public virtual void SetInFog(bool infog)
+    {
+        if (eye != null && eye.gameObject.layer != 10)// GuardFOV
+        {
+            inFog = infog;
+            eye.SetVisonConesVisible(!infog);
+        }        
     }
 }

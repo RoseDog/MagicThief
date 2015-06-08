@@ -11,7 +11,7 @@
     {
         //Globals.cameraFollowMagician.StaringMagician((actor as Magician).escape.duration - 0.5f);
         actor.SleepThenCallFunction((actor as Magician).escape.GetDuration(),
-            () => Globals.LevelController.AfterMagicianSuccessedEscaped());
-        (actor as Magician).escape.Excute();        
+            () => Globals.LevelController.AfterStealingSuccessedEscaped());
+        (actor as Magician).escape.Go("victoryEscape");        
     }
 }

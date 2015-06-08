@@ -19,6 +19,9 @@
     public LifeNumber MazeRoomNumber;
     public int roomConsumed;
     public UnityEngine.GameObject room_not_full_used;
+    public UIMover add_box_tip_pointer;
+
+    UIMover FogBtn;
     public override void Awake()
     {
         base.Awake();
@@ -50,7 +53,14 @@
 
         room_not_full_used = Globals.getChildGameObject(gameObject, "room_not_full_used");
         room_not_full_used.gameObject.SetActive(false);
+
+        add_box_tip_pointer = Globals.getChildGameObject<UIMover>(btnEnhanceDef.gameObject, "add_box_tip_pointer");
+        add_box_tip_pointer.transform.parent.gameObject.SetActive(false);
+
+        FogBtn = Globals.getChildGameObject<UIMover>(gameObject, "FogBtn");
+        FogBtn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => SwitchFog());
     }
+    
 	// Use this for initialization
 	public override void Start () 
     {
@@ -121,6 +131,7 @@
         btnEnhanceDef.gameObject.SetActive(true);
         btnEnhanceDef.BeginMove(Globals.uiMoveAndScaleDuration);        
         ExitMazeBtn.BeginMove(Globals.uiMoveAndScaleDuration);
+        FogBtn.BeginMove(Globals.uiMoveAndScaleDuration);
         //进入MyMaze，HomeExit上面的红点根据new targets来更新        
         Globals.UpdateUnclickedRedPointsText(unclickedCityEventCount);
     }
@@ -132,6 +143,7 @@
         //Globals.selectGuard.mover.Goback(Globals.uiMoveAndScaleDuration);
         btnEnhanceDef.Goback(Globals.uiMoveAndScaleDuration);
         ExitMazeBtn.Goback(Globals.uiMoveAndScaleDuration);
+        FogBtn.Goback(Globals.uiMoveAndScaleDuration);
         Globals.cameraFollowMagician.CloseMinimap();
         room_not_full_used.gameObject.SetActive(false);
     }
@@ -178,5 +190,27 @@
         {
             room_not_full_used.SetActive(true);
         }
+    }
+
+    public void SwitchFog()
+    {
+        myMaze.fogPlane.SetActive(!myMaze.fogPlane.activeSelf);
+
+        if (!myMaze.fogPlane.activeSelf)
+        {
+            Globals.languageTable.SetText(FogBtn.GetComponentInChildren<MultiLanguageUIText>(), "open_fog");
+            
+        }
+        else
+        {
+            Globals.languageTable.SetText(FogBtn.GetComponentInChildren<MultiLanguageUIText>(), "close_fog");
+            myMaze.fogCam.clearFlags = UnityEngine.CameraClearFlags.Color;
+            Invoke("ClearFogTexOver",0.1f);
+        }
+    }
+
+    public void ClearFogTexOver()
+    {
+        myMaze.fogCam.clearFlags = UnityEngine.CameraClearFlags.Depth;
     }
 }

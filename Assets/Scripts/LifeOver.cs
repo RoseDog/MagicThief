@@ -2,8 +2,7 @@
 {
     public override void Awake()
     {
-        base.Awake();        
-        actor.spriteSheet.CreateAnimationByName("die", 1.0f, true);
+        base.Awake();                
     }
     public override void Excute()
     {
@@ -15,7 +14,14 @@
         //actor.moving.GetSeeker().GetCurrentPath().Reset();        
         actor.moving.canMove = false;
         actor.moving.ClearPath();
-        actor.spriteSheet.Play("die");
+        actor.spriteSheet.Play("lifeOver");
         Globals.LevelController.MagicianLifeOver();
+        foreach (Chest chest in Globals.maze.chests)
+        {
+            if (chest.isMagicianNear)
+            {
+                chest.OnTriggerExit(actor.collider);
+            }
+        }
     }
 }

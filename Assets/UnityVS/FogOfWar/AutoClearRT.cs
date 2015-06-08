@@ -8,14 +8,14 @@ public class AutoClearRT : MonoBehaviour {
 
 	void Start () 
 	{
-		GetComponent<Camera>().clearFlags = CameraClearFlags.Color;
+        GetComponent<Camera>().clearFlags = CameraClearFlags.Color;
 	}
 
 	void OnPostRender () 
 	{
-		if(!NoClearAfterStart)
-		{
-			GetComponent<Camera>().clearFlags = CameraClearFlags.Depth;
-		}
+        if ((Globals.LevelController as MyMazeLevelController)==null && !NoClearAfterStart)
+        {
+            GetComponent<Camera>().clearFlags = CameraClearFlags.Depth;
+        }
 	}
 }

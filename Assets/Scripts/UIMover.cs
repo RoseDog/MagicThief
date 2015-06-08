@@ -36,4 +36,20 @@
     {
         (transform as UnityEngine.RectTransform).anchoredPosition = originPosition;
     }
+
+    public void Blink()
+    {
+        AddAction(new Sequence(
+            new Blink(GetComponent<UnityEngine.UI.Image>(),20,100), 
+            new SleepFor(50),
+            new Blink(GetComponent<UnityEngine.UI.Image>(), 20, 100), 
+            new SleepFor(50),
+            new Blink(GetComponent<UnityEngine.UI.Image>(), 20, 100)));
+    }
+
+    public void BlinkForever()
+    {
+        AddAction(new RepeatForever(new Blink(GetComponent<UnityEngine.UI.Image>(),20,100), 
+            new SleepFor(50)));
+    }
 }

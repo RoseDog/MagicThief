@@ -15,13 +15,13 @@
 
     public void Start()
     {
-        itemButton.onClick.AddListener(() => Globals.canvasForMagician.OpenItemDescriptionUI(this));
+        itemButton.onClick.AddListener(() => Globals.canvasForMagician.UpdateItemDescriptionUI(this));
         itemButton.onClick.AddListener(() => Globals.magician.CastMagic(trickData));
     }
 
     public void OnBeginDrag(UnityEngine.EventSystems.PointerEventData data)
     {
-        if(!trickData.IsLocked() && trickData.bought && Globals.canvasForMagician.equips.gameObject.activeSelf)
+        if(!trickData.IsLocked() && trickData.bought && Globals.canvasForMagician.tricksBg.gameObject.activeSelf)
         {
             rt.parent = Globals.canvasForMagician.transform;
             rt.pivot = new UnityEngine.Vector2(0.5f, 0.5f);
@@ -73,11 +73,11 @@
                     Globals.canvasForMagician.draggingDownSlot.data.idx);
                 Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();                                                
                 Globals.canvasForMagician.draggingDownSlot.PointerExit();
-                Globals.canvasForMagician.equips.trickItemsInPack.Remove(this);
+                Globals.canvasForMagician.tricksBg.trickItemsInPack.Remove(this);
             }
-            else if (Globals.canvasForMagician.equips.gameObject.activeSelf)
+            else if (Globals.canvasForMagician.tricksBg.gameObject.activeSelf)
             {                
-                Globals.canvasForMagician.equips.trickItemsInPack.Insert(Globals.GetTrickIdx(trickData.nameKey), this);
+                Globals.canvasForMagician.tricksBg.trickItemsInPack.Insert(Globals.GetTrickIdx(trickData.nameKey), this);
                 PutItemBackInPack(this);                
             }
         }        
@@ -87,6 +87,7 @@
     {
         trickData.Use(slot.index);
         rt.parent = slot.transform;
+        rt.SetAsFirstSibling();
         rt.anchoredPosition = UnityEngine.Vector3.zero;
         rt.localScale = UnityEngine.Vector3.one;
         slot.powerCost.text = trickData.powerCost.ToString();
@@ -95,7 +96,7 @@
     void PutItemBackInPack(TrickItem item)
     {
         UnityEngine.GameObject slotInPack =
-            Globals.canvasForMagician.equips.trickSlots[Globals.GetTrickIdx(item.trickData.nameKey)];
+            Globals.canvasForMagician.tricksBg.trickSlots[Globals.GetTrickIdx(item.trickData.nameKey)];
 
         if (item.trickData.IsInUse())
         {

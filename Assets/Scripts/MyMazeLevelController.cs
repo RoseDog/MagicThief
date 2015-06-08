@@ -20,7 +20,8 @@
         // 在TutorialLevel.InitMaze这个阶段，最开始“完整的迷宫”会闪一帧，      
         FindObjectOfType<CameraFollow>().camera.enabled = false;
 
-        GuardFullFillHisDutyTipPrefab = UnityEngine.Resources.Load("UI/GuardFullFillHisDuty") as UnityEngine.GameObject;        
+        GuardFullFillHisDutyTipPrefab = UnityEngine.Resources.Load("UI/GuardFullFillHisDuty") as UnityEngine.GameObject;
+        fogPlane.SetActive(false);
     }
 
     public override void BeforeGenerateMaze()
@@ -120,6 +121,17 @@
             System.String guardname = Globals.self.guardsHired[idx];
             Globals.GetGuardData(guardname).hired = true;
         }
+    }
+
+    public override void MoneyFull(bool full)
+    {
+        base.MoneyFull(full);
+        Globals.canvasForMyMaze.add_box_tip_pointer.transform.parent.gameObject.SetActive(full);
+        if(full)
+        {
+            Globals.canvasForMyMaze.add_box_tip_pointer.ClearAllActions();
+            Globals.canvasForMyMaze.add_box_tip_pointer.Blink();
+        }        
     }
 
     public void ChestFallingStart()
@@ -316,6 +328,7 @@
         {
             Globals.canvasForMyMaze.Invoke("ShowTutorialEndMsgBox", 1.0f);
         }
+        currentThief.Invoke("Vanish", 3.5f);
         base.MagicianLifeOver();
     }    
 
@@ -351,5 +364,27 @@
         
         PutCashInBox(Globals.self);
         return falling_pos;
-    }    
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        // 拖动的guard要在雾上面
+        if (Globals.maze.choosenGuard != null)
+        {
+            Globals.maze.choosenGuard.spriteRenderer.sortingOrder = 10;
+        }
+
+        foreach( Guard guard in Globals.maze.guards )
+        {
+            // 狗和蜘蛛放在迷雾上面
+            if ((guard.eye != null && guard.eye.gameObject.layer == 27) || guard.eye == null)
+            {
+                guard.spriteRenderer.sortingOrder = 10;
+                UnityEngine.Vector3 pos = guard.transform.position;
+                guard.heightOriginCache = -0.6f;
+                guard.transform.position = new UnityEngine.Vector3(pos.x, pos.y, -0.6f);
+            }
+        }
+    }
 }

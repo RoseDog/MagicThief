@@ -13,7 +13,6 @@
         base.Awake();
         FakeGuard_prefab = UnityEngine.Resources.Load("Avatar/FakeGuard") as UnityEngine.GameObject;
         TrickTimerPrefab = UnityEngine.Resources.Load("UI/FakeGuardTimer") as UnityEngine.GameObject;
-        actor.spriteSheet.CreateAnimationByName("disguise");
     }
 
     public override void Excute()
@@ -61,7 +60,7 @@
         // 易容可以逃脱狗和Armed
         foreach (Guard guard in Globals.maze.guards)
         {
-            if (guard.data.name != "guard" && guard.spot.target == actor.transform)
+            if (guard.data.name != "guard" && guard.spot != null && guard.spot.target == actor.transform)
             {
                 guard.wandering.Excute();
             }

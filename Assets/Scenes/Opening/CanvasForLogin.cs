@@ -59,7 +59,7 @@
 	    
     public void Submit()
     {
-        if (Globals.socket.ws.ReadyState != WebSocketSharp.WebSocketState.Connecting)
+        if (Globals.socket.ws.ReadyState == WebSocketSharp.WebSocketState.CONNECTING)
         {
             Globals.socket.ws.ConnectAsync();
         }

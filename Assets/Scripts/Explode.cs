@@ -8,10 +8,7 @@
         flash.transform.position = guard.transform.position;
         Actor actor = guard.spot.target.GetComponent<Actor>();
         actor.ChangeLife(-guard.data.attackValue);
-        if (!actor.IsLifeOver())
-        {
-            actor.hitted.Excute();
-        }
+        actor.hitted.Excute();        
 
         Globals.DestroyGuard(guard);
     }

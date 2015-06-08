@@ -46,6 +46,7 @@
         base.Update();
         if (actor != null)
         {
+            transform.rotation = UnityEngine.Quaternion.identity;
             transform.position = actor.transform.position + posOffset;
             --lastFrames;
             if (unlockProgressSprite != null)

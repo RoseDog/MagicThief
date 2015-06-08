@@ -71,8 +71,7 @@ public class Finger
     public FingerEvent Evt_Up;
     public FingerEvent Evt_Hovering;
     public FingerEvent Evt_FastMoving;
-    public FingerEvent Evt_SlowMoving;
-
+    public FingerEvent Evt_SlowMoving;    
 
     public void Down(Vector2 pos)
     {
@@ -333,7 +332,7 @@ public class Finger
 }
 
 public delegate bool KeyEvent(string key);
-public delegate bool MouseEvent(string value);
+public delegate bool MouseEvent(UnityEngine.Vector2 pos);
 
 public class InputMgr : MonoBehaviour
 {
@@ -349,6 +348,8 @@ public class InputMgr : MonoBehaviour
     public KeyEvent Evt_SpaceDown;
     public KeyEvent Evt_KeyAlpha0Up;
     public KeyEvent Evt_KeyAlpha1Up;
+    public MouseEvent Evt_MouseLeftDown;
+    public MouseEvent Evt_MouseRightDown;
     public MouseEvent Evt_MouseLeftUp;
     public MouseEvent Evt_MouseRightUp;
 
@@ -550,11 +551,27 @@ public class InputMgr : MonoBehaviour
             }
 
             // ЪѓБъ
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (Evt_MouseLeftDown != null)
+                {
+                    Evt_MouseLeftDown(Input.mousePosition);
+                }
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                if (Evt_MouseRightDown != null)
+                {
+                    Evt_MouseRightDown(Input.mousePosition);
+                }
+
+            }
             if (Input.GetMouseButtonUp(0))
             {
                 if (Evt_MouseLeftUp != null)
                 {
-                    Evt_MouseLeftUp("A");
+                    Evt_MouseLeftUp(Input.mousePosition);
                 }
             }
 
@@ -562,7 +579,7 @@ public class InputMgr : MonoBehaviour
             {
                 if (Evt_MouseRightUp != null)
                 {
-                    Evt_MouseRightUp("B");
+                    Evt_MouseRightUp(Input.mousePosition);
                 }
             }
 #endif

@@ -3,7 +3,7 @@
     public UnityEngine.UI.Text uiText;
     public int fadeAwaySpeed = 3;
     public float currentFadeTime = 1;
-    public float completeFadeTime = 2;
+    public float completeFadeTime = 2.5f;
     void Awake()
     {
         uiText = GetComponent<UnityEngine.UI.Text>();
@@ -17,10 +17,6 @@
         {
             currentFadeTime = currentFadeTime - UnityEngine.Time.deltaTime;
             uiText.color = new UnityEngine.Color(1.0f, 0.0f, 0.0f, currentFadeTime / completeFadeTime);
-
-
-            //guiText.material.SetColor("_Color", tempTextColor);
-            //guiTexture.color = tempTextureColor;
             yield return null;
         }
         

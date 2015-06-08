@@ -3,6 +3,10 @@
     public int randSeedCache;
     public UnityEngine.Canvas mainCanvas;
     UnityEngine.Camera MiniMapCamera;
+    public UnityEngine.GameObject fogPlane;
+    public UnityEngine.Camera fogCam;
+    protected UnityEngine.Texture2D fogTex;
+    
     public override void Awake()
     {
         base.Awake();
@@ -15,7 +19,7 @@
         if (Globals.magician == null)
         {
             // 魔术师出场
-            UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/Magician") as UnityEngine.GameObject;
+            UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/Kid") as UnityEngine.GameObject;
             UnityEngine.GameObject.Instantiate(magician_prefab);
             Globals.magician.gameObject.SetActive(false);
         }
@@ -24,6 +28,12 @@
         if (minimapCamObj != null)
         {
             MiniMapCamera = minimapCamObj.GetComponent<UnityEngine.Camera>();
+        }
+
+        if (UnityEngine.GameObject.Find("FogCamera") != null)
+        {
+            fogCam = UnityEngine.GameObject.Find("FogCamera").camera;
+            fogPlane = UnityEngine.GameObject.Find("FogPlane");            
         }        
     }
 
@@ -36,7 +46,7 @@
             UnityEngine.GameObject.Instantiate(canvas_prefab);
         }
         // 这个是防止LevelPassed重复调用的，
-        bIsPerfectStealing = false;
+        bIsPerfectStealing = false;   
     }
 
     public virtual void BeforeGenerateMaze()
@@ -95,22 +105,27 @@
             return;
         }
 //        bIsPerfectStealing = true;
-//        Invoke("PerfectStealing", 0.5f);
+//        PerfectStealing();
 //        return;
-
-        Gem[] gems = UnityEngine.GameObject.FindObjectsOfType<Gem>();        
-        if (gems.Length == 0)
-        {            
-            foreach(Chest chest in Globals.maze.chests)
+        // 检查宝石
+        Gem[] gems = UnityEngine.GameObject.FindObjectsOfType<Gem>();
+        foreach(Gem gem in gems)
+        {
+            if (gem.GetCash() != 0)
             {
-                if (chest.IsVisible() && chest.goldLast > 1)
-                {
-                    return;
-                }
+                return;
             }
-            bIsPerfectStealing = true;
-            Invoke("PerfectStealing", 0.5f);
         }
+        // 检查箱子
+        foreach (Chest chest in Globals.maze.chests)
+        {
+            if (chest.IsVisible() && chest.goldLast > 1)
+            {
+                return;
+            }
+        }
+        bIsPerfectStealing = true;
+        PerfectStealing();
     }
 
     public virtual void PerfectStealing()
@@ -123,12 +138,7 @@
 
     }
 
-    public virtual void AfterMagicianSuccessedEscaped()
-    {
-
-    }
-
-    public virtual void AfterMagicianLifeOverEscaped()
+    public virtual void AfterStealingSuccessedEscaped()
     {
 
     }
@@ -170,6 +180,11 @@
     }
 
     public virtual void ClickOnMap(UnityEngine.Vector2 pos)
+    {
+
+    }
+
+    public virtual void RightClickOnMap(UnityEngine.Vector2 pos)
     {
 
     }
@@ -253,5 +268,10 @@
             Globals.self.cashAmount = Globals.AccumulateCashInBox(player);
             Globals.canvasForMagician.UpdateCash();
         }
+    }
+
+    public virtual void MoneyFull(bool full)
+    {
+
     }
 }

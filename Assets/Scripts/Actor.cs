@@ -19,6 +19,8 @@
     public GuardMoving moving;
     [UnityEngine.HideInInspector]
     public BeenPressDown beenPressDown;
+    [UnityEngine.HideInInspector]
+    public CatchByNet catchByNet;
 
     [UnityEngine.HideInInspector]
     public UnityEngine.MeshRenderer[] meshRenderers;
@@ -48,11 +50,14 @@
     public int PowerCurrent;
     [UnityEngine.HideInInspector]
     public UnityEngine.Vector3 scaleCache;
+    [UnityEngine.HideInInspector]
+    public double heightOriginCache;
 
     public FOV2DEyes eye;
     public virtual void Awake()
     {
         scaleCache = transform.localScale;
+        heightOriginCache = transform.position.z;
         spriteRenderer = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(gameObject, "Sprite");
         spriteSheet = GetComponentInChildren<SpriteSheet>();
         anim = GetComponent<UnityEngine.Animation>();        
@@ -61,6 +66,7 @@
         lifeOver = GetComponent<LifeOver>();
         moving = GetComponent<GuardMoving>();
         beenPressDown = GetComponent<BeenPressDown>();
+        catchByNet = GetComponent<CatchByNet>();
 
         eye = GetComponentInChildren<FOV2DEyes>();
 
@@ -190,7 +196,7 @@
 
     public bool IsLifeOver()
     {
-        return currentAction == lifeOver || LifeCurrent < UnityEngine.Mathf.Epsilon;
+        return lifeOver != null && (currentAction == lifeOver || LifeCurrent < UnityEngine.Mathf.Epsilon);
     }
 
     public virtual void InStealing()
@@ -316,10 +322,6 @@
     {
         LifeCurrent += delta;
         LifeCurrent = UnityEngine.Mathf.Clamp(LifeCurrent, 0, LifeAmount);
-        if (LifeCurrent < UnityEngine.Mathf.Epsilon)
-        {
-            lifeOver.Excute();
-        }        
     }
     
     public void FaceTarget(UnityEngine.Transform target)

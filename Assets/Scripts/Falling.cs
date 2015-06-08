@@ -4,11 +4,8 @@
     public UnityEngine.Vector3 to;
     [UnityEngine.HideInInspector]
     public double duration;
-    public override void Awake()
+    public void Start()
     {
-        base.Awake();
-        actor.spriteSheet.CreateAnimationByName("falling",0.7f);
-        actor.spriteSheet.CreateAnimationByName("landing", 0.3f);
         actor.spriteSheet.AddAnimationEvent("falling", -1, ()=>FallingOver());
         actor.spriteSheet.AddAnimationEvent("landing", -1, ()=>LandingOver());
     }
@@ -20,7 +17,7 @@
         actor.moving.canMove = false;
         actor.AddAction(new MoveTo(actor.transform, to,
             actor.spriteSheet.GetAnimationLengthWithSpeed("falling")));
-        actor.transform.localScale = new UnityEngine.Vector3(actor.scaleCache.x, 8, 8);
+        actor.transform.localScale = new UnityEngine.Vector3(actor.scaleCache.x, 12, 12);
         actor.AddAction(new ScaleTo(actor.transform, actor.scaleCache,
             actor.spriteSheet.GetAnimationLengthWithSpeed("falling")));
         actor.spriteSheet.Play("falling");
@@ -31,7 +28,7 @@
         actor.spriteSheet.Play("landing");        
     }
 
-    void LandingOver()
+    public void LandingOver()
     {
         if( UnityEngine.Application.loadedLevelName != "City")
         {

@@ -1,17 +1,17 @@
 ﻿public class Escape : Action
 {
-    int Duration = 100;
+    int Duration = 150;
     public int GetDuration()
     {
         return Duration;
     }
-    public override void Excute()
+    public void Go(System.String anim)
     {
         UnityEngine.Debug.Log("magician Escape");
         Globals.maze.GuardsTargetVanish(actor.gameObject);
         base.Excute();
         actor.moving.canMove = false;
-        actor.spriteSheet.Play("flying");
+        actor.spriteSheet.Play(anim);
         transform.position = transform.position - new UnityEngine.Vector3(0,0,0.6f);
         actor.AddAction(
             new Sequence(new MoveTo(transform, transform.position + new UnityEngine.Vector3(0, 15, 0), Duration)

@@ -4,32 +4,35 @@
     void OnTriggerEnter(UnityEngine.Collider other)
     {
         Guard guard = other.GetComponent<Guard>();
-        if (owner != guard && guard.heardAlert != null && guard.heardAlert.alertTeammate == null && guard.spot.target == null)
+        if (owner != guard && guard.heardAlert != null && /*guard.heardAlert.alertTeammate == null &&*/ guard.spot.target == null)
         {
-            if (owner == null)
-            {
-                guard.heardAlert.HeardSound(transform.position);
-            }
-            else
-            {
-                guard.heardAlert.Heard(owner);
-            }            
+            guard.heardAlert.HeardSound(transform.position);
+//             if (owner == null)
+//             {
+//                 guard.heardAlert.HeardSound(transform.position);
+//             }
+//             else
+//             {
+//                 guard.heardAlert.Heard(owner);
+//             }            
         }
     }
 
     void OnTriggerStay(UnityEngine.Collider other)
     {
         Guard guard = other.GetComponent<Guard>();
-        if (owner != guard && guard.heardAlert != null && guard.heardAlert.alertTeammate == null && guard.spot.target == null)
+        if (owner != guard && guard.heardAlert != null && /*guard.heardAlert.alertTeammate == null &&*/ guard.spot.target == null)
         {
-            if (owner == null)
-            {
-                guard.heardAlert.HeardSound(transform.position);
-            }
-            else
-            {
-                guard.heardAlert.Heard(owner);
-            }
+            guard.heardAlert.HeardSound(transform.position);
+
+//             if (owner == null)
+//             {
+//                 guard.heardAlert.HeardSound(transform.position);
+//             }
+//             else
+//             {
+//                 guard.heardAlert.Heard(owner);
+//             }
         }
     }
 

@@ -1,22 +1,17 @@
-﻿public class Lamp : Guard 
+﻿public class Lamp : Machine 
 {
-    TrickTimer fixTimer;
     Cocos2dAction moveAction;
-    UnityEngine.GameObject LightCone;
+    
     public override void Awake()
     {
         base.Awake();
-        walkable = false;
-        fixTimer = GetComponentInChildren<TrickTimer>();
-        fixTimer.gameObject.SetActive(false);
-        LightCone = Globals.getChildGameObject(gameObject,"LightCone");
-        spriteSheet.Play("idle");        
+        spriteSheet.AddAnim("idle", 3);
     }
 
     public override void Start()
     {
         base.Start();
-        if ((Globals.LevelController as TutorialLevelController) != null)
+        if ((Globals.LevelController as StealingLevelController) != null)
         {
             int duration = UnityEngine.Random.Range(30, 50);
             UnityEngine.Vector3 pos_cache = transform.localPosition;
@@ -27,22 +22,15 @@
         }        
     }
 
-    int fixingDuration = 500;
-    public void BulbBroken()
+    public override void Broken()
     {
-        fixTimer.BeginCountDown(this.gameObject, fixingDuration, UnityEngine.Vector3.zero);
-        spriteSheet.enabled = false;
-        moveAction.paused = true;
-        LightCone.SetActive(false);
-        fixTimer.gameObject.SetActive(true);
-        SleepThenCallFunction(fixingDuration, () => FixingComplete());
+        base.Broken();                
+        moveAction.paused = true;        
     }
 
-    public void FixingComplete()
+    public override void FixingComplete()
     {
-        fixTimer.gameObject.SetActive(false);
-        spriteSheet.enabled = true;
-        moveAction.paused = false;
-        LightCone.SetActive(true);
+        base.FixingComplete();
+        moveAction.paused = false;        
     }
 }

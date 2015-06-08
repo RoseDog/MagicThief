@@ -16,7 +16,17 @@ public class TipDisplayManager : UnityEngine.MonoBehaviour
         UnityEngine.RectTransform tipTransform = tip.GetComponent<UnityEngine.RectTransform>();
         if (parent == null)
         {
-            tipTransform.SetParent(Globals.LevelController.mainCanvas.transform);
+            UnityEngine.Canvas[] canvases = UnityEngine.GameObject.FindObjectsOfType<UnityEngine.Canvas>();
+            UnityEngine.Canvas topPriorityCanvas = canvases[0];
+            
+            foreach (UnityEngine.Canvas canvas in canvases)
+            {
+                if (canvas.sortingOrder > topPriorityCanvas.sortingOrder)
+                {
+                    topPriorityCanvas = canvas;
+                }
+            }
+            tipTransform.SetParent(topPriorityCanvas.transform);
         }
         else
         {

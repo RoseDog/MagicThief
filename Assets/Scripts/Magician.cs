@@ -8,7 +8,7 @@ public class Magician : Actor
     public Incant incant;    
         
     public Hypnosis hypnosis;
-    public ShotLight shot;
+    public GunShot shot;
     public Disguise disguise;
     public FlyUp flyUp;    
 
@@ -18,45 +18,62 @@ public class Magician : Actor
     public override void Awake()
     {
         base.Awake();
-        spriteSheet.CreateAnimationByName("idle");
-        spriteSheet.CreateAnimationByName("moving");
+        
+        spriteSheet.AddAnim("idle", 4);                
+        spriteSheet.AddAnim("moving",6, 1.2f);
+        spriteSheet.AddAnim("falling", 1, 0.2f);
+        spriteSheet.AddAnim("landing", 1, 0.2f);
+        spriteSheet.AddAnim("hitted", 1, 0.2f);        
+        spriteSheet.AddAnim("lifeOver", 6, 0.8f);
+        spriteSheet.AddAnim("lifeOverEscape", 1, 1.0f, true);
+        spriteSheet.AddAnim("TryEscape", 4, 0.7f);
+        spriteSheet.AddAnim("victoryEscape", 2);
+        spriteSheet.AddAnim("Hypnosis", 2, 0.7f);
+
+        spriteSheet.AddAnim("disguise", 4);        
+        spriteSheet.AddAnim("flyup", 4, 1.3f);
+        spriteSheet.AddAnim("flying", 2);
+        spriteSheet.AddAnim("down_on_floor", 1);
+        spriteSheet.AddAnim("stand_up", 2);        
+        spriteSheet.AddAnim("falling_failed", 4);
+        spriteSheet.AddAnim("Shot", 2);
+        
         DontDestroyOnLoad(this);
-        tryEscape = GetComponent<TryEscape>();
-        escape = GetComponent<Escape>();
+        tryEscape = GetComponent<TryEscape>();        
+        escape = GetComponent<Escape>();        
         victory = GetComponent<Victory>();
-        falling = GetComponent<Falling>();
+        falling = GetComponent<Falling>();        
         incant = GetComponent<Incant>();        
         
         TrickData trick = new TrickData();        
         trick.nameKey = "hypnosis";
         trick.descriptionKey = "hypnosis_desc";
         trick.duration = 350;
-        trick.powerCost = 25;
+        trick.powerCost = 30;
         trick.unlockRoseCount = 0;
-        trick.price = 0;
-        trick.bought = true;
-        hypnosis = GetComponent<Hypnosis>();
+        trick.price = 10;
+        hypnosis = GetComponent<Hypnosis>();        
         hypnosis.data = trick;
+        Globals.tricks.Add(trick);
+        
+        trick = new TrickData();
+        trick.nameKey = "disguise";
+        trick.descriptionKey = "disguise_desc";
+        trick.duration = 700;
+        trick.powerCost = 40;
+        trick.unlockRoseCount = 0;
+        trick.price = 300;
+        disguise = GetComponent<Disguise>();
+        disguise.data = trick;
         Globals.tricks.Add(trick);
 
         trick = new TrickData();
         trick.nameKey = "dove";
         trick.descriptionKey = "dove_desc";
-        trick.duration = 400;
-        trick.powerCost = 20;
-        trick.unlockRoseCount = 0;
-        trick.price = 300;
-        Globals.tricks.Add(trick);
-
-        trick = new TrickData();
-        trick.nameKey = "disguise";
-        trick.descriptionKey = "disguise_desc";
         trick.duration = 500;
-        trick.powerCost = 35;
-        trick.unlockRoseCount = 0;
-        trick.price = 500;
-        disguise = GetComponent<Disguise>();
-        disguise.data = trick;
+        trick.powerCost = 25;
+        trick.unlockRoseCount = 10;
+        trick.price = 1000;
         Globals.tricks.Add(trick);
 
         trick = new TrickData();
@@ -64,8 +81,19 @@ public class Magician : Actor
         trick.descriptionKey = "flash_grenade_desc";
         trick.duration = 0;
         trick.powerCost = 2;
-        trick.unlockRoseCount = 10;
-        trick.price = 10000;        
+        trick.unlockRoseCount = 25;
+        trick.price = 5000;        
+        Globals.tricks.Add(trick);
+        
+        trick = new TrickData();
+        trick.nameKey = "shotLight";
+        trick.descriptionKey = "shotLight_desc";
+        trick.duration = 0;
+        trick.powerCost = 10;
+        trick.unlockRoseCount = 50;
+        trick.price = 16000;
+        shot = GetComponent<GunShot>();
+        shot.data = trick;
         Globals.tricks.Add(trick);
 
         trick = new TrickData();
@@ -74,21 +102,10 @@ public class Magician : Actor
         trick.duration = 300;
         trick.powerCost = 35;
         trick.unlockRoseCount = 30;
-        trick.price = 16000;
+        trick.price = 31000;
         flyUp = GetComponent<FlyUp>();
         flyUp.data = trick;
         Globals.tricks.Add(trick);
-
-        trick = new TrickData();
-        trick.nameKey = "shotLight";
-        trick.descriptionKey = "shotLight_desc";
-        trick.duration = 0;
-        trick.powerCost = 10;
-        trick.unlockRoseCount = 50;
-        trick.price = 31000;
-        shot = GetComponent<ShotLight>();
-        shot.data = trick;
-        Globals.tricks.Add(trick);                
         
 
         moving.canMove = false;
@@ -100,13 +117,13 @@ public class Magician : Actor
         PowerCurrent = PowerAmount;
 
         GuardData guard_data = new GuardData();
-        guard_data.name = "guard";
-        guard_data.price = 3500;
+        guard_data.name = "armed";
+        guard_data.price = 10;
         guard_data.roomConsume = 2;
-        guard_data.magicianOutVisionTime = 250;
-        guard_data.atkCd = 120;
+        guard_data.magicianOutVisionTime = 450;
+        guard_data.atkCd = 100;
         guard_data.attackValue = 60;
-        guard_data.atkShortestDistance = 1.5f;
+        guard_data.atkShortestDistance = 1.8f;
         guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
         Globals.guardDatas.Add(guard_data);
@@ -121,13 +138,25 @@ public class Magician : Actor
         guard_data.doveOutVisionTime = 500;
         Globals.guardDatas.Add(guard_data);
 
+//         guard_data = new GuardData();
+//         guard_data.name = "guard";
+//         guard_data.price = 12000;
+//         guard_data.roomConsume = 2;
+//         guard_data.magicianOutVisionTime = 450;
+//         guard_data.atkCd = 60;
+//         guard_data.attackValue = 40;
+//         guard_data.atkShortestDistance = 1.5f;
+//         guard_data.doveOutVisionTime = 50;
+//         guard_data.attackSpeed = 1.0f;
+//         Globals.guardDatas.Add(guard_data);
+
         guard_data = new GuardData();
-        guard_data.name = "armed";
+        guard_data.name = "Spider";
         guard_data.price = 12000;
-        guard_data.roomConsume = 3;
+        guard_data.roomConsume = 2;
         guard_data.magicianOutVisionTime = 450;
-        guard_data.atkCd = 60;
-        guard_data.attackValue = 101;
+        guard_data.atkCd = 220;
+        guard_data.attackValue = 40;
         guard_data.atkShortestDistance = 1.5f;
         guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
@@ -149,15 +178,39 @@ public class Magician : Actor
         data.roseRequire = 0;
         data.price = 3000;
         data.roomSupport = 8;
-        data.lockGuardsName = new System.String[] { "guard"};
+        data.lockGuardsName = new System.String[] { "armed" };
         data.safeBoxCount = 3;
         Globals.mazeLvDatas.Add(data);
 
         data = new MazeLvData();
-        data.roseRequire = 20;
-        data.price = 12000;
-        data.roomSupport = 15;
-        data.lockGuardsName = new System.String[] { "dog","armed"};
+        data.roseRequire = 0;
+        data.price = 5000;
+        data.roomSupport = 9;
+        data.lockGuardsName = new System.String[] { "dog" };
+        data.safeBoxCount = 3;
+        Globals.mazeLvDatas.Add(data);
+
+        data = new MazeLvData();
+        data.roseRequire = 0;
+        data.price = 8000;
+        data.roomSupport = 10;
+        data.lockGuardsName = new System.String[]{};
+        data.safeBoxCount = 3;
+        Globals.mazeLvDatas.Add(data);
+
+        data = new MazeLvData();
+        data.roseRequire = 0;
+        data.price = 10000;
+        data.roomSupport = 11;
+        data.lockGuardsName = new System.String[]{};
+        data.safeBoxCount = 3;
+        Globals.mazeLvDatas.Add(data);
+
+        data = new MazeLvData();
+        data.roseRequire = 30;
+        data.price = 17000;
+        data.roomSupport = 14;
+        data.lockGuardsName = new System.String[] { "Spider" };
         data.safeBoxCount = 4;
         Globals.mazeLvDatas.Add(data);
 
@@ -168,6 +221,12 @@ public class Magician : Actor
         data.lockGuardsName = new System.String[] { "lamp"};
         data.safeBoxCount = 5;
         Globals.mazeLvDatas.Add(data);
+
+        Globals.buySafeBoxPrice = 5000;
+        Globals.safeBoxLvDatas = new SafeBoxLvData[] { 
+        new SafeBoxLvData(2000, 6000), 
+        new SafeBoxLvData(5000, 10000), 
+        new SafeBoxLvData(10000, 15000) };
 
         TrickTimerPrefab = UnityEngine.Resources.Load("UI/FakeGuardTimer") as UnityEngine.GameObject;
 
@@ -220,7 +279,7 @@ public class Magician : Actor
         eye.gameObject.SetActive(false);
         Globals.cameraFollowMagician.CloseMinimap();
         Globals.canvasForMagician.gameObject.SetActive(false);
-        (Globals.LevelController as TutorialLevelController).canvasForStealing.gameObject.SetActive(false);
+        (Globals.LevelController as StealingLevelController).canvasForStealing.gameObject.SetActive(false);
     }
 
     public void CoverInMoonlight()
@@ -239,7 +298,7 @@ public class Magician : Actor
     public void CastMagic(TrickData data)
     {
         Globals.replaySystem.RecordMagicCast(data);
-        TutorialLevelController level = Globals.LevelController as TutorialLevelController;
+        StealingLevelController level = Globals.LevelController as StealingLevelController;
         if (level != null && data.nameKey == "flash_grenade")
         {
             if (!Stealing)
@@ -291,19 +350,23 @@ public class Magician : Actor
                     {
                         continue;
                     }
-                    Dove dove = (UnityEngine.GameObject.Instantiate(dovePrefab) as UnityEngine.GameObject).GetComponent<Dove>();
-                    dove.transform.position = transform.position;
-                    dove.StartOut(guard.transform.position, data);
+                    CreateDove(data, dovePrefab, guard.transform.position);
                     ++dove_idx;
                     if (dove_idx == 2)
                     {
                         break;
                     }
                 }
+
+                while (dove_idx != 2)
+                {
+                    CreateDove(data, dovePrefab, UnityEngine.Vector3.zero);
+                    ++dove_idx;
+                }
             }
             if (data.nameKey == "hypnosis" && Globals.magician.currentAction != Globals.magician.hypnosis)
             {
-                Guard guard = (Globals.LevelController as TutorialLevelController).m_lastNearest;
+                Guard guard = (Globals.LevelController as StealingLevelController).m_lastNearest;
                 if (guard != null)
                 {
                     hypnosis.Cast(guard);
@@ -324,6 +387,17 @@ public class Magician : Actor
         }        
     }
 
+    void CreateDove(TrickData data, UnityEngine.GameObject dovePrefab, UnityEngine.Vector3 targetPos)
+    {
+        Dove dove = (UnityEngine.GameObject.Instantiate(dovePrefab) as UnityEngine.GameObject).GetComponent<Dove>();
+        dove.transform.position = transform.position;
+        if (targetPos == UnityEngine.Vector3.zero)
+        {
+            targetPos = dove.FindFarestWallDestination();
+        }
+        dove.StartOut(targetPos, data);
+    }
+
     public override bool GoTo(UnityEngine.Vector3 pos, OnPathDelegate callback = null)
     {
         System.String content = "Mage go to:";
@@ -342,12 +416,12 @@ public class Magician : Actor
         return true;
     }
 
-    public void ShotLight(UnityEngine.GameObject bulb)
+    public void Shot(UnityEngine.GameObject target)
     {
         if (Globals.magician.shot.data.IsInUse()&& 
             ChangePower(-shot.data.powerCost))
         {
-            shot.Shot(bulb);
+            shot.Shot(target);
         }
     }
 

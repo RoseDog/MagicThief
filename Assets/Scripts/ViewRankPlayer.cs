@@ -83,8 +83,8 @@
         Globals.playingReplay = replay;
         Globals.thiefPlayer = replay.thief;
         Globals.guardPlayer = replay.guard;
-        city.Exit();        
-        Globals.asyncLoad.ToLoadSceneAsync("Tutorial_Levels");
+        city.Exit();
+        Globals.asyncLoad.ToLoadSceneAsync("StealingLevel");
     }
     
     public void VisitMaze()

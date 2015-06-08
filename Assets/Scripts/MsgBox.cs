@@ -48,8 +48,8 @@
     public void MessageBoxBtnClicked()
     {
         UnityEngine.Debug.Log("MessageBoxBtnClicked");
-        MsgBoxBG.AddAction(new Sequence(new FadeUI(MsgBoxBG, 1, 0, 0.7f), new FunctionCall(()=>FadeOver())));
-        AddAction(new FadeUI(this, 0.4f, 0, 0.7f));
+        MsgBoxBG.AddAction(new Sequence(new FadeUI(MsgBoxBG, 1, 0, 0.2f), new FunctionCall(()=>FadeOver())));
+        AddAction(new FadeUI(this, 0.4f, 0, 0.2f));
         YesBtn.interactable = false;
     }
 

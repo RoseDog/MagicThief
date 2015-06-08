@@ -21,11 +21,14 @@
 
         LifeAmount = 100;
         LifeCurrent = LifeAmount;
-        spriteSheet.CreateAnimationByName("idle");
-        spriteSheet.CreateAnimationByName("moving");
-        // BeenPressDown用的
-        spriteSheet.CreateAnimationByName("disguise");
-        spriteSheet.CreateAnimationByName("down_on_floor");
+               
+        spriteSheet.AddAnim("idle", 4);
+        spriteSheet.AddAnim("moving", 6, 1.2f);
+        spriteSheet.AddAnim("falling", 1, 0.2f);
+        spriteSheet.AddAnim("landing", 1, 0.2f);
+        spriteSheet.AddAnim("hitted", 1, 0.2f);
+        spriteSheet.AddAnim("lifeOver", 6, 0.8f);
+        spriteRenderer.color = UnityEngine.Color.black;
     }
 
     public void ShowTipToShowMazeBtn()
@@ -81,5 +84,10 @@
         HidePath();
         moving.canMove = false;        
         base.OutStealing();
+    }
+
+    public void Vanish()
+    {
+        Destroy(gameObject);
     }
 }

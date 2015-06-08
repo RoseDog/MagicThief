@@ -1,5 +1,5 @@
 ﻿GuardCount=1
-(-4.1150, -1.3750, -0.0200)=guard
+(-4.1150, -1.3750, -0.0200)=armed
 randSeedCacheWhenEditLevel=1653179144
 Z_CELLS_COUNT=5
 X_CELLS_COUNT=3
@@ -11,6 +11,6 @@ minRoomXCellsCount=2
 maxRoomXCellsCount=2
 minRoomZCellsCount=2
 maxRoomZCellsCount=2
-GEMS_COUNT=3
+GEMS_COUNT=2
 LAMPS_COUNT=0
 LevelTipText=“小心那些守卫”

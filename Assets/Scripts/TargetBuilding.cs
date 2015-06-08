@@ -94,6 +94,6 @@
     {
         Globals.thiefPlayer = Globals.self;
         Globals.self.DownloadTarget(data);
-        Globals.asyncLoad.ToLoadSceneAsync("Tutorial_Levels");
+        Globals.asyncLoad.ToLoadSceneAsync("StealingLevel");
     }
 }

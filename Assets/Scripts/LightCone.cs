@@ -1,15 +1,14 @@
-﻿public class LightCone : UnityEngine.MonoBehaviour 
+﻿public class LightCone : MachineActiveArea
 {
-    public System.Collections.Generic.List<UnityEngine.GameObject> enemiesInLight = new System.Collections.Generic.List<UnityEngine.GameObject>();
-    void OnTriggerEnter(UnityEngine.Collider other)
+    public override void OnTriggerEnter(UnityEngine.Collider other)
     {
         other.GetComponent<Actor>().inLight = true;
-        enemiesInLight.Add(other.gameObject);
+        base.OnTriggerEnter(other);                
     }
 
     void OnTriggerStay(UnityEngine.Collider other)
     {
-        foreach (UnityEngine.GameObject enemy in enemiesInLight)
+        foreach (UnityEngine.GameObject enemy in enemiesInArea)
         {
             foreach (Guard guard in Globals.maze.guards)
             {
@@ -21,10 +20,4 @@
             }
         }
     }
-
-    void OnTriggerExit(UnityEngine.Collider other)
-    {
-        other.GetComponent<Actor>().inLight = false;
-        enemiesInLight.Remove(other.gameObject);        
-    }    
 }

@@ -1,20 +1,20 @@
 ﻿public class LifeNumber : Actor
 {    
-    UnityEngine.UI.Text lifeText;
+    public UnityEngine.UI.Text numberText;
     UnityEngine.UI.RawImage LifeNumerBg;
     float scaleTo = 1.6f;
     int scaleTotalTime = 8;
     public override void Awake()
     {
         base.Awake();
-        lifeText = GetComponent<UnityEngine.UI.Text>();
+        numberText = GetComponent<UnityEngine.UI.Text>();
         LifeNumerBg = GetComponentInParent<UnityEngine.UI.RawImage>();
         //LifeNumerBg.gameObject.SetActive(false);
     }
 
     public void UpdateText(float current, float amount)
     {
-        lifeText.text = current.ToString("F0") + "/" + amount.ToString("F0");
+        numberText.text = current.ToString("F0") + "/" + amount.ToString("F0");
     }
 
     public void UpdateCurrentLife(float current, float amount)

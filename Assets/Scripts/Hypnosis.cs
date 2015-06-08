@@ -2,10 +2,8 @@
 {
     Guard target;
 
-    public override void Awake()
+    public void Start()
     {
-        base.Awake();
-        mage.spriteSheet.CreateAnimationByName("Hypnosis",1.3f);
         mage.spriteSheet.AddAnimationEvent("Hypnosis", -1, () => TrickActionEnd());
     }
 

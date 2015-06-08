@@ -12,7 +12,7 @@
     public void ToCashNumber(bool rotate)
     {
         // 在教程中，TutorialThief偷东西的时候，不往界面上飞
-        TutorialLevelController controller = Globals.LevelController as TutorialLevelController;
+        StealingLevelController controller = Globals.LevelController as StealingLevelController;
 
         // 金钱增量的位置
         numberFlyTo = controller.StealingCash;
@@ -21,6 +21,11 @@
             controller.StealingCash.gameObject.SetActive(true);
         }
         FlyOff(rotate);
+
+        if (Globals.magician.LifeCurrent > 0 && numberFlyTo.gameObject.activeSelf)
+        {
+            controller.MagicianGotCash(numberDelta);
+        }        
     }
 
     public void ToRoseNumber()
@@ -74,11 +79,7 @@
                 DestroyImmediate(gameObject);
                 if (Globals.magician.LifeCurrent > 0 && numberFlyTo.gameObject.activeSelf)
                 {                    
-                    numberFlyTo.Add(numberDelta);
-                    if ((Globals.LevelController as TutorialLevelController) != null)
-                    {
-                        Globals.LevelController.MagicianGotCash(numberDelta);
-                    }                    
+                    numberFlyTo.Add(numberDelta);                                    
                 }
                 break;
             }

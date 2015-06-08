@@ -2,6 +2,10 @@
 {
     FlyToScreenNumber fly;
     int cash = 300;
+    public int GetCash()
+    {
+        return cash;
+    }
     
 	public override void Awake () 
     {
@@ -19,8 +23,8 @@
     {
         int floatDuration = 60;
 
-        Globals.Assert((Globals.LevelController as TutorialLevelController).unstolenGems.Contains(transform.parent.gameObject));
-        (Globals.LevelController as TutorialLevelController).unstolenGems.Remove(transform.parent.gameObject);
+        Globals.Assert((Globals.LevelController as StealingLevelController).unstolenGems.Contains(transform.parent.gameObject));
+        (Globals.LevelController as StealingLevelController).unstolenGems.Remove(transform.parent.gameObject);
 
         transform.parent = null;
         ClearAllActions();
@@ -28,6 +32,7 @@
         gameObject.layer = 26;
         AddAction(new MoveTo(transform, transform.localPosition + new UnityEngine.Vector3(0.0f, 2.0f, 0.0f), floatDuration));
         fly.numberDelta = cash;
+        cash = 0;
         SleepThenCallFunction(floatDuration + 5, ()=>FlyOff());
     }
 

@@ -52,15 +52,17 @@
                 Globals.languageTable.SetText(msgbox.msgBoxText, "sure_to_buy_slot", new System.String[] { data.price.ToString() });
             }
             // 否则打开装备界面
-            else if (!Globals.canvasForMagician.equips.gameObject.activeSelf)
+            else if (!Globals.canvasForMagician.tricksBg.gameObject.activeSelf)
             {
-                Globals.canvasForMagician.OpenEquipUI();
+                Globals.canvasForMagician.OpenTricksUI();
+                Globals.canvasForMagician.SetTrickDescriptionVisible(false);
             }            
         }        
     }
 
     public void ClickToBuyTrickSlot()
     {
+        Globals.canvasForMagician.TryMoreTricksTipHand.transform.parent.gameObject.SetActive(false);
         if (Globals.canvasForMagician.ChangeCash(-data.price))
         {
             Globals.self.TrickSlotBought(data);

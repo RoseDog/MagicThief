@@ -13,23 +13,20 @@
     public override void Awake()
     {
         base.Awake();
-        mage.spriteSheet.CreateAnimationByName("flyup");
-        mage.spriteSheet.AddAnimationEvent("flyup", -1, () => InAir());
-
-        mage.spriteSheet.CreateAnimationByName("flying");
+        
+        mage.spriteSheet.AddAnimationEvent("flyup", -1, () => InAir());        
         System.Collections.Generic.List<UnityEngine.Sprite> sprites = new System.Collections.Generic.List<UnityEngine.Sprite>();
         sprites.Add(mage.spriteSheet._animationList["falling"].spriteList[0]);
         sprites.Add(mage.spriteSheet._animationList["falling"].spriteList[1]);
         sprites.Add(mage.spriteSheet._animationList["falling"].spriteList[2]);
         mage.spriteSheet.CreateAnimationBySprites(sprites, "falling_success");
-        mage.spriteSheet.CreateAnimationByName("falling_failed");
+        
 
         sprites.Clear();
         sprites.Add(mage.spriteSheet._animationList["landing"].spriteList[0]);        
         mage.spriteSheet.CreateAnimationBySprites(sprites, "success_down_on_floor");
 
-        mage.spriteSheet.CreateAnimationByName("down_on_floor");
-        mage.spriteSheet.CreateAnimationByName("stand_up");
+        
 
         shadow = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(gameObject, "shadow");
         shadowPosCache = shadow.transform.localPosition;

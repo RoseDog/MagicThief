@@ -2,190 +2,36 @@ fileFormatVersion: 2
 guid: a6f12075a03a25d4fb42ebe9c711edc4
 TextureImporter:
   fileIDToRecycleName:
-    21300000: disguise_0
-    21300002: disguise_2
-    21300004: disguise_3
-    21300006: tutorial_thief_3
-    21300008: disguise_4
-    21300010: tutorial_thief_5
-    21300012: tutorial_thief_6
-    21300014: tutorial_thief_7
-    21300016: tutorial_thief_8
-    21300018: tutorial_thief_9
-    21300020: tutorial_thief_10
-    21300022: tutorial_thief_11
-    21300024: disguise_1
-    21300026: tutorial_thief_13
-    21300028: tutorial_thief_14
-    21300030: tutorial_thief_15
-    21300032: tutorial_thief_16
-    21300034: tutorial_thief_17
-    21300036: tutorial_thief_18
-    21300038: idle_0
-    21300040: idle_1
-    21300042: idle_2
-    21300044: idle_4
-    21300046: idle_5
-    21300048: tutorial_thief_24
-    21300050: tutorial_thief_25
-    21300052: tutorial_thief_26
-    21300054: tutorial_thief_27
-    21300056: die_0
-    21300058: die_1
-    21300060: die_2
-    21300062: down_on_floor_0
-    21300064: tutorial_thief_32
-    21300066: tutorial_thief_33
-    21300068: tutorial_thief_34
-    21300070: tutorial_thief_35
-    21300072: tutorial_thief_36
-    21300074: tutorial_thief_37
-    21300076: tutorial_thief_38
-    21300078: tutorial_thief_39
-    21300080: hitted_0
-    21300082: hitted_1
-    21300084: 
-    21300086: tutorial_thief_43
-    21300088: tutorial_thief_44
-    21300090: tutorial_thief_45
-    21300092: tutorial_thief_46
-    21300094: tutorial_thief_47
-    21300096: tutorial_thief_48
-    21300098: tutorial_thief_49
-    21300100: tutorial_thief_50
-    21300102: tutorial_thief_51
-    21300104: tutorial_thief_52
-    21300106: tutorial_thief_53
-    21300108: tutorial_thief_54
-    21300110: tutorial_thief_55
-    21300112: tutorial_thief_56
-    21300114: tutorial_thief_57
-    21300116: tutorial_thief_58
-    21300118: tutorial_thief_59
-    21300120: tutorial_thief_60
-    21300122: tutorial_thief_61
-    21300124: tutorial_thief_62
-    21300126: tutorial_thief_63
-    21300128: tutorial_thief_64
-    21300130: tutorial_thief_65
-    21300132: tutorial_thief_66
-    21300134: tutorial_thief_67
-    21300136: tutorial_thief_68
-    21300138: tutorial_thief_69
-    21300140: tutorial_thief_70
-    21300142: tutorial_thief_71
-    21300144: tutorial_thief_72
-    21300146: tutorial_thief_73
-    21300148: tutorial_thief_74
-    21300150: tutorial_thief_75
-    21300152: tutorial_thief_76
-    21300154: tutorial_thief_77
-    21300156: tutorial_thief_78
-    21300158: tutorial_thief_79
-    21300160: tutorial_thief_80
-    21300162: tutorial_thief_81
-    21300164: tutorial_thief_82
-    21300166: tutorial_thief_83
-    21300168: tutorial_thief_84
-    21300170: tutorial_thief_85
-    21300172: tutorial_thief_86
-    21300174: tutorial_thief_87
-    21300176: tutorial_thief_88
-    21300178: tutorial_thief_89
-    21300180: tutorial_thief_90
-    21300182: tutorial_thief_91
-    21300184: tutorial_thief_92
-    21300186: tutorial_thief_93
-    21300188: tutorial_thief_94
-    21300190: tutorial_thief_95
-    21300192: tutorial_thief_96
-    21300194: tutorial_thief_97
-    21300196: tutorial_thief_98
-    21300198: tutorial_thief_99
-    21300200: tutorial_thief_100
-    21300202: tutorial_thief_101
-    21300204: tutorial_thief_102
-    21300206: tutorial_thief_103
-    21300208: tutorial_thief_104
-    21300210: tutorial_thief_105
-    21300212: tutorial_thief_106
-    21300214: tutorial_thief_107
-    21300216: tutorial_thief_108
-    21300218: tutorial_thief_109
-    21300220: tutorial_thief_110
-    21300222: tutorial_thief_111
-    21300224: tutorial_thief_112
-    21300226: tutorial_thief_113
-    21300228: tutorial_thief_114
-    21300230: tutorial_thief_115
-    21300232: tutorial_thief_116
-    21300234: tutorial_thief_117
-    21300236: tutorial_thief_118
-    21300238: tutorial_thief_119
-    21300240: tutorial_thief_120
-    21300242: tutorial_thief_121
-    21300244: moving_0
-    21300246: moving_1
-    21300248: moving_2
-    21300250: moving_3
-    21300252: moving_4
-    21300254: moving_5
-    21300256: tutorial_thief_128
-    21300258: tutorial_thief_129
-    21300260: tutorial_thief_130
-    21300262: tutorial_thief_131
-    21300264: tutorial_thief_132
-    21300266: tutorial_thief_133
-    21300268: tutorial_thief_134
-    21300270: tutorial_thief_135
-    21300272: tutorial_thief_136
-    21300274: tutorial_thief_137
-    21300276: tutorial_thief_138
-    21300278: tutorial_thief_139
-    21300280: tutorial_thief_140
-    21300282: tutorial_thief_141
-    21300284: tutorial_thief_142
-    21300286: tutorial_thief_143
-    21300288: tutorial_thief_144
-    21300290: tutorial_thief_145
-    21300292: tutorial_thief_146
-    21300294: tutorial_thief_147
-    21300296: tutorial_thief_148
-    21300298: tutorial_thief_149
-    21300300: tutorial_thief_150
-    21300302: tutorial_thief_151
-    21300304: tutorial_thief_152
-    21300306: tutorial_thief_153
-    21300308: tutorial_thief_154
-    21300310: tutorial_thief_155
-    21300312: tutorial_thief_156
-    21300314: tutorial_thief_157
-    21300316: tutorial_thief_158
-    21300318: tutorial_thief_159
-    21300320: tutorial_thief_160
-    21300322: tutorial_thief_161
-    21300324: tutorial_thief_162
-    21300326: tutorial_thief_163
-    21300328: tutorial_thief_164
-    21300330: tutorial_thief_165
-    21300332: tutorial_thief_166
-    21300334: tutorial_thief_167
-    21300336: tutorial_thief_168
-    21300338: tutorial_thief_169
-    21300340: tutorial_thief_170
-    21300342: tutorial_thief_171
-    21300344: tutorial_thief_172
-    21300346: tutorial_thief_173
-    21300348: tutorial_thief_174
-    21300350: tutorial_thief_175
-    21300352: tutorial_thief_176
-    21300354: tutorial_thief_177
-    21300356: tutorial_thief_178
-    21300358: tutorial_thief_179
-    21300360: tutorial_thief_180
-    21300362: tutorial_thief_181
-    21300364: tutorial_thief_182
-    21300366: tutorial_thief_183
+    21300000: Tutorial_Thief_Sprite_0
+    21300002: Tutorial_Thief_Sprite_1
+    21300004: Tutorial_Thief_Sprite_2
+    21300006: Tutorial_Thief_Sprite_3
+    21300008: Tutorial_Thief_Sprite_4
+    21300010: Tutorial_Thief_Sprite_5
+    21300012: Tutorial_Thief_Sprite_6
+    21300014: Tutorial_Thief_Sprite_7
+    21300016: Tutorial_Thief_Sprite_8
+    21300018: Tutorial_Thief_Sprite_9
+    21300020: Tutorial_Thief_Sprite_10
+    21300022: Tutorial_Thief_Sprite_11
+    21300024: Tutorial_Thief_Sprite_12
+    21300026: Tutorial_Thief_Sprite_13
+    21300028: Tutorial_Thief_Sprite_14
+    21300030: Tutorial_Thief_Sprite_15
+    21300032: Tutorial_Thief_Sprite_16
+    21300034: Tutorial_Thief_Sprite_17
+    21300036: Tutorial_Thief_Sprite_18
+    21300038: Tutorial_Thief_Sprite_19
+    21300040: Tutorial_Thief_Sprite_20
+    21300042: Tutorial_Thief_Sprite_21
+    21300044: Tutorial_Thief_Sprite_22
+    21300046: Tutorial_Thief_Sprite_23
+    21300048: Tutorial_Thief_Sprite_24
+    21300050: Tutorial_Thief_Sprite_25
+    21300052: Tutorial_Thief_Sprite_26
+    21300054: Tutorial_Thief_Sprite_27
+    21300056: Tutorial_Thief_Sprite_28
+    21300058: Tutorial_Thief_Sprite_29
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -206,10 +52,10 @@ TextureImporter:
   generateCubemap: 0
   seamlessCubemap: 0
   textureFormat: -1
-  maxTextureSize: 1024
+  maxTextureSize: 2048
   textureSettings:
     filterMode: 0
-    aniso: -1
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -227,1845 +73,305 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: disguise_0
+    - name: Tutorial_Thief_Sprite_0
       rect:
         serializedVersion: 2
-        x: 31
-        y: 565
-        width: 28
-        height: 44
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: disguise_2
-      rect:
-        serializedVersion: 2
-        x: 131
-        y: 565
-        width: 56
-        height: 47
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: disguise_3
-      rect:
-        serializedVersion: 2
-        x: 197
-        y: 563
-        width: 56
-        height: 47
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_3
-      rect:
-        serializedVersion: 2
-        x: 263
-        y: 597
-        width: 14
-        height: 6
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: disguise_4
-      rect:
-        serializedVersion: 2
-        x: 281
-        y: 563
-        width: 33
-        height: 48
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_5
-      rect:
-        serializedVersion: 2
-        x: 318
-        y: 599
-        width: 13
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_6
-      rect:
-        serializedVersion: 2
-        x: 345
-        y: 595
-        width: 14
-        height: 6
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_7
-      rect:
-        serializedVersion: 2
-        x: 365
-        y: 561
-        width: 36
-        height: 49
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_8
-      rect:
-        serializedVersion: 2
-        x: 404
-        y: 598
-        width: 13
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_9
-      rect:
-        serializedVersion: 2
-        x: 450
-        y: 559
-        width: 38
-        height: 49
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_10
-      rect:
-        serializedVersion: 2
-        x: 491
-        y: 596
-        width: 13
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_11
-      rect:
-        serializedVersion: 2
-        x: 430
-        y: 593
-        width: 14
-        height: 6
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: disguise_1
-      rect:
-        serializedVersion: 2
-        x: 70
-        y: 563
-        width: 51
-        height: 52
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_13
-      rect:
-        serializedVersion: 2
-        x: 265
-        y: 583
-        width: 14
-        height: 6
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_14
-      rect:
-        serializedVersion: 2
-        x: 323
-        y: 585
-        width: 13
-        height: 5
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_15
-      rect:
-        serializedVersion: 2
-        x: 349
-        y: 581
-        width: 14
-        height: 6
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_16
-      rect:
-        serializedVersion: 2
-        x: 410
-        y: 583
-        width: 13
-        height: 5
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_17
-      rect:
-        serializedVersion: 2
-        x: 497
-        y: 581
-        width: 13
-        height: 5
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_18
-      rect:
-        serializedVersion: 2
-        x: 434
-        y: 579
-        width: 14
-        height: 6
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: idle_0
-      rect:
-        serializedVersion: 2
-        x: 35
-        y: 490
-        width: 33
-        height: 47
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: idle_1
-      rect:
-        serializedVersion: 2
-        x: 76
-        y: 486
-        width: 34
-        height: 46
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: idle_2
-      rect:
-        serializedVersion: 2
-        x: 121
-        y: 485
-        width: 35
-        height: 44
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: idle_4
-      rect:
-        serializedVersion: 2
-        x: 167
-        y: 484
-        width: 34
-        height: 46
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: idle_5
-      rect:
-        serializedVersion: 2
-        x: 210
-        y: 484
-        width: 33
-        height: 47
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_24
-      rect:
-        serializedVersion: 2
-        x: 37
-        y: 412
-        width: 30
-        height: 48
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_25
-      rect:
-        serializedVersion: 2
-        x: 86
-        y: 418
-        width: 29
-        height: 40
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_26
-      rect:
-        serializedVersion: 2
-        x: 129
-        y: 419
-        width: 30
-        height: 33
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_27
-      rect:
-        serializedVersion: 2
-        x: 168
-        y: 413
-        width: 27
-        height: 46
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: die_0
-      rect:
-        serializedVersion: 2
-        x: 41
-        y: 340
-        width: 36
-        height: 37
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: die_1
-      rect:
-        serializedVersion: 2
-        x: 84
-        y: 343
-        width: 48
-        height: 23
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: die_2
-      rect:
-        serializedVersion: 2
-        x: 139
-        y: 339
-        width: 46
-        height: 26
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: down_on_floor_0
-      rect:
-        serializedVersion: 2
-        x: 194
-        y: 342
-        width: 48
-        height: 23
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_32
-      rect:
-        serializedVersion: 2
-        x: 253
-        y: 339
-        width: 46
-        height: 26
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_33
-      rect:
-        serializedVersion: 2
-        x: 309
-        y: 343
-        width: 48
-        height: 23
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_34
-      rect:
-        serializedVersion: 2
-        x: 365
-        y: 336
-        width: 37
-        height: 38
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_35
-      rect:
-        serializedVersion: 2
-        x: 38
-        y: 270
-        width: 34
-        height: 46
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_36
-      rect:
-        serializedVersion: 2
-        x: 86
-        y: 272
-        width: 32
-        height: 48
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_37
-      rect:
-        serializedVersion: 2
-        x: 130
-        y: 270
-        width: 35
-        height: 50
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_38
-      rect:
-        serializedVersion: 2
-        x: 177
-        y: 270
-        width: 42
-        height: 52
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_39
-      rect:
-        serializedVersion: 2
-        x: 233
-        y: 268
-        width: 32
-        height: 47
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: hitted_0
-      rect:
-        serializedVersion: 2
-        x: 31
-        y: 212
-        width: 36
-        height: 47
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: hitted_1
-      rect:
-        serializedVersion: 2
-        x: 79
-        y: 214
-        width: 36
-        height: 37
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: 
-      rect:
-        serializedVersion: 2
-        x: 126
-        y: 218
-        width: 48
-        height: 23
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_43
-      rect:
-        serializedVersion: 2
-        x: 33
+        x: 0
         y: 150
-        width: 29
-        height: 50
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_44
+    - name: Tutorial_Thief_Sprite_1
       rect:
         serializedVersion: 2
-        x: 66
-        y: 149
-        width: 35
-        height: 50
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_45
-      rect:
-        serializedVersion: 2
-        x: 109
+        x: 128
         y: 150
-        width: 43
-        height: 50
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_46
+    - name: Tutorial_Thief_Sprite_2
       rect:
         serializedVersion: 2
-        x: 159
-        y: 180
-        width: 20
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_47
-      rect:
-        serializedVersion: 2
-        x: 216
-        y: 152
-        width: 58
-        height: 46
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_48
-      rect:
-        serializedVersion: 2
-        x: 283
+        x: 256
         y: 150
-        width: 60
-        height: 46
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_49
+    - name: Tutorial_Thief_Sprite_3
       rect:
         serializedVersion: 2
-        x: 350
-        y: 148
-        width: 68
-        height: 46
+        x: 384
+        y: 150
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_50
+    - name: Tutorial_Thief_Sprite_4
       rect:
         serializedVersion: 2
-        x: 427
-        y: 179
-        width: 20
-        height: 7
+        x: 512
+        y: 150
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_51
-      rect:
-        serializedVersion: 2
-        x: 455
-        y: 149
-        width: 48
-        height: 46
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_52
-      rect:
-        serializedVersion: 2
-        x: 518
-        y: 148
-        width: 38
-        height: 46
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_53
-      rect:
-        serializedVersion: 2
-        x: 35
-        y: 81
-        width: 32
-        height: 44
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_54
-      rect:
-        serializedVersion: 2
-        x: 78
-        y: 83
-        width: 37
-        height: 42
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_55
-      rect:
-        serializedVersion: 2
-        x: 125
-        y: 79
-        width: 36
-        height: 47
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_56
-      rect:
-        serializedVersion: 2
-        x: 380
-        y: 88
-        width: 10
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_57
-      rect:
-        serializedVersion: 2
-        x: 391
-        y: 88
-        width: 4
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_58
-      rect:
-        serializedVersion: 2
-        x: 396
-        y: 88
-        width: 5
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_59
-      rect:
-        serializedVersion: 2
-        x: 406
-        y: 88
-        width: 6
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_60
-      rect:
-        serializedVersion: 2
-        x: 413
-        y: 88
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_61
-      rect:
-        serializedVersion: 2
-        x: 420
-        y: 88
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_62
-      rect:
-        serializedVersion: 2
-        x: 427
-        y: 88
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_63
-      rect:
-        serializedVersion: 2
-        x: 434
-        y: 88
-        width: 6
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_64
-      rect:
-        serializedVersion: 2
-        x: 445
-        y: 88
-        width: 9
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_65
-      rect:
-        serializedVersion: 2
-        x: 455
-        y: 86
-        width: 9
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_66
-      rect:
-        serializedVersion: 2
-        x: 463
-        y: 88
-        width: 7
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_67
-      rect:
-        serializedVersion: 2
-        x: 476
-        y: 88
-        width: 5
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_68
-      rect:
-        serializedVersion: 2
-        x: 486
-        y: 88
-        width: 6
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_69
-      rect:
-        serializedVersion: 2
-        x: 493
-        y: 86
-        width: 10
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_70
-      rect:
-        serializedVersion: 2
-        x: 504
-        y: 88
-        width: 6
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_71
-      rect:
-        serializedVersion: 2
-        x: 511
-        y: 88
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_72
-      rect:
-        serializedVersion: 2
-        x: 518
-        y: 88
-        width: 4
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_73
-      rect:
-        serializedVersion: 2
-        x: 527
-        y: 88
-        width: 8
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_74
-      rect:
-        serializedVersion: 2
-        x: 536
-        y: 86
-        width: 6
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_75
-      rect:
-        serializedVersion: 2
-        x: 543
-        y: 86
-        width: 6
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_76
-      rect:
-        serializedVersion: 2
-        x: 550
-        y: 88
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_77
-      rect:
-        serializedVersion: 2
-        x: 557
-        y: 88
-        width: 6
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_78
-      rect:
-        serializedVersion: 2
-        x: 568
-        y: 88
-        width: 6
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_79
-      rect:
-        serializedVersion: 2
-        x: 575
-        y: 86
-        width: 5
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_80
-      rect:
-        serializedVersion: 2
-        x: 585
-        y: 88
-        width: 7
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_81
-      rect:
-        serializedVersion: 2
-        x: 593
-        y: 88
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_82
-      rect:
-        serializedVersion: 2
-        x: 600
-        y: 88
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_83
-      rect:
-        serializedVersion: 2
-        x: 607
-        y: 88
-        width: 5
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_84
-      rect:
-        serializedVersion: 2
-        x: 613
-        y: 88
-        width: 9
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_85
-      rect:
-        serializedVersion: 2
-        x: 623
-        y: 88
-        width: 5
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_86
-      rect:
-        serializedVersion: 2
-        x: 629
-        y: 88
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_87
-      rect:
-        serializedVersion: 2
-        x: 380
-        y: 74
-        width: 7
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_88
-      rect:
-        serializedVersion: 2
-        x: 388
-        y: 74
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_89
-      rect:
-        serializedVersion: 2
-        x: 399
-        y: 74
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_90
-      rect:
-        serializedVersion: 2
-        x: 406
-        y: 74
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_91
-      rect:
-        serializedVersion: 2
-        x: 413
-        y: 74
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_92
-      rect:
-        serializedVersion: 2
-        x: 420
-        y: 74
-        width: 6
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_93
-      rect:
-        serializedVersion: 2
-        x: 431
-        y: 74
-        width: 4
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_94
-      rect:
-        serializedVersion: 2
-        x: 436
-        y: 74
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_95
-      rect:
-        serializedVersion: 2
-        x: 447
-        y: 72
-        width: 8
-        height: 11
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_96
-      rect:
-        serializedVersion: 2
-        x: 456
-        y: 74
-        width: 5
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_97
-      rect:
-        serializedVersion: 2
-        x: 462
-        y: 74
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_98
-      rect:
-        serializedVersion: 2
-        x: 473
-        y: 74
-        width: 9
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_99
-      rect:
-        serializedVersion: 2
-        x: 483
-        y: 74
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_100
-      rect:
-        serializedVersion: 2
-        x: 494
-        y: 74
-        width: 9
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_101
-      rect:
-        serializedVersion: 2
-        x: 504
-        y: 74
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_102
-      rect:
-        serializedVersion: 2
-        x: 511
-        y: 74
-        width: 8
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_103
-      rect:
-        serializedVersion: 2
-        x: 520
-        y: 74
-        width: 4
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_104
-      rect:
-        serializedVersion: 2
-        x: 529
-        y: 74
-        width: 6
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_105
-      rect:
-        serializedVersion: 2
-        x: 539
-        y: 74
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_106
-      rect:
-        serializedVersion: 2
-        x: 546
-        y: 74
-        width: 4
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_107
-      rect:
-        serializedVersion: 2
-        x: 551
-        y: 74
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_108
-      rect:
-        serializedVersion: 2
-        x: 558
-        y: 74
-        width: 6
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_109
-      rect:
-        serializedVersion: 2
-        x: 569
-        y: 74
-        width: 6
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_110
-      rect:
-        serializedVersion: 2
-        x: 576
-        y: 74
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_111
-      rect:
-        serializedVersion: 2
-        x: 583
-        y: 74
-        width: 4
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_112
-      rect:
-        serializedVersion: 2
-        x: 592
-        y: 74
-        width: 6
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_113
-      rect:
-        serializedVersion: 2
-        x: 602
-        y: 72
-        width: 5
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_114
-      rect:
-        serializedVersion: 2
-        x: 608
-        y: 74
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_115
-      rect:
-        serializedVersion: 2
-        x: 615
-        y: 74
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_116
-      rect:
-        serializedVersion: 2
-        x: 626
-        y: 72
-        width: 6
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_117
-      rect:
-        serializedVersion: 2
-        x: 633
-        y: 74
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_118
+    - name: Tutorial_Thief_Sprite_5
       rect:
         serializedVersion: 2
         x: 640
-        y: 74
-        width: 4
-        height: 9
+        y: 150
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_119
+    - name: Tutorial_Thief_Sprite_6
       rect:
         serializedVersion: 2
-        x: 649
-        y: 74
-        width: 4
-        height: 9
+        x: 768
+        y: 150
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_120
+    - name: Tutorial_Thief_Sprite_7
       rect:
         serializedVersion: 2
-        x: 654
-        y: 74
-        width: 8
-        height: 10
+        x: 896
+        y: 150
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_121
+    - name: Tutorial_Thief_Sprite_8
       rect:
         serializedVersion: 2
-        x: 663
-        y: 74
-        width: 4
-        height: 7
+        x: 1024
+        y: 150
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: moving_0
+    - name: Tutorial_Thief_Sprite_9
       rect:
         serializedVersion: 2
-        x: 38
-        y: 29
-        width: 42
-        height: 38
+        x: 1152
+        y: 150
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: moving_1
+    - name: Tutorial_Thief_Sprite_10
       rect:
         serializedVersion: 2
-        x: 97
-        y: 28
-        width: 44
-        height: 37
+        x: 1280
+        y: 150
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: moving_2
+    - name: Tutorial_Thief_Sprite_11
       rect:
         serializedVersion: 2
-        x: 151
-        y: 26
-        width: 53
-        height: 35
+        x: 1408
+        y: 150
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: moving_3
+    - name: Tutorial_Thief_Sprite_12
       rect:
         serializedVersion: 2
-        x: 212
-        y: 25
-        width: 39
-        height: 37
+        x: 1536
+        y: 150
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: moving_4
+    - name: Tutorial_Thief_Sprite_13
       rect:
         serializedVersion: 2
-        x: 258
-        y: 26
-        width: 45
-        height: 37
+        x: 1664
+        y: 150
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: moving_5
+    - name: Tutorial_Thief_Sprite_14
       rect:
         serializedVersion: 2
-        x: 309
-        y: 28
-        width: 49
-        height: 37
+        x: 1792
+        y: 150
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_128
+    - name: Tutorial_Thief_Sprite_15
       rect:
         serializedVersion: 2
-        x: 380
-        y: 60
-        width: 4
-        height: 7
+        x: 0
+        y: 0
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_129
+    - name: Tutorial_Thief_Sprite_16
       rect:
         serializedVersion: 2
-        x: 385
-        y: 60
-        width: 6
-        height: 10
+        x: 128
+        y: 0
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_130
+    - name: Tutorial_Thief_Sprite_17
       rect:
         serializedVersion: 2
-        x: 392
-        y: 60
-        width: 6
-        height: 7
+        x: 256
+        y: 0
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_131
+    - name: Tutorial_Thief_Sprite_18
       rect:
         serializedVersion: 2
-        x: 399
-        y: 60
-        width: 6
-        height: 7
+        x: 384
+        y: 0
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_132
+    - name: Tutorial_Thief_Sprite_19
       rect:
         serializedVersion: 2
-        x: 406
-        y: 60
-        width: 4
-        height: 9
+        x: 512
+        y: 0
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_133
+    - name: Tutorial_Thief_Sprite_20
       rect:
         serializedVersion: 2
-        x: 415
-        y: 60
-        width: 6
-        height: 7
+        x: 640
+        y: 0
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_134
+    - name: Tutorial_Thief_Sprite_21
       rect:
         serializedVersion: 2
-        x: 422
-        y: 60
-        width: 6
-        height: 7
+        x: 768
+        y: 0
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_135
+    - name: Tutorial_Thief_Sprite_22
       rect:
         serializedVersion: 2
-        x: 433
-        y: 58
-        width: 5
-        height: 9
+        x: 896
+        y: 0
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_136
+    - name: Tutorial_Thief_Sprite_23
       rect:
         serializedVersion: 2
-        x: 439
-        y: 60
-        width: 6
-        height: 7
+        x: 1024
+        y: 0
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_137
+    - name: Tutorial_Thief_Sprite_24
       rect:
         serializedVersion: 2
-        x: 446
-        y: 60
-        width: 10
-        height: 7
+        x: 1152
+        y: 0
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_138
+    - name: Tutorial_Thief_Sprite_25
       rect:
         serializedVersion: 2
-        x: 461
-        y: 60
-        width: 4
-        height: 7
+        x: 1280
+        y: 0
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_139
+    - name: Tutorial_Thief_Sprite_26
       rect:
         serializedVersion: 2
-        x: 466
-        y: 60
-        width: 6
-        height: 9
+        x: 1408
+        y: 0
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_140
+    - name: Tutorial_Thief_Sprite_27
       rect:
         serializedVersion: 2
-        x: 473
-        y: 60
-        width: 6
-        height: 7
+        x: 1536
+        y: 0
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_141
+    - name: Tutorial_Thief_Sprite_28
       rect:
         serializedVersion: 2
-        x: 484
-        y: 58
-        width: 8
-        height: 12
+        x: 1664
+        y: 0
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_142
+    - name: Tutorial_Thief_Sprite_29
       rect:
         serializedVersion: 2
-        x: 493
-        y: 60
-        width: 6
-        height: 7
+        x: 1792
+        y: 0
+        width: 128
+        height: 150
       alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_143
-      rect:
-        serializedVersion: 2
-        x: 500
-        y: 60
-        width: 5
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_144
-      rect:
-        serializedVersion: 2
-        x: 506
-        y: 60
-        width: 4
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_145
-      rect:
-        serializedVersion: 2
-        x: 511
-        y: 60
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_146
-      rect:
-        serializedVersion: 2
-        x: 522
-        y: 60
-        width: 8
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_147
-      rect:
-        serializedVersion: 2
-        x: 531
-        y: 60
-        width: 5
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_148
-      rect:
-        serializedVersion: 2
-        x: 537
-        y: 60
-        width: 5
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_149
-      rect:
-        serializedVersion: 2
-        x: 543
-        y: 60
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_150
-      rect:
-        serializedVersion: 2
-        x: 554
-        y: 60
-        width: 4
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_151
-      rect:
-        serializedVersion: 2
-        x: 559
-        y: 60
-        width: 8
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_152
-      rect:
-        serializedVersion: 2
-        x: 568
-        y: 60
-        width: 4
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_153
-      rect:
-        serializedVersion: 2
-        x: 577
-        y: 60
-        width: 4
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_154
-      rect:
-        serializedVersion: 2
-        x: 582
-        y: 60
-        width: 5
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_155
-      rect:
-        serializedVersion: 2
-        x: 588
-        y: 58
-        width: 6
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_156
-      rect:
-        serializedVersion: 2
-        x: 599
-        y: 60
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_157
-      rect:
-        serializedVersion: 2
-        x: 606
-        y: 60
-        width: 9
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_158
-      rect:
-        serializedVersion: 2
-        x: 380
-        y: 46
-        width: 7
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_159
-      rect:
-        serializedVersion: 2
-        x: 388
-        y: 46
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_160
-      rect:
-        serializedVersion: 2
-        x: 395
-        y: 46
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_161
-      rect:
-        serializedVersion: 2
-        x: 402
-        y: 46
-        width: 5
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_162
-      rect:
-        serializedVersion: 2
-        x: 408
-        y: 46
-        width: 9
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_163
-      rect:
-        serializedVersion: 2
-        x: 418
-        y: 46
-        width: 5
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_164
-      rect:
-        serializedVersion: 2
-        x: 424
-        y: 46
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_165
-      rect:
-        serializedVersion: 2
-        x: 380
-        y: 32
-        width: 6
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_166
-      rect:
-        serializedVersion: 2
-        x: 387
-        y: 32
-        width: 4
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_167
-      rect:
-        serializedVersion: 2
-        x: 392
-        y: 32
-        width: 4
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_168
-      rect:
-        serializedVersion: 2
-        x: 397
-        y: 30
-        width: 9
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_169
-      rect:
-        serializedVersion: 2
-        x: 408
-        y: 30
-        width: 4
-        height: 12
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_170
-      rect:
-        serializedVersion: 2
-        x: 413
-        y: 30
-        width: 4
-        height: 12
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_171
-      rect:
-        serializedVersion: 2
-        x: 418
-        y: 32
-        width: 6
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_172
-      rect:
-        serializedVersion: 2
-        x: 425
-        y: 32
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_173
-      rect:
-        serializedVersion: 2
-        x: 432
-        y: 32
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_174
-      rect:
-        serializedVersion: 2
-        x: 439
-        y: 32
-        width: 5
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_175
-      rect:
-        serializedVersion: 2
-        x: 445
-        y: 32
-        width: 9
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_176
-      rect:
-        serializedVersion: 2
-        x: 455
-        y: 32
-        width: 5
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_177
-      rect:
-        serializedVersion: 2
-        x: 461
-        y: 32
-        width: 9
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_178
-      rect:
-        serializedVersion: 2
-        x: 472
-        y: 30
-        width: 8
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_179
-      rect:
-        serializedVersion: 2
-        x: 479
-        y: 32
-        width: 11
-        height: 10
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_180
-      rect:
-        serializedVersion: 2
-        x: 492
-        y: 32
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_181
-      rect:
-        serializedVersion: 2
-        x: 499
-        y: 32
-        width: 6
-        height: 7
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_182
-      rect:
-        serializedVersion: 2
-        x: 506
-        y: 32
-        width: 4
-        height: 9
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tutorial_thief_183
-      rect:
-        serializedVersion: 2
-        x: 511
-        y: 30
-        width: 4
-        height: 12
-      alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

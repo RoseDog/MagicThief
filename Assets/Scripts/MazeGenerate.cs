@@ -39,6 +39,8 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 
     public System.String IniFileNameForEditor;
     public System.String LevelTipText;
+
+    public int CASH = 0;
     
 
     UnityEngine.GameObject maze;
@@ -148,6 +150,17 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     public float NorthPosInPixel()
     {
         return WestNorthCornerCell.transform.position.y + cell_side_length * 0.5f;
+    }
+
+    public UnityEngine.Vector2 GetMiniMapProjectPosition(float x_ratio, float y_ratio)
+    {
+        UnityEngine.Vector2 left_bottom_corner_pos = new UnityEngine.Vector3(
+            left_up_corner_pos.x,
+            left_up_corner_pos.y - cell_side_length * Y_CELLS_COUNT,
+            0);
+        return new UnityEngine.Vector2(
+            left_bottom_corner_pos.x + x_ratio * cell_side_length * X_CELLS_COUNT,
+            left_bottom_corner_pos.y + y_ratio * cell_side_length * Y_CELLS_COUNT);
     }
 
     private Cell[,] cells;
@@ -1084,6 +1097,9 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             finger.Evt_Down += OnChallengerFingerDown;
             finger.Evt_Moving += OnChallengerFingerMoving;
             finger.Evt_Up += OnChallengerFingerUp;
+
+            Globals.input.Evt_MouseRightDown += OnChallengerRightBtnDown;
+            Globals.input.Evt_MouseRightUp += OnChallengerRightBtnUp;
         }
     }
 
@@ -1095,6 +1111,9 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             finger.Evt_Down -= OnChallengerFingerDown;
             finger.Evt_Moving -= OnChallengerFingerMoving;
             finger.Evt_Up -= OnChallengerFingerUp;
+
+            Globals.input.Evt_MouseRightDown -= OnChallengerRightBtnDown;
+            Globals.input.Evt_MouseRightUp -= OnChallengerRightBtnUp;
         }
     }
 
@@ -1105,33 +1124,40 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     }
 
     Finger fingerDownOnMap;
-    Magician fingerDownMage;
+
     public bool OnChallengerFingerDown(object sender)
     {
         Finger finger = sender as Finger;
-        fingerDownOnMap = finger;
+        if (Globals.cameraFollowMagician.CheckFingerDownOnMiniMap(finger))
+        {
+            return false;
+        }
+        fingerDownOnMap = finger;        
         return true;
     }
-
+    
     public bool OnChallengerFingerMoving(object sender)
     {
         if (fingerDownOnMap != null)
         {
             Globals.cameraFollowMagician.DragToMove(fingerDownOnMap);
-        }        
+        }
+        else
+        {
+            Globals.cameraFollowMagician.DragOnMiniMap(sender as Finger);
+        }
         return true;
     }
 
     public bool OnChallengerFingerUp(object sender)
     {
         Finger finger = sender as Finger;
-        if (fingerDownMage != null)
+        if (Globals.cameraFollowMagician.CheckFingerUpOnMiniMap(finger))
         {
-            fingerDownMage.FingerUp(finger);
-            fingerDownMage = null;
+            return false;
         }
         if (finger == fingerDownOnMap)
-        {
+        {            
             // 点击地板
             if (fingerDownOnMap.timeSinceTouchBegin < 0.5f &&
                 UnityEngine.Vector2.Distance(fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition) < 10.0f)
@@ -1141,6 +1167,28 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         }
 
         fingerDownOnMap = null;
+        return true;
+    }
+
+    float timeSinceRightDown = -1.0f;
+    public bool OnChallengerRightBtnDown(UnityEngine.Vector2 pos)
+    {
+        timeSinceRightDown = UnityEngine.Time.time;
+        return true;
+    }
+
+    public bool OnChallengerRightBtnUp(UnityEngine.Vector2 pos)
+    {
+        if (timeSinceRightDown > 0)
+        {
+            // 点击地板
+            if (UnityEngine.Time.time - timeSinceRightDown < 0.5f)
+            {
+                Globals.LevelController.RightClickOnMap(pos);
+            }
+        }
+
+        timeSinceRightDown = -1.0f;
         return true;
     }
 // 
@@ -1207,6 +1255,10 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         }
 
         fingerDownOnMap = sender as Finger;
+        if (Globals.cameraFollowMagician.CheckFingerDownOnMiniMap(fingerDownOnMap))
+        {
+            return false;
+        }
         // guard fov , guard, dog fov
         //int mask = 1 << 10 | 1 << 13 |1 << 27 | ;
         // HeadOnMiniMap
@@ -1264,7 +1316,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                 Pathfinding.Node node = pathFinder.GetSingleNode(hitInfo.point, false);
                 Globals.Assert(node != null);
                 choosenGuard.birthNode = node;
-                draggingGuard.transform.position = new UnityEngine.Vector3(node.position.x / 1000.0f, node.position.y / 1000.0f, node.position.z / 1000.0f);
+                draggingGuard.transform.position = new UnityEngine.Vector3(node.position.x / 1000.0f, node.position.y / 1000.0f, node.position.z / 1000.0f-0.6f);
                 if (node.walkable == draggingGuard.walkable)
                 {                    
                     if (draggingGuard.patrol != null)
@@ -1284,6 +1336,10 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 
     public bool OnDragFingerUp(object sender)
     {
+        if (Globals.cameraFollowMagician.CheckFingerUpOnMiniMap(fingerDownOnMap))
+        {
+            return false;
+        }
 //		UnityEngine.Debug.Log("OnDragFingerUp:" + fingerDownOnMap.timeSinceTouchBegin.ToString("f4")+"," 
 //		                      + UnityEngine.Vector2.Distance (fingerDownOnMap.beginPosition, fingerDownOnMap.nowPosition).ToString("f4"));
         if (draggingGuard != null)
@@ -1487,7 +1543,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         {
             gem.GetComponent<UnityEngine.CharacterController>().Move(new UnityEngine.Vector3(0.001f, 0.0f, 0.0f));
             gem.GetComponent<UnityEngine.CharacterController>().Move(new UnityEngine.Vector3(-0.001f, 0.0f, 0.0f));
-        }
+        }        
     }
 
     public void GuardsTargetVanish(UnityEngine.GameObject obj)
@@ -1503,10 +1559,10 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             {
                 guard.eye.enemiesInEye.Remove(obj);
             }
-            LightCone light = guard.GetComponentInChildren<LightCone>();
-            if (light)
+            MachineActiveArea area = guard.GetComponentInChildren<MachineActiveArea>();
+            if (area)
             {
-                light.enemiesInLight.Remove(obj);
+                area.enemiesInArea.Remove(obj);
             }
         }
     }

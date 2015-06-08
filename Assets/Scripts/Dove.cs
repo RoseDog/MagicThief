@@ -90,11 +90,17 @@
     }
 
     public override void OnTargetReached()
-    {       
+    {
+        GoTo(FindFarestWallDestination());
+        base.OnTargetReached();
+    }
+
+    public UnityEngine.Vector3 FindFarestWallDestination()
+    {
         double farest = UnityEngine.Mathf.NegativeInfinity;
         UnityEngine.Vector3 destinationPosition = UnityEngine.Vector3.zero;
         System.String farestDir = "";
-        System.Collections.Generic.List<System.String> dirs = 
+        System.Collections.Generic.List<System.String> dirs =
             new System.Collections.Generic.List<System.String>(Globals.DIRECTIONS);
         // 不能原路返回
         dirs.Remove(Globals.GetOppositeDir(flyingDir));
@@ -110,8 +116,7 @@
             }
         }
         flyingDir = farestDir;
-        GoTo(destinationPosition);
-        base.OnTargetReached();
+        return destinationPosition;
     }
 
     UnityEngine.Vector3 GetFarestOnDir(System.String direction)

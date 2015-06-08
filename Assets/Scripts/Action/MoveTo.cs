@@ -274,7 +274,69 @@ public class JumpTo : Cocos2dAction
             _transform.localPosition = _start + new UnityEngine.Vector3(x, jumpHeight);
 			
 			// Reached target position
-            if (_transform.localPosition == _end) EndAction();
+            if (Time.frameCount - _start_frame >= _duration) EndAction();
+		}
+		
+	}
+
+}
+
+public class Blink : Cocos2dAction
+{
+    UnityEngine.UI.Image _target;
+    int _start_frame;
+	// duration
+	private int _duration;
+	// start time
+    private int _visibleDuration;
+	
+
+	// Constructor
+    public Blink(UnityEngine.UI.Image target, int visibleDuration, int duration)
+	{
+        _target = target;
+		// define destination point
+        _visibleDuration = visibleDuration;
+        _duration = duration;		
+	}
+	
+	// Init
+	public override void Init () 
+    {		
+	    
+	}
+	
+	public override void Update () 
+    {
+
+        if (!initialized)
+        {
+            // get start time
+            _start_frame = Time.frameCount;
+
+            initialized = true;
+        }
+        
+		// Not completed
+		if(!completed)
+		{                        
+            int frac = (Time.frameCount - _start_frame) / _visibleDuration;
+            
+            if(frac%2==0)
+            {
+                _target.enabled = true;
+            }
+            else
+            {
+                _target.enabled = false;
+            }
+			
+			// Reached target position
+            if (Time.frameCount - _start_frame >= _duration)
+            {
+                _target.enabled = false;
+                EndAction();
+            }
 		}
 		
 	}
