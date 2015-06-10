@@ -106,7 +106,6 @@
     {
         locate = cell;
         locate.chest = this;
-        //cell.CreateTorchLight();
         transform.position = cell.GetFloorPos();
         //transform.localEulerAngles = new UnityEngine.Vector3(0.0f, rotate_angle, 0.0f);
     }

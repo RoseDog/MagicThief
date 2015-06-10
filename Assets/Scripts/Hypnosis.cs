@@ -9,10 +9,13 @@
 
     public void Cast(Guard guard)
     {
-        target = guard;        
-        Excute();
-        mage.spriteSheet.Play("Hypnosis");
-        mage.FaceTarget(target.transform);
+        if (Globals.magician.ChangePower(data.powerCost))
+        {
+            target = guard;
+            Excute();
+            mage.spriteSheet.Play("Hypnosis");
+            mage.FaceTarget(target.transform);
+        }        
     }   
 
     public void TrickActionEnd()

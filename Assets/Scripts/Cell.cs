@@ -36,7 +36,10 @@ public class Cell : Actor
     public Cell GetAdjacentCell(String direction)
     {
         if (!HasAdjacentCellInDirection(direction))
-            throw new InvalidOperationException("No adjacent cell exists for the location and direction provided.");
+        {
+            return null;
+        }
+            
 
         if (direction == Globals.EAST)
         {
@@ -243,7 +246,7 @@ public class Cell : Actor
         return null;
     }
 
-    public void FloorTurnToWhite()
+    public void FloorTurnToRed()
     {
         UnityEngine.GameObject floor = GetFloor();
         if (floor == null)
@@ -253,42 +256,6 @@ public class Cell : Actor
         {
             sprite.color = UnityEngine.Color.red;
         }
-    }
-
-    public void CreateTorchLight()
-    {
-        foreach (String dir in Globals.DIRECTIONS)
-        {
-            UnityEngine.GameObject wall = Globals.getChildGameObject(gameObject, dir);
-            if (wall != null)
-            {
-                UnityEngine.GameObject touch_prefab = UnityEngine.Resources.Load("Props/Prefab_Pieces/Torch_Lit_Prefab") as UnityEngine.GameObject;
-                UnityEngine.GameObject touch = UnityEngine.GameObject.Instantiate(touch_prefab) as UnityEngine.GameObject;                
-
-                if (wall.name == Globals.EAST)
-                {
-                    touch.transform.localEulerAngles = new UnityEngine.Vector3(0.0f, 180.0f, 0.0f);
-                }
-                else if (wall.name == Globals.SOUTH)
-                {
-                    touch.transform.localEulerAngles = new UnityEngine.Vector3(0.0f, 90.0f, 0.0f);
-                }
-                else if (wall.name == Globals.WEST)
-                {
-                    ;
-                }
-                else if (wall.name == Globals.NORTH)
-                {
-                    touch.transform.localEulerAngles = new UnityEngine.Vector3(0.0f, -90.0f, 0.0f);
-                }
-
-                //touch.transform.parent = wall.transform;
-                //touch.transform.localPosition = UnityEngine.Vector3.zero;
-                touch.transform.position = wall.transform.position + new UnityEngine.Vector3(0.0f, 2.0f, 0.0f);
-                touch.transform.parent = wall.transform;
-                break;
-            }
-        }        
     }
 
     public UnityEngine.GameObject GetFloor()
@@ -315,7 +282,7 @@ public class Cell : Actor
         UnityEngine.Renderer[] renderers = GetComponentsInChildren<UnityEngine.Renderer>();
         foreach (UnityEngine.Renderer renderer in renderers)
         {
-            if (renderer.transform.parent.gameObject != floor)
+            if (renderer.gameObject != floor)
             {
                 renderer.enabled = false;
             }            
@@ -328,9 +295,22 @@ public class Cell : Actor
         UnityEngine.SpriteRenderer[] renderers = GetComponentsInChildren<UnityEngine.SpriteRenderer>();
         foreach (UnityEngine.SpriteRenderer renderer in renderers)
         {
-            if (renderer.transform.parent.gameObject != floor)
+            if (renderer.gameObject != floor)
             {
                 renderer.enabled = true;
+            }
+        }
+    }
+
+    public void DestroyEverythingExceptFloor()
+    {
+        UnityEngine.GameObject floor = GetFloor();
+        UnityEngine.Renderer[] renderers = GetComponentsInChildren<UnityEngine.Renderer>();
+        foreach (UnityEngine.Renderer renderer in renderers)
+        {
+            if (renderer.gameObject != floor)
+            {
+                Destroy(renderer.gameObject);
             }
         }
     }

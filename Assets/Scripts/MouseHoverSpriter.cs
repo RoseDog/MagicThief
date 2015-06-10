@@ -1,4 +1,4 @@
-﻿public class TrickTip : Actor
+﻿public class MouseHoverSpriter : Actor
 {
     public override void Awake()
     {

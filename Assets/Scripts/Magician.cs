@@ -364,19 +364,7 @@ public class Magician : Actor
                     ++dove_idx;
                 }
             }
-            if (data.nameKey == "hypnosis" && Globals.magician.currentAction != Globals.magician.hypnosis)
-            {
-                Guard guard = (Globals.LevelController as StealingLevelController).m_lastNearest;
-                if (guard != null)
-                {
-                    hypnosis.Cast(guard);
-                }
-                else
-                {
-                    ChangePower(data.powerCost);
-                    Globals.tipDisplay.Msg("no_hypnosis_target_nearby");
-                }                
-            }
+            
             if (data.nameKey == "shotLight")
             {
                 UnityEngine.GameObject soundPrefab = UnityEngine.Resources.Load("Misc/GunSound") as UnityEngine.GameObject;

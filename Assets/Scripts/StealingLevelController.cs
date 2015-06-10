@@ -25,9 +25,9 @@
 
     public System.Collections.Generic.List<UnityEngine.GameObject> unstolenGems = new System.Collections.Generic.List<UnityEngine.GameObject>();
     public System.Collections.Generic.List<Chest> unstolenChests = new System.Collections.Generic.List<Chest>();
-    
 
-    
+    UnityEngine.GameObject HypnosisMouseHoverSpriter_prefab;
+    UnityEngine.GameObject ShotGunMouseHoverSpriter_prefab;
     public override void Awake()
     {
         base.Awake();
@@ -61,43 +61,46 @@
         landingMark.SetActive(false);
         
         fogTex = new UnityEngine.Texture2D(512, 512, UnityEngine.TextureFormat.ARGB32, false);        
-        Globals.Assert(fogPlane != null, "no FogPlane");        
+        Globals.Assert(fogPlane != null, "no FogPlane");
+
+        HypnosisMouseHoverSpriter_prefab = UnityEngine.Resources.Load("Avatar/HypnosisMouseHoverSpriter") as UnityEngine.GameObject;
+        ShotGunMouseHoverSpriter_prefab = UnityEngine.Resources.Load("Avatar/ShotGunMouseHoverSpriter") as UnityEngine.GameObject;      
     }    
 
     public override void BeforeGenerateMaze()
     {
-        Globals.guardPlayer = new PlayerInfo();
-        Globals.guardPlayer.isBot = true;
-        Globals.iniFileName = "Test";
-        SafeBoxData data = new SafeBoxData();
-        Globals.guardPlayer.safeBoxDatas.Add(data);
-
-        Globals.guardPlayer.currentMazeRandSeedCache = -1;
-        Globals.thiefPlayer = Globals.guardPlayer;
-        Globals.ReadMazeIniFile(Globals.iniFileName, Globals.guardPlayer.currentMazeRandSeedCache);
-//         int seed = 0;
-//         if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
-//         {
-//             Globals.iniFileName = "Tutorial_Level_" + Globals.self.TutorialLevelIdx.ToString();
-//             seed = -1;
-//         }
-//         else
-//         {
-//             if(!Globals.guardPlayer.isBot)
-//             {
-//                 seed = Globals.guardPlayer.currentMazeRandSeedCache;
-//                 Globals.iniFileName = "MyMaze_" + Globals.guardPlayer.currentMazeLevel.ToString();
-//             }
-//             else
-//             {
-//                 seed = -1;
-//             }            
-//         }
-//        IniFile ini = Globals.ReadMazeIniFile(Globals.iniFileName, seed);
-//         if(Globals.guardPlayer.isBot)
-//         {
-//             Globals.guardPlayer.cashAmount = ini.get("CASH", 0);
-//         }
+//         Globals.guardPlayer = new PlayerInfo();
+//         Globals.guardPlayer.isBot = true;
+//         Globals.iniFileName = "Test";
+//         SafeBoxData data = new SafeBoxData();
+//         Globals.guardPlayer.safeBoxDatas.Add(data);
+// 
+//         Globals.guardPlayer.currentMazeRandSeedCache = -1;
+//         Globals.thiefPlayer = Globals.guardPlayer;
+//         Globals.ReadMazeIniFile(Globals.iniFileName, Globals.guardPlayer.currentMazeRandSeedCache);
+        int seed = 0;
+        if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
+        {
+            Globals.iniFileName = "Tutorial_Level_" + Globals.self.TutorialLevelIdx.ToString();
+            seed = -1;
+        }
+        else
+        {
+            if(!Globals.guardPlayer.isBot)
+            {
+                seed = Globals.guardPlayer.currentMazeRandSeedCache;
+                Globals.iniFileName = "MyMaze_" + Globals.guardPlayer.currentMazeLevel.ToString();
+            }
+            else
+            {
+                seed = -1;
+            }            
+        }
+       IniFile ini = Globals.ReadMazeIniFile(Globals.iniFileName, seed);
+        if(Globals.guardPlayer.isBot)
+        {
+            Globals.guardPlayer.cashAmount = ini.get("CASH", 0);
+        }
 
         randSeedCache = UnityEngine.Random.seed;            
         if (Globals.playingReplay == null)
@@ -645,43 +648,50 @@
     {
         Clear();
         Globals.asyncLoad.ToLoadSceneAsync("City");
-    }    
+    }
 
-    public Guard m_lastNearest;
+    public Guard hoveredGuard;
+    MouseHoverSpriter hoveringSpriter;
     public override void Update()
     {
         base.Update();
-        if (Globals.magician.Stealing && 
-            (Globals.magician.hypnosis.data.IsInUse() || Globals.playingReplay != null) && 
-            Globals.magician.currentAction != Globals.magician.hypnosis)
+        if (Globals.magician.Stealing && Globals.playingReplay == null)            
         {
-            float minDis = UnityEngine.Mathf.Infinity;
-            Guard nearest = null;
-            foreach (Guard guard in Globals.maze.guards)
+            UnityEngine.Ray ray = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().ScreenPointToRay(UnityEngine.Input.mousePosition);
+            UnityEngine.RaycastHit hitInfo;
+            int layermask = 1 << 13;
+            if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
             {
-                if(guard.beenHypnosised != null)
+                Guard hovered = hitInfo.collider.gameObject.GetComponent<Guard>();
+                if (hovered != hoveredGuard)
                 {
-                    float dis = UnityEngine.Vector3.Distance(Globals.magician.transform.position, guard.transform.position);
-                    if (dis < 7.0f && dis < minDis && 
-                        guard.currentAction != guard.beenHypnosised)
+                    if (Globals.magician.hypnosis.data.IsInUse() && hovered.beenHypnosised)
                     {
-                        minDis = dis;
-                        nearest = guard;
+                        hoveringSpriter = (UnityEngine.GameObject.Instantiate(HypnosisMouseHoverSpriter_prefab) as UnityEngine.GameObject).GetComponent<MouseHoverSpriter>();
+                        hoveredGuard = hovered;
+                        hoveringSpriter.transform.position = new UnityEngine.Vector3(ray.origin.x,ray.origin.y,0);
                     }
-                }                
+                    else if (Globals.magician.shot.data.IsInUse() && hovered as Machine != null)
+                    {
+                        hoveringSpriter = (UnityEngine.GameObject.Instantiate(ShotGunMouseHoverSpriter_prefab) as UnityEngine.GameObject).GetComponent<MouseHoverSpriter>();
+                        hoveredGuard = hovered;
+                        hoveringSpriter.transform.position = new UnityEngine.Vector3(ray.origin.x, ray.origin.y, 0);
+                    }
+                    else
+                    {
+                        hoveredGuard = null;
+                    }
+                }                                
             }
-            if (m_lastNearest != nearest)
+            else
             {
-                if (m_lastNearest != null)
+                if (hoveringSpriter != null)
                 {
-                    m_lastNearest.HideBtns();
-                }
-                if (nearest != null)
-                {
-                    nearest.ShowTrickBtns();
+                    DestroyObject(hoveringSpriter.gameObject);
+                    hoveringSpriter = null;
                 }                
-                m_lastNearest = nearest;
-            }                                   
+                hoveredGuard = null;
+            }
         }                        
 
         UnityEngine.RenderTexture.active = fogCam.targetTexture;
@@ -747,7 +757,7 @@
     public void RayOnMap(UnityEngine.Ray ray)
     {
         UnityEngine.RaycastHit hitInfo;
-        int layermask = 1 << 9 | 1 << 21;
+        int layermask = 1 << 9;
         if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
         {            
             Pathfinding.Node node = Globals.maze.pathFinder.GetNearestWalkableNode(hitInfo.point);
@@ -760,13 +770,20 @@
             }
             else if (Globals.magician.Stealing)
             {
-                if (hitInfo.collider.gameObject.layer == 9)
+                if (hoveredGuard != null)
                 {
-                    Globals.magician.GoTo(hitInfo.point);
+                    if (Globals.magician.shot.data.IsInUse() && hoveredGuard as Machine != null)
+                    {
+                        Globals.magician.Shot(hoveredGuard.gameObject);
+                    }
+                    else if (Globals.magician.hypnosis.data.IsInUse())
+                    {
+                        Globals.magician.hypnosis.Cast(hoveredGuard);
+                    }
                 }
                 else
                 {
-                    Globals.magician.Shot(hitInfo.collider.gameObject);
+                    Globals.magician.GoTo(hitInfo.point);
                 }
             }
         }
