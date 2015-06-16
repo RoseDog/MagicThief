@@ -18,7 +18,15 @@ public class WanderingLostTarget : GuardAction
             guard.heardAlert.alertTeammate = null;
         }
         guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Suspicious);
-        guard.spriteSheet.Play("idle");
+        
+        if (guard.spriteSheet.HasAnimation("wander"))
+        {
+            guard.spriteSheet.Play("wander");
+        }
+        else
+        {
+            guard.spriteSheet.Play("idle");
+        }
         guard.spot.target = null;
         guard.moving.target = null;
         guard.moving.canMove = false;

@@ -19,6 +19,7 @@
         itemButton.onClick.AddListener(() => Globals.magician.CastMagic(trickData));
     }
 
+    
     public void OnBeginDrag(UnityEngine.EventSystems.PointerEventData data)
     {
         if(!trickData.IsLocked() && trickData.bought && Globals.canvasForMagician.tricksBg.gameObject.activeSelf)
@@ -26,7 +27,15 @@
             rt.parent = Globals.canvasForMagician.transform;
             rt.pivot = new UnityEngine.Vector2(0.5f, 0.5f);
             Globals.canvasForMagician.draggingTrickItem = this;
-        }        
+        }
+
+        if (Globals.LevelController as StealingLevelController != null && 
+            trickData.nameKey == "flash_grenade" && !Globals.canvasForMagician.tricksBg.gameObject.activeSelf)
+        {
+            Globals.canvasForMagician.draggingFlashGrenade = true;
+            Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();
+            UnityEngine.Cursor.SetCursor(UnityEngine.Resources.Load("UI/flash_grenade_cursor") as UnityEngine.Texture2D, new UnityEngine.Vector2(0,50), UnityEngine.CursorMode.ForceSoftware);            
+        }       
     }
 
     public void OnDrag(UnityEngine.EventSystems.PointerEventData data)
@@ -53,13 +62,46 @@
                     }
                 }
             }
-        }        
+        }       
     }
 
     public void OnEndDrag(UnityEngine.EventSystems.PointerEventData data)
     {
-        if (Globals.canvasForMagician.draggingTrickItem == this)
+        if (Globals.canvasForMagician.draggingFlashGrenade)
         {
+            bool cast = true;
+            // 如果在slot的范围内，不释放
+            foreach (TrickSlot slot in Globals.canvasForMagician.trickInUseSlots)
+            {
+                UnityEngine.RectTransform rt = GetComponent<UnityEngine.RectTransform>();
+                if (UnityEngine.RectTransformUtility.RectangleContainsScreenPoint(rt, data.position, data.pressEventCamera))
+                {
+                    cast = false;
+                }
+            }
+            
+            if (cast)
+            {
+                StealingLevelController level = Globals.LevelController as StealingLevelController;
+                if (level != null && trickData.nameKey == "flash_grenade")
+                {
+                    if (Globals.magician.ChangePower(-trickData.powerCost))
+                    {
+                        UnityEngine.GameObject flashPrefab = UnityEngine.Resources.Load("Avatar/Flash") as UnityEngine.GameObject;
+                        UnityEngine.GameObject flash = UnityEngine.GameObject.Instantiate(flashPrefab) as UnityEngine.GameObject;
+                        UnityEngine.Vector3 finger_pos = UnityEngine.Camera.main.ScreenToWorldPoint(data.position);
+                        flash.transform.position = new UnityEngine.Vector3(finger_pos.x, finger_pos.y, level.landingMark.transform.position.z);
+                    }
+                }
+            }
+            
+            UnityEngine.Cursor.SetCursor(null, UnityEngine.Vector2.zero, UnityEngine.CursorMode.Auto);
+            Globals.canvasForMagician.draggingFlashGrenade = false;
+            Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();
+        }
+
+        if (Globals.canvasForMagician.draggingTrickItem == this)
+        {                        
             Globals.canvasForMagician.draggingTrickItem = null;
             if (Globals.canvasForMagician.draggingDownSlot != null)
             {
@@ -90,7 +132,7 @@
         rt.SetAsFirstSibling();
         rt.anchoredPosition = UnityEngine.Vector3.zero;
         rt.localScale = UnityEngine.Vector3.one;
-        slot.powerCost.text = trickData.powerCost.ToString();
+        slot.powerCost.text = trickData.powerCost.ToString();        
     }
 
     void PutItemBackInPack(TrickItem item)

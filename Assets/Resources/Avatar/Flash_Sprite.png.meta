@@ -108,16 +108,6 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: flash_13
-      rect:
-        serializedVersion: 2
-        x: 296
-        y: 37
-        width: 31
-        height: 33
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
     - name: flash_0
       rect:
         serializedVersion: 2
@@ -205,16 +195,6 @@ TextureImporter:
         y: 37
         width: 26
         height: 30
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: flash_14
-      rect:
-        serializedVersion: 2
-        x: 328
-        y: 35
-        width: 32
-        height: 33
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}

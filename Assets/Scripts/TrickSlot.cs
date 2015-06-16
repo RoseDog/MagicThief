@@ -1,4 +1,4 @@
-﻿public class TrickSlot : UnityEngine.MonoBehaviour    
+﻿public class TrickSlot : CustomEventTrigger
 {
     UnityEngine.RectTransform draggingDownImage;
     public TrickUsingSlotData data;
@@ -7,8 +7,9 @@
     public UnityEngine.GameObject lockImage;
     public int index;
     public MultiLanguageUIText cashCost;
-    public void Awake()
+    public override void Awake()
     {
+        base.Awake();
         btn = GetComponent<UnityEngine.UI.Button>();
         btn.onClick.AddListener(() => TrickSlotClicked());
         index = System.Convert.ToInt32(gameObject.name);
@@ -117,5 +118,50 @@
     {
         DestroyObject(draggingDownImage.gameObject);
         Globals.canvasForMagician.draggingDownSlot = null;        
+    }
+
+    public override void OnPointerEnter(UnityEngine.EventSystems.PointerEventData d)
+    {
+        base.OnPointerEnter(d);
+        if(!Globals.canvasForMagician.tricksBg.gameObject.activeSelf)
+        {
+            Globals.canvasForMagician.cast_tip.gameObject.SetActive(true);
+            Globals.canvasForMagician.cast_tip.parent = rectTransform;
+            Globals.canvasForMagician.cast_tip.anchoredPosition = new UnityEngine.Vector2(-rectTransform.sizeDelta.x, 120);
+
+            if (data.statu == "-1")
+            {
+                Globals.languageTable.SetText(Globals.canvasForMagician.cast_tip.GetComponentInChildren<MultiLanguageUIText>(), "unlock_to_bring_more_item");
+            }
+            else if (data.statu == "0")
+            {
+                Globals.languageTable.SetText(Globals.canvasForMagician.cast_tip.GetComponentInChildren<MultiLanguageUIText>(), "plz_bring_more_item");
+            }
+            else
+            {
+                TrickData trick = Globals.GetTrickByName(data.statu);
+                if (trick.nameKey == "flash_grenade")
+                {
+                    Globals.languageTable.SetText(Globals.canvasForMagician.cast_tip.GetComponentInChildren<MultiLanguageUIText>(), "drag_to_cast");
+                }
+                else if (trick.clickOnGuardToCast)
+                {
+                    Globals.languageTable.SetText(Globals.canvasForMagician.cast_tip.GetComponentInChildren<MultiLanguageUIText>(), "click_guard_to_cast");
+                }
+                else
+                {
+                    Globals.languageTable.SetText(Globals.canvasForMagician.cast_tip.GetComponentInChildren<MultiLanguageUIText>(), "click_to_cast");
+                }
+            }
+        }
+    }
+
+    public override void OnPointerExit(UnityEngine.EventSystems.PointerEventData d)
+    {
+        base.OnPointerExit(d);
+        if (!Globals.canvasForMagician.tricksBg.gameObject.activeSelf)
+        {
+            Globals.canvasForMagician.cast_tip.gameObject.SetActive(false);
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿GuardCount=3
-(5.6350, 10.7500, -0.0200)=armed
-(1.6350, -8.2500, -0.0200)=armed
-(-12.8650, 3.0000, -0.0200)=armed
+(5.6350, 10.7500, -0.0100)=joker
+(1.6350, -6.7500, -0.0100)=joker
+(-11.3650, 2.7500, -0.0100)=joker
 randSeedCacheWhenEditLevel=-1596906175
 Z_CELLS_COUNT=7
 X_CELLS_COUNT=6

@@ -1,5 +1,5 @@
 ﻿GuardCount=1
-(-4.1150, -1.3750, -0.0200)=armed
+(-4.1150, -1.3750, -0.0200)=joker
 randSeedCacheWhenEditLevel=1653179144
 Z_CELLS_COUNT=5
 X_CELLS_COUNT=3

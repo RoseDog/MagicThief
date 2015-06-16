@@ -3,7 +3,10 @@
     public override void Awake()
     {        
         base.Awake();        
-        bGoChaseDove = true;        
+        bGoChaseDove = true;
+
+        spriteSheet.CreateAnimationByName("idle");
+        spriteSheet.CreateAnimationByName("moving");
     }
 
     public override bool CheckIfChangeTarget(UnityEngine.GameObject newTar)

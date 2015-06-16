@@ -4,10 +4,21 @@ public class TipDisplayManager : UnityEngine.MonoBehaviour
     public System.Collections.Generic.List<UnityEngine.RectTransform> msgList = new System.Collections.Generic.List<UnityEngine.RectTransform>();    
     UnityEngine.GameObject tipPrefab;
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         Globals.tipDisplay = this;
-        tipPrefab = UnityEngine.Resources.Load("UI/Tip") as UnityEngine.GameObject;        
+        tipPrefab = UnityEngine.Resources.Load("UI/Tip") as UnityEngine.GameObject;
+    }
+    void OnLevelWasLoaded(int scene_id)
+    {
+        if (msgList.Count != 0)
+        {
+            foreach(UnityEngine.RectTransform rt in msgList)
+            {
+                DestroyObject(rt.gameObject);
+            }
+            msgList.Clear();
+        }
     }
 
     public void Msg(string msg, float height_ratio = 0.25f, UnityEngine.Transform parent = null)

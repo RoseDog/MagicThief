@@ -1,6 +1,6 @@
 ﻿GuardCount=2
 (1.7500, 0.0500, 2.7500)=dog
-(-4.2500, 0.0500, -1.7500)=armed
+(-4.2500, 0.0500, -1.7500)=joker
 randSeedCacheWhenEditLevel=-1471226901
 Z_CELLS_COUNT=6
 X_CELLS_COUNT=4

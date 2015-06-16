@@ -71,18 +71,21 @@
 
         UnityEngine.Debug.Log(Globals.iniFileName);
         IniFile ini = GetGuardsIniFile();
-        // 关卡守卫               
-        int guard_count = ini.get("GuardCount", 0);
-        System.String[] keys = ini.keys();
-        for (int i = 1; i <= guard_count; ++i)
+        if (ini != null)
         {
-            UnityEngine.Vector3 pos = Globals.StringToVector3(keys[i]);
-            Pathfinding.Node birthNode = Globals.maze.pathFinder.GetSingleNode(pos, false);
+            // 关卡守卫               
+            int guard_count = ini.get("GuardCount", 0);
+            System.String[] keys = ini.keys();
+            for (int i = 1; i <= guard_count; ++i)
+            {
+                UnityEngine.Vector3 pos = Globals.StringToVector3(keys[i]);
+                Pathfinding.Node birthNode = Globals.maze.pathFinder.GetSingleNode(pos, false);
 
-            Guard guard = Globals.CreateGuard(Globals.GetGuardData(ini.get(keys[i])), birthNode);
-            guard.BeginPatrol();
-        }           
-
+                Guard guard = Globals.CreateGuard(Globals.GetGuardData(ini.get(keys[i])), birthNode);
+                guard.BeginPatrol();
+            }
+        }
+        
         Globals.transition.BlackIn();
 
         MiniMapCamera.transform.position = new UnityEngine.Vector3(

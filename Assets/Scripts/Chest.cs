@@ -205,6 +205,7 @@
                 SafeboxNotFinishedTip = null;
             }
 
+            renderers.Remove(head_on_minimap.renderer);
             Destroy(head_on_minimap);
             head_on_minimap = null;            
 

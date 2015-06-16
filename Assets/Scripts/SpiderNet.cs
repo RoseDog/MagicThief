@@ -2,7 +2,6 @@
 {
     Actor targetActor;
     Cocos2dAction jumpAction;
-    UnityEngine.Vector3 rushingDir;
     double catch_mage_dis = 1.1f;
     int jumpDuration = 60;
 
@@ -12,7 +11,6 @@
     {
         targetActor = target;
         UnityEngine.Debug.Log("Net Fired");
-        rushingDir = targetActor.transform.position - transform.position;
         jumpAction = new Sequence(new JumpTo(transform, targetActor.transform.position, 1.0f,
             jumpDuration),
             new FunctionCall(() => NetCatchMiss()));

@@ -15,7 +15,13 @@
         UnityEngine.Debug.Log("guard stop attack");
         base.Stop();
         guard.RemoveAction(ref checkFunc);
+        if (atkJumpAction != null)
+        {
+            guard.RemoveAction(ref atkJumpAction);
+        }        
+        
         guard.spriteSheet.transform.localEulerAngles = new UnityEngine.Vector3(0, 0, 0);
+        guard.spriteRenderer.gameObject.layer = 13;
     }
 
     void Atk()
@@ -38,7 +44,14 @@
         else
         {
             UnityEngine.Debug.Log("Guard Attacking Gap");
-            guard.spriteSheet.Play("idle");
+            if (guard.spriteSheet.HasAnimation("atkReady"))
+            {
+                guard.spriteSheet.Play("atkReady");
+            }
+            else
+            {
+                guard.spriteSheet.Play("idle");
+            }
         }
     }    
 
@@ -60,11 +73,20 @@
     public void AtkEnd()
     {
         UnityEngine.Debug.Log("atk end");
-        guard.spriteSheet.transform.localEulerAngles = new UnityEngine.Vector3(0, 0, 0);
+        atkJumpAction = null;
         if (guard.currentAction == this)
         {
-            guard.spriteSheet.Play("idle");
+            if (guard.spriteSheet.HasAnimation("atkReady"))
+            {
+                guard.spriteSheet.Play("atkReady");
+            }
+            else
+            {
+                guard.spriteSheet.Play("idle");
+            }
+            
             checkFunc = guard.RepeatingCallFunction(5, () => DuringAtkIdle());
+            guard.gameObject.layer = 13;
         }
     }
 
@@ -97,17 +119,29 @@
         }
     }
 
+    Cocos2dAction atkJumpAction;
     public virtual void AtkAnimation()
     {
         guard.FaceTarget(guard.spot.target);
         if (!checkIfTargetPressDown())
         {
-            guard.spriteSheet.transform.localEulerAngles = new UnityEngine.Vector3(0, 180, 0);
             guard.spriteSheet.Play("Atk");
+
+            atkJumpAction = new Sequence(new JumpTo(transform, guard.spot.target.transform.position, 1.0f,
+            guard.spriteSheet.GetAnimationLengthWithSpeed("Atk") + 15), new FunctionCall(() => AtkEnd()));
+            guard.AddAction(atkJumpAction);
+            guard.spriteRenderer.gameObject.layer = 21;
         }
         else
         {
-            guard.spriteSheet.Play("idle");
+            if (guard.spriteSheet.HasAnimation("atkReady"))
+            {
+                guard.spriteSheet.Play("atkReady");
+            }
+            else
+            {
+                guard.spriteSheet.Play("idle");
+            }
         }
     }
 
@@ -126,7 +160,7 @@
                 }
                 faceDir.z = 0;
                 double angle = UnityEngine.Vector3.Angle(magicianDir, faceDir);
-                if (angle < 90 && angle > -90)
+                if (angle < 100 && angle > -100)
                 {
                     targetActor.ChangeLife(-guard.data.attackValue);
                     targetActor.hitted.Excute();

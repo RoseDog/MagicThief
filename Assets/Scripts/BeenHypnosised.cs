@@ -3,8 +3,8 @@
     public TrickTimer timer;
     public override void Awake()
     {
-        base.Awake();        
-        guard.spriteSheet.CreateAnimationByName("BeenHypnosised",0.5f, true);
+        base.Awake();                
+        actor.spriteSheet.AddAnimationEvent("BeenHypnosised", -1, () => Sleeping());
     }
 
     public void GoToSleep(int duration)
@@ -24,6 +24,11 @@
         timer.BeginCountDown(gameObject, duration, new UnityEngine.Vector3(0, 1.0f, 0));
 
         guard.SleepThenCallFunction(duration, ()=>Stop());
+    }
+
+    public void Sleeping()
+    {
+        actor.spriteSheet.Play("Sleeping");
     }
 
     public override void Stop()

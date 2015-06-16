@@ -35,7 +35,7 @@ public class PathFinder : UnityEngine.MonoBehaviour
         graph.center = new UnityEngine.Vector3(-Globals.maze.GetCellSideLength(), 0, 0);
         //graph.nodeSize = map.cell_side_length / 2.0f;
         graph.nodeSize = grideNodeSize;
-        graph.collision.diameter = 3.6f;
+        graph.collision.diameter = 0.1f;
         graph.UpdateSizeFromWidthDepth();
         path.Scan();
     }
@@ -67,5 +67,20 @@ public class PathFinder : UnityEngine.MonoBehaviour
         nnc.walkable = false;
         Pathfinding.NNInfo nodeInfo = graph.GetNearestForce(pos, nnc);
         return nodeInfo.node;
+    }
+
+    public bool IsPositionWalkable(UnityEngine.Vector3 pos)
+    {
+        System.Collections.Generic.List<Pathfinding.Node> nodes =
+            graph.GetNodesInArea(new UnityEngine.Bounds(pos, new UnityEngine.Vector3(0.0001f, 0.0001f, 1.0f)));
+
+        foreach (Pathfinding.Node node in nodes)
+        {
+            if (node.walkable)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

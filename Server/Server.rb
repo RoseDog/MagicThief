@@ -2,7 +2,7 @@
 require 'eventmachine'
 require 'websocket-eventmachine-server'
 require 'yaml'
-PORT = (ARGV.shift || 42788).to_i
+PORT = 42788
 
 class Numeric
   def clamp min, max
@@ -391,7 +391,12 @@ class Player
     EM.cancel_timer(building.roseGrowTimer)
     building.roseGrowTimer = nil
     building.roseGrowStopTimer = nil
-    building.roseGrowLastDuration = building.roseGrowTotalDuration - (Time.now - building.roseGrowBeginTimeStamp)
+    if building.roseGrowBeginTimeStamp == -1
+      building.roseGrowLastDuration = building.roseGrowTotalDuration
+    else
+      building.roseGrowLastDuration = building.roseGrowTotalDuration - (Time.now - building.roseGrowBeginTimeStamp)
+    end
+
   end
 
   def DownloadBuildings(protocal_no,contents)

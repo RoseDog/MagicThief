@@ -1,6 +1,6 @@
 ﻿public class UIMover : Actor
 {
-    UnityEngine.Vector3 originPosition;
+    public UnityEngine.Vector3 originPosition;
     public UnityEngine.Vector3 to;
 
     public override void Awake()

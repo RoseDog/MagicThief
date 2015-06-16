@@ -27,7 +27,7 @@
     [UnityEngine.HideInInspector]
     public UnityEngine.SkinnedMeshRenderer[] skinnedMeshRenderers;
     [UnityEngine.HideInInspector]
-    public UnityEngine.Renderer[] renderers;
+    public System.Collections.Generic.List<UnityEngine.Renderer> renderers;
 
     UnityEngine.GameObject pathMeshPrefab;
     UnityEngine.GameObject pathMesh;
@@ -72,7 +72,7 @@
 
         meshRenderers = GetComponentsInChildren<UnityEngine.MeshRenderer>();
         skinnedMeshRenderers = GetComponentsInChildren<UnityEngine.SkinnedMeshRenderer>();
-        renderers = GetComponentsInChildren<UnityEngine.Renderer>();
+        renderers = new System.Collections.Generic.List<UnityEngine.Renderer>(GetComponentsInChildren<UnityEngine.Renderer>());
 
         pathMeshPrefab = UnityEngine.Resources.Load("Misc/PathMesh") as UnityEngine.GameObject;
     }

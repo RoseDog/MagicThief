@@ -10,7 +10,22 @@ public class Spot : GuardAction
     public override void Awake()
     {
         base.Awake();
+        if (guard.spriteSheet.HasAnimation("spot"))
+        {
+            actor.spriteSheet.AddAnimationEvent("spot", -1, () => SpotTurnToAtkReady());
+        }        
     }
+
+    public void SpotTurnToAtkReady()
+    {
+        guard.SleepThenCallFunction(15, ()=>TurnToAtkReady());        
+    }
+
+    void TurnToAtkReady()
+    {
+        guard.spriteSheet.Play("atkReady");
+    }
+
     public void SpotMagician(GameObject newTar, bool goChasing, int spotDuration)
     {
         if (outVisionCountDown != null)
@@ -24,7 +39,16 @@ public class Spot : GuardAction
             target = newTar.transform;
             guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Alert);
 
-            guard.spriteSheet.Play("idle");
+            
+            if (guard.spriteSheet.HasAnimation("spot"))
+            {
+                guard.spriteSheet.Play("spot");
+            }
+            else
+            {
+                guard.spriteSheet.Play("idle");
+            }
+
             guard.FaceTarget(target);
             guard.moving.ClearPath();
             guard.moving.canMove = false;

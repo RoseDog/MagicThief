@@ -18,6 +18,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
     public UIMover clickTrickBtnPointer;
     public UnityEngine.GameObject SelectedImage_prefab;
     public TrickItem draggingTrickItem;
+    public bool draggingFlashGrenade = false;
     public TrickSlot draggingDownSlot;
     public UnityEngine.UI.Text TrickName;
     public UnityEngine.UI.Text TrickDesc;
@@ -30,6 +31,8 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
     public UIMover TryMoreTricksTipHand;
     public TrickSlot[] trickInUseSlots;
     public UIMover draggingItemFinger;
+    public UIMover dropFlashFinger;
+    public UnityEngine.RectTransform cast_tip;
 	void Awake () 
     {
         DontDestroyOnLoad(this);
@@ -80,7 +83,8 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         TryMoreTricksTipHand.transform.parent.gameObject.SetActive(false);
 
 
-        draggingItemFinger = Globals.getChildGameObject<UIMover>(gameObject, "DraggingItemFinger");        
+        draggingItemFinger = Globals.getChildGameObject<UIMover>(gameObject, "DraggingItemFinger");
+        dropFlashFinger = Globals.getChildGameObject<UIMover>(gameObject, "DropFlashFinger");
                 
         InitUIStats();
 
@@ -94,6 +98,10 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
 
         highLightFrame = Globals.getChildGameObject<UnityEngine.RectTransform>(tricksInUsingPanel, "highLightFrame").gameObject;
         highLightFrame.SetActive(false);
+
+        cast_tip = Globals.getChildGameObject<UnityEngine.RectTransform>(tricksInUsingPanel, "cast_tip");
+        cast_tip.gameObject.SetActive(false);
+        
 	}
     bool initialized = false;
     public void Start()
@@ -138,6 +146,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         trickUnclickedCount.gameObject.SetActive(false);
         tricksBg.gameObject.SetActive(false);
         draggingItemFinger.gameObject.SetActive(false);
+        dropFlashFinger.gameObject.SetActive(false);
     }
 
     public void SetLifeVisible(bool Visible)
@@ -203,6 +212,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         TryMoreTricksTipHand.transform.parent.gameObject.SetActive(false);
         tricksBg.gameObject.SetActive(true);
         tricksBg.CreateTrickItemsInPack();
+        cast_tip.gameObject.SetActive(false);
         
         StealingLevelController controller = (Globals.LevelController as StealingLevelController);
         if (controller != null)
@@ -211,7 +221,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
             controller.landingMark.SetActive(false);
         }
 
-        CheckIfNeedDraggingItemFinger();        
+        CheckIfNeedDraggingItemFinger();
     }
 
     public void CheckIfNeedDraggingItemFinger()
@@ -237,12 +247,31 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
                 draggingItemFinger.gameObject.SetActive(false);
                 clickTrickBtnPointer.gameObject.SetActive(true);
                 clickTrickBtnPointer.ClearAllActions();
-                clickTrickBtnPointer.Jump();
+                clickTrickBtnPointer.Jump();                
             }
         }
         else
         {
-            draggingItemFinger.gameObject.SetActive(false);            
+            draggingItemFinger.gameObject.SetActive(false);
+        }
+
+        TrickData trick = Globals.GetTrickByName("flash_grenade");
+        if (!draggingFlashGrenade && !tricksBg.gameObject.activeSelf && trick.IsInUse() && !Globals.magician.Stealing && Globals.LevelController as StealingLevelController)
+        {
+            dropFlashFinger.gameObject.SetActive(true);
+            dropFlashFinger.transform.parent = trickInUseSlots[trick.slotIdxInUsingPanel].rectTransform;
+            dropFlashFinger.GetComponent<UnityEngine.RectTransform>().anchoredPosition = UnityEngine.Vector2.zero;
+            dropFlashFinger.originPosition = UnityEngine.Vector2.zero;
+            dropFlashFinger.to = dropFlashFinger.originPosition - new UnityEngine.Vector3(0, -160, 0);
+            dropFlashFinger.RecoverPos();
+            dropFlashFinger.ClearAllActions();
+            dropFlashFinger.GetComponent<UnityEngine.CanvasGroup>().interactable = false;
+            dropFlashFinger.GetComponent<UnityEngine.CanvasGroup>().blocksRaycasts = false;
+            dropFlashFinger.ForeverMoving(100);
+        }
+        else
+        {
+            dropFlashFinger.gameObject.SetActive(false);
         }
     }
 
@@ -251,24 +280,19 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         TrickName.gameObject.SetActive(visible);
         TrickDesc.gameObject.SetActive(visible);
         powerLabel.transform.parent.gameObject.SetActive(visible);
-        durationLabel.transform.parent.gameObject.SetActive(visible);
+        //durationLabel.transform.parent.gameObject.SetActive(visible);
         unlockLabel.transform.parent.gameObject.SetActive(visible);
         buyTrickBtn.gameObject.SetActive(visible);
     }
 
     public void UpdateItemDescriptionUI(TrickItem item)
     {
-        if (Globals.canvasForMagician.draggingTrickItem != null)
+        if (Globals.canvasForMagician.draggingTrickItem != null || draggingFlashGrenade)
         {
             return;
         }
-        // 如果是闪光弹，不打开界面。闪光弹是在战斗开始前使用的
+  
         TrickData data = item.trickData;
-        City city = Globals.LevelController as City;
-        if (city == null && data.nameKey == "flash_grenade" && data.IsInUse())
-        {
-            return;
-        }
         // 如果魔术师已经降下，不打开界面        
         if(Globals.magician.gameObject.activeSelf)
         {
@@ -283,7 +307,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         Globals.languageTable.SetText(TrickName, data.nameKey);
         Globals.languageTable.SetText(TrickDesc, data.descriptionKey);
         Globals.languageTable.SetText(powerLabel, "power_cost", new System.String[]{data.powerCost.ToString()});
-        Globals.languageTable.SetText(durationLabel, "duration", new System.String[] { (data.duration * UnityEngine.Time.fixedDeltaTime).ToString("F1") });
+        //Globals.languageTable.SetText(durationLabel, "duration", new System.String[] { (data.duration * UnityEngine.Time.fixedDeltaTime).ToString("F1") });
         if (!data.IsLocked())
         {
             Globals.languageTable.SetText(unlockLabel, "already_unlocked");
@@ -376,6 +400,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
                 Globals.languageTable.SetText(trickCashCost, "already_bought");
                 buyTrickBtn.interactable = false;
                 tricksBg.ClickHypnosisPointer.transform.parent.gameObject.SetActive(false);
+                CheckIfNeedDraggingItemFinger();
             }
         }
         else

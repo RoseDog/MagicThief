@@ -9,6 +9,7 @@ public class TrickData
     public int slotIdxInUsingPanel = -1;
     public int price;
     public bool bought = false;
+    public bool clickOnGuardToCast = false;
 
     public bool IsLocked()
     {
@@ -723,7 +724,7 @@ public class Globals
     public static readonly System.String NORTH = "N";
     public static readonly System.String[] DIRECTIONS = { EAST, SOUTH, WEST, NORTH };
     public static bool SHOW_MACE_GENERATING_PROCESS = false;
-    public static bool SHOW_ROOMS = true;
+    public static bool SHOW_ROOMS = false;
     public static float CREATE_MAZE_TIME_STEP = 0.1f;
     public static int cameraMoveDuration = 10;
     public static int uiMoveAndScaleDuration = 20;

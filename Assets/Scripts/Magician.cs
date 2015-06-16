@@ -52,6 +52,7 @@ public class Magician : Actor
         trick.powerCost = 30;
         trick.unlockRoseCount = 0;
         trick.price = 10;
+        trick.clickOnGuardToCast = true;
         hypnosis = GetComponent<Hypnosis>();        
         hypnosis.data = trick;
         Globals.tricks.Add(trick);
@@ -82,7 +83,8 @@ public class Magician : Actor
         trick.duration = 0;
         trick.powerCost = 2;
         trick.unlockRoseCount = 25;
-        trick.price = 5000;        
+        trick.price = 5000;
+        trick.clickOnGuardToCast = true;
         Globals.tricks.Add(trick);
         
         trick = new TrickData();
@@ -92,6 +94,7 @@ public class Magician : Actor
         trick.powerCost = 10;
         trick.unlockRoseCount = 50;
         trick.price = 16000;
+        trick.clickOnGuardToCast = true;
         shot = GetComponent<GunShot>();
         shot.data = trick;
         Globals.tricks.Add(trick);
@@ -117,20 +120,20 @@ public class Magician : Actor
         PowerCurrent = PowerAmount;
 
         GuardData guard_data = new GuardData();
-        guard_data.name = "armed";
+        guard_data.name = "joker";
         guard_data.price = 10;
         guard_data.roomConsume = 2;
         guard_data.magicianOutVisionTime = 450;
-        guard_data.atkCd = 100;
+        guard_data.atkCd = 150;
         guard_data.attackValue = 60;
-        guard_data.atkShortestDistance = 1.8f;
+        guard_data.atkShortestDistance = 2.1f;
         guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
         Globals.guardDatas.Add(guard_data);
 
         guard_data = new GuardData();
         guard_data.name = "dog";
-        guard_data.price = 8000;
+        guard_data.price = 3000;
         guard_data.roomConsume = 1;
         guard_data.magicianOutVisionTime = 500;
         guard_data.attackValue = 40;
@@ -152,7 +155,7 @@ public class Magician : Actor
 
         guard_data = new GuardData();
         guard_data.name = "Spider";
-        guard_data.price = 12000;
+        guard_data.price = 8000;
         guard_data.roomConsume = 2;
         guard_data.magicianOutVisionTime = 450;
         guard_data.atkCd = 220;
@@ -176,15 +179,15 @@ public class Magician : Actor
 
         data = new MazeLvData();
         data.roseRequire = 0;
-        data.price = 3000;
+        data.price = 1500;
         data.roomSupport = 8;
-        data.lockGuardsName = new System.String[] { "armed" };
+        data.lockGuardsName = new System.String[] { "joker" };
         data.safeBoxCount = 3;
         Globals.mazeLvDatas.Add(data);
 
         data = new MazeLvData();
         data.roseRequire = 0;
-        data.price = 5000;
+        data.price = 2500;
         data.roomSupport = 9;
         data.lockGuardsName = new System.String[] { "dog" };
         data.safeBoxCount = 3;
@@ -296,37 +299,8 @@ public class Magician : Actor
     }
 
     public void CastMagic(TrickData data)
-    {
-        Globals.replaySystem.RecordMagicCast(data);
-        StealingLevelController level = Globals.LevelController as StealingLevelController;
-        if (level != null && data.nameKey == "flash_grenade")
-        {
-            if (!Stealing)
-            {                
-                if (data.IsInUse() || Globals.playingReplay != null)
-                {
-                    UnityEngine.GameObject landingMark = level.landingMark;
-                    if (landingMark.activeSelf)
-                    {
-                        if(ChangePower(-data.powerCost))
-                        {
-                            UnityEngine.GameObject flashPrefab = UnityEngine.Resources.Load("Avatar/Flash") as UnityEngine.GameObject;
-                            UnityEngine.GameObject flash = UnityEngine.GameObject.Instantiate(flashPrefab) as UnityEngine.GameObject;
-                            flash.transform.position = landingMark.transform.position;
-                        }                        
-                    }
-                    else
-                    {
-                        Globals.tipDisplay.Msg("no_landmark_yet");
-                    }
-                }                
-            }
-            else
-            {
-                Globals.tipDisplay.Msg("stealing_cant_use_flash");
-            }
-        }
-        else if (Stealing && ChangePower(-data.powerCost))
+    {        
+        if (Stealing && !data.clickOnGuardToCast && ChangePower(-data.powerCost))
         {
             if (data.nameKey == "disguise")
             {

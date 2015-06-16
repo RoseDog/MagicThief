@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class MazeGenerate : UnityEngine.MonoBehaviour
 {
-    float cell_side_length = 3.9f;
+    float cell_side_length = 3.24f;
     public float GetCellSideLength()
     {
         return cell_side_length;
@@ -565,48 +565,48 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         cell.CreateFloor();
         cell.DestroyWall(Globals.EAST);
         cell.DestroyWall(Globals.SOUTH);
+        //DestroyObject(Globals.getChildGameObject(cell.gameObject, "S-E-Corner"));
         room.walls.Add(cell);
         if (cell.AdjacentCellInDirectionIsCorridor(Globals.NORTH) || cell.AdjacentCellInDirectionIsCorridor(Globals.WEST))
         {
             room.couldBeDoors.Add(cell);
         }
-        DestroyObject(Globals.getChildGameObject(cell.gameObject, "S-E-Corner"));
 
         // 右上
         cell = GetCell(upper_left_cell.y, upper_left_cell.x + room.X_CELLS_COUNT - 1);
         cell.CreateFloor();
         cell.DestroyWall(Globals.WEST);
         cell.DestroyWall(Globals.SOUTH);
+        //DestroyObject(Globals.getChildGameObject(cell.gameObject, "S-W-Corner"));
         room.walls.Add(cell);
         if (cell.AdjacentCellInDirectionIsCorridor(Globals.EAST) || cell.AdjacentCellInDirectionIsCorridor(Globals.NORTH))
         {
             room.couldBeDoors.Add(cell);
         }
-        DestroyObject(Globals.getChildGameObject(cell.gameObject, "S-W-Corner"));
 
         // 左下
         cell = GetCell(upper_left_cell.y + room.Y_CELLS_COUNT - 1, upper_left_cell.x);
         cell.CreateFloor();
         cell.DestroyWall(Globals.EAST);
         cell.DestroyWall(Globals.NORTH);
+        //DestroyObject(Globals.getChildGameObject(cell.gameObject, "S-E-Corner"));
         room.walls.Add(cell);
         if (cell.AdjacentCellInDirectionIsCorridor(Globals.WEST) || cell.AdjacentCellInDirectionIsCorridor(Globals.SOUTH))
         {
             room.couldBeDoors.Add(cell);
         }
-        DestroyObject(Globals.getChildGameObject(cell.gameObject, "N-E-Corner"));
 
         // 右下
         cell = GetCell(upper_left_cell.y + room.Y_CELLS_COUNT - 1, upper_left_cell.x + room.X_CELLS_COUNT - 1);
         cell.CreateFloor();        
         cell.DestroyWall(Globals.WEST);
         cell.DestroyWall(Globals.NORTH);
+        //DestroyObject(Globals.getChildGameObject(cell.gameObject, "S-W-Corner"));
         room.walls.Add(cell);
         if (cell.AdjacentCellInDirectionIsCorridor(Globals.EAST) || cell.AdjacentCellInDirectionIsCorridor(Globals.SOUTH))
         {
             room.couldBeDoors.Add(cell);
         }
-        DestroyObject(Globals.getChildGameObject(cell.gameObject, "N-W-Corner"));
 
         // 第一行和最后一行，留下南北墙
         for (int x = 1; x < room.X_CELLS_COUNT - 1; x++)
@@ -617,9 +617,8 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             cell.DestroyWall(Globals.NORTH);
             cell.DestroyWall(Globals.EAST);
             cell.DestroyWall(Globals.WEST);
-            DestroyObject(Globals.getChildGameObject(cell.gameObject, "N-E-Corner"));
-            DestroyObject(Globals.getChildGameObject(cell.gameObject, "N-W-Corner"));
             
+
             if (cell.AdjacentCellInDirectionIsCorridor(Globals.SOUTH))
             {
                 room.couldBeDoors.Add(cell);
@@ -631,8 +630,9 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             cell.DestroyWall(Globals.SOUTH);
             cell.DestroyWall(Globals.EAST);
             cell.DestroyWall(Globals.WEST);
-            DestroyObject(Globals.getChildGameObject(cell.gameObject, "S-E-Corner"));
-            DestroyObject(Globals.getChildGameObject(cell.gameObject, "S-W-Corner"));
+            //DestroyObject(Globals.getChildGameObject(cell.gameObject, "S-E-Corner"));
+            //DestroyObject(Globals.getChildGameObject(cell.gameObject, "S-W-Corner"));
+
             if (cell.AdjacentCellInDirectionIsCorridor(Globals.NORTH))
             {
                 room.couldBeDoors.Add(cell);
@@ -651,19 +651,14 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             cell.DestroyWall(Globals.WEST);
             cell.DestroyWall(Globals.NORTH);
             cell.DestroyWall(Globals.SOUTH);
-            DestroyObject(Globals.getChildGameObject(cell.gameObject, "N-W-Corner"));
-            DestroyObject(Globals.getChildGameObject(cell.gameObject, "S-W-Corner"));
-
-            
-
+            //DestroyObject(Globals.getChildGameObject(cell.gameObject, "S-W-Corner"));
             cell = GetCell(upper_left_cell.y + y, upper_left_cell.x);
             room.walls.Add(cell);
             cell.CreateFloor();
             cell.DestroyWall(Globals.EAST);
             cell.DestroyWall(Globals.NORTH);
             cell.DestroyWall(Globals.SOUTH);
-            DestroyObject(Globals.getChildGameObject(cell.gameObject, "S-E-Corner"));
-            DestroyObject(Globals.getChildGameObject(cell.gameObject, "N-E-Corner"));
+            //DestroyObject(Globals.getChildGameObject(cell.gameObject, "S-E-Corner"));
             if (cell.AdjacentCellInDirectionIsCorridor(Globals.WEST))
             {
                 room.couldBeDoors.Add(cell);
@@ -957,8 +952,15 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                 float offset_limit = cell_side_length * 0.3f;
                 pos += new UnityEngine.Vector3(UnityEngine.Random.Range(-offset_limit, offset_limit), UnityEngine.Random.Range(-offset_limit, offset_limit), 0.0f);
             }
-            g = Globals.CreateGuard(guard, pathFinder.GetNearestWalkableNode(pos));
-            g.BeginPatrol();
+            if (guard.name == "Spider")
+            {
+                g = Globals.CreateGuard(guard, pathFinder.GetNearestUnwalkableNode(pos));
+            }
+            else
+            {
+                g = Globals.CreateGuard(guard, pathFinder.GetNearestWalkableNode(pos));
+                g.BeginPatrol();
+            }                        
         }
         
         ++chestIdxA;
@@ -1026,10 +1028,13 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     UnityEngine.GameObject rayCastPlane;
     void MazeProcessOver()
     {
-        UnityEngine.Sprite up_corner = UnityEngine.Resources.Load<UnityEngine.Sprite>("Props/up_corner");
-        UnityEngine.Sprite buttom_corner = UnityEngine.Resources.Load<UnityEngine.Sprite>("Props/buttom_corner");
-        UnityEngine.Sprite wall_hor_small = UnityEngine.Resources.Load<UnityEngine.Sprite>("Props/wall_hor_small");
-        UnityEngine.Sprite wall_ver_small = UnityEngine.Resources.Load<UnityEngine.Sprite>("Props/wall_ver_small");
+//         UnityEngine.Sprite up_corner = UnityEngine.Resources.Load<UnityEngine.Sprite>("Props/up_corner");
+//         UnityEngine.Sprite buttom_corner = UnityEngine.Resources.Load<UnityEngine.Sprite>("Props/buttom_corner");
+//         UnityEngine.Sprite wall_hor_small = UnityEngine.Resources.Load<UnityEngine.Sprite>("Props/wall_hor_small");
+//         UnityEngine.Sprite wall_ver_small = UnityEngine.Resources.Load<UnityEngine.Sprite>("Props/wall_ver_small");
+
+        UnityEngine.Sprite s_w_corner = UnityEngine.Resources.Load<UnityEngine.Sprite>("Props/S_W_Corner");
+        UnityEngine.Sprite s_e_corner = UnityEngine.Resources.Load<UnityEngine.Sprite>("Props/S_E_Corner");
         
         // 如果没有地板，墙体也不需要显示出来
         foreach (Cell cell in EveryCells)
@@ -1039,91 +1044,182 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                 cell.HideEverythingExceptFloor();
             }
 //             // 修改Corner
-            UnityEngine.SpriteRenderer N_W_Corner = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "N-W-Corner");
-            UnityEngine.SpriteRenderer N_E_Corner = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "N-E-Corner");
+//             UnityEngine.SpriteRenderer N_W_Corner = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "N-W-Corner");
+//             UnityEngine.SpriteRenderer N_E_Corner = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "N-E-Corner");
+//             UnityEngine.SpriteRenderer S_W_Corner = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "S-W-Corner");
+//             UnityEngine.SpriteRenderer S_E_Corner = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "S-E-Corner");
+// 
+//             UnityEngine.SpriteRenderer N_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "N");
+//             UnityEngine.SpriteRenderer W_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "W");
+//             UnityEngine.SpriteRenderer E_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "E");
+//             UnityEngine.SpriteRenderer S_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "S");
+// 
+//             if (N_sprite == null)
+//             {
+//                 if (W_sprite == null)
+//                 {
+//                     N_W_Corner.sprite = buttom_corner;
+//                 }
+//                 else
+//                 {
+//                     N_W_Corner.sprite = wall_ver_small;
+//                     N_W_Corner.transform.localEulerAngles = new UnityEngine.Vector3(0, 180, 0);
+//                 }
+// 
+//                 if (E_sprite == null)
+//                 {
+//                     N_E_Corner.sprite = buttom_corner;
+//                 }
+//                 else
+//                 {
+//                     N_E_Corner.sprite = wall_ver_small;
+//                     N_E_Corner.transform.localEulerAngles = new UnityEngine.Vector3(0, 0, 0);
+//                 }
+//             }
+//             else
+//             {
+//                 if (W_sprite == null)
+//                 {
+//                     N_W_Corner.sprite = wall_hor_small;
+//                     N_W_Corner.transform.localEulerAngles = new UnityEngine.Vector3(0, 0, 0);
+//                 }
+//         
+//                 if (E_sprite == null)
+//                 {
+//                     N_E_Corner.sprite = wall_hor_small;
+//                     N_E_Corner.transform.localEulerAngles = new UnityEngine.Vector3(0, 0, 0);
+//                 }
+//                 
+//             }
+// 
+//             if (S_sprite == null)
+//             {
+//                 if (W_sprite == null)
+//                 {
+//                     S_W_Corner.sprite = buttom_corner;
+//                 }
+//                 else
+//                 {
+//                     S_W_Corner.sprite = wall_ver_small;
+//                     S_W_Corner.transform.localEulerAngles = new UnityEngine.Vector3(0, 180, 0);
+//                 }
+// 
+//                 if (E_sprite == null)
+//                 {
+//                     S_E_Corner.sprite = buttom_corner;
+//                 }
+//                 else
+//                 {
+//                     S_E_Corner.sprite = wall_ver_small;
+//                     S_E_Corner.transform.localEulerAngles = new UnityEngine.Vector3(0, 0, 0);
+//                 }
+//             }
+//             else
+//             {
+//                 if (W_sprite == null)
+//                 {
+//                     S_W_Corner.sprite = wall_hor_small;
+//                     S_W_Corner.transform.localEulerAngles = new UnityEngine.Vector3(0, 0, -180);
+//                 }
+//                 
+//                 if (E_sprite == null)
+//                 {
+//                     S_E_Corner.sprite = wall_hor_small;
+//                     S_E_Corner.transform.localEulerAngles = new UnityEngine.Vector3(0, 0, -180);
+//                 }                
+//             }            
+
+            
+        }
+
+        foreach (Cell cell in EveryCells)
+        {
             UnityEngine.SpriteRenderer S_W_Corner = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "S-W-Corner");
             UnityEngine.SpriteRenderer S_E_Corner = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "S-E-Corner");
-
-            UnityEngine.SpriteRenderer N_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "N");
-            UnityEngine.SpriteRenderer W_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "W");
+            
             UnityEngine.SpriteRenderer E_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "E");
-            UnityEngine.SpriteRenderer S_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "S");
+            UnityEngine.SpriteRenderer W_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "W");
 
-            if (N_sprite == null)
+            Cell S_Cell = cell.GetAdjacentCell(Globals.SOUTH);
+            if (S_Cell)
             {
-                if (W_sprite == null)
+                UnityEngine.SpriteRenderer south_cell_E_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(S_Cell.gameObject, "E");
+                UnityEngine.SpriteRenderer south_cell_W_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(S_Cell.gameObject, "W");
+
+                if (E_sprite != null && E_sprite.enabled && (south_cell_E_sprite == null || south_cell_E_sprite.enabled == false))
                 {
-                    N_W_Corner.sprite = buttom_corner;
-                }
-                else
-                {
-                    N_W_Corner.sprite = wall_ver_small;
-                    N_W_Corner.transform.localEulerAngles = new UnityEngine.Vector3(0, 180, 0);
+                    S_E_Corner.sprite = s_e_corner;
+                    S_E_Corner.enabled = true;
+                    S_E_Corner.collider.enabled = true;
                 }
 
-                if (E_sprite == null)
+                if (W_sprite != null && W_sprite.enabled && (south_cell_W_sprite == null || south_cell_W_sprite.enabled == false))
                 {
-                    N_E_Corner.sprite = buttom_corner;
-                }
-                else
-                {
-                    N_E_Corner.sprite = wall_ver_small;
-                    N_E_Corner.transform.localEulerAngles = new UnityEngine.Vector3(0, 0, 0);
+                    S_W_Corner.sprite = s_w_corner;
+                    S_W_Corner.enabled = true;
+                    S_W_Corner.collider.enabled = true;
                 }
             }
             else
             {
-                if (W_sprite == null)
+                if (W_sprite != null && W_sprite.enabled)
                 {
-                    N_W_Corner.sprite = wall_hor_small;
-                    N_W_Corner.transform.localEulerAngles = new UnityEngine.Vector3(0, 0, 0);
+                    S_W_Corner.sprite = s_w_corner;
+                    S_W_Corner.enabled = true;
+                    S_W_Corner.collider.enabled = true;
                 }
-        
-                if (E_sprite == null)
+
+                if (E_sprite != null && E_sprite.enabled)
                 {
-                    N_E_Corner.sprite = wall_hor_small;
-                    N_E_Corner.transform.localEulerAngles = new UnityEngine.Vector3(0, 0, 0);
+                    S_E_Corner.sprite = s_e_corner;
+                    S_E_Corner.enabled = true;
+                    S_E_Corner.collider.enabled = true;
                 }
-                
             }
 
-            if (S_sprite == null)
+            if (S_E_Corner != null && !S_E_Corner.enabled)
             {
-                if (W_sprite == null)
+                S_E_Corner.collider.enabled = false;
+            }
+
+            if (S_W_Corner != null && !S_W_Corner.enabled)
+            {
+                S_W_Corner.collider.enabled = false;
+            }
+
+            Cell N_Cell = cell.GetAdjacentCell(Globals.SOUTH);
+            UnityEngine.Collider N_W_Corner = Globals.getChildGameObject<UnityEngine.Collider>(cell.gameObject, "N-W-Corner");
+            UnityEngine.Collider N_E_Corner = Globals.getChildGameObject<UnityEngine.Collider>(cell.gameObject, "N-E-Corner");
+            if (N_Cell)
+            {
+                UnityEngine.SpriteRenderer north_cell_E_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(S_Cell.gameObject, "E");
+                UnityEngine.SpriteRenderer north_cell_W_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(S_Cell.gameObject, "W");
+
+                if (E_sprite != null && E_sprite.enabled && (north_cell_E_sprite == null || north_cell_E_sprite.enabled == false))
                 {
-                    S_W_Corner.sprite = buttom_corner;
-                }
-                else
-                {
-                    S_W_Corner.sprite = wall_ver_small;
-                    S_W_Corner.transform.localEulerAngles = new UnityEngine.Vector3(0, 180, 0);
+                    N_E_Corner.enabled = true;
                 }
 
-                if (E_sprite == null)
+                if (W_sprite != null && W_sprite.enabled && (north_cell_E_sprite == null || north_cell_E_sprite.enabled == false))
                 {
-                    S_E_Corner.sprite = buttom_corner;
-                }
-                else
-                {
-                    S_E_Corner.sprite = wall_ver_small;
-                    S_E_Corner.transform.localEulerAngles = new UnityEngine.Vector3(0, 0, 0);
+                    N_W_Corner.enabled = true;
                 }
             }
             else
             {
-                if (W_sprite == null)
+                if (W_sprite != null && W_sprite.enabled)
                 {
-                    S_W_Corner.sprite = wall_hor_small;
-                    S_W_Corner.transform.localEulerAngles = new UnityEngine.Vector3(0, 0, -180);
+                    N_W_Corner.enabled = true;
                 }
-                
-                if (E_sprite == null)
+
+                if (E_sprite != null && E_sprite.enabled)
                 {
-                    S_E_Corner.sprite = wall_hor_small;
-                    S_E_Corner.transform.localEulerAngles = new UnityEngine.Vector3(0, 0, -180);
-                }                
-            }            
+                    N_E_Corner.enabled = true;
+                }
+
+            }
         }
+        
         // 创造一个入口，找到地图最靠近东南角的走廊作为入口
         foreach (Cell corrido in CorridorCellLocations)
         {
@@ -1243,7 +1339,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     
     public bool OnChallengerFingerMoving(object sender)
     {
-        if (fingerDownOnMap != null)
+        if (fingerDownOnMap != null && !Globals.canvasForMagician.draggingFlashGrenade)
         {
             Globals.cameraFollowMagician.DragToMove(fingerDownOnMap);
         }
@@ -1353,7 +1449,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     public Guard draggingGuard;
     public Chest choosenChest;
     public bool OnDragFingerDown(object sender)
-    {
+    {        
         if (choosenChest != null)
         {
             choosenChest.HideBtn();

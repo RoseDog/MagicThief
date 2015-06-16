@@ -3,7 +3,8 @@
     public override void Awake()
     {
         base.Awake();
-        spriteSheet.AddAnim("play", 4);
+        spriteSheet.init();
+        spriteSheet.AddAnim("play", spriteSheet._sprites.Length);
         spriteSheet.Play("play");
     }    
 }

@@ -59,13 +59,7 @@ public class Guard : Actor, System.IComparable<Guard>
         
         walkable = true;
         bGoChaseDove = false;
-        base.Awake();
-        
-        if(moving != null)
-        {
-            spriteSheet.CreateAnimationByName("idle");
-            spriteSheet.CreateAnimationByName("moving");
-        }        
+        base.Awake();               
     }
 
     public override void Start()

@@ -306,6 +306,7 @@
         Globals.canvasForMyMaze.btnEnhanceDef.gameObject.SetActive(true);
         currentThief.targetChest.ResetGold();
         currentThief.HideTip();
+        currentThief.currentAction = null;
         ThiefAboutToMove();
         Globals.cameraFollowMagician.MoveToPoint(currentThief.transform.position,Globals.cameraMoveDuration);
     }

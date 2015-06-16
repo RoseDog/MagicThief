@@ -9,7 +9,7 @@
 
     public void Cast(Guard guard)
     {
-        if (Globals.magician.ChangePower(data.powerCost))
+        if (Globals.magician.ChangePower(-data.powerCost))
         {
             target = guard;
             Excute();

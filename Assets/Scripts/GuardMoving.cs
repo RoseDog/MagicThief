@@ -138,7 +138,6 @@ public class GuardMoving : AIPath
                 //Fade out walking animation
                 if (target == null)
                 {
-                    //actor.anim.CrossFade("idle");
                     if (actor.spriteSheet != null)
                     {
                         actor.spriteSheet.Play("idle");
@@ -152,6 +151,14 @@ public class GuardMoving : AIPath
                         throw new InvalidOperationException("guard moving error");
                     }
                     //actor.anim.CrossFade("atkReady");
+                    if (actor.spriteSheet.HasAnimation("atkReady"))
+                    {
+                        actor.spriteSheet.Play("atkReady");
+                    }
+                    else
+                    {
+                        actor.spriteSheet.Play("idle");
+                    }                    
                 }
             }
             else

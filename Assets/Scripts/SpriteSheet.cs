@@ -75,7 +75,10 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
         {
             anim.spriteList.Add(_sprites[sprite_add_idx]);
             ++sprite_add_idx;
-            sprite_add_idx = sprite_add_idx%28;
+            if (sprite_add_idx >= _sprites.Length)
+            {
+                sprite_add_idx = sprite_add_idx % _sprites.Length;
+            }            
         }
 
         _animationList.Add(name, anim);
