@@ -5,7 +5,7 @@ public class PathFinder : UnityEngine.MonoBehaviour
     public AstarPath path;
     MazeGenerate map;
     public Pathfinding.GridGraph graph;
-    float grideNodeSize = 0.25f;
+    float grideNodeSize = 25f;
     public float GetGrideNodeSize()
     {
         return grideNodeSize;

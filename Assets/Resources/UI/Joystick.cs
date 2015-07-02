@@ -19,29 +19,29 @@ public class Joystick : Button
     public override void Prepare()
     {
         float scale_factor = UnityEngine.Screen.width / 640.0f;
-        guiTexture.pixelInset = new UnityEngine.Rect(0.0f, 0.0f, 200.0f * scale_factor,
+        GetComponent<GUITexture>().pixelInset = new UnityEngine.Rect(0.0f, 0.0f, 200.0f * scale_factor,
             200.0f * scale_factor);
         base.Prepare();        
         pad = GetComponentInChildren<StickPad>();
-        originalRect = guiTexture.pixelInset;
+        originalRect = GetComponent<GUITexture>().pixelInset;
         ResetGUI();
     }
 
 	void MoveStick()
 	{
-		Rect tmprect = guiTexture.pixelInset;
+		Rect tmprect = GetComponent<GUITexture>().pixelInset;
 
-		// ²»ÄÜ³¬¹ý±ßÔµ
+		// ï¿½ï¿½ï¿½Ü³ï¿½ï¿½ï¿½ï¿½ï¿½Ôµ
 		Vector2 guiPos = pad.LimitStickMove(touchingFinger.nowPosition);
 
 		tmprect.x = guiPos.x;
 		tmprect.y = guiPos.y;
 
-		// ÒÆµ½ÖÐÐÄ
+		// ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½
 		tmprect.x = tmprect.x - halfGuiSize.x;
 		tmprect.y = tmprect.y - halfGuiSize.y;
 
-		guiTexture.pixelInset = tmprect;
+		GetComponent<GUITexture>().pixelInset = tmprect;
 
 		// Get a value between -1 and 1 based on the joystick graphic location
 		position.x = (GetCenter().x - pad.GetCenter().x) / halfGuiSize.x;
@@ -52,9 +52,9 @@ public class Joystick : Button
 	{
 		if (base.OnFingerDown(sender))
 		{
-			originalRect = guiTexture.pixelInset;
+			originalRect = GetComponent<GUITexture>().pixelInset;
 			firstMove = true;
-			pad.Active(guiTexture.pixelInset, guiTexture.color);
+			pad.Active(GetComponent<GUITexture>().pixelInset, GetComponent<GUITexture>().color);
 			MoveStick();
 		}
 
@@ -101,7 +101,7 @@ public class Joystick : Button
 	{
 		base.ResetGUI();
 		position = Vector2.zero;
-		guiTexture.pixelInset = originalRect;
+		GetComponent<GUITexture>().pixelInset = originalRect;
 	}
 
     public void MannullyActive(bool active)

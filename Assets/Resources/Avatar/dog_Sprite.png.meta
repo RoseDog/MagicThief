@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: 2ef97911f7288b945bc09d66e1d2f7d2
+timeCreated: 1435298595
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: dog_Sprite_0
@@ -29,6 +31,27 @@ TextureImporter:
     21300048: dog_Sprite_24
     21300050: dog_Sprite_25
     21300052: dog_Sprite_26
+    21300054: dog_Sprite_3
+    21300056: dog_Sprite_4
+    21300058: dog_Sprite_5
+    21300060: dog_Sprite_6
+    21300062: dog_Sprite_27
+    21300064: dog_Sprite_28
+    21300066: dog_Sprite_29
+    21300068: dog_Sprite_30
+    21300070: dog_Sprite_31
+    21300072: dog_Sprite_32
+    21300074: dog_Sprite_33
+    21300076: dog_Sprite_34
+    21300078: dog_Sprite_35
+    21300080: dog_Sprite_36
+    21300082: dog_Sprite_37
+    21300084: dog_Sprite_38
+    21300086: dog_Sprite_39
+    21300088: dog_Sprite_40
+    21300090: dog_Sprite_41
+    21300092: dog_Sprite_42
+    21300094: dog_Sprite_43
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -47,9 +70,12 @@ TextureImporter:
   isReadable: 0
   grayScaleToAlpha: 0
   generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
-  maxTextureSize: 1024
+  maxTextureSize: 2048
   textureSettings:
     filterMode: 0
     aniso: -1
@@ -57,6 +83,7 @@ TextureImporter:
     wrapMode: 1
   nPOTScale: 0
   lightmap: 0
+  rGBM: 0
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
@@ -73,272 +100,444 @@ TextureImporter:
     - name: dog_Sprite_0
       rect:
         serializedVersion: 2
-        x: 20
-        y: 200
-        width: 15
-        height: 19
+        x: 0
+        y: 128
+        width: 70
+        height: 64
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_1
       rect:
         serializedVersion: 2
-        x: 80
-        y: 197
-        width: 15
-        height: 24
+        x: 70
+        y: 128
+        width: 70
+        height: 64
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_2
       rect:
         serializedVersion: 2
         x: 140
-        y: 194
-        width: 15
-        height: 31
+        y: 128
+        width: 70
+        height: 64
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: moving_0
+    - name: dog_Sprite_3
       rect:
         serializedVersion: 2
-        x: 194
-        y: 193
-        width: 28
-        height: 32
+        x: 210
+        y: 128
+        width: 70
+        height: 64
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: idle_0
+    - name: dog_Sprite_4
       rect:
         serializedVersion: 2
-        x: 256
-        y: 194
-        width: 24
-        height: 30
+        x: 280
+        y: 128
+        width: 70
+        height: 64
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: moving_1
+    - name: dog_Sprite_5
       rect:
         serializedVersion: 2
-        x: 313
-        y: 193
-        width: 29
-        height: 32
+        x: 350
+        y: 128
+        width: 70
+        height: 64
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: moving_2
+    - name: dog_Sprite_6
       rect:
         serializedVersion: 2
-        x: 374
-        y: 194
-        width: 28
-        height: 30
+        x: 420
+        y: 128
+        width: 70
+        height: 64
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_7
       rect:
         serializedVersion: 2
-        x: 19
-        y: 131
-        width: 18
-        height: 36
+        x: 490
+        y: 128
+        width: 70
+        height: 64
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_8
       rect:
         serializedVersion: 2
-        x: 78
-        y: 129
-        width: 19
-        height: 40
+        x: 560
+        y: 128
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_9
       rect:
         serializedVersion: 2
-        x: 136
-        y: 131
-        width: 24
-        height: 36
+        x: 630
+        y: 128
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_10
       rect:
         serializedVersion: 2
-        x: 199
-        y: 129
-        width: 18
-        height: 40
+        x: 700
+        y: 128
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_11
       rect:
         serializedVersion: 2
-        x: 259
-        y: 134
-        width: 17
-        height: 30
+        x: 770
+        y: 128
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_12
       rect:
         serializedVersion: 2
-        x: 319
-        y: 134
-        width: 17
-        height: 30
+        x: 840
+        y: 128
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_13
       rect:
         serializedVersion: 2
-        x: 374
-        y: 134
-        width: 28
-        height: 30
+        x: 910
+        y: 128
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_14
       rect:
         serializedVersion: 2
-        x: 15
-        y: 74
-        width: 26
-        height: 30
+        x: 980
+        y: 128
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_15
       rect:
         serializedVersion: 2
-        x: 71
-        y: 69
-        width: 33
-        height: 40
+        x: 0
+        y: 64
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_16
       rect:
         serializedVersion: 2
-        x: 129
-        y: 73
-        width: 37
-        height: 32
+        x: 70
+        y: 64
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_17
       rect:
         serializedVersion: 2
-        x: 200
-        y: 87
-        width: 16
-        height: 5
+        x: 140
+        y: 64
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_18
       rect:
         serializedVersion: 2
-        x: 241
-        y: 81
-        width: 53
-        height: 16
+        x: 210
+        y: 64
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_19
       rect:
         serializedVersion: 2
-        x: 317
-        y: 74
-        width: 21
-        height: 30
+        x: 280
+        y: 64
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_20
       rect:
         serializedVersion: 2
-        x: 377
-        y: 73
-        width: 21
-        height: 32
+        x: 350
+        y: 64
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_21
       rect:
         serializedVersion: 2
-        x: 16
-        y: 12
-        width: 23
-        height: 34
+        x: 420
+        y: 64
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_22
       rect:
         serializedVersion: 2
-        x: 75
-        y: 12
-        width: 25
-        height: 35
+        x: 490
+        y: 64
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_23
       rect:
         serializedVersion: 2
-        x: 137
-        y: 12
-        width: 21
-        height: 35
+        x: 560
+        y: 64
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_24
       rect:
         serializedVersion: 2
-        x: 193
-        y: 16
-        width: 30
-        height: 27
+        x: 630
+        y: 64
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_25
       rect:
         serializedVersion: 2
-        x: 260
-        y: 8
-        width: 15
-        height: 42
+        x: 700
+        y: 64
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: dog_Sprite_26
       rect:
         serializedVersion: 2
-        x: 312
-        y: 18
-        width: 32
-        height: 23
+        x: 770
+        y: 64
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_27
+      rect:
+        serializedVersion: 2
+        x: 840
+        y: 64
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_28
+      rect:
+        serializedVersion: 2
+        x: 910
+        y: 64
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_29
+      rect:
+        serializedVersion: 2
+        x: 980
+        y: 64
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_31
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 0
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_32
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 0
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_33
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 0
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: .5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_34
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_35
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 0
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_36
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 0
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_37
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 0
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_38
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_39
+      rect:
+        serializedVersion: 2
+        x: 630
+        y: 0
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_40
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 0
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_41
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 0
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_42
+      rect:
+        serializedVersion: 2
+        x: 840
+        y: 0
+        width: 70
+        height: 64
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dog_Sprite_43
+      rect:
+        serializedVersion: 2
+        x: 910
+        y: 0
+        width: 70
+        height: 64
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

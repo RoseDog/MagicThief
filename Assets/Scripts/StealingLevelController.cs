@@ -1,6 +1,6 @@
 ﻿public class StealingLevelController : LevelController
 {    
-    protected UnityEngine.Vector3 posOnSky = new UnityEngine.Vector3(0.0f, 5.0f, 0.0f);
+    protected UnityEngine.Vector3 posOnSky = new UnityEngine.Vector3(0.0f, 500.0f, 0.0f);
     protected float fallingDuration = 0.4f;
         
     int restartInSeconds = 3;
@@ -14,10 +14,7 @@
     public UnityEngine.UI.Text RestartText;    
     public System.Collections.Generic.List<UnityEngine.GameObject> coinsOnFloor = new System.Collections.Generic.List<UnityEngine.GameObject>();
 
-    public int paperMovingDuration = 40;
-    
-    UnityEngine.Vector3 camOffsetInSpy = new UnityEngine.Vector3(0, 20, -7);
-    UnityEngine.Vector3 camOffsetInStealing = new UnityEngine.Vector3(0, 21, -7);
+    public int paperMovingDuration = 40;    
 
     UnityEngine.GameObject mark_prefab;
     public UnityEngine.GameObject landingMark;
@@ -54,11 +51,7 @@
 
         mark_prefab = UnityEngine.Resources.Load("Misc/LandingPositionMark") as UnityEngine.GameObject;        
         landingMark = UnityEngine.GameObject.Instantiate(mark_prefab) as UnityEngine.GameObject;
-        UnityEngine.UI.Image markImage = landingMark.GetComponentInChildren<UnityEngine.UI.Image>();
-        markImage.GetComponent<Actor>().AddAction(
-                new RotateTo(
-                    new UnityEngine.Vector3(0.0f, 0.0f, 0.0f),
-                    new UnityEngine.Vector3(0.0f, 00.0f, 360.0f), 100, true));
+        
         landingMark.SetActive(false);
         
         fogTex = new UnityEngine.Texture2D(512, 512, UnityEngine.TextureFormat.ARGB32, false);        
@@ -70,9 +63,28 @@
 
     public override void BeforeGenerateMaze()
     {
+        if (Globals.playingReplay == null)
+        {
+            DiveInBtn.onClick.AddListener(() => DiveInBtnClicked());
+            LeaveBtn.onClick.AddListener(() => LeaveBtnClicked());
+
+            System.IO.File.Delete(UnityEngine.Application.dataPath + "/Resources/replay.txt");
+            System.IO.File.Delete(UnityEngine.Application.dataPath + "/Resources/testReplay_pvp.txt");
+            System.IO.File.Delete(UnityEngine.Application.dataPath + "/Resources/testReplay_reply.txt");
+        }
+        else
+        {
+            System.IO.File.Delete(UnityEngine.Application.dataPath + "/Resources/testReplay_reply.txt");
+            Globals.replaySystem.Unpack(Globals.playingReplay.ini);
+            LeaveBtn.onClick.AddListener(() => StopReplay());
+            DiveInBtn.gameObject.SetActive(false);
+        }
+
+        Globals.replaySystem.frameBeginNo = UnityEngine.Time.frameCount;
+
         Globals.guardPlayer = new PlayerInfo();
         Globals.guardPlayer.isBot = true;
-        Globals.iniFileName = "pve_0";
+        Globals.iniFileName = "Test";
         SafeBoxData data = new SafeBoxData();
         Globals.guardPlayer.safeBoxDatas.Add(data);
 
@@ -92,10 +104,17 @@
 //             {
 //                 seed = Globals.guardPlayer.currentMazeRandSeedCache;
 //                 Globals.iniFileName = "MyMaze_" + Globals.guardPlayer.currentMazeLevel.ToString();
-//                 
 //             }
 //             else
 //             {
+//                 if(Globals.playingReplay == null)
+//                 {
+//                     Globals.replaySystem.RecordPvEFileName(Globals.iniFileName);
+//                 }
+//                 else
+//                 {
+//                     Globals.iniFileName = Globals.replaySystem.pveFile;
+//                 }
 //                 UnityEngine.TextAsset textAssets = UnityEngine.Resources.Load(Globals.iniFileName) as UnityEngine.TextAsset;
 //                 if (textAssets != null && textAssets.text.Length != 0)
 //                 {
@@ -121,26 +140,9 @@
 //         {
 //             Globals.guardPlayer.cashAmount = ini.get("CASH", 0);
 //         }
-        
-        randSeedCache = UnityEngine.Random.seed;            
-        if (Globals.playingReplay == null)
-        {            
-            DiveInBtn.onClick.AddListener(() => DiveInBtnClicked());            
-            LeaveBtn.onClick.AddListener(() => LeaveBtnClicked());
-            
-            System.IO.File.Delete(UnityEngine.Application.dataPath + "/Resources/replay.txt");
-            System.IO.File.Delete(UnityEngine.Application.dataPath + "/Resources/testReplay_pvp.txt");
-            System.IO.File.Delete(UnityEngine.Application.dataPath + "/Resources/testReplay_reply.txt");
-        }
-        else
-        {
-            System.IO.File.Delete(UnityEngine.Application.dataPath + "/Resources/testReplay_reply.txt");                        
-            Globals.replaySystem.Unpack(Globals.playingReplay.ini);
-            LeaveBtn.onClick.AddListener(() => StopReplay());
-            DiveInBtn.gameObject.SetActive(false);
-        }      
-
-        Globals.replaySystem.frameBeginNo = UnityEngine.Time.frameCount;        
+//         
+//         randSeedCache = UnityEngine.Random.seed;            
+           
         
         base.BeforeGenerateMaze();
     }
@@ -297,6 +299,9 @@
         }        
 
         Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();
+        Globals.cameraFollowMagician.audioSource.clip = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/FiveFloorGoodbye");
+        Globals.cameraFollowMagician.audioSource.Play();
+        Globals.cameraFollowMagician.audioSource.volume = 0.25f;        
     }
 
     public override void GuardCreated(Guard guard)
@@ -319,7 +324,6 @@
             if (flash.IsInUse())
             {
                 Globals.tipDisplay.Msg("cant_bring_flash_to_stealing");
-                landingMark.SetActive(false);
             }
             else
             {
@@ -350,7 +354,7 @@
         Globals.magician.falling.from = Globals.magician.transform.position + posOnSky;
         Globals.magician.falling.to = Globals.magician.transform.position;
         Globals.magician.falling.duration = fallingDuration;
-        Globals.magician.falling.Excute();       
+        Globals.magician.falling.Excute();        
     }
 
     public override void AfterMagicianFalling()
@@ -358,7 +362,15 @@
         Globals.EnableAllInput(true);
         OperateMagician();
         canvasForStealing.gameObject.SetActive(true);
-        RestartText.gameObject.SetActive(false);
+        if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.GetGem)
+        {
+            Globals.languageTable.SetText(RestartText, "operate_guide_info");
+        }
+        else
+        {
+            RestartText.gameObject.SetActive(false);
+        }
+        
         if (landingMark.activeSelf)
         {            
             landingMark.SetActive(false);
@@ -397,29 +409,30 @@
 
     public override void MagicianLifeOver()
     {
-        float forceFactor = 2.0f;
-        float rotateForceFactor = 115.0f;
-
-        UnityEngine.GameObject dropPrefab = UnityEngine.Resources.Load("Props/DroppedCoin") as UnityEngine.GameObject;
-        for (int i = 0; i < 15; ++i)
-        {
-            UnityEngine.GameObject coin = UnityEngine.GameObject.Instantiate(dropPrefab,
-                Globals.magician.transform.position + new UnityEngine.Vector3(0, Globals.magician.controller.bounds.size.y * 0.5f, 0),
-                Globals.magician.transform.rotation) as UnityEngine.GameObject;
-
-            UnityEngine.Vector3 randForce = new UnityEngine.Vector3(UnityEngine.Random.Range(-1.0f, 1.0f),
-                UnityEngine.Random.Range(1.0f, 4.0f),
-                UnityEngine.Random.Range(-1.0f, 1.0f));
-            randForce *= forceFactor;
-
-            UnityEngine.Vector3 randRotForce = new UnityEngine.Vector3(UnityEngine.Random.Range(-1.0f, 1.0f),
-                                                UnityEngine.Random.Range(-1.0f, 1.0f),
-                                                UnityEngine.Random.Range(-1.0f, 1.0f));
-            randRotForce *= rotateForceFactor;
-            coin.rigidbody.velocity = randForce;
-            coin.rigidbody.angularVelocity = randRotForce;
-            coinsOnFloor.Add(coin);
-        }
+        // 抛洒钱币。暂时不要
+//         float forceFactor = 2.0f;
+//         float rotateForceFactor = 115.0f;
+// 
+//         UnityEngine.GameObject dropPrefab = UnityEngine.Resources.Load("Props/DroppedCoin") as UnityEngine.GameObject;
+//         for (int i = 0; i < 15; ++i)
+//         {
+//             UnityEngine.GameObject coin = UnityEngine.GameObject.Instantiate(dropPrefab,
+//                 Globals.magician.transform.position + new UnityEngine.Vector3(0, Globals.magician.controller.bounds.size.y * 0.5f, 0),
+//                 Globals.magician.transform.rotation) as UnityEngine.GameObject;
+// 
+//             UnityEngine.Vector3 randForce = new UnityEngine.Vector3(UnityEngine.Random.Range(-1.0f, 1.0f),
+//                 UnityEngine.Random.Range(1.0f, 4.0f),
+//                 UnityEngine.Random.Range(-1.0f, 1.0f));
+//             randForce *= forceFactor;
+// 
+//             UnityEngine.Vector3 randRotForce = new UnityEngine.Vector3(UnityEngine.Random.Range(-1.0f, 1.0f),
+//                                                 UnityEngine.Random.Range(-1.0f, 1.0f),
+//                                                 UnityEngine.Random.Range(-1.0f, 1.0f));
+//             randRotForce *= rotateForceFactor;
+//             coin.GetComponent<UnityEngine.Rigidbody>().velocity = randForce;
+//             coin.GetComponent<UnityEngine.Rigidbody>().angularVelocity = randRotForce;
+//             coinsOnFloor.Add(coin);
+//         }
 
 
         StealingCash.SetToZero();
@@ -547,6 +560,8 @@
         Globals.magician.gameObject.SetActive(false);
         Globals.maze.ClearGuards();
         UnityEngine.Debug.Log("Newsreport");
+        
+        
         // 禁止输入        
         Globals.EnableAllInput(false);
 
@@ -555,13 +570,6 @@
         // 远离迷宫
         MoonNightThief.transform.position = new UnityEngine.Vector3(1000, 0, 1000);
 
-        // 站立点
-        UnityEngine.GameObject Stand = Globals.getChildGameObject(MoonNightThief, "StandPos");
-        Globals.magician.transform.parent = Stand.transform.parent;
-        Globals.magician.transform.position = Stand.transform.position;
-        Globals.magician.transform.localRotation = Stand.transform.localRotation;
-        Globals.magician.transform.localScale = Stand.transform.localScale;
-        Globals.magician.CoverInMoonlight();
 
         // 相机就位
         UnityEngine.GameObject cam = Globals.getChildGameObject(MoonNightThief, "Camera");
@@ -576,6 +584,19 @@
         // Newsreport.Show();
         papers = MoonNightThief.GetComponentsInChildren<UIMover>();
         Globals.transition.BlackIn(()=>NewsreportOut());
+
+        if (!Globals.magician.IsLifeOver())
+        {
+            Globals.cameraFollowMagician.audioSource.clip = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/Shop");
+            Globals.cameraFollowMagician.audioSource.Play();
+        }
+        else
+        {
+            UnityEngine.GameObject fiddle_gem = Globals.getChildGameObject(MoonNightThief, "fiddle_gem");
+            fiddle_gem.SetActive(false);
+            Globals.cameraFollowMagician.audioSource.clip = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/23195__kaponja__2trump");
+            Globals.cameraFollowMagician.audioSource.Play();
+        }
     }
 
     void NewsreportOut()
@@ -612,7 +633,7 @@
             Globals.canvasForMagician.RoseNumber.Add(rose_bonus);
         }
 
-        seq_action.actions.Add(new SleepFor(paperMovingDuration*4));
+        seq_action.actions.Add(new SleepFor(paperMovingDuration*6));
         seq_action.actions.Add(new FunctionCall(() => NewsreportOutEnd()));
         AddAction(seq_action);
     }
@@ -666,28 +687,36 @@
             UnityEngine.Ray ray = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().ScreenPointToRay(UnityEngine.Input.mousePosition);
             UnityEngine.RaycastHit hitInfo;
             int layermask = 1 << 13;
-            if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
+            if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask) 
+                && Globals.magician.currentAction != Globals.magician.hitted
+                && Globals.magician.currentAction != Globals.magician.catchByNet)
             {
                 Guard hovered = hitInfo.collider.gameObject.GetComponent<Guard>();
-                if (hovered != hoveredGuard)
+    
+                if (Globals.magician.hypnosis.data.IsInUse() && hovered.beenHypnosised)
                 {
-                    if (Globals.magician.hypnosis.data.IsInUse() && hovered.beenHypnosised)
+                    if (hoveringSpriter == null)
                     {
                         hoveringSpriter = (UnityEngine.GameObject.Instantiate(HypnosisMouseHoverSpriter_prefab) as UnityEngine.GameObject).GetComponent<MouseHoverSpriter>();
-                        hoveredGuard = hovered;
-                        hoveringSpriter.transform.position = new UnityEngine.Vector3(ray.origin.x,ray.origin.y,0);
                     }
-                    else if (Globals.magician.shot.data.IsInUse() && hovered as Machine != null)
+                    
+                    hoveredGuard = hovered;
+                    hoveringSpriter.transform.position = new UnityEngine.Vector3(ray.origin.x, ray.origin.y, 0);
+                }
+                else if (Globals.magician.shot.data.IsInUse() && hovered as Machine != null)
+                {
+                    if (hoveringSpriter == null)
                     {
                         hoveringSpriter = (UnityEngine.GameObject.Instantiate(ShotGunMouseHoverSpriter_prefab) as UnityEngine.GameObject).GetComponent<MouseHoverSpriter>();
-                        hoveredGuard = hovered;
-                        hoveringSpriter.transform.position = new UnityEngine.Vector3(ray.origin.x, ray.origin.y, 0);
                     }
-                    else
-                    {
-                        hoveredGuard = null;
-                    }
-                }                                
+                    
+                    hoveredGuard = hovered;
+                    hoveringSpriter.transform.position = new UnityEngine.Vector3(ray.origin.x, ray.origin.y, 0);
+                }
+                else
+                {
+                    hoveredGuard = null;
+                }
             }
             else
             {
@@ -727,19 +756,10 @@
     {
         base.ClickOnMap(finger_pos);
         
-        if (Globals.magician.Stealing)
+        if (Globals.magician.Stealing && hoveredGuard != null)
         {
-            if (hoveredGuard != null)
-            {
-                if (Globals.magician.shot.data.IsInUse() && hoveredGuard as Machine != null)
-                {
-                    Globals.magician.Shot(hoveredGuard.gameObject);
-                }
-                else if (Globals.magician.hypnosis.data.IsInUse() && Globals.magician.currentAction != Globals.magician.hypnosis)
-                {
-                    Globals.magician.hypnosis.Cast(hoveredGuard);
-                }
-            }         
+            Globals.replaySystem.RecordClickOnGuard(hoveredGuard.idx);
+            ClickOnHoveredGuard(hoveredGuard);
         }
         else
         {
@@ -758,14 +778,19 @@
             {
                 chest.UpgradeBtnClicked();
             }
-        }
+        }        
+    }
 
-//         else if (Globals.playingReplay == null)
-//         {
-//             UnityEngine.Ray ray = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().ScreenPointToRay(finger_pos);
-//             RayOnMap(ray);
-//             Globals.replaySystem.RecordClick(ray);
-//         }               
+    public void ClickOnHoveredGuard(Guard guard)
+    {
+        if (guard as Machine != null)
+        {
+            Globals.magician.Shot(guard.gameObject);
+        }
+        else if (Globals.magician.currentAction != Globals.magician.hypnosis)
+        {
+            Globals.magician.hypnosis.Cast(guard);
+        }
     }
 
     public override void RightClickOnMap(UnityEngine.Vector2 pos)
@@ -775,7 +800,7 @@
         {
             UnityEngine.Ray ray = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().ScreenPointToRay(pos);
             RayOnMap(ray);
-            Globals.replaySystem.RecordClick(ray);
+            Globals.replaySystem.RecordRightClickToMove(ray);
         }
     }
 
@@ -795,14 +820,21 @@
             }
             else if (Globals.magician.Stealing && hoveredGuard == null)
             {
-                if (Globals.maze.pathFinder.IsPositionWalkable(hitInfo.point))
+                if (Globals.magician.currentAction == Globals.magician.flyUp)
                 {
-                    Globals.magician.GoTo(hitInfo.point);
+                    Globals.magician.flyUp.destination = hitInfo.point;
                 }
                 else
                 {
-                    Globals.magician.GoTo(Globals.GetPathNodePos(Globals.maze.pathFinder.GetNearestWalkableNode(hitInfo.point)));
-                }
+                    if (Globals.maze.pathFinder.IsPositionWalkable(hitInfo.point))
+                    {
+                        Globals.magician.GoTo(hitInfo.point);
+                    }
+                    else
+                    {
+                        Globals.magician.GoTo(Globals.GetPathNodePos(Globals.maze.pathFinder.GetNearestWalkableNode(hitInfo.point)));
+                    }
+                }                   
             }
             
         }

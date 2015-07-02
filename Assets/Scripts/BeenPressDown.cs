@@ -31,7 +31,7 @@
             {
                 if (chest.isMagicianNear)
                 {
-                    chest.OnTriggerExit(actor.collider);
+                    chest.OnTriggerExit(actor.GetComponent<UnityEngine.Collider>());
                 }
             }
         }

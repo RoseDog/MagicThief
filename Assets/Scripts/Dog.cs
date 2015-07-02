@@ -5,8 +5,13 @@
         base.Awake();        
         bGoChaseDove = true;
 
-        spriteSheet.CreateAnimationByName("idle");
-        spriteSheet.CreateAnimationByName("moving");
+        spriteSheet.AddAnim("idle", 4);
+        spriteSheet.AddAnim("walking", 4);
+        spriteSheet.AddAnim("spot", 8, 1.0f, true);
+        spriteSheet.AddAnim("atkReady", 7);
+        spriteSheet.AddAnim("running", 3, 1.3f);
+        spriteSheet.AddAnim("wander", 12, 0.5f);        
+        spriteSheet.AddAnim("Atk", 6, 1.0f, true);
     }
 
     public override bool CheckIfChangeTarget(UnityEngine.GameObject newTar)

@@ -125,12 +125,18 @@
         guard.FaceTarget(guard.spot.target);
         if (!checkIfTargetPressDown())
         {
-            guard.spriteSheet.Play("Atk");
-
-            atkJumpAction = new Sequence(new JumpTo(transform, guard.spot.target.transform.position, 1.0f,
-            guard.spriteSheet.GetAnimationLengthWithSpeed("Atk") + 15), new FunctionCall(() => AtkEnd()));
-            guard.AddAction(atkJumpAction);
-            guard.spriteRenderer.gameObject.layer = 21;
+            if(guard.spriteSheet.HasAnimation("kick") && Globals.magician.currentAction == Globals.magician.catchByNet)
+            {
+                guard.spriteSheet.Play("kick");
+            }
+            else
+            {
+                guard.spriteSheet.Play("Atk");
+                atkJumpAction = new Sequence(new JumpTo(transform, guard.spot.target.transform.position, 1.0f,
+guard.spriteSheet.GetAnimationLengthWithSpeed("Atk") + 15), new FunctionCall(() => AtkEnd()));
+                guard.AddAction(atkJumpAction);
+                guard.spriteRenderer.gameObject.layer = 21;
+            }            
         }
         else
         {
@@ -163,6 +169,7 @@
                 if (angle < 100 && angle > -100)
                 {
                     targetActor.ChangeLife(-guard.data.attackValue);
+                    //targetActor.ChangeLife(-25);
                     targetActor.hitted.Excute();
                     targetActor.FaceDir(magicianDir);
                 }
@@ -183,7 +190,13 @@
     public virtual bool checkTargetStillClose()
     {
         System.Diagnostics.Debug.Assert(guard.spot.target != null);
-        if (UnityEngine.Vector3.Distance(guard.spot.target.position, guard.transform.position) > guard.data.atkShortestDistance)
+
+        float atkShortestDistance = guard.data.atkShortestDistance;
+        if (guard.spriteSheet.HasAnimation("kick") && Globals.magician.currentAction == Globals.magician.catchByNet)
+        {
+            atkShortestDistance = 0.5f;
+        }
+        if (UnityEngine.Vector3.Distance(guard.spot.target.position, guard.transform.position) > atkShortestDistance)
         {
             guard.chase.Excute();
             return false;

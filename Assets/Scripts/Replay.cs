@@ -1,6 +1,7 @@
 ﻿public class Replay : UnityEngine.MonoBehaviour 
 {
     public int frameBeginNo;
+    public System.String pveFile;
     public class TrickRecord
     {
         public int frame_no;
@@ -15,6 +16,13 @@
         public UnityEngine.Vector3 ray_direction;
     }
     public System.Collections.Generic.List<ClickRecord> clickRecords = new System.Collections.Generic.List<ClickRecord>();
+
+    public class ClickOnGuard
+    {
+        public int frame_no;
+        public int guard_idx;
+    }
+    public System.Collections.Generic.List<ClickOnGuard> clickOnGuardRecords = new System.Collections.Generic.List<ClickOnGuard>();
     
     public int mage_falling_down_frame_no = -1;
     
@@ -32,11 +40,18 @@
     {
         Globals.playingReplay = null;
         mage_falling_down_frame_no = -1;
+        pveFile = "";
         mageTryEscapeFrameNos.Clear();
         trickRecords.Clear();
         clickRecords.Clear();
+        clickOnGuardRecords.Clear();
         magePositions.Clear();
-    } 
+    }
+
+    public void RecordPvEFileName(System.String pve)
+    {
+        pveFile = pve;
+    }
 
     public void RecordMagicCast(TrickData data)
     {
@@ -49,7 +64,18 @@
         }                
     }
 
-    public void RecordClick(UnityEngine.Ray ray)
+    public void RecordClickOnGuard(int guard_idx)
+    {
+        if (Globals.playingReplay == null)
+        {
+            ClickOnGuard record = new ClickOnGuard();
+            record.frame_no = UnityEngine.Time.frameCount - frameBeginNo;
+            record.guard_idx = guard_idx;
+            clickOnGuardRecords.Add(record);
+        }                
+    }
+
+    public void RecordRightClickToMove(UnityEngine.Ray ray)
     {
         if (Globals.playingReplay == null)
         {
@@ -88,7 +114,9 @@
     public IniFile Pack()
     {
         IniFile ini = new IniFile();
-       
+
+        ini.set("pveFile", pveFile);
+
         System.String TrickRecords = "";
         foreach (TrickRecord record in trickRecords)
         {
@@ -103,6 +131,19 @@
         }
         ini.set("TrickRecords", TrickRecords);
 
+        System.String clickOnGuardStr = "";
+        foreach (ClickOnGuard record in clickOnGuardRecords)
+        {
+            clickOnGuardStr += record.frame_no + ",";
+            clickOnGuardStr += record.guard_idx + ",";
+            if (record != clickOnGuardRecords[clickOnGuardRecords.Count - 1])
+            {
+                clickOnGuardStr += " ";
+            }
+        }
+        ini.set("clickOnGuardRecords", clickOnGuardStr);
+
+
         System.String ClickRecords = "";
         foreach (ClickRecord record in clickRecords)
         {
@@ -115,7 +156,7 @@
                 ClickRecords += ";";
             }
         }
-        ini.set("ClickRecords", ClickRecords);
+        ini.set("ClickRecords", ClickRecords);                
         ini.set("mage_falling_down_frame_no", mage_falling_down_frame_no);
         mage_falling_down_frame_no = -1;
 
@@ -143,7 +184,9 @@
     }
 
     public void Unpack(IniFile ini)
-    {                
+    {
+        pveFile = ini.get("pveFile");
+
         System.String records_str = ini.get("TrickRecords");
         System.String[] temp;
         if (records_str != "")
@@ -158,6 +201,20 @@
                 record.data.duration = int.Parse(trick_data_str[2]);
                 record.data.powerCost = int.Parse(trick_data_str[3]);
                 trickRecords.Add(record);
+            }
+        }
+
+        records_str = ini.get("clickOnGuardRecords");
+        if (records_str != "")
+        {
+            temp = records_str.Split(' ');
+            foreach (System.String click_on_guard_str in temp)
+            {
+                System.String[] trick_data_str = click_on_guard_str.Split(',');
+                ClickOnGuard record = new ClickOnGuard();
+                record.frame_no = int.Parse(trick_data_str[0]);
+                record.guard_idx = int.Parse(trick_data_str[1]);
+                clickOnGuardRecords.Add(record);
             }
         }
         
@@ -214,6 +271,31 @@
                 record = clickRecords[0];
             }
         }
+
+
+        if (clickOnGuardRecords.Count != 0)
+        {
+            ClickOnGuard record = clickOnGuardRecords[0];
+            while (record.frame_no == UnityEngine.Time.frameCount - frameBeginNo)
+            {
+                Guard hovered = null;
+                foreach(Guard guard in Globals.maze.guards)
+                {
+                    if (record.guard_idx == guard.idx)
+                    {
+                        hovered = guard;
+                    }
+                }
+                (Globals.LevelController as StealingLevelController).ClickOnHoveredGuard(hovered);
+                clickOnGuardRecords.RemoveAt(0);
+                if (clickOnGuardRecords.Count == 0)
+                {
+                    break;
+                }
+                record = clickOnGuardRecords[0];
+            }
+        }
+        
 
         if (mage_falling_down_frame_no == UnityEngine.Time.frameCount - frameBeginNo)
         {

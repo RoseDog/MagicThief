@@ -15,8 +15,11 @@ public class Joker : Guard
         spriteSheet.AddAnim("wakeUp", 6, 0.4f);
         spriteSheet.AddAnim("BeenHypnosised", 4, 0.5f);
         spriteSheet.AddAnim("Atk", 8, 2.0f, true);
+        spriteSheet.AddAnim("kick", 6,0.5f);
                 
         base.Awake();
         spriteSheet.AddAnimationEvent("Atk", 5, () => atk.FireTheHit());
+        spriteSheet.AddAnimationEvent("kick", 4, () => atk.FireTheHit());
+        spriteSheet.AddAnimationEvent("kick", -1, () => atk.AtkEnd());
     }
 }

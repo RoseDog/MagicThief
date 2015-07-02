@@ -51,13 +51,13 @@ public class Finger
     public int id;
 
 
-    // 从手指按下开始累计的时间
+    // 锟斤拷锟斤拷指锟斤拷锟铰匡拷始锟桔计碉拷时锟斤拷
     public float timeSinceTouchBegin;
 
-    // 从移动时开始累计的时间
+    // 锟斤拷锟狡讹拷时锟斤拷始锟桔计碉拷时锟斤拷
     public float timeSinceMoving;
 
-    // 从移动时开始累计的向量
+    // 锟斤拷锟狡讹拷时锟斤拷始锟桔计碉拷锟斤拷锟斤拷
     private float movingLength;
 
     public string currentState = FINGER_STATE_NONE;
@@ -340,7 +340,7 @@ public class InputMgr : MonoBehaviour
 
     bool bBlock = false;
 
-    // 阀值
+    // 锟斤拷值
     public float movingSpeedThreshold = 600.0f;
 
     public KeyEvent Evt_WASD;
@@ -415,7 +415,7 @@ public class InputMgr : MonoBehaviour
     {
         //UnityEngine.Physics2D.Raycast();
 
-        // 分别针对iphone和PC查询输入
+        // 锟街憋拷锟斤拷锟斤拷iphone锟斤拷PC锟斤拷询锟斤拷锟斤拷
         if (!bBlock)
         {
 #if UNITY_IPHONE
@@ -459,9 +459,9 @@ public class InputMgr : MonoBehaviour
 
                 Finger finger = GetFingerByID(idx);
 
-                // 下面的代码检测手指是否放在了UI上，如果是的话，就不发送finger消息了
-                // 现在还有个问题。如果手指按下的时候在UI上，稍后移动手指，移出了ui范围，还是会继续发送FingerMoving这样的消息
-                // 解决方法：手指在没接触到屏幕的时候应该删除，接收到down的消息才创建，这样，落到Ui上的touch就不会创建finger，就没有后面的消息了
+                // 锟斤拷锟斤拷锟侥达拷锟斤拷锟斤拷锟斤拷锟斤拷指锟角凤拷锟斤拷锟斤拷锟斤拷UI锟较ｏ拷锟斤拷锟斤拷锟角的伙拷锟斤拷锟酵诧拷锟斤拷锟斤拷finger锟斤拷息锟斤拷
+                // 锟斤拷锟节伙拷锟叫革拷锟斤拷锟解。锟斤拷锟斤拷锟斤拷指锟斤拷锟铰碉拷时锟斤拷锟斤拷UI锟较ｏ拷锟皆猴拷锟狡讹拷锟斤拷指锟斤拷锟狡筹拷锟斤拷ui锟斤拷围锟斤拷锟斤拷锟角伙拷锟斤拷锟斤拷锟斤拷锟斤拷FingerMoving锟斤拷锟斤拷锟斤拷锟斤拷息
+                // 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷指锟斤拷没锟接达拷锟斤拷锟斤拷幕锟斤拷时锟斤拷应锟斤拷删锟斤拷锟斤拷锟斤拷锟秸碉拷down锟斤拷锟斤拷息锟脚达拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟戒到Ui锟较碉拷touch锟酵诧拷锟结创锟斤拷finger锟斤拷锟斤拷没锟叫猴拷锟斤拷锟斤拷锟斤拷息锟斤拷
                 Vector2 mousePos = Input.mousePosition;
 
 
@@ -498,7 +498,7 @@ public class InputMgr : MonoBehaviour
             }
 
 
-            // 键盘
+            // 锟斤拷锟斤拷
             if (Input.GetKeyUp(KeyCode.Alpha1))
             {
                 if (Evt_KeyAlpha0Up != null)
@@ -550,7 +550,7 @@ public class InputMgr : MonoBehaviour
                 }
             }
 
-            // 鼠标
+            // 锟斤拷锟斤拷
             if (Input.GetMouseButtonDown(0))
             {
                 if (Evt_MouseLeftDown != null)
@@ -605,10 +605,10 @@ public class InputMgr : MonoBehaviour
 		// Send data to server
         if (stream.isWriting)
         {
-            Vector3 pos = rigidbody.position;
-            Quaternion rot = rigidbody.rotation;
-            Vector3 velocity = rigidbody.velocity;
-            Vector3 angularVelocity = rigidbody.angularVelocity;
+            Vector3 pos = GetComponent<Rigidbody>().position;
+            Quaternion rot = GetComponent<Rigidbody>().rotation;
+            Vector3 velocity = GetComponent<Rigidbody>().velocity;
+            Vector3 angularVelocity = GetComponent<Rigidbody>().angularVelocity;
 
             stream.Serialize(ref pos);
             stream.Serialize(ref velocity);

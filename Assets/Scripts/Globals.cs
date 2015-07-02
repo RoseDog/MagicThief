@@ -132,7 +132,7 @@ public class ReplayData
 public class PlayerInfo
 {
     public System.String separator = "|";
-    // 以后要存到服务器上的
+    // 浠ュ悗瑕佸瓨鍒版湇鍔″櫒涓婄殑
     public enum TutorialLevel
     {
         GetGem = 0,
@@ -238,7 +238,7 @@ public class PlayerInfo
             Globals.socket.serverReplyActions.Add("new_poor", (reply) => NewPoor(reply));
             Globals.socket.serverReplyActions.Add("new_rosebuilding", (reply) => NewRoseBuilding(reply));
         }
-        // 这个顺序根本没有保证啊...日..
+        // 杩欎釜椤哄簭鏍规湰娌℃湁淇濊瘉鍟?..鏃?.
         Globals.socket.Send("self_stealing_info" + separator + name);        
     }
 
@@ -296,7 +296,7 @@ public class PlayerInfo
         for (int idx = 0; idx < slotsDatas.Count; ++idx)
         {
             TrickUsingSlotData slot = slotsDatas[idx];
-            // 由于字符串拼接问题，temp[0]是空字符串
+            // 鐢变簬瀛楃涓叉嫾鎺ラ棶棰橈紝temp[0]鏄┖瀛楃涓?
             slot.statu = temp[idx+1];
         }
 
@@ -657,7 +657,7 @@ public class PlayerInfo
     }
 
     public void StealingOver(float StealingCash, int PerfectStealingBonus, bool bIsPerfectStealing)
-    {        
+    {
         ReplayData replay = new ReplayData();
         replay.date = System.DateTime.Now;
         replay.StealingCash = StealingCash;
@@ -781,7 +781,7 @@ public class Globals
     {
         UnityEngine.GameObject guard_prefab = UnityEngine.Resources.Load("Avatar/" + data.name) as UnityEngine.GameObject;
         UnityEngine.GameObject guardObject = UnityEngine.GameObject.Instantiate(guard_prefab) as UnityEngine.GameObject;
-        Guard guard = guardObject.GetComponent<Guard>();
+        Guard guard = guardObject.GetComponent<Guard>();        
         guard.data = data;
         if (birthNode != null)
         {
@@ -1018,7 +1018,7 @@ public class Globals
         UnityEngine.EventSystems.EventTrigger.Entry entry =
             new UnityEngine.EventSystems.EventTrigger.Entry() { callback = trigger, eventID = triggerType };
         // Add the EventTrigger.Entry to delegates list on the EventTrigger
-        eventTrigger.delegates.Add(entry);
+        eventTrigger.triggers.Add(entry);
     }
 
     public static MsgBox MessageBox(System.String text, UnityEngine.Events.UnityAction yesAction = null, bool bNeedCancel = false)

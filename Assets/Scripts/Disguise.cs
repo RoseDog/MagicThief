@@ -43,8 +43,8 @@
         actor.spriteSheet._sprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Avatar/FakeGuard_Sprite");
         actor.spriteSheet._actor = actor;
         actor.spriteSheet.initialized = true;
-        actor.spriteSheet.CreateAnimationByName("idle");
-        actor.spriteSheet.CreateAnimationByName("moving");
+        actor.spriteSheet.AddAnim("idle",4);
+        actor.spriteSheet.AddAnim("moving",6);
 
 
         TrickTimer = UnityEngine.GameObject.Instantiate(TrickTimerPrefab) as UnityEngine.GameObject;

@@ -22,7 +22,7 @@
     {
         base.Start();
         // 界面显示会读取这个数字
-        data.atkShortestDistance = (machineActiveArea.collider as UnityEngine.SphereCollider).radius * scaleCache.x;
+        data.atkShortestDistance = (machineActiveArea.GetComponent<UnityEngine.Collider>() as UnityEngine.SphereCollider).radius * scaleCache.x;
     }
 
     public override void EnterActiveArea(UnityEngine.GameObject other)

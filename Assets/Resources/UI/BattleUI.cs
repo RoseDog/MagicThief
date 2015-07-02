@@ -18,9 +18,9 @@ public class BattleUI : MonoBehaviour
 
         joystick = transform.Find("R_Joystick").GetComponent<Joystick>();
 
-        UnityEngine.Rect inset = joystick.guiTexture.pixelInset;
-        joystick.guiTexture.pixelInset = new UnityEngine.Rect(UnityEngine.Screen.width * 0.5f - joystick.halfGuiSize.x, 80, inset.width, inset.height);
-        joystick.pad.guiTexture.pixelInset = joystick.guiTexture.pixelInset;
+        UnityEngine.Rect inset = joystick.GetComponent<GUITexture>().pixelInset;
+        joystick.GetComponent<GUITexture>().pixelInset = new UnityEngine.Rect(UnityEngine.Screen.width * 0.5f - joystick.halfGuiSize.x, 80, inset.width, inset.height);
+        joystick.pad.GetComponent<GUITexture>().pixelInset = joystick.GetComponent<GUITexture>().pixelInset;
     }
 
 	public void Hide()

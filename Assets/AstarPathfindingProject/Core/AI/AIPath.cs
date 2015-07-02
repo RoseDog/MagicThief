@@ -155,7 +155,7 @@ public class AIPath : MonoBehaviour {
 		
 		//Cache some other components (not all are necessarily there)
 		controller = GetComponent<CharacterController>();
-		rigid = rigidbody;
+		rigid = GetComponent<Rigidbody>();
 	}
 	
 	/** Starts searching for paths.

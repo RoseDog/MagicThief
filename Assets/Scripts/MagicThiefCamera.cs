@@ -1,7 +1,7 @@
 ﻿
 public class MagicThiefCamera : Actor
 {
-    float dragCamSpeed = 0.02f;    
+    float dragCamSpeed = 2f;    
     [UnityEngine.HideInInspector]
     public float disScale = 1.0f;
 
@@ -15,13 +15,14 @@ public class MagicThiefCamera : Actor
     float plane_height;
     UnityEngine.Rect MiniMapRect;
     float zCache;
-    public virtual void Awake()
+    public UnityEngine.AudioSource audioSource;
+    public override void Awake()
     {
         base.Awake();
         Globals.cameraFollowMagician = this;
         MiniMapPlane = Globals.getChildGameObject(gameObject, "MiniMapPlane");
-        float view_port_height = camera.orthographicSize;
-        float view_port_width = camera.orthographicSize * UnityEngine.Screen.width / UnityEngine.Screen.height;
+        float view_port_height = GetComponent<UnityEngine.Camera>().orthographicSize;
+        float view_port_width = GetComponent<UnityEngine.Camera>().orthographicSize * UnityEngine.Screen.width / UnityEngine.Screen.height;
         plane_width = 11.0f * MiniMapPlane.transform.localScale.x;
         plane_height = 11.0f * MiniMapPlane.transform.localScale.z;
         MiniMapPlane.transform.localPosition = new UnityEngine.Vector3(
@@ -29,7 +30,7 @@ public class MagicThiefCamera : Actor
             view_port_height - plane_height * 0.5f,
             MiniMapPlane.transform.localPosition.z);
         MiniMapRect = new UnityEngine.Rect();
-        UnityEngine.Vector3 plane_screen_pos = camera.WorldToScreenPoint(MiniMapPlane.transform.localPosition);
+        UnityEngine.Vector3 plane_screen_pos = GetComponent<UnityEngine.Camera>().WorldToScreenPoint(MiniMapPlane.transform.localPosition);
         MiniMapRect.center = plane_screen_pos;
 
         float plane_screen_width = 2f*(UnityEngine.Screen.width - plane_screen_pos.x);
@@ -44,6 +45,8 @@ public class MagicThiefCamera : Actor
         viewportFrame.SetActive(false);
 
         zCache = transform.localPosition.z;
+
+        audioSource = GetComponent<UnityEngine.AudioSource>();
     }
 
     public void OpenMinimap()
@@ -62,7 +65,7 @@ public class MagicThiefCamera : Actor
     public void Reset()
     {
         enabled = true;
-        SetDragSpeed(0.06f);
+        SetDragSpeed(6f);
     }
 
     public void SetDragSpeed(float speed)
@@ -115,7 +118,7 @@ public class MagicThiefCamera : Actor
     Finger fingerOnMiniMap;
     public bool CheckFingerDownOnMiniMap(Finger finger)
     {
-        UnityEngine.Vector3 finger_pos = camera.ScreenToWorldPoint(finger.nowPosition);
+        UnityEngine.Vector3 finger_pos = GetComponent<UnityEngine.Camera>().ScreenToWorldPoint(finger.nowPosition);
         if (MiniMapPlane.activeSelf && MiniMapRect.Contains(finger.nowPosition))
         {
             fingerOnMiniMap = finger;
@@ -151,7 +154,7 @@ public class MagicThiefCamera : Actor
 
     public void DragOnMiniMap(Finger finger)
     {
-        UnityEngine.Vector3 finger_pos = camera.ScreenToWorldPoint(finger.nowPosition);
+        UnityEngine.Vector3 finger_pos = GetComponent<UnityEngine.Camera>().ScreenToWorldPoint(finger.nowPosition);
         if (fingerOnMiniMap != null)
         {
             if (MiniMapRect.Contains(finger.nowPosition))

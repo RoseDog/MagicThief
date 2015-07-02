@@ -16,7 +16,7 @@ public class Transition : Actor
     UnityEngine.GameObject CreateCameraCoverPlane()
 	{
         cookShadersObject = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
-		cookShadersObject.renderer.material = cookShadersCover;        
+		cookShadersObject.GetComponent<UnityEngine.Renderer>().material = cookShadersCover;        
 		return cookShadersObject;
 	}
 
@@ -30,7 +30,7 @@ public class Transition : Actor
 
 	public override void Visible(bool visibility)
 	{
-		cookShadersObject.renderer.enabled = visibility;
+		cookShadersObject.GetComponent<UnityEngine.Renderer>().enabled = visibility;
 	}
 
 	void DestroyCameraCoverPlane()
@@ -57,7 +57,7 @@ public class Transition : Actor
             RemoveAction(ref fadeInAction);
         }
         Location();
-        fadeOutAction = new Sequence(new FadeTo(cookShadersObject.renderer, 0, 1, duration), new FunctionCall(action));
+        fadeOutAction = new Sequence(new FadeTo(cookShadersObject.GetComponent<UnityEngine.Renderer>(), 0, 1, duration), new FunctionCall(action));
         AddAction(fadeOutAction);
 	}
 
@@ -74,7 +74,7 @@ public class Transition : Actor
             RemoveAction(ref fadeOutAction);
         }
         Location();
-        fadeInAction = new Sequence(new FadeTo(cookShadersObject.renderer, 1, 0, duration), new FunctionCall(action));
+        fadeInAction = new Sequence(new FadeTo(cookShadersObject.GetComponent<UnityEngine.Renderer>(), 1, 0, duration), new FunctionCall(action));
         AddAction(fadeInAction);
 	}    
 }

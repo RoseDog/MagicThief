@@ -1,9 +1,10 @@
 ﻿public class Hitted : Action 
 {    
-    public void Start()
+    public virtual void Start()
     {
         actor.spriteSheet.AddAnimationEvent("hitted", -1, () => hitteAnimEnd());
     }
+
 	public override void Excute()
     {
         UnityEngine.Debug.Log("hitted");

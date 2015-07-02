@@ -1,0 +1,1325 @@
+fileFormatVersion: 2
+guid: 6578a8d69ca86b64e8fe9e00cd79aed2
+timeCreated: 1435110137
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Rosa_0
+    21300002: Rosa_1
+    21300004: Rosa_2
+    21300006: Rosa_3
+    21300008: Rosa_4
+    21300010: Rosa_5
+    21300012: Rosa_6
+    21300014: Rosa_7
+    21300016: Rosa_8
+    21300018: Rosa_9
+    21300020: Rosa_10
+    21300022: Rosa_11
+    21300024: Rosa_12
+    21300026: Rosa_13
+    21300028: Rosa_14
+    21300030: Rosa_15
+    21300032: Rosa_16
+    21300034: Rosa_17
+    21300036: Rosa_18
+    21300038: Rosa_19
+    21300040: Rosa_20
+    21300042: Rosa_21
+    21300044: Rosa_22
+    21300046: Rosa_23
+    21300048: Rosa_24
+    21300050: Rosa_25
+    21300052: Rosa_26
+    21300054: Rosa_27
+    21300056: Rosa_28
+    21300058: Rosa_29
+    21300060: Rosa_30
+    21300062: Rosa_31
+    21300064: Rosa_32
+    21300066: Rosa_33
+    21300068: Rosa_34
+    21300070: Rosa_35
+    21300072: Rosa_36
+    21300074: Rosa_37
+    21300076: Rosa_38
+    21300078: Rosa_39
+    21300080: Rosa_40
+    21300082: Rosa_41
+    21300084: Rosa_42
+    21300086: Rosa_43
+    21300088: Rosa_44
+    21300090: Rosa_45
+    21300092: Rosa_46
+    21300094: Rosa_47
+    21300096: Rosa_48
+    21300098: Rosa_49
+    21300100: Rosa_50
+    21300102: Rosa_51
+    21300104: Rosa_52
+    21300106: Rosa_53
+    21300108: Rosa_54
+    21300110: Rosa_55
+    21300112: Rosa_56
+    21300114: Rosa_57
+    21300116: Rosa_58
+    21300118: Rosa_59
+    21300120: Rosa_60
+    21300122: Rosa_61
+    21300124: Rosa_62
+    21300126: Rosa_63
+    21300128: Rosa_64
+    21300130: Rosa_65
+    21300132: Rosa_66
+    21300134: Rosa_67
+    21300136: Rosa_68
+    21300138: Rosa_69
+    21300140: Rosa_70
+    21300142: Rosa_71
+    21300144: Rosa_72
+    21300146: Rosa_73
+    21300148: Rosa_74
+    21300150: Rosa_75
+    21300152: Rosa_76
+    21300154: Rosa_77
+    21300156: Rosa_78
+    21300158: Rosa_79
+    21300160: Rosa_80
+    21300162: Rosa_81
+    21300164: Rosa_Sprite_0
+    21300166: Rosa_Sprite_1
+    21300168: Rosa_Sprite_2
+    21300170: Rosa_Sprite_3
+    21300172: Rosa_Sprite_4
+    21300174: Rosa_Sprite_5
+    21300176: Rosa_Sprite_6
+    21300178: Rosa_Sprite_7
+    21300180: Rosa_Sprite_8
+    21300182: Rosa_Sprite_9
+    21300184: Rosa_Sprite_10
+    21300186: Rosa_Sprite_11
+    21300188: Rosa_Sprite_12
+    21300190: Rosa_Sprite_13
+    21300192: Rosa_Sprite_14
+    21300194: Rosa_Sprite_15
+    21300196: Rosa_Sprite_16
+    21300198: Rosa_Sprite_17
+    21300200: Rosa_Sprite_18
+    21300202: Rosa_Sprite_19
+    21300204: Rosa_Sprite_20
+    21300206: Rosa_Sprite_21
+    21300208: Rosa_Sprite_22
+    21300210: Rosa_Sprite_23
+    21300212: Rosa_Sprite_24
+    21300214: Rosa_Sprite_25
+    21300216: Rosa_Sprite_26
+    21300218: Rosa_Sprite_27
+    21300220: Rosa_Sprite_28
+    21300222: Rosa_Sprite_29
+    21300224: Rosa_Sprite_30
+    21300226: Rosa_Sprite_31
+    21300228: Rosa_Sprite_32
+    21300230: Rosa_Sprite_33
+    21300232: Rosa_Sprite_34
+    21300234: Rosa_Sprite_35
+    21300236: Rosa_Sprite_36
+    21300238: Rosa_Sprite_37
+    21300240: Rosa_Sprite_38
+    21300242: Rosa_Sprite_39
+    21300244: Rosa_Sprite_40
+    21300246: Rosa_Sprite_41
+    21300248: Rosa_Sprite_42
+    21300250: Rosa_Sprite_43
+    21300252: Rosa_Sprite_44
+    21300254: Rosa_Sprite_45
+    21300256: Rosa_Sprite_46
+    21300258: Rosa_Sprite_47
+    21300260: Rosa_Sprite_48
+    21300262: Rosa_Sprite_49
+    21300264: Rosa_Sprite_50
+    21300266: Rosa_Sprite_51
+    21300268: Rosa_Sprite_52
+    21300270: Rosa_Sprite_53
+    21300272: Rosa_Sprite_54
+    21300274: Rosa_Sprite_55
+    21300276: Rosa_Sprite_56
+    21300278: Rosa_Sprite_57
+    21300280: Rosa_Sprite_58
+    21300282: Rosa_Sprite_59
+    21300284: Rosa_Sprite_60
+    21300286: Rosa_Sprite_61
+    21300288: Rosa_Sprite_62
+    21300290: Rosa_Sprite_63
+    21300292: Rosa_Sprite_64
+    21300294: Rosa_Sprite_65
+    21300296: Rosa_Sprite_66
+    21300298: Rosa_Sprite_67
+    21300300: Rosa_Sprite_68
+    21300302: Rosa_Sprite_69
+    21300304: Rosa_Sprite_70
+    21300306: Rosa_Sprite_71
+    21300308: Rosa_Sprite_72
+    21300310: Rosa_Sprite_73
+    21300312: Rosa_Sprite_74
+    21300314: Rosa_Sprite_75
+    21300316: Rosa_Sprite_76
+    21300318: Rosa_Sprite_77
+    21300320: Rosa_Sprite_78
+    21300322: Rosa_Sprite_79
+    21300324: Rosa_Sprite_80
+    21300326: Rosa_Sprite_81
+    21300328: Rosa_Sprite_82
+    21300330: Rosa_Sprite_83
+    21300332: Rosa_Sprite_84
+    21300334: Rosa_Sprite_85
+    21300336: Rosa_Sprite_86
+    21300338: Rosa_Sprite_87
+    21300340: Rosa_Sprite_88
+    21300342: Rosa_Sprite_89
+    21300344: Rosa_Sprite_90
+    21300346: Rosa_Sprite_91
+    21300348: Rosa_Sprite_92
+    21300350: Rosa_Sprite_93
+    21300352: Rosa_Sprite_94
+    21300354: Rosa_Sprite_95
+    21300356: Rosa_Sprite_96
+    21300358: Rosa_Sprite_97
+    21300360: Rosa_Sprite_98
+    21300362: Rosa_Sprite_99
+    21300364: Rosa_Sprite_100
+    21300366: Rosa_Sprite_101
+    21300368: Rosa_Sprite_102
+    21300370: Rosa_Sprite_103
+    21300372: Rosa_Sprite_104
+    21300374: Rosa_Sprite_105
+    21300376: Rosa_Sprite_106
+    21300378: Rosa_Sprite_107
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Rosa_Sprite_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 847
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_1
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 847
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_2
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 847
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_3
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 847
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_4
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 847
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_5
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 847
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_6
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 847
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_7
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 847
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_8
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 847
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_9
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 847
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_10
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 847
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_11
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 847
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_12
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 847
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_13
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 847
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_14
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 847
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 726
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_16
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 726
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_17
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 726
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_18
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 726
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_19
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 726
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_20
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 726
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_21
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 726
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_22
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 726
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_23
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 726
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_24
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 726
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_25
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 726
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_26
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 726
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_27
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 726
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_28
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 726
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_29
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 726
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 605
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_31
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 605
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_32
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 605
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_33
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 605
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_34
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 605
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_35
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 605
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_36
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 605
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_37
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 605
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_38
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 605
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_39
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 605
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_40
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 605
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_41
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 605
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_42
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 605
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_43
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 605
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_44
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 605
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_45
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 484
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_46
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 484
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_47
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 484
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_48
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 484
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_49
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 484
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_50
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 484
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_51
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 484
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_52
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 484
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_53
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 484
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_54
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 484
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_55
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 484
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_56
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 484
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_57
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 484
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_58
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 484
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_59
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 484
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_60
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 363
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_61
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 363
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_62
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 363
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_63
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 363
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_64
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 363
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_65
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 363
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_66
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 363
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_67
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 363
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_68
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 363
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_69
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 363
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_70
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 363
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_71
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 363
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_72
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 363
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_73
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 363
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_74
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 363
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_75
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 242
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_76
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 242
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_77
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 242
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_78
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 242
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_79
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 242
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_80
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 242
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_81
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 242
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_82
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 242
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_83
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 242
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_84
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 242
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_85
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 242
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_86
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 242
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_87
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 242
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_88
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 242
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_89
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 242
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_90
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 121
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_91
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 121
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_92
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 121
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_93
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 121
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_94
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 121
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_95
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 121
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_96
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 121
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_97
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 121
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_98
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 121
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_99
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 121
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_100
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 121
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_101
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 121
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_102
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 121
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_103
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 121
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_104
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 121
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_105
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_106
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 0
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Rosa_Sprite_107
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 100
+        height: 121
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

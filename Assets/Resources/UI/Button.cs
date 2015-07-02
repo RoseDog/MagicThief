@@ -39,10 +39,10 @@ public class Button : MonoBehaviour
 
         // This is an offset for touch input to match with the top left
         // corner of the GUI
-        halfGuiSize.x = guiTexture.pixelInset.width * 0.5f;
-        halfGuiSize.y = guiTexture.pixelInset.height * 0.5f;
+        halfGuiSize.x = GetComponent<GUITexture>().pixelInset.width * 0.5f;
+        halfGuiSize.y = GetComponent<GUITexture>().pixelInset.height * 0.5f;
 
-        originalColor = guiTexture.color;
+        originalColor = GetComponent<GUITexture>().color;
 
         for (int idx = 0; idx < 3; ++idx)
         {
@@ -63,18 +63,18 @@ public class Button : MonoBehaviour
 		{
 			OnTouchingFingerUp(null);
 		}
-		guiTexture.enabled = visibility;
+		GetComponent<GUITexture>().enabled = visibility;
 	}
 
 
 	public bool IsVisible()
 	{
-		return guiTexture.enabled;
+		return GetComponent<GUITexture>().enabled;
 	}
 
 	public Vector2 GetCenter()
 	{
-		return new Vector2(guiTexture.pixelInset.x + halfGuiSize.x, guiTexture.pixelInset.y + halfGuiSize.y);
+		return new Vector2(GetComponent<GUITexture>().pixelInset.x + halfGuiSize.x, GetComponent<GUITexture>().pixelInset.y + halfGuiSize.y);
 	}
 
 	public virtual bool OnFingerDown(object sender)
@@ -82,10 +82,10 @@ public class Button : MonoBehaviour
 		if (touchingFinger == null && IsVisible())
 		{
 			Finger finger = (Finger)sender;
-			if (guiTexture.HitTest(new Vector3(finger.nowPosition.x, finger.nowPosition.y)))
+			if (GetComponent<GUITexture>().HitTest(new Vector3(finger.nowPosition.x, finger.nowPosition.y)))
 			{
 				touchingFinger = finger;
-				guiTexture.color = Color.gray;
+				GetComponent<GUITexture>().color = Color.gray;
 
 				if (Evt_BtnDown != null)
 					Evt_BtnDown(GetAtkPrefix());
@@ -156,6 +156,6 @@ public class Button : MonoBehaviour
 	public virtual void ResetGUI()
 	{
 		touchingFinger = null;
-		guiTexture.color = originalColor;
+		GetComponent<GUITexture>().color = originalColor;
 	}
 }

@@ -86,9 +86,9 @@
         if (goldPoper == null)
         {
             UnityEngine.GameObject effectPrefab = (UnityEngine.GameObject)UnityEngine.Resources.Load("Props/Chest/GoldPoper/GoldPoper", typeof(UnityEngine.GameObject));
-            goldPoper = (Instantiate(effectPrefab, transform.position + UnityEngine.Vector3.up * 0.5f + new UnityEngine.Vector3(0, 0, -0.1f), UnityEngine.Quaternion.identity) as UnityEngine.GameObject).GetComponent<GoldPoper>();
+            goldPoper = (Instantiate(effectPrefab, transform.position + UnityEngine.Vector3.up * 50f + new UnityEngine.Vector3(0, 0, -0.1f), UnityEngine.Quaternion.identity) as UnityEngine.GameObject).GetComponent<GoldPoper>();
             goldPoper.chest = this;
-            goldPoper.transform.localScale = new UnityEngine.Vector3(2.0f, 2.0f, 2.0f);
+            goldPoper.transform.localScale = new UnityEngine.Vector3(200.0f, 200.0f, 200.0f);
             goldPoper.transform.parent = transform;
         }
         
@@ -99,7 +99,7 @@
     public override void Visible(bool visibility)
     {
         base.Visible(visibility);
-        collider.enabled = visibility;        
+        GetComponent<UnityEngine.Collider>().enabled = visibility;        
     }
 	
 	public void PlaceOnCell(Cell cell, float rotate_angle)
@@ -156,7 +156,7 @@
             if (Globals.magician.Stealing && SafeboxNotFinishedTip == null)
             {
                 SafeboxNotFinishedTip = UnityEngine.GameObject.Instantiate(SafeboxNotFinishedPrefab) as UnityEngine.GameObject;
-                SafeboxNotFinishedTip.GetComponent<UnityEngine.Canvas>().worldCamera = Globals.cameraFollowMagician.camera;
+                SafeboxNotFinishedTip.GetComponent<UnityEngine.Canvas>().worldCamera = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>();
                 SafeboxNotFinishedTip.GetComponentInChildren<UIMover>().Jump();
                 SafeboxNotFinishedTip.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f);
             }            
@@ -205,7 +205,7 @@
                 SafeboxNotFinishedTip = null;
             }
 
-            renderers.Remove(head_on_minimap.renderer);
+            renderers.Remove(head_on_minimap.GetComponent<UnityEngine.Renderer>());
             Destroy(head_on_minimap);
             head_on_minimap = null;            
 
@@ -242,6 +242,7 @@
     {
         int time = 3;
         float gold_every_time = goldLostPersecond / time;
+        audioSource.Play();
         while (time > 0)
         {
             int count = UnityEngine.Random.Range(1,3);
@@ -258,7 +259,7 @@
                 coin_fly.numberDelta = gold_every_coint;
                 coin_fly.ToCashNumber(true);
             }
-            --time;
+            --time;            
             yield return new UnityEngine.WaitForSeconds(0.1f); 
         }
     }    
@@ -291,7 +292,7 @@
         {
             UnityEngine.GameObject obj = UnityEngine.GameObject.Instantiate(SafeboxUpgradeUIPrefab) as UnityEngine.GameObject;
             canvasForSafeboxBtns = obj.GetComponent<UnityEngine.Canvas>();
-            canvasForSafeboxBtns.worldCamera = Globals.cameraFollowMagician.camera;
+            canvasForSafeboxBtns.worldCamera = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>();
 
             UnityEngine.UI.Button UpgradeBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(obj, "UpgradeBtn");
             UpgradeBtn.onClick.AddListener(() => UpgradeBtnClicked());

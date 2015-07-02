@@ -51,7 +51,7 @@ public class GoldPoper : Actor
             int digit = 0;
             int.TryParse(s, out digit);
             systems[i].gameObject.SetActive(true);
-            systems[i].renderer.material.mainTexture = (Texture2D)Resources.Load("Props/Chest/GoldPoper/" + digit, typeof(Texture2D));
+            systems[i].GetComponent<Renderer>().material.mainTexture = (Texture2D)Resources.Load("Props/Chest/GoldPoper/" + digit, typeof(Texture2D));
         }
 	}
 

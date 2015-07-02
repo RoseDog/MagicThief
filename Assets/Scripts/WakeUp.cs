@@ -9,13 +9,13 @@
     public override void Excute()
     {
         base.Excute();
+        guard.EnableEyes(true);
         actor.spriteSheet.Play("wakeUp");
     }
 
     public void wakeUpEnd()
     {
-        Stop();
-        guard.EnableEyes(true);
+        Stop();        
         guard.wandering.Excute();
     }
 }

@@ -28,12 +28,12 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("shotLight_desc", new System.String[] { "可以<color=orange>破坏蜘蛛。</color>\n可以原地开枪<color=orange>吸引守卫注意力。</color>", "A fancy Gun" });
         table.Add("disguise", new System.String[] { "易容", "Disguise" });
         table.Add("disguise_desc", new System.String[] { "魔术师以高超的手法进行乔装，让自己混进守卫之中。", "Disguise" });
-        table.Add("flyUp", new System.String[] { "银翼的魔术师", "Glider" });
+        table.Add("flyUp", new System.String[] { "浮空", "Glider" });
         table.Add("flyUp_desc", new System.String[] { "可以<color=orange>瞬间脱离</color>守卫的追击。移动<color=orange>无视地形。</color>", "Use a glider to fly" });
         table.Add("dove", new System.String[] { "鸽子戏法", "Dove Trick" });
-        table.Add("dove_desc", new System.String[] { "放出小动物吸引守卫的注意力。<color=orange>用来对付机械狗效果显著。</color>", "release animals to distract guards" });
+        table.Add("dove_desc", new System.String[] { "放出小动物吸引守卫的注意力。<color=orange>用来对付玩具狗效果显著。</color>", "release animals to distract guards" });
         table.Add("flash_grenade", new System.String[] { "照明弹", "Flare" });
-        table.Add("flash_grenade_desc", new System.String[] { "<color=orange>先设置降落点</color>，然后点击照明弹进行投掷，可驱散迷雾。<color=orange>只能在潜入之前使用</color>", "Flare" });                       
+        table.Add("flash_grenade_desc", new System.String[] { "<color=orange>拖拽照明弹进行投掷</color>，可驱散迷雾。<color=orange>只能在潜入之前使用</color>", "Flare" });                       
         table.Add("level_loading_progress", new System.String[] { "场景加载{0}%", "Level Loading:{0}%" });
         table.Add("power_cost", new System.String[] { "魔力消耗:{0}", "Power Cost:{0}" });
         table.Add("duration", new System.String[] { "持续时间:{0}", "Duration:{0}" });
@@ -88,10 +88,12 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("joker_desc", new System.String[] { "使用舞步进行近距离攻击。\n可以被催眠。", "joker desc" });
         table.Add("guard", new System.String[] { "警卫", "Guard" });
         table.Add("guard_desc", new System.String[] { "接受过良好教育的执法者。他们会奋力制服并活捉来犯的盗贼。<color=red>当发现自己守护的保险箱箱被偷的时候，会去支援其他保险箱的守卫工作。\n它的视野不会驱散迷雾。</color>", "guard description.." });
-        table.Add("dog", new System.String[] { "机械狗", "Dog" });
+        table.Add("dog", new System.String[] { "玩具狗", "Dog" });
         table.Add("dog_desc", new System.String[] { "当发现异常情况会立刻发出警报，呼叫周围的守卫。\n<color=red>它的视野不会驱散迷雾。</color>\n<color=red>自爆攻击</color>\n<color=red>容易被鸽子引开</color>", "Loyalty dog,  bark to call teammates around when spot anything unusual.not so smart, like to chase anything movable" });
         table.Add("Spider", new System.String[] { "蜘蛛", "Dog" });
-        table.Add("Spider_desc", new System.String[] { "栖息在墙上，喷射蛛网。\n<color=red>它的视野不会驱散迷雾。</color>\n<color=red>自爆攻击</color>\n<color=red>可被魔术牌手枪破坏</color>", "Loyalty dog,  bark to call teammates around when spot anything unusual.not so smart, like to chase anything movable" });
+        table.Add("Spider_desc", new System.String[] { "栖息在墙上，喷射蛛网。\n<color=red>它的视野不会驱散迷雾。</color>\n<color=red>可被魔术牌手枪破坏</color>", "Loyalty dog,  bark to call teammates around when spot anything unusual.not so smart, like to chase anything movable" });
+        table.Add("Monkey", new System.String[] { "马戏猴子", "Dog" });
+        table.Add("Monkey_desc", new System.String[] { "弹射出小鸟，<color=red>远程攻击。</color>\n<color=red>它的视野不会驱散迷雾。</color>\n移动速度缓慢。\n可以被催眠。", "" });
         table.Add("lamp", new System.String[] { "机械萤火虫", "Lamp" });
         table.Add("lamp_desc", new System.String[] { "如果窃贼在灯照下，守卫可以从远处看到他，当然，他们中间没有隔着墙的时候。", "guard will easily see thief when thief is under light." });
         table.Add("upgrade_maze_to_unlock", new System.String[] { "升级迷宫到{0}级以解锁", "Upgrade Maze to Lv.{0} to unlock" });
@@ -186,7 +188,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("rose_pick_tip", new System.String[] { "玫瑰 + {0}\n魔力 + {1}", "Rose + {0}\nPower + {1}" });
         table.Add("nothing_over_charm", new System.String[] { "作为一个魔术师，还有什么能比你的魅力更重要呢：）", "nothing_over_charm" });
         table.Add("rose_add_power", new System.String[] { "每{0}朵玫瑰增加1法力上限", "rose_add_power {0}" });
-        table.Add("power_delta", new System.String[] { "+ {0}", "+ {0}" });
+        table.Add("power_delta", new System.String[] { "魔力值 + {0}", "magic value + {0}" });
 
         table.Add("personal_storage", new System.String[] { "你买下这栋楼的房间，存放“你的”私人财产", "personal_storage" });
         table.Add("create_maze_to_stop_thief", new System.String[] { "用幻术创造一个迷宫，阻止窃贼", "create_maze_to_stop_thief" });
@@ -217,7 +219,14 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("unlock_to_bring_more_item", new System.String[] { "解锁后可携带更多道具", "Fog" });
         table.Add("click_guard_to_cast", new System.String[] { "左键点击守卫释放", "Fog" });
         table.Add("click_to_cast", new System.String[] { "直接点击图标释放", "Disable Fog" });
-        table.Add("drag_to_cast", new System.String[] { "拖拽释放", "Drag to cast" });        
+        table.Add("drag_to_cast", new System.String[] { "拖拽释放", "Drag to cast" });
+
+        table.Add("speed", new System.String[] { "速度", "Speed" });
+        table.Add("vision", new System.String[] { "视野", "Vision" });
+        table.Add("strength", new System.String[] { "力量", "Strength" });
+
+        table.Add("operate_guide_info", new System.String[] { "<color=red>点击右键</color>移动角色\n<color=red>按住左键拖动</color>地图", "Strength" });  
+        
    }    
 
     public void SetText(UnityEngine.UI.Text uiText, System.String key, System.String[] strings = null)

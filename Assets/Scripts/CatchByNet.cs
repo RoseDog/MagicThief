@@ -1,7 +1,7 @@
 ﻿public class CatchByNet : Action
 {
     TrickTimer timer;
-    int duration = 150;
+    int duration = 200;
     Cocos2dAction breakNetAction;
     Cocos2dAction clearNetReduceAction;
     float netReduce = 1;
@@ -42,11 +42,17 @@
         }
         else
         {
+            UnityEngine.GameObject soundPrefab = UnityEngine.Resources.Load("Misc/GunSound") as UnityEngine.GameObject;
+            GuardAlertSound sound = (UnityEngine.GameObject.Instantiate(soundPrefab) as UnityEngine.GameObject).GetComponent<GuardAlertSound>();
+            sound.transform.position = transform.position;
+            sound.SetRadius(15);
+            sound.StartAlert();
+
             if (timer == null)
             {
                 base.Excute();
                 actor.moving.canMove = false;
-                actor.spriteSheet.Play("down_on_floor");
+                actor.spriteSheet.Play("catch_by_net");
 
                 timer = (UnityEngine.GameObject.Instantiate(Globals.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
                 timer.BeginCountDown(gameObject, netTime, new UnityEngine.Vector3(0, 1.5f, 0));
@@ -56,7 +62,7 @@
                 {
                     if (chest.isMagicianNear)
                     {
-                        chest.OnTriggerExit(actor.collider);
+                        chest.OnTriggerExit(actor.GetComponent<UnityEngine.Collider>());
                     }
                 }
             }
@@ -72,7 +78,7 @@
         Globals.canvasForMagician.HideTricksPanel();
     }
     Cocos2dAction stopCall;
-    Cocos2dAction jumpSequence;
+    public Cocos2dAction jumpSequence;
     public void BreakNet()
     {
         UnityEngine.Debug.Log("BreakNet");
@@ -87,9 +93,14 @@
             new MoveTo(transform, originPosition, jump_up_duration / 2));
         actor.AddAction(jumpSequence);
 
-        // 没有挣扎起身的动作。先用易容的动作代替
-        actor.spriteSheet.Play("disguise");
+        
+        actor.spriteSheet.Play("break_net");
         stopCall = actor.SleepThenCallFunction(jump_up_duration, () => Stop());
+
+
+        UnityEngine.GameObject NetPrefab = UnityEngine.Resources.Load("Avatar/Net") as UnityEngine.GameObject;
+        UnityEngine.GameObject Net = UnityEngine.GameObject.Instantiate(NetPrefab) as UnityEngine.GameObject;
+        Net.transform.position = actor.transform.position;
 
         System.String content = gameObject.name;
         content += " BreakNet";

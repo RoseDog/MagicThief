@@ -33,7 +33,7 @@ public class Guard : Actor, System.IComparable<Guard>
     public Chest guardedChest = null;
 
     public GuardData data;
-    int idx;
+    public int idx;
     protected bool bGoChaseDove;
     public override void Awake()
     {                
@@ -116,7 +116,7 @@ public class Guard : Actor, System.IComparable<Guard>
                 foreach (UnityEngine.Vector3 pos in poses)
                 {
                     double dis = UnityEngine.Vector3.Distance(pos, chest.transform.position);
-                    if (dis < fovMaxDistance + (chest.collider as UnityEngine.BoxCollider).size.x * 0.5f * transform.localScale.x)
+                    if (dis < fovMaxDistance + (chest.GetComponent<UnityEngine.Collider>() as UnityEngine.BoxCollider).size.x * 0.5f * transform.localScale.x)
                     {
                         guardedChest = chest;
                         break;
@@ -181,7 +181,7 @@ public class Guard : Actor, System.IComparable<Guard>
         {
             UnityEngine.GameObject obj = UnityEngine.GameObject.Instantiate(defenderArrangeUIPrefab) as UnityEngine.GameObject;
             canvasForCommandBtns = obj.GetComponent<UnityEngine.Canvas>();
-            canvasForCommandBtns.worldCamera = Globals.cameraFollowMagician.camera;
+            canvasForCommandBtns.worldCamera = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>();
 
             UnityEngine.UI.Button ConfirmHireBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(obj, "ConfirmHireBtn");
             
@@ -242,7 +242,7 @@ public class Guard : Actor, System.IComparable<Guard>
         {
             UnityEngine.GameObject obj = UnityEngine.GameObject.Instantiate(challengerTricksUIPrefab) as UnityEngine.GameObject;
             canvasForCommandBtns = obj.GetComponent<UnityEngine.Canvas>();
-            canvasForCommandBtns.worldCamera = Globals.cameraFollowMagician.camera;
+            canvasForCommandBtns.worldCamera = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>();
 
             TrickBtnOnGuardHead btn = obj.GetComponentInChildren<TrickBtnOnGuardHead>();
             btn.guard = this;            

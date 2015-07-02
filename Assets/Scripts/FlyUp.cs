@@ -2,7 +2,7 @@
 {
     Guard target;
     [UnityEngine.HideInInspector]
-    public UnityEngine.Vector3 up = new UnityEngine.Vector3(0,1.5f,0);
+    public UnityEngine.Vector3 up = new UnityEngine.Vector3(0,2.5f,0);
     [UnityEngine.HideInInspector]
     public UnityEngine.Vector3 destination = UnityEngine.Vector3.zero;
     Cocos2dAction inAirCD;
@@ -13,20 +13,9 @@
     public override void Awake()
     {
         base.Awake();
-        
-        mage.spriteSheet.AddAnimationEvent("flyup", -1, () => InAir());        
-        System.Collections.Generic.List<UnityEngine.Sprite> sprites = new System.Collections.Generic.List<UnityEngine.Sprite>();
-        sprites.Add(mage.spriteSheet._animationList["falling"].spriteList[0]);
-        sprites.Add(mage.spriteSheet._animationList["falling"].spriteList[1]);
-        sprites.Add(mage.spriteSheet._animationList["falling"].spriteList[2]);
-        mage.spriteSheet.CreateAnimationBySprites(sprites, "falling_success");
-        
 
-        sprites.Clear();
-        sprites.Add(mage.spriteSheet._animationList["landing"].spriteList[0]);        
-        mage.spriteSheet.CreateAnimationBySprites(sprites, "success_down_on_floor");
-
-        
+        mage.spriteSheet.AddAnimationEvent("flyup_0", -1, () => Up());
+        mage.spriteSheet.AddAnimationEvent("flyup_2", -1, () => InAir());
 
         shadow = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(gameObject, "shadow");
         shadowPosCache = shadow.transform.localPosition;
@@ -41,13 +30,7 @@
         actor.moving.canMove = false;
         actor.gameObject.layer = 26;
         actor.spriteRenderer.gameObject.layer = 26;
-        actor.AddAction(new MoveTo(actor.transform, actor.transform.position + up, actor.spriteSheet.GetAnimationLength("flyup")));
-        actor.AddAction(new MoveTo(shadow.transform, -up/2, actor.spriteSheet.GetAnimationLength("flyup")));
-        actor.AddAction(new ScaleTo(shadow.transform, shadowScaleCache / 2, actor.spriteSheet.GetAnimationLength("flyup")));
-        
-        actor.spriteSheet.Play("flyup");
-
-        destination = actor.transform.position;
+        actor.spriteSheet.Play("flyup_0");
 
         Globals.canvasForMagician.HideTricksPanel();
 
@@ -55,11 +38,29 @@
         content += " Fly up";
         Globals.record("testReplay", content);
     }
+    int up_duration = 10;
+    public void Up()
+    {
+        
+
+        actor.AddAction(new MoveTo(actor.transform, actor.transform.position + up, up_duration));
+        actor.AddAction(new MoveTo(shadow.transform, -up / 2, up_duration));
+        actor.AddAction(new ScaleTo(shadow.transform, shadowScaleCache / 2, up_duration));
+        destination = actor.transform.position;
+        actor.spriteSheet.Play("flyup_1");
+        actor.SleepThenCallFunction(up_duration, () => UnfoldUmbrella());
+    }
+
+    public void UnfoldUmbrella()
+    {
+        actor.spriteSheet.Play("flyup_2");
+        actor.AddAction(new MoveTo(actor.transform, actor.transform.position - new UnityEngine.Vector3(0, 0.4f, 0), actor.spriteSheet.GetAnimationLengthWithSpeed("flyup_2")));
+    }
 
     public void InAir()
     {
         timer = (UnityEngine.GameObject.Instantiate(Globals.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
-        timer.BeginCountDown(gameObject, data.duration, new UnityEngine.Vector3(0, 1.4f, 0));
+        timer.BeginCountDown(gameObject, data.duration, new UnityEngine.Vector3(0, 1.7f, 0));
         inAirCD = actor.SleepThenCallFunction(data.duration, () => FoldGlider());
         actor.spriteSheet.Play("flying");
         UnityEngine.Debug.Log("flying");
@@ -79,7 +80,7 @@
     }
 
     public void FoldGlider()
-    {
+    {        
         DestroyObject(timer.gameObject);
         UnityEngine.Debug.Log("FoldGlider");
         Pathfinding.Node node = Globals.maze.pathFinder.GetSingleNode(actor.transform.position - up, true);
@@ -87,6 +88,11 @@
         // 可以落下
         if (node != null)
         {
+            UnityEngine.GameObject UmbrellaPrefab = UnityEngine.Resources.Load("Avatar/FoldUmbrella") as UnityEngine.GameObject;
+            UnityEngine.GameObject umbrella = UnityEngine.GameObject.Instantiate(UmbrellaPrefab) as UnityEngine.GameObject;
+            umbrella.transform.position = actor.transform.position
+                + new UnityEngine.Vector3(0,1.0f,0);
+
             actor.spriteSheet.Play("falling_success");
             actor.AddAction(new Sequence(
                 new MoveTo(actor.transform, actor.transform.position - up, 20),
@@ -96,7 +102,7 @@
         }
         else
         {
-            actor.spriteSheet.Play("falling_failed");
+            actor.spriteSheet.Play("falling_failed_loop");
             UnityEngine.Vector3 fall_pos = Globals.GetPathNodePos(Globals.maze.pathFinder.GetNearestWalkableNode(actor.transform.position - up));
             actor.AddAction(new Sequence(
                 new MoveToWithSpeed(actor.transform, fall_pos, 0.05f),
@@ -114,19 +120,21 @@
 
     public void SuccessDownOnFloor()
     {
-        actor.spriteSheet.Play("success_down_on_floor");
-        actor.SleepThenCallFunction(20, () => StandUp());
+        standUpAct = actor.SleepThenCallFunction(20, () => StandUp());
 
         System.String content = gameObject.name;
         content += " SuccessDownOnFloor";
         Globals.record("testReplay", content);
     }
-   
+    Cocos2dAction standUpAct;
     public void FailedDownOnFloor()
     {
-        shadow.transform.localPosition = shadowPosCache;        
-        actor.spriteSheet.Play("down_on_floor");
-        actor.SleepThenCallFunction(60, ()=>StandUp());
+        actor.gameObject.layer = 11;
+        actor.spriteRenderer.gameObject.layer = 11;
+
+        shadow.transform.localPosition = shadowPosCache;
+        actor.spriteSheet.Play("falling_failed");
+        standUpAct = actor.SleepThenCallFunction(100, ()=>StandUp());
 
         System.String content = gameObject.name;
         content += " FailedDownOnFloor";
@@ -135,20 +143,30 @@
 
     public void StandUp()
     {
-        actor.spriteSheet.Play("stand_up");
-        actor.SleepThenCallFunction(actor.spriteSheet.GetAnimationLength("stand_up"), () => Landed());
+        standUpAct = null;
+        actor.spriteSheet.Play("landing");
+        actor.SleepThenCallFunction(actor.spriteSheet.GetAnimationLength("landing"), () => Landed());
     }
 
     public void Landed()
+    {        
+        System.String content = gameObject.name;
+        content += " Landed";
+        Globals.record("testReplay", content);
+
+        Stop();
+    }
+
+    public override void Stop()
     {
+        if (standUpAct != null)
+        {
+            actor.RemoveAction(ref standUpAct);
+        }
         actor.moving.canMove = true;
         actor.gameObject.layer = 11;
         actor.spriteRenderer.gameObject.layer = 11;
         Globals.canvasForMagician.ShowTricksPanel();
-
-        System.String content = gameObject.name;
-        content += " Landed";
-        Globals.record("testReplay", content);
 
         base.Stop();
     }

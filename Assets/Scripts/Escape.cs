@@ -14,7 +14,7 @@
         actor.spriteSheet.Play(anim);
         transform.position = transform.position - new UnityEngine.Vector3(0,0,0.6f);
         actor.AddAction(
-            new Sequence(new MoveTo(transform, transform.position + new UnityEngine.Vector3(0, 15, 0), Duration)
+            new Sequence(new MoveTo(transform, transform.position + new UnityEngine.Vector3(0, 1500, 0), Duration)
                 ,new FunctionCall(()=>EscapeOver())));
         if (actor.moving.GetSeeker().GetCurrentPath() != null)
         {

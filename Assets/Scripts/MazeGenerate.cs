@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class MazeGenerate : UnityEngine.MonoBehaviour
 {
-    float cell_side_length = 3.24f;
+    float cell_side_length = 324.0f;
     public float GetCellSideLength()
     {
         return cell_side_length;
@@ -1150,14 +1150,14 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                 {
                     S_E_Corner.sprite = s_e_corner;
                     S_E_Corner.enabled = true;
-                    S_E_Corner.collider.enabled = true;
+                    S_E_Corner.GetComponent<UnityEngine.Collider>().enabled = true;
                 }
 
                 if (W_sprite != null && W_sprite.enabled && (south_cell_W_sprite == null || south_cell_W_sprite.enabled == false))
                 {
                     S_W_Corner.sprite = s_w_corner;
                     S_W_Corner.enabled = true;
-                    S_W_Corner.collider.enabled = true;
+                    S_W_Corner.GetComponent<UnityEngine.Collider>().enabled = true;
                 }
             }
             else
@@ -1166,25 +1166,25 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                 {
                     S_W_Corner.sprite = s_w_corner;
                     S_W_Corner.enabled = true;
-                    S_W_Corner.collider.enabled = true;
+                    S_W_Corner.GetComponent<UnityEngine.Collider>().enabled = true;
                 }
 
                 if (E_sprite != null && E_sprite.enabled)
                 {
                     S_E_Corner.sprite = s_e_corner;
                     S_E_Corner.enabled = true;
-                    S_E_Corner.collider.enabled = true;
+                    S_E_Corner.GetComponent<UnityEngine.Collider>().enabled = true;
                 }
             }
 
             if (S_E_Corner != null && !S_E_Corner.enabled)
             {
-                S_E_Corner.collider.enabled = false;
+                S_E_Corner.GetComponent<UnityEngine.Collider>().enabled = false;
             }
 
             if (S_W_Corner != null && !S_W_Corner.enabled)
             {
-                S_W_Corner.collider.enabled = false;
+                S_W_Corner.GetComponent<UnityEngine.Collider>().enabled = false;
             }
 
             Cell N_Cell = cell.GetAdjacentCell(Globals.SOUTH);
@@ -1192,8 +1192,8 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             UnityEngine.Collider N_E_Corner = Globals.getChildGameObject<UnityEngine.Collider>(cell.gameObject, "N-E-Corner");
             if (N_Cell)
             {
-                UnityEngine.SpriteRenderer north_cell_E_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(S_Cell.gameObject, "E");
-                UnityEngine.SpriteRenderer north_cell_W_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(S_Cell.gameObject, "W");
+                UnityEngine.SpriteRenderer north_cell_E_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(N_Cell.gameObject, "E");
+                UnityEngine.SpriteRenderer north_cell_W_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(N_Cell.gameObject, "W");
 
                 if (E_sprite != null && E_sprite.enabled && (north_cell_E_sprite == null || north_cell_E_sprite.enabled == false))
                 {
@@ -1240,8 +1240,8 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         
         rayCastPlane = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
         rayCastPlane.transform.localPosition = new UnityEngine.Vector3(0, Globals.FLOOR_HEIGHT, 0);
-        rayCastPlane.transform.localScale = new UnityEngine.Vector3(1000, 1000, 0.2f);
-        rayCastPlane.renderer.enabled = false;
+        rayCastPlane.transform.localScale = new UnityEngine.Vector3(10000, 10000, 0.2f);
+        rayCastPlane.GetComponent<UnityEngine.Renderer>().enabled = false;
         rayCastPlane.layer = 9;
 
         // pve关卡
@@ -1532,6 +1532,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         else
         {
 			Globals.cameraFollowMagician.DragToMove(fingerDownOnMap);
+            Globals.cameraFollowMagician.DragOnMiniMap(fingerDownOnMap);
         }
         
         return true;

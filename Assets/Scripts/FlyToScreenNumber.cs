@@ -7,7 +7,7 @@
     UnityEngine.Vector3 posWhenFlyBegin;
     UnityEngine.Vector3 scaleWhenFlyBegin;
     Number numberFlyTo;
-    public float speed = 0.1f;
+    public float speed = 0.1f;    
 
     public void ToCashNumber(bool rotate)
     {
@@ -40,7 +40,7 @@
     public void FlyOff(bool rotate)
     {
         UnityEngine.RectTransform rect_transform = numberFlyTo.GetComponent<UnityEngine.RectTransform>();
-        numberScreenPos = new UnityEngine.Vector3(rect_transform.position.x, rect_transform.position.y, Globals.cameraFollowMagician.camera.nearClipPlane);
+        numberScreenPos = new UnityEngine.Vector3(rect_transform.position.x, rect_transform.position.y, Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().nearClipPlane);
 
         transform.parent = Globals.cameraFollowMagician.transform;
         posWhenFlyBegin = transform.localPosition;
@@ -62,7 +62,7 @@
     {
         while (true)
         {
-            UnityEngine.Vector3 uiWorldPos = Globals.cameraFollowMagician.camera.ScreenToWorldPoint(numberScreenPos);
+            UnityEngine.Vector3 uiWorldPos = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().ScreenToWorldPoint(numberScreenPos);
             UnityEngine.Vector3 destination = Globals.cameraFollowMagician.transform.InverseTransformPoint(uiWorldPos);
 
             float disNow = UnityEngine.Vector3.Distance(destination, transform.localPosition);
@@ -78,9 +78,11 @@
             {
                 DestroyImmediate(gameObject);
                 if (Globals.magician.LifeCurrent > 0 && numberFlyTo.gameObject.activeSelf)
-                {                    
-                    numberFlyTo.Add(numberDelta);                                    
+                {
+                    numberFlyTo.Add(numberDelta);
+                    numberFlyTo.audioSource.Play();
                 }
+                
                 break;
             }
             else

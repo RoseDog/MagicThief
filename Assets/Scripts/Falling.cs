@@ -17,7 +17,7 @@
         actor.moving.canMove = false;
         actor.AddAction(new MoveTo(actor.transform, to,
             actor.spriteSheet.GetAnimationLengthWithSpeed("falling")));
-        actor.transform.localScale = new UnityEngine.Vector3(actor.scaleCache.x, 12, 12);
+        actor.transform.localScale = new UnityEngine.Vector3(actor.scaleCache.x, 4000, 2400);
         actor.AddAction(new ScaleTo(actor.transform, actor.scaleCache,
             actor.spriteSheet.GetAnimationLengthWithSpeed("falling")));
         actor.spriteSheet.Play("falling");

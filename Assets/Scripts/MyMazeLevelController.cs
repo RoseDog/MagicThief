@@ -18,7 +18,7 @@
         mainCanvas = CanvasForMyMaze.GetComponent<UnityEngine.Canvas>();
         
         // 在TutorialLevel.InitMaze这个阶段，最开始“完整的迷宫”会闪一帧，      
-        FindObjectOfType<CameraFollow>().camera.enabled = false;
+        FindObjectOfType<CameraFollow>().GetComponent<UnityEngine.Camera>().enabled = false;
 
         GuardFullFillHisDutyTipPrefab = UnityEngine.Resources.Load("UI/GuardFullFillHisDuty") as UnityEngine.GameObject;
         fogPlane.SetActive(false);
@@ -54,7 +54,7 @@
 
     public override void MazeFinished()
     {
-        Globals.cameraFollowMagician.camera.enabled = true;
+        Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().enabled = true;
         base.MazeFinished();
         
         Globals.canvasForMyMaze.ShowUnclickedGuardsRedPointsOnEnhanceDefBtn();
@@ -121,6 +121,10 @@
             System.String guardname = Globals.self.guardsHired[idx];
             Globals.GetGuardData(guardname).hired = true;
         }
+
+        Globals.cameraFollowMagician.audioSource.clip = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/尋問");
+        Globals.cameraFollowMagician.audioSource.Play();
+        Globals.cameraFollowMagician.audioSource.volume = 0.25f;
     }
 
     public override void MoneyFull(bool full)

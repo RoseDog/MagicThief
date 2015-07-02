@@ -285,7 +285,7 @@ public class Cell : Actor
             if (renderer.gameObject != floor)
             {
                 renderer.enabled = false;
-                renderer.collider.enabled = false;
+                renderer.GetComponent<UnityEngine.Collider>().enabled = false;
             }            
         }
     }

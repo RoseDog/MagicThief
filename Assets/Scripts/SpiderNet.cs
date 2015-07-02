@@ -1,62 +1,25 @@
-﻿public class SpiderNet : Actor 
+﻿public class SpiderNet : Projectle 
 {
-    Actor targetActor;
-    Cocos2dAction jumpAction;
-    double catch_mage_dis = 1.1f;
-    int jumpDuration = 60;
-
-    bool activeNet = false;
     public Spider spider;
-    public void Fire(Actor target)
+    public override void Awake()
     {
-        targetActor = target;
-        UnityEngine.Debug.Log("Net Fired");
-        jumpAction = new Sequence(new JumpTo(transform, targetActor.transform.position, 1.0f,
-            jumpDuration),
-            new FunctionCall(() => NetCatchMiss()));
-        AddAction(jumpAction);
-        AddAction(SleepThenCallFunction((int)(jumpDuration * 0.7f), () => Active()));        
+        base.Awake();
+        hit_target_dis = 1.1f;
+        jumpDuration = 60;
     }
 
-    void Active()
+    public override void HitTarget()
     {
-        activeNet = true;
-    }
-
-    public override void Update()
-    {
-        base.Update();
-        if (activeNet)
-        {
-            if (targetActor != null && !targetActor.IsLifeOver())
-            {
-                if (UnityEngine.Vector3.Distance(transform.position, targetActor.transform.position) < catch_mage_dis)
-                {
-                    DestroyObject(gameObject);
-
-                    if (targetActor.catchByNet != null)
-                    {
-                        targetActor.catchByNet.Catched(spider);
-                    }                    
-
-                    System.String content = gameObject.name;
-                    content += " net mage";
-                    Globals.record("testReplay", content);
-                }
-            }
-        }
-    }
-
-    void NetCatchMiss()
-    {
-        UnityEngine.Debug.Log("NetCatchMiss");
-        jumpAction = null;
-
+        base.HitTarget();
         DestroyObject(gameObject);
 
+        if (targetActor.catchByNet != null && targetActor.gameObject.layer == 11)
+        {
+            targetActor.catchByNet.Catched(spider);
+        }
+
         System.String content = gameObject.name;
-        content += " NetCatchMiss";
+        content += " net mage";
         Globals.record("testReplay", content);
     }
-
 }

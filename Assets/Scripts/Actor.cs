@@ -54,6 +54,9 @@
     public double heightOriginCache;
 
     public FOV2DEyes eye;
+
+    public UnityEngine.AudioSource audioSource;
+
     public virtual void Awake()
     {
         scaleCache = transform.localScale;
@@ -75,6 +78,8 @@
         renderers = new System.Collections.Generic.List<UnityEngine.Renderer>(GetComponentsInChildren<UnityEngine.Renderer>());
 
         pathMeshPrefab = UnityEngine.Resources.Load("Misc/PathMesh") as UnityEngine.GameObject;
+
+        audioSource = GetComponent<UnityEngine.AudioSource>();
     }
 
     public virtual void Start()

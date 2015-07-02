@@ -12,7 +12,7 @@
 		LOD 200
 		
 		CGPROGRAM
-		#pragma surface surf NoLighting noambient
+		#pragma surface surf NoLighting alpha
 		
 		fixed4 LightingNoLighting(SurfaceOutput s, fixed3 lightDir, float aten)
 		{

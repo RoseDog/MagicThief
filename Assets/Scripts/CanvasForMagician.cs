@@ -139,7 +139,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
 
         cashIntroUI.gameObject.SetActive(false);
         roseIntroUI.gameObject.SetActive(false);
-    }
+    }    
 
     void InitUIStats()
     {        
@@ -310,10 +310,12 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         //Globals.languageTable.SetText(durationLabel, "duration", new System.String[] { (data.duration * UnityEngine.Time.fixedDeltaTime).ToString("F1") });
         if (!data.IsLocked())
         {
-            Globals.languageTable.SetText(unlockLabel, "already_unlocked");
+            //Globals.languageTable.SetText(unlockLabel, "already_unlocked");
+            unlockLabel.gameObject.SetActive(false);
         }
         else
         {
+            unlockLabel.gameObject.SetActive(true);
             Globals.languageTable.SetText(unlockLabel, "unlock_need_rose", new System.String[] { data.unlockRoseCount.ToString() });
             unlockLabel.color = UnityEngine.Color.red;
 
@@ -330,9 +332,11 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
             Globals.languageTable.SetText(trickCashCost, "already_bought");
             trickCashCost.color = UnityEngine.Color.green;
             buyTrickBtn.interactable = false;
+            buyTrickBtn.gameObject.SetActive(false);
         }
         else
         {
+            buyTrickBtn.gameObject.SetActive(true);
             buyTrickBtn.interactable = true;
             buyTrickBtn.onClick.AddListener(() => BuyTrickItem(item));
             if (data.price > 0)
@@ -472,7 +476,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
 
     public void CheckBuyTrickAndSlotTip()
     {
-        if (Globals.playingReplay == null && Globals.guardPlayer.isBot && Globals.self.pveProgress <= 3)
+        if (Globals.playingReplay == null && Globals.guardPlayer.isBot && Globals.self.pveProgress <= 6)
         {
             // 易容，鸽子没购买，第一个槽没解锁
             if (!Globals.tricks[1].bought || !Globals.tricks[2].bought || Globals.self.slotsDatas[1].statu == "-1")

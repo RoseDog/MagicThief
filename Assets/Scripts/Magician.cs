@@ -21,22 +21,30 @@ public class Magician : Actor
         
         spriteSheet.AddAnim("idle", 4);                
         spriteSheet.AddAnim("moving",6, 1.2f);
-        spriteSheet.AddAnim("falling", 1, 0.2f);
+        spriteSheet.AddAnim("victoryEscape", 1);
+        spriteSheet.AddAnim("catch_by_net", 4);
+        spriteSheet.AddAnim("hitted_in_net", 1, 0.2f);
+        spriteSheet.AddAnim("break_net", 8);
+        spriteSheet.AddAnim("disguise", 8);
+        spriteSheet.AddAnim("falling_failed", 7, 1.0f, true);
+        spriteSheet.AddAnim("falling_success", 5, 1.0f, true);
+        spriteSheet.AddAnim("falling", 1, 0.1f);
+        spriteSheet.AddAnim("flying", 8);
+        spriteSheet.AddAnim("hitted", 1, 0.2f);
+        spriteSheet.AddAnim("Hypnosis", 4, 0.7f);
         spriteSheet.AddAnim("landing", 1, 0.2f);
-        spriteSheet.AddAnim("hitted", 1, 0.2f);        
-        spriteSheet.AddAnim("lifeOver", 6, 0.8f);
+        spriteSheet.AddAnim("lifeOver", 5, 1.1f, true);
         spriteSheet.AddAnim("lifeOverEscape", 1, 1.0f, true);
-        spriteSheet.AddAnim("TryEscape", 4, 0.7f);
-        spriteSheet.AddAnim("victoryEscape", 2);
-        spriteSheet.AddAnim("Hypnosis", 2, 0.7f);
+        spriteSheet.AddAnim("take_out_gun", 5);
+        spriteSheet.AddAnim("shot_machine", 3);
+        spriteSheet.AddAnim("shot_empty", 3);
+        spriteSheet.AddAnim("TryEscape", 6, 0.7f);
 
-        spriteSheet.AddAnim("disguise", 4);        
-        spriteSheet.AddAnim("flyup", 4, 1.3f);
-        spriteSheet.AddAnim("flying", 2);
-        spriteSheet.AddAnim("down_on_floor", 1);
-        spriteSheet.AddAnim("stand_up", 2);        
-        spriteSheet.AddAnim("falling_failed", 4);
-        spriteSheet.AddAnim("Shot", 2);
+        spriteSheet.AddAnim("falling_failed_loop", 12, 1.3f);
+        spriteSheet.AddAnim("flyup_0",7, 1.6f);
+        spriteSheet.AddAnim("flyup_1", 1, 1.3f);
+        spriteSheet.AddAnim("flyup_2", 6, 1.5f);
+        
         
         DontDestroyOnLoad(this);
         tryEscape = GetComponent<TryEscape>();        
@@ -126,7 +134,7 @@ public class Magician : Actor
         guard_data.magicianOutVisionTime = 450;
         guard_data.atkCd = 150;
         guard_data.attackValue = 60;
-        guard_data.atkShortestDistance = 2.1f;
+        guard_data.atkShortestDistance = 210f;
         guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
         Globals.guardDatas.Add(guard_data);
@@ -137,7 +145,7 @@ public class Magician : Actor
         guard_data.roomConsume = 1;
         guard_data.magicianOutVisionTime = 500;
         guard_data.attackValue = 40;
-        guard_data.atkShortestDistance = 1.0f;
+        guard_data.atkShortestDistance = 0.5f;
         guard_data.doveOutVisionTime = 500;
         Globals.guardDatas.Add(guard_data);
 
@@ -165,9 +173,23 @@ public class Magician : Actor
         guard_data.attackSpeed = 1.0f;
         Globals.guardDatas.Add(guard_data);
 
+
+        guard_data = new GuardData();
+        guard_data.name = "Monkey";
+        guard_data.price = 12000;
+        guard_data.roomConsume = 3;
+        guard_data.magicianOutVisionTime = 200;
+        guard_data.atkCd = 250;
+        guard_data.attackValue = 60;
+        guard_data.atkShortestDistance = 6.1f;
+        guard_data.doveOutVisionTime = 50;
+        guard_data.attackSpeed = 1.0f;
+        Globals.guardDatas.Add(guard_data);
+
+
         guard_data = new GuardData();
         guard_data.name = "lamp";
-        guard_data.price = 15000;
+        guard_data.price = 17000;
         guard_data.roomConsume = 1;        
         Globals.guardDatas.Add(guard_data);
 
@@ -218,6 +240,14 @@ public class Magician : Actor
         Globals.mazeLvDatas.Add(data);
 
         data = new MazeLvData();
+        data.roseRequire = 35;
+        data.price = 20000;
+        data.roomSupport = 16;
+        data.lockGuardsName = new System.String[] { "Monkey" };
+        data.safeBoxCount = 4;
+        Globals.mazeLvDatas.Add(data);
+
+        data = new MazeLvData();
         data.roseRequire = 50;
         data.price = 25000;
         data.roomSupport = 23;
@@ -264,7 +294,7 @@ public class Magician : Actor
         eye.gameObject.SetActive(true);
         //moving.canMove = true;
         Globals.EnableAllInput(true);
-        Globals.cameraFollowMagician.SetDragSpeed(0.02f);
+        Globals.cameraFollowMagician.SetDragSpeed(2f);
         Globals.canvasForMagician.gameObject.SetActive(true);
     }
 
@@ -285,23 +315,12 @@ public class Magician : Actor
         (Globals.LevelController as StealingLevelController).canvasForStealing.gameObject.SetActive(false);
     }
 
-    public void CoverInMoonlight()
-    {
-        if(currentAction != null)
-        {
-            currentAction.Stop();
-        }
-        spriteSheet.Play("idle");
-//         for (int idx = 0; idx < skinnedMeshRenderers.Length; ++idx)
-//         {
-//             skinnedMeshRenderers[idx].material.shader = UnityEngine.Shader.Find("Diffuse");            
-//         }
-    }
 
     public void CastMagic(TrickData data)
-    {        
-        if (Stealing && !data.clickOnGuardToCast && ChangePower(-data.powerCost))
+    {
+        if (Stealing && (!data.clickOnGuardToCast || data.nameKey == "shotLight") && ChangePower(-data.powerCost))
         {
+            Globals.replaySystem.RecordMagicCast(data);            
             if (data.nameKey == "disguise")
             {
                 disguise.Excute();
@@ -366,15 +385,8 @@ public class Magician : Actor
         content += pos.ToString("F3");
         Globals.record("testReplay", content);
 
-        if(currentAction == flyUp)
-        {
-            flyUp.destination = pos;
-        }
-        else
-        {
-            moving.canSearch = false;
-            moving.GetSeeker().StartPath(moving.GetFeetPosition(), pos, OnPathComplete);
-        }        
+        moving.canSearch = false;
+        moving.GetSeeker().StartPath(moving.GetFeetPosition(), pos, OnPathComplete);             
         return true;
     }
 

@@ -38,7 +38,7 @@
 
         if (Globals.buildingSprites == null)
         {
-            Globals.buildingSprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("City Night/city-0");
+            Globals.buildingSprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Avatar/City Night/city-0");
         }
 
         go_add_box = Globals.getChildGameObject<UIMover>(canvasForCity, "go_add_box");
@@ -84,6 +84,7 @@
         Globals.canvasForMagician.SetCashVisible(true);
         Globals.canvasForMagician.SetRoseVisible(true);
         Globals.canvasForMagician.ShowTricksPanel();
+        Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();
         Globals.magician.ResetLifeAndPower(Globals.self);
                 
         ranksWindow.viewRankPlayer.OnTouchUpOutside(null);
@@ -131,6 +132,10 @@
         Globals.UpdateUnclickedRedPointsText(eventsWindow.unclickedCount);
         
         MoneyFull(Globals.canvasForMagician.money_full.activeSelf);
+
+        Globals.cameraFollowMagician.audioSource.clip = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/Supergiant Games - Bastion Original Soundtrack - 11 Slinger's Song");
+        Globals.cameraFollowMagician.audioSource.Play();
+        Globals.cameraFollowMagician.audioSource.volume = 0.25f;
     }
 
     public void AddReplaysToEventWindow(System.Collections.Hashtable replays)

@@ -33,7 +33,7 @@
         UnityEngine.Ray ray = UnityEngine.Camera.main.ScreenPointToRay(finger.nowPosition);
         if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
         {
-            animation.CrossFade(animationNamesArray[anim_idx] as System.String, 1.0f);
+            GetComponent<UnityEngine.Animation>().CrossFade(animationNamesArray[anim_idx] as System.String, 1.0f);
             ++anim_idx;
             anim_idx = anim_idx%3;
         }
@@ -42,7 +42,7 @@
 
     public void GreetingEnd()
     {
-        animation.CrossFade("A_Stand", 0.2f);    
+        GetComponent<UnityEngine.Animation>().CrossFade("A_Stand", 0.2f);    
     }
 	
 	// Update is called once per frame

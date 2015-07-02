@@ -23,8 +23,8 @@
             ready = false;
         }
 
-        //ws = new WebSocketSharp.WebSocket("ws://96.126.116.192:42788");
-        ws = new WebSocketSharp.WebSocket("ws://127.0.0.1:42788");
+        ws = new WebSocketSharp.WebSocket("ws://96.126.116.192:42788");
+        //ws = new WebSocketSharp.WebSocket("ws://127.0.0.1:42788");
 
         ws.OnMessage += OnMessage;
         ws.OnError += OnError;

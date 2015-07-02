@@ -34,6 +34,7 @@
         fly.numberDelta = cash;
         cash = 0;
         SleepThenCallFunction(floatDuration + 5, ()=>FlyOff());
+        GetComponent<UnityEngine.AudioSource>().Play();
     }
 
     void FlyOff()

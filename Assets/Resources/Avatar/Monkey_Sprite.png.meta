@@ -1,0 +1,517 @@
+fileFormatVersion: 2
+guid: 9137da69eaf4491419f356e455ee584a
+timeCreated: 1435166988
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Monkey_Sprite_0
+    21300002: Monkey_Sprite_1
+    21300004: Monkey_Sprite_2
+    21300006: Monkey_Sprite_3
+    21300008: Monkey_Sprite_4
+    21300010: Monkey_Sprite_5
+    21300012: Monkey_Sprite_6
+    21300014: Monkey_Sprite_7
+    21300016: Monkey_Sprite_8
+    21300018: Monkey_Sprite_9
+    21300020: Monkey_Sprite_10
+    21300022: Monkey_Sprite_11
+    21300024: Monkey_Sprite_12
+    21300026: Monkey_Sprite_13
+    21300028: Monkey_Sprite_14
+    21300030: Monkey_Sprite_15
+    21300032: Monkey_Sprite_16
+    21300034: Monkey_Sprite_17
+    21300036: Monkey_Sprite_18
+    21300038: Monkey_Sprite_19
+    21300040: Monkey_Sprite_20
+    21300042: Monkey_Sprite_21
+    21300044: Monkey_Sprite_22
+    21300046: Monkey_Sprite_23
+    21300048: Monkey_Sprite_24
+    21300050: Monkey_Sprite_25
+    21300052: Monkey_Sprite_26
+    21300054: Monkey_Sprite_27
+    21300056: Monkey_Sprite_28
+    21300058: Monkey_Sprite_29
+    21300060: Monkey_Sprite_30
+    21300062: Monkey_Sprite_31
+    21300064: Monkey_Sprite_32
+    21300066: Monkey_Sprite_33
+    21300068: Monkey_Sprite_34
+    21300070: Monkey_Sprite_35
+    21300072: Monkey_Sprite_36
+    21300074: Monkey_Sprite_37
+    21300076: Monkey_Sprite_38
+    21300078: Monkey_Sprite_39
+    21300080: Monkey_Sprite_40
+    21300082: Monkey_Sprite_41
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Monkey_Sprite_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 166
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_1
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 166
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_2
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 166
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_3
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 166
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_4
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 166
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_5
+      rect:
+        serializedVersion: 2
+        x: 545
+        y: 166
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_6
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 166
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_7
+      rect:
+        serializedVersion: 2
+        x: 763
+        y: 166
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_8
+      rect:
+        serializedVersion: 2
+        x: 872
+        y: 166
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_9
+      rect:
+        serializedVersion: 2
+        x: 981
+        y: 166
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_10
+      rect:
+        serializedVersion: 2
+        x: 1090
+        y: 166
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_11
+      rect:
+        serializedVersion: 2
+        x: 1199
+        y: 166
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_12
+      rect:
+        serializedVersion: 2
+        x: 1308
+        y: 166
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_13
+      rect:
+        serializedVersion: 2
+        x: 1417
+        y: 166
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_14
+      rect:
+        serializedVersion: 2
+        x: 1526
+        y: 166
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 83
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_16
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 83
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_17
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 83
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_18
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 83
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_19
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 83
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_20
+      rect:
+        serializedVersion: 2
+        x: 545
+        y: 83
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_21
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 83
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_22
+      rect:
+        serializedVersion: 2
+        x: 763
+        y: 83
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_23
+      rect:
+        serializedVersion: 2
+        x: 872
+        y: 83
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_24
+      rect:
+        serializedVersion: 2
+        x: 981
+        y: 83
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_25
+      rect:
+        serializedVersion: 2
+        x: 1090
+        y: 83
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_26
+      rect:
+        serializedVersion: 2
+        x: 1199
+        y: 83
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_27
+      rect:
+        serializedVersion: 2
+        x: 1308
+        y: 83
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_28
+      rect:
+        serializedVersion: 2
+        x: 1417
+        y: 83
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_29
+      rect:
+        serializedVersion: 2
+        x: 1526
+        y: 83
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_31
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 0
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_32
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 0
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_33
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 0
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_34
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 0
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_35
+      rect:
+        serializedVersion: 2
+        x: 545
+        y: 0
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_36
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 0
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_37
+      rect:
+        serializedVersion: 2
+        x: 763
+        y: 0
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_38
+      rect:
+        serializedVersion: 2
+        x: 872
+        y: 0
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_39
+      rect:
+        serializedVersion: 2
+        x: 981
+        y: 0
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_40
+      rect:
+        serializedVersion: 2
+        x: 1090
+        y: 0
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Monkey_Sprite_41
+      rect:
+        serializedVersion: 2
+        x: 1199
+        y: 0
+        width: 109
+        height: 83
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

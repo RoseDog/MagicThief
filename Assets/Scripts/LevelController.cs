@@ -19,7 +19,7 @@
         if (Globals.magician == null)
         {
             // 魔术师出场
-            UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/Kid") as UnityEngine.GameObject;
+            UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/Rosa") as UnityEngine.GameObject;
             UnityEngine.GameObject.Instantiate(magician_prefab);
             Globals.magician.gameObject.SetActive(false);
         }
@@ -32,7 +32,7 @@
 
         if (UnityEngine.GameObject.Find("FogCamera") != null)
         {
-            fogCam = UnityEngine.GameObject.Find("FogCamera").camera;
+            fogCam = UnityEngine.GameObject.Find("FogCamera").GetComponent<UnityEngine.Camera>();
             fogPlane = UnityEngine.GameObject.Find("FogPlane");            
         }        
     }
@@ -103,10 +103,10 @@
     protected int rose_bonus = 5;
     public virtual void MagicianGotCash(float value)
     {        
-        if (bIsPerfectStealing)
-        {
-            return;
-        }
+//         if (bIsPerfectStealing)
+//         {
+//             return;
+//         }
 //        bIsPerfectStealing = true;
 //        PerfectStealing();
 //        return;
@@ -223,7 +223,7 @@
                 }
                 else
                 {
-                    sprite.sortingOrder = UnityEngine.Mathf.RoundToInt((50 + sprite.transform.position.y) * 10f) * -1;
+                    sprite.sortingOrder = UnityEngine.Mathf.RoundToInt((1000 + sprite.transform.position.y) * 10f) * -1;
                 }
             }
             else

@@ -212,13 +212,13 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
                 }
                 
                 System.Collections.Generic.List<UnityEngine.Sprite> spriteList = anim.spriteList;
-                if (_actor)
+                if (_actor.spriteRenderer)
                 {
                     _actor.spriteRenderer.sprite = spriteList[frameIdx];
                 }
                 else
                 {
-                    UnityEngine.UI.Image image = GetComponent<UnityEngine.UI.Image>();
+                    UnityEngine.UI.Image image = _actor.GetComponent<UnityEngine.UI.Image>();
                     if (image)
                     {
                         image.sprite = spriteList[frameIdx];
