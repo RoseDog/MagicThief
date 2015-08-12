@@ -51,11 +51,11 @@
         GoTo(pos);
         SleepThenCallFunction(data.duration, () => Vanish());
         timer = (UnityEngine.GameObject.Instantiate(Globals.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
-        timer.BeginCountDown(spriteSheet.gameObject, data.duration, new UnityEngine.Vector3(0, 0.7f, 0));
+        timer.BeginCountDown(spriteSheet.gameObject, data.duration, new UnityEngine.Vector3(0, 70f, 0));
     }
 
     System.String flyingDir;
-    public override void Update()
+    public override void FrameFunc()
     {
         double angle = Globals.Angle(moving.currentDir, UnityEngine.Vector3.right);
         if (angle >= 315 || angle < 45)
@@ -79,14 +79,14 @@
             spriteSheet.Play(animalName + "_moving_down");
         }
 
-        base.Update();
+        base.FrameFunc();
     }
 
     void Vanish()
     {
-        Globals.maze.GuardsTargetVanish(gameObject);        
-        DestroyImmediate(timer.gameObject);
-        Destroy(gameObject);
+        Globals.maze.GuardsTargetVanish(gameObject);
+        Actor.to_be_remove.Add(timer.GetComponent<Actor>());
+        Actor.to_be_remove.Add(this);        
     }
 
     public override void OnTargetReached()

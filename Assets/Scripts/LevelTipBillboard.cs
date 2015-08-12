@@ -8,14 +8,16 @@
         base.Start();
     }
 
-    void OnTriggerEnter(UnityEngine.Collider other)
+    public override void TouchBegin(Actor other)
     {
+        base.TouchBegin(other);
         LevelTipCanvas.transform.localScale = UnityEngine.Vector3.zero;
         AddAction(new ScaleTo(LevelTipCanvas.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), Globals.uiMoveAndScaleDuration));
     }
 
-    void OnTriggerExit(UnityEngine.Collider other)
+    public override void TouchOut(Actor other)
     {
+        base.TouchOut(other);
         LevelTipCanvas.transform.localScale = new UnityEngine.Vector3(1,1,1);
         AddAction(new ScaleTo(LevelTipCanvas.transform, UnityEngine.Vector3.zero, Globals.uiMoveAndScaleDuration));
     }

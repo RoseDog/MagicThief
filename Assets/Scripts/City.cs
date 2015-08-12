@@ -14,9 +14,11 @@
     public RanksWindow ranksWindow;
     public UnityEngine.UI.Text whoIsYourTarget;
     UIMover go_add_box;
+    public BeenStolenReport beenStolenReportUI;
     public override void Awake()
     {
-        base.Awake();                   
+        Globals.city = this;
+        base.Awake();        
         canvasForCity = UnityEngine.GameObject.Find("CanvasForCity");
         mainCanvas = canvasForCity.GetComponent<UnityEngine.Canvas>();
         cityEventsOpenBtn = Globals.getChildGameObject<UIMover>(canvasForCity, "CityEventsOpenBtn");
@@ -44,6 +46,7 @@
         go_add_box = Globals.getChildGameObject<UIMover>(canvasForCity, "go_add_box");
         go_add_box.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => GoAddBox());
         go_add_box.gameObject.SetActive(false);
+        beenStolenReportUI.transform.parent.parent.gameObject.SetActive(false);
     }
 
     public void GoAddBox()
@@ -96,15 +99,13 @@
             // 生成周围的目标
             for (int idx = 0; idx < Globals.self.buildingDatas.Count; ++idx)
             {
-                UnityEngine.GameObject building = UnityEngine.GameObject.Find(Globals.self.buildingDatas[idx].posID);
-                building.GetComponent<Building>().data = Globals.self.buildingDatas[idx];
-                UpdateBuilding(building.GetComponent<Building>());
+                UnityEngine.GameObject building = UnityEngine.GameObject.Find("building_" + Globals.self.buildingDatas[idx].posID);
+                building.GetComponentInChildren<Building>().data = Globals.self.buildingDatas[idx];
+                UpdateBuilding(building.GetComponentInChildren<Building>(), Globals.self.buildingDatas[idx]);
             }           
 
-            // 显示出城市事件列表的按钮
-            cityEventsOpenBtn.BeginMove(Globals.uiMoveAndScaleDuration);
-            rankOpenBtn.BeginMove(Globals.uiMoveAndScaleDuration);
-
+            
+            
             // 录像
             AddReplaysToEventWindow(Globals.self.defReplays);
             AddReplaysToEventWindow(Globals.self.atkReplays);
@@ -122,6 +123,13 @@
             myMazeBuilding.SetActive(false);
         }
 
+        // 云雾的状态
+        for (int idx = 0; idx < Globals.self.cloudDatas.Count; ++idx)
+        {
+            UnityEngine.GameObject cloud = UnityEngine.GameObject.Find("clouds_" + idx.ToString());
+            cloud.GetComponent<Cloud>().SyncData(Globals.self.cloudDatas[idx]);
+        }           
+
         for (int idx = 0; idx < 1; ++idx)
         {
             Finger finger = Globals.input.GetFingerByID(0);
@@ -133,9 +141,14 @@
         
         MoneyFull(Globals.canvasForMagician.money_full.activeSelf);
 
-        Globals.cameraFollowMagician.audioSource.clip = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/Supergiant Games - Bastion Original Soundtrack - 11 Slinger's Song");
+        Globals.cameraFollowMagician.audioSource.clip = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/city_bgm");
         Globals.cameraFollowMagician.audioSource.Play();
         Globals.cameraFollowMagician.audioSource.volume = 0.25f;
+
+        if (Globals.self.beenStolenReports.Count != 0)
+        {
+            BeenStolen();
+        }        
     }
 
     public void AddReplaysToEventWindow(System.Collections.Hashtable replays)
@@ -153,7 +166,16 @@
             else
             {
                 ce = eventsWindow.AddEvent(replay.everClicked);
-                Globals.languageTable.SetText(ce.uiText,"stolen_by_others_event",new System.String[] { replay.thief.name });
+                if (replay.StealingCash > 0)
+                {
+                    ce.uiText.color = UnityEngine.Color.red;
+                    Globals.languageTable.SetText(ce.uiText, "stolen_by_others_event_guards_failed", new System.String[] { replay.thief.name, replay.thief.roseCount.ToString()});
+                }
+                else
+                {
+                    ce.uiText.color = UnityEngine.Color.green;
+                    Globals.languageTable.SetText(ce.uiText, "stolen_by_others_event_guards_success", new System.String[] { replay.thief.name, replay.thief.roseCount.ToString() });
+                }                
             }
 
             UnityEngine.UI.Button eventBtn = ce.GetComponent<UnityEngine.UI.Button>();
@@ -161,8 +183,15 @@
         }
     }
 
-    public void OnDestroy()
+    public void BeenStolen()
     {
+        beenStolenReportUI.Open();
+        Globals.self.beenStolenReports.Clear();        
+    }
+
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
         for (int idx = 0; idx < 1; ++idx)
         {
             Finger finger = Globals.input.GetFingerByID(0);
@@ -170,34 +199,37 @@
             finger.Evt_Moving -= OnDragFingerMoving;
             finger.Evt_Up -= OnDragFingerUp;
         }
+        Globals.city = null;
     }
 
-    public Building UpdateBuilding(Building building)
+    public Building UpdateBuilding(Building old_building,BuildingData new_data)
     {
-        UnityEngine.GameObject buildingPrefab = UnityEngine.Resources.Load("Props/" + building.data.type + "Building") as UnityEngine.GameObject;
-        UnityEngine.GameObject targetBuildingObject = UnityEngine.GameObject.Instantiate(buildingPrefab) as UnityEngine.GameObject;
-        Building newbuilding = targetBuildingObject.GetComponent<Building>();
-        newbuilding.transform.position = building.transform.position;
-        newbuilding.gameObject.name = building.data.posID;
-        newbuilding.data = building.data;
-        newbuilding.city = this;
-        buildings.Add(newbuilding);
-        buildings.Remove(building);
-        DestroyObject(building.gameObject);
-
-        if (newbuilding.data.type == "Target")
+        System.String new_building_name = "";
+        if (new_data.isPvP)
         {
-            if (newbuilding.data.isPvP)
-            {
-                newbuilding.spriteRenderer.sprite = GetBuildingSprite("city-0_2");
-            }
-            else
-            {
-                newbuilding.spriteRenderer.sprite = GetBuildingSprite("city-0_4");
-            }
+            new_building_name = "City/pvp";
         }
-        
-        return newbuilding;
+        else
+        {
+            int idx = UnityEngine.Random.Range(0, 4);
+            new_building_name = "City/pve_" + idx.ToString();
+        }
+        new_building_name += new_data.type;
+
+        UnityEngine.GameObject buildingPrefab = UnityEngine.Resources.Load("Props/" + new_data.type + "Building") as UnityEngine.GameObject;
+        UnityEngine.GameObject targetBuildingObject = UnityEngine.GameObject.Instantiate(buildingPrefab) as UnityEngine.GameObject;
+        Building new_building = targetBuildingObject.GetComponentInChildren<Building>();
+        new_building.gameObject.name = new_building_name;
+        new_building.transform.parent.name = new_data.posID;
+        new_building.transform.parent.parent = old_building.transform.parent.parent;
+        new_building.transform.position = old_building.transform.position;
+        new_building.data = new_data;
+        new_building.city = this;
+        buildings.Add(new_building);
+        buildings.Remove(old_building);
+        DestroyObject(old_building.transform.parent.gameObject);
+
+        return new_building;
     }
 
     public Building GetBuilding(BuildingData buildingdata)
@@ -227,7 +259,7 @@
     public void RoseBuildingEnd(BuildingData data)
     {
         Building b = GetBuilding(data);
-        UpdateBuilding(b);        
+        UpdateBuilding(b, data);        
     }    
         
     public void TargetClicked(System.String clickedTarget)
@@ -314,8 +346,8 @@
 
     public void Exit()
     {
-        cityEventsOpenBtn.Goback(Globals.uiMoveAndScaleDuration);
-        rankOpenBtn.Goback(Globals.uiMoveAndScaleDuration);
+        cityEventsOpenBtn.gameObject.SetActive(false);
+        rankOpenBtn.gameObject.SetActive(false);
         eventsWindow.CloseBtnClcked();
         ranksWindow.CloseBtnClcked();
         go_add_box.gameObject.SetActive(false);
@@ -334,7 +366,7 @@
         if(full)
         {
             go_add_box.ClearAllActions();
-            go_add_box.Jump();
+            go_add_box.Scale();
         }
     }
 }

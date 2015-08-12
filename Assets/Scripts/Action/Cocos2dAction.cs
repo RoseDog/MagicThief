@@ -23,7 +23,6 @@ public class Cocos2dAction
 	// Initialization
 	public virtual void Init() {}
 	
-	// Update
 	public virtual void Update() {}
 	
 	// Complete

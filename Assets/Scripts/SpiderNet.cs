@@ -4,16 +4,18 @@
     public override void Awake()
     {
         base.Awake();
-        hit_target_dis = 1.1f;
-        jumpDuration = 60;
+        hit_target_dis = 110f;
+        jumpDuration = 40;
     }
 
     public override void HitTarget()
     {
         base.HitTarget();
-        DestroyObject(gameObject);
 
-        if (targetActor.catchByNet != null && targetActor.gameObject.layer == 11)
+        Actor.to_be_remove.Add(this);
+        RemoveAction(ref jumpAction);
+
+        if (targetActor.catchByNet != null && (targetActor.gameObject.layer == 11 || targetActor.gameObject.layer == 23))
         {
             targetActor.catchByNet.Catched(spider);
         }

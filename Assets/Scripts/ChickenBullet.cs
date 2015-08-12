@@ -4,7 +4,7 @@
     public override void Awake()
     {
         base.Awake();
-        hit_target_dis = 1.1f;
+        hit_target_dis = 110f;
         jumpDuration = 60;
         spriteSheet.AddAnim("flying", 2);
         spriteSheet.Play("flying");
@@ -13,7 +13,7 @@
     public override void HitTarget()
     {
         base.HitTarget();
-        DestroyObject(gameObject);
+        Actor.to_be_remove.Add(this);
 
         targetActor.ChangeLife(-monkey.data.attackValue);
         targetActor.hitted.Excute();

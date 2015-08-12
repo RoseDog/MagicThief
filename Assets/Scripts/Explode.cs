@@ -3,7 +3,7 @@
     public void Start()
     {
         actor.spriteSheet.AddAnimationEvent("Atk", 2, () => Fire());
-        actor.spriteSheet.AddAnimationEvent("Atk", -1, () => AtkEnd());
+        actor.spriteSheet.AddAnimationEvent("Atk", -1, () => ExplodeEnd());
     }
 
     public override void Excute()
@@ -14,14 +14,17 @@
 
     public void Fire()
     {
-        Actor actor = guard.spot.target.GetComponent<Actor>();
-        actor.ChangeLife(-guard.data.attackValue);
-        actor.hitted.Excute();
+        Actor tar = guard.spot.target.GetComponent<Actor>();        
+        if (tar.currentAction != tar.lifeOver)
+        {
+            tar.ChangeLife(-guard.data.attackValue);
+            tar.hitted.Excute();
+        }               
     }
 
-    public void AtkEnd()
+    public void ExplodeEnd()
     {
-        guard.spriteSheet.enabled = false;
-        Globals.DestroyGuard(guard);
+        guard.spriteSheet.enabled = false;        
+        Actor.to_be_remove.Add(guard);
     }
 }

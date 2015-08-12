@@ -24,21 +24,21 @@
             actor.spriteSheet.Play("down_on_floor");
 
             timer = (UnityEngine.GameObject.Instantiate(Globals.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
-            timer.BeginCountDown(gameObject, duration, new UnityEngine.Vector3(0, 1.5f, 0));
+            timer.BeginCountDown(gameObject, duration, new UnityEngine.Vector3(0, 150f, 0));
 
             pushAwayAction = actor.SleepThenCallFunction(duration, () => PushGuardsAway());
             foreach( Chest chest in Globals.maze.chests )
             {
                 if (chest.isMagicianNear)
                 {
-                    chest.OnTriggerExit(actor.GetComponent<UnityEngine.Collider>());
+                    chest.TouchOut(actor);
                 }
             }
         }
         else
         {
             timer.AddFrameTime(duration);
-            ((pushAwayAction as Sequence).actions[0] as SleepFor)._start_frame = UnityEngine.Time.frameCount;
+            ((pushAwayAction as Sequence).actions[0] as SleepFor)._start_frame = Globals.LevelController.frameCount;
             ((pushAwayAction as Sequence).actions[0] as SleepFor)._frameDuration = timer.GetLastFrameTime();
         }        
         guardsPressingMage.Add(guard);
@@ -50,7 +50,7 @@
     {
         UnityEngine.Debug.Log("Push Guards Away");
 
-        DestroyObject(timer.gameObject);
+        Actor.to_be_remove.Add(timer);
         timer = null;
         int jump_up_duration = actor.spriteSheet.GetAnimationLength("disguise");
         UnityEngine.Vector3 originPosition = actor.transform.position;

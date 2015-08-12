@@ -5,9 +5,9 @@
         spriteSheet = GetComponentInChildren<SpriteSheet>();
 
         spriteSheet.AddAnim("idle", 4, 0.23f);
-        spriteSheet.AddAnim("walking", 4, 0.7f);
+        spriteSheet.AddAnim("walking", 4, 1.0f);
         spriteSheet.AddAnim("spot", 2, 1.0f, true);        
-        spriteSheet.AddAnim("running", 4, 1.3f);
+        spriteSheet.AddAnim("running", 4, 1.5f);
         spriteSheet.AddAnim("atkReady", 4);
         spriteSheet.AddAnim("Atk", 9, 0.5f, true);
         spriteSheet.AddAnim("BeenHypnosised", 4, 0.5f);

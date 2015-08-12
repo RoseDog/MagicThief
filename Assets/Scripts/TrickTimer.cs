@@ -41,9 +41,9 @@
         return lastFrames;
     }
 
-    public override void Update()
+    public override void FrameFunc()
     {
-        base.Update();
+        base.FrameFunc();
         if (actor != null)
         {
             transform.rotation = UnityEngine.Quaternion.identity;

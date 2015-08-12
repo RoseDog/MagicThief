@@ -14,7 +14,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         new System.Collections.Generic.Dictionary<System.String, System.String[]>();
     void Awake()
     {
-        chn_simple_font = UnityEngine.Resources.Load("UI/FZCuYuan-M03S") as UnityEngine.Font;
+        chn_simple_font = UnityEngine.Resources.Load("UI/simhei") as UnityEngine.Font;
         chn_traditional_font = UnityEngine.Resources.Load("UI/FZCuYuan-M03T") as UnityEngine.Font;
                 
         Globals.languageTable = this;
@@ -37,7 +37,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("level_loading_progress", new System.String[] { "场景加载{0}%", "Level Loading:{0}%" });
         table.Add("power_cost", new System.String[] { "魔力消耗:{0}", "Power Cost:{0}" });
         table.Add("duration", new System.String[] { "持续时间:{0}", "Duration:{0}" });
-        table.Add("unlock_need_rose", new System.String[] { "解锁：达到{0}朵玫瑰", "unlock: reach {0} rose"});
+        table.Add("unlock_need_rose", new System.String[] { "达到{0}玫瑰解锁", "unlock: reach {0} rose" });
         table.Add("restart_tutorial_level_tip", new System.String[] { 
             "任务失败！<b><color=red><size=30>{0}</size></color></b> 秒后重新开始\n\n 教程关卡你都能输，能专心点儿么 =.= ", 
             "Mission Failed！Restart After <b><color=red><size=30>{0}</size></color></b> seconds" });
@@ -73,10 +73,13 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("dive_in", new System.String[] { "潜入", "Dive In" });
         table.Add("spy", new System.String[] { "窥视", "Spy" });
         table.Add("target_tonight", new System.String[] { "你是个小偷，\n这是你今晚的目标", "you are a thief,\nthis is your target tonight" });
-        table.Add("buy", new System.String[] { "购买", "Buy" });
-        table.Add("not_enough_roses", new System.String[] { "魅力值不够", "not enough charm points" });
+        table.Add("buy", new System.String[] { "购买:$", "Buy:$" });
+        table.Add("bought", new System.String[] { "已购买", "Bought" });
+        table.Add("not_bought", new System.String[] { "未购买", "Not Bought" });
+        
+        table.Add("not_enough_roses", new System.String[] { "尚未解锁", "not enough charm points" });
         table.Add("not_enough_cash", new System.String[] { "金钱不够", "not enough cash" });
-        table.Add("not_enough_room", new System.String[] { "迷宫空间不够了", "not enough maze supported room" });
+        table.Add("not_enough_room", new System.String[] { "坑位不够了", "not enough maze supported room" });
         table.Add("room", new System.String[] { "迷宫空间：{0}", "Room：{0}" });
         table.Add("property_is_safe_now", new System.String[] { "你的财产暂时安全了", "your property is safe now" });
         table.Add("guards", new System.String[] { "守卫", "Guards" });
@@ -100,42 +103,57 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("upgrade_maze_to_add_safe_box", new System.String[] { "升级迷宫到{0}级以增加更多保险箱", "Upgrade Maze to Lv.{0} to add more safe box" });
         table.Add("upgrade_maze_to_upgrade_safe_box", new System.String[] { "升级迷宫到{0}级以进一步升级保险箱", "Upgrade Maze to Lv.{0} to upgrade safe box" });
         table.Add("top_safe_box", new System.String[] { "保险箱已达到最高等级", "top_safe_box" });
+        table.Add("upgrade", new System.String[] { "升级", "top_safe_box" });
+        table.Add("guard_full_fill_his_duty", new System.String[] { "你的守卫履行了他的职责！", "full fill his duty" });
+        table.Add("excellent", new System.String[] { "很好！", "excellent" });        
+        
         
         table.Add("top_maze", new System.String[] { "迷宫已达到最高级", "Top Maze" });        
         table.Add("bigger_maze", new System.String[] { "更复杂的迷宫可以放入更多宝物箱以及守卫", "bigger maze support more safe cases and guards" });
         table.Add("current_lv", new System.String[] { "当前等级：", "Current Lv:" });
+        table.Add("next_lv", new System.String[] { "下一等级：", "Next Lv:" });        
         table.Add("safebox", new System.String[] { "保险箱", "Safe Box" });
         table.Add("safe_box_desc", new System.String[] { "增加保险箱可以增加金钱的储量", "Add Safe Box to store more money" });
         table.Add("safe_box_upgrade_desc", new System.String[] { "这是用来存放你金钱的箱子。升级可增加容量。", "This is a box to store your money, upgrade will increase its capacity." });
-        table.Add("cash_in_box", new System.String[] { "当前现金量", "Cash in this" });
+        table.Add("cash_in_box", new System.String[] { "当前现金量：", "Cash in this" });
         table.Add("capacity", new System.String[] { "容量：{0}", "Capacity：{0}" });
+        table.Add("capacity_lable", new System.String[] { "容量：", "Capacity：" });
         
         table.Add("you_have_some_cash", new System.String[] { "你有<color=yellow>{0}</color>现金", "you have {0} Cash" });
-        table.Add("you_have_some_safeboxes", new System.String[] { "你有<color=yellow>{0}</color>个保险箱", "you have {0} safeboxes" });
-        table.Add("total_capacity", new System.String[] { "总容量：", "Total Capacity:" });
+        table.Add("you_have_some_safeboxes", new System.String[] { "你有<color=yellow>{0}</color>个保险箱，总容量：", "you have {0} safeboxes,Total Capacity:" });
+
         table.Add("cash_average_put_in_box", new System.String[] { "现金被平均放入保险箱", "All cash been averaged put in safe box" });
 
         table.Add("this_is_tricks_in_use", new System.String[] { "道具槽", "tricks in use" });
         table.Add("click_guard_to_show_info", new System.String[] { "点击守卫可查看信息", "click guard to show info" });
         table.Add("sure_to_buy_slot", new System.String[] { "确定要花费{0}现金购买这个道具使用槽吗？", "Are you sure cost {0} cash to buy this trick item slot?" });
+        table.Add("sure_to_unlock_cloud", new System.String[] { "确定要花费{0}现金驱散这片雾霭吗？", "Are you sure cost {0} cash to buy this trick item slot?" });
+        
         table.Add("already_bought", new System.String[] { "已购买", "Already Bought" });
         table.Add("already_unlocked", new System.String[] { "已解锁", "Already Unlocked" });
         table.Add("no_landmark_yet", new System.String[] { "还没有标记降落点", "no_landmark_yet" });
         table.Add("no_hypnosis_target_nearby", new System.String[] { "附近没有可以催眠的目标", "no_hypnosis_target_nearby" });
         table.Add("cant_bring_flash_to_stealing", new System.String[] { "不能携带照明弹进行潜入", "cant_bring_flash_to_stealing" });
         table.Add("place_guard_in_maze_to_protect_your_property", new System.String[] { "在迷宫中放置守卫来保护你的财产", "place_guard_in_maze_to_protect_your_property" });
+        table.Add("hire", new System.String[] { "雇佣", "Hire" });
         table.Add("hired", new System.String[] { "已雇佣", "Hired" });
         table.Add("not_hired_yet", new System.String[] { "尚未雇佣", "Not hired yet" });
         table.Add("no_more_safebox", new System.String[] { "没有更多的保险箱了", "No More Safebox" });
-        table.Add("room_not_full_used", new System.String[] { "迷宫空间未完全使用，请放置更多守卫，以防其他玩家太轻易的盗取你的钱财", "room not full used" });
+        table.Add("room_not_full_used", new System.String[] { "坑位未完全使用，请放置更多守卫", "room not full used" });
         table.Add("enter_name", new System.String[] { "请输入你的名字", "Enter a name" });
         table.Add("name_duplicated", new System.String[] { "名字重复，请重新输入", "Name Duplicated" });
         table.Add("spotted_cant_escape", new System.String[] { "被守卫发现！无法逃离！", "Spotted！Can't escape！" });        
         table.Add("cash_back_then", new System.String[] { "迷宫金钱:{0}", "Total Cash:{0}" });
         table.Add("stealing_cash", new System.String[] { "失窃金钱:{0}", "Stolen:{0}" });
-        table.Add("stolen_by_others_event", new System.String[] { "{0}潜入了你的迷宫", "{0} dived in your Maze" });
-        table.Add("you_stole_others_event", new System.String[] { "你潜入了{0}的迷宫", "You dived in {0}'s Maze" });        
-
+        table.Add("stolen_by_others_event_guards_failed", new System.String[] { "{0}(魅力{1})盗取了你的钱财！", "{0} dived in your Maze" });
+        table.Add("stolen_by_others_event_guards_success", new System.String[] { "你的守卫成功的赶走了xxx(魅力{1})！", "{0} dived in your Maze" });
+        table.Add("you_stole_others_event", new System.String[] { "你潜入了{0}的迷宫", "You dived in {0}'s Maze" });
+        table.Add("replay", new System.String[] { "回放", "replay" });
+        table.Add("few_days_ago", new System.String[] { "盗窃发生于{0}天前", "{0} days ago" });
+        table.Add("few_hours_ago", new System.String[] { "盗窃发生于{0}小时前", "{0} hours ago" });
+        table.Add("few_minutes_ago", new System.String[] { "盗窃发生于几分钟前", "few_minutes_ago" });
+        table.Add("someone_intrude_your_maze", new System.String[] { "有人潜入了你的迷宫！", "someone_intrude_your_maze" });
+        
         table.Add("news_success_1", new System.String[] { 
             "News\n-------\n珍宝失窃", 
             "News\n-------\nPrecious Stolen！" });
@@ -148,9 +166,17 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
             "损失财产价值：\n<color=red><size=40>{0}</size></color>\n", 
             "Stolen Property Valued：\n<color=red><size=40>{0}</size></color>\nMr.Rich Broken！\n-----\n-----\n----\n" });
 
+        table.Add("get_paid", new System.String[] { 
+            "你在深夜敲开黑市交易员的房门。他打开你带来的袋子，看到里面闪动的微光，脸上绽放出无比热情的笑容，立刻对你的货付了钱：\n<color=yellow>金钱+{0}</color>\n", 
+            "" });
+
+        table.Add("then_you_leave", new System.String[] { 
+            "你总是对虚伪的笑容感到不适。你收好现金，一言不发的转身离去。", 
+            "" });        
+        
         table.Add("perfect_stealing", new System.String[] { 
-            "<size=30>你高超的技艺完美的破解了迷宫！</size>\n<color=red>完美潜入：\n<size=40>金钱+{0}\n玫瑰+{1}</size></color>\n富商破产！\n-----", 
-            "Stolen Property Valued：\n<color=red><size=40>{0}</size></color>\nMr.Rich Broken！\n-----\n-----\n----\n" });
+            "你正准备离开，他突然又叫住了你：“我差点忘了，为了谢谢你帮我们教训了那个傲慢的盗贼，这是额外付给你的”：\n<color=yellow>金钱+{0}</color>\n<color=red>玫瑰+{1}</color>\n", 
+            "" });
 
         table.Add("news_failure_1", new System.String[] { 
             "News\n-------\n魔盗再现！！", 
@@ -165,8 +191,19 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
             "守卫森严\n魔盗败走" });
 
         table.Add("would_you_share", new System.String[] { 
-            "奸商长年非法敛财使得这里的居民生活压力很大，犯罪率居高不下，要把你盗窃的成果分一些给他们吗？", 
+            "你穿起那件灰色的大衣来到这个街区，低头慢慢走着。你走过失去双亲的少年。你走过长发遮蔽眼睛的流浪汉。虽然罪恶被你铲除，但贫穷带来的消极情绪已经快要毁掉这里...\n你要花些钱来做点什么吗？", 
             "would you share your money with poor?" });
+        table.Add("people_admire_you", new System.String[] { 
+            "这里的人们敬仰你。", 
+            "would you share your money with poor?" });
+
+        table.Add("rose_total", new System.String[] { 
+            "玫瑰总数：{0}", 
+            "would you share your money with poor?" });
+        table.Add("roseTimeLastText", new System.String[] { 
+            "剩余玫瑰增长时间：{0}", 
+            "would you share your money with poor?" });
+        
         table.Add("new_target_event", new System.String[] { 
             "新的目标：{0}", 
             "New Target：{0}" });
@@ -184,7 +221,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
             "Visit" });
 
         table.Add("stealing_event", new System.String[] { "{0}潜入了{1}的迷宫", "{0} dived in {1}'s Maze" });
-        table.Add("other_player_maze_name", new System.String[] { "{0}的迷宫", "{0}'s Maze" });
+        table.Add("other_player_maze_name", new System.String[] { "{0}的迷宫，{1}级", "{0}'s Maze" });
         table.Add("rose_pick_tip", new System.String[] { "玫瑰 + {0}\n魔力 + {1}", "Rose + {0}\nPower + {1}" });
         table.Add("nothing_over_charm", new System.String[] { "作为一个魔术师，还有什么能比你的魅力更重要呢：）", "nothing_over_charm" });
         table.Add("rose_add_power", new System.String[] { "每{0}朵玫瑰增加1法力上限", "rose_add_power {0}" });
@@ -200,8 +237,8 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("what_do_i_do", new System.String[] { "我该怎么办？", "what_do_i_do" });
         table.Add("box_not_finished", new System.String[] { "还有钱可以拿", "box_not_finished" });
         table.Add("click_to_summon_guard", new System.String[] { "点击召唤守卫", "click_to_summon_guard" });
-        table.Add("pve_intro", new System.String[] { "\"这里的主人是个臭名昭著的恶人，你决定拿走他的每一分钱！\"\n\n<color=red>必须成功才会更换目标</color>\n<color=red>潜入之后无法主动撤离</color>", "take every peny of him" });
-        table.Add("pvp_intro", new System.String[] { "\"这个迷宫属于另一个玩家，你只有一次潜入的机会\"\n\n<color=white>偷取所有的金钱会有额外奖励</color>\n<color=red>潜入之后可以撤离</color>\n<color=red>潜入之后无论是否成功偷窃，目标都会消失</color>", "another player, u got only one chance" });
+        table.Add("pve_intro", new System.String[] { "\"这里的主人是个臭名昭著的恶人，你决定拿走他的每一分钱\"\n\n<color=red>必须成功才会更换目标</color>", "take every peny of him" });
+        table.Add("pvp_intro", new System.String[] { "\"这里属于另一个玩家，你只有一次潜入的机会\"\n\n<color=red>有额外奖励</color>\n<color=red>如果偷窃失败，目标会消失</color>", "another player, u got only one chance" });
         table.Add("money_full", new System.String[] { "金钱已满", "money_full" });
 
         table.Add("try_other_trick", new System.String[] { "任务失败，\n试试<color=red>其他魔术道具？\n或购买更多的槽？</color>", "try_other_trick" });
@@ -209,8 +246,8 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("who_is_your_target", new System.String[] { "“今晚谁会是你的目标呢？”", "who_is_your_target" });
         table.Add("go_add_box", new System.String[] { "去买箱子", "go buy box" });
         table.Add("add_box", new System.String[] { "增加箱子", "add box" });
-        table.Add("MP:", new System.String[] { "魔力值：", "MP:" });
-        table.Add("HP:", new System.String[] { "体力值：", "HP:" });
+        table.Add("MP:", new System.String[] { "MP:", "MP:" });
+        table.Add("HP:", new System.String[] { "HP:", "HP:" });
         table.Add("buy_this", new System.String[] { "买下它", "buy_it" });
         table.Add("open_fog", new System.String[] { "开启迷雾", "Fog" });
         table.Add("close_fog", new System.String[] { "关闭迷雾", "Disable Fog" });
@@ -225,8 +262,11 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("vision", new System.String[] { "视野", "Vision" });
         table.Add("strength", new System.String[] { "力量", "Strength" });
 
-        table.Add("operate_guide_info", new System.String[] { "<color=red>点击右键</color>移动角色\n<color=red>按住左键拖动</color>地图", "Strength" });  
-        
+        table.Add("operate_guide_info", new System.String[] { "<color=red>右键移动角色\n左键拖动地图</color>", "Strength" });
+
+        table.Add("replay_speed", new System.String[] { "快进 x {0}", "Speed x {0}" });
+        table.Add("circus", new System.String[] { "来自马戏团的守卫们", "Circus" });
+        table.Add("reward_accepted", new System.String[] { "已领取", "Circus" });        
    }    
 
     public void SetText(UnityEngine.UI.Text uiText, System.String key, System.String[] strings = null)
@@ -254,7 +294,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         }                
     }
 
-    System.String GetText(System.String key, System.String[] strings = null)
+    public System.String GetText(System.String key, System.String[] strings = null)
     {
         System.String str = "";
         if (table.ContainsKey(key))

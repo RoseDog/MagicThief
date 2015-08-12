@@ -43,7 +43,6 @@ public class FadeTo : Cocos2dAction
 		initialized = true;
 	}
 
-	// Update
 	public override void Update () {
 		
 		// Not completed
@@ -53,7 +52,6 @@ public class FadeTo : Cocos2dAction
 			_color.a = Mathf.Lerp(_start, _end, (Time.time - _start_time) / _duration);
             _renderer.material.SetColor("_TintColor", _color);
 			
-			// Update material color
             //_renderer.material.color = _color;
 			
 			// Reached target position
@@ -99,7 +97,6 @@ public class FadeUI : Cocos2dAction
 		initialized = true;
 	}
 
-	// Update
 	public override void Update () {
 		
 		// Not completed
@@ -108,7 +105,6 @@ public class FadeUI : Cocos2dAction
 			// Change tmp color
             float a = Mathf.Lerp(_start, _end, (Time.time - _start_time) / _duration);
 			
-			// Update material color
             _ui.UpdateAlpha(a);
 			
 			// Reached target position

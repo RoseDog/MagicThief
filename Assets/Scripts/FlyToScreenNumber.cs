@@ -74,13 +74,13 @@
 
             transform.localPosition += (destination - transform.localPosition) * speed;
 
-            if (disNow < 0.01f)
+            if (disNow < 1.0f)
             {
                 DestroyImmediate(gameObject);
                 if (Globals.magician.LifeCurrent > 0 && numberFlyTo.gameObject.activeSelf)
                 {
                     numberFlyTo.Add(numberDelta);
-                    numberFlyTo.audioSource.Play();
+                    //numberFlyTo.audioSource.Play();
                 }
                 
                 break;

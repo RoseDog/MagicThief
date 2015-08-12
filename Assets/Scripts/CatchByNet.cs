@@ -16,10 +16,6 @@
     {
         UnityEngine.Debug.Log("CatchByNet");
 
-        System.String content = gameObject.name;
-        content += " CatchByNet";
-        Globals.record("testReplay", content);
-
         if (stopCall != null)
         {
             actor.RemoveAction(ref stopCall);
@@ -36,6 +32,10 @@
         netTime = (int)(duration / netReduce);
         netReduce += 0.25f;
 
+        System.String content = gameObject.name;
+        content += " CatchByNet netTime:" + netTime.ToString();
+        Globals.record("testReplay", content);
+
         if (actor.IsLifeOver())
         {
             actor.hitted.Excute();
@@ -45,7 +45,7 @@
             UnityEngine.GameObject soundPrefab = UnityEngine.Resources.Load("Misc/GunSound") as UnityEngine.GameObject;
             GuardAlertSound sound = (UnityEngine.GameObject.Instantiate(soundPrefab) as UnityEngine.GameObject).GetComponent<GuardAlertSound>();
             sound.transform.position = transform.position;
-            sound.SetRadius(15);
+            sound.SetRadius(1500);
             sound.StartAlert();
 
             if (timer == null)
@@ -55,21 +55,21 @@
                 actor.spriteSheet.Play("catch_by_net");
 
                 timer = (UnityEngine.GameObject.Instantiate(Globals.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
-                timer.BeginCountDown(gameObject, netTime, new UnityEngine.Vector3(0, 1.5f, 0));
+                timer.BeginCountDown(gameObject, netTime, new UnityEngine.Vector3(0, 150f, 0));
 
                 breakNetAction = actor.SleepThenCallFunction(netTime, () => BreakNet());
                 foreach (Chest chest in Globals.maze.chests)
                 {
                     if (chest.isMagicianNear)
                     {
-                        chest.OnTriggerExit(actor.GetComponent<UnityEngine.Collider>());
+                        chest.TouchOut(actor);
                     }
                 }
             }
             else
             {
                 timer.AddFrameTime(netTime);
-                ((breakNetAction as Sequence).actions[0] as SleepFor)._start_frame = UnityEngine.Time.frameCount;
+                ((breakNetAction as Sequence).actions[0] as SleepFor)._start_frame = Globals.LevelController.frameCount;
                 ((breakNetAction as Sequence).actions[0] as SleepFor)._frameDuration = timer.GetLastFrameTime();
             }
         }
@@ -83,11 +83,11 @@
     {
         UnityEngine.Debug.Log("BreakNet");
         breakNetAction = null;
-        DestroyObject(timer.gameObject);
+        Actor.to_be_remove.Add(timer);
         timer = null;
         int jump_up_duration = actor.spriteSheet.GetAnimationLength("disguise");
         UnityEngine.Vector3 originPosition = actor.transform.position;
-        UnityEngine.Vector3 to = originPosition + new UnityEngine.Vector3(0, 0.5f, 0);
+        UnityEngine.Vector3 to = originPosition + new UnityEngine.Vector3(0, 50f, 0);
         jumpSequence = new Sequence(
             new MoveTo(transform, to, jump_up_duration / 2),
             new MoveTo(transform, originPosition, jump_up_duration / 2));
@@ -122,7 +122,7 @@
 
         if (timer != null)
         {
-            DestroyObject(timer.gameObject);
+            Actor.to_be_remove.Add(timer);
             timer = null;
         }        
         
@@ -142,7 +142,7 @@
         clearNetReduceAction = actor.SleepThenCallFunction(300, () => ClearNetReduce());
     }
 
-    void ClearNetReduce()
+    public void ClearNetReduce()
     {
         netTime = duration;
         netReduce = 1;

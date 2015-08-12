@@ -33,22 +33,20 @@ public class RotateTo : Cocos2dAction
 		// get transformer instance
 		_transform = parent.transform;
 		// get start time
-		_start_frame = Time.frameCount;
+        _start_frame = Globals.LevelController.frameCount;
         _transform.rotation = Quaternion.Euler(_start);
 
 		initialized = true;        
 	}
 
-	// Update
 	public override void Update () {
 		
 		// Not completed
 		if(!completed)
 		{
-			// Update rotation
-            _transform.rotation = Quaternion.Euler(Vector3.Lerp(_start, _end, (Time.frameCount - _start_frame) / (float)_duration));
+            _transform.rotation = Quaternion.Euler(Vector3.Lerp(_start, _end, (Globals.LevelController.frameCount - _start_frame) / (float)_duration));
 			// Reached target position
-            if (Time.frameCount - _start_frame >= _duration)
+            if (Globals.LevelController.frameCount - _start_frame >= _duration)
             {
                 _transform.rotation = Quaternion.Euler(_end);
                 if(!_loop)
@@ -57,7 +55,7 @@ public class RotateTo : Cocos2dAction
                 }
                 else
                 {
-                    _start_frame = Time.frameCount;                    
+                    _start_frame = Globals.LevelController.frameCount;                    
                     _transform.rotation = Quaternion.Euler(_start);
                 }
             }
@@ -94,23 +92,22 @@ public class RotateEye : Cocos2dAction
     {
         _start_dir = fovEye.dirCache;
         // get start time
-        _start_frame = Time.frameCount;
+        _start_frame = Globals.LevelController.frameCount;
         
         initialized = true;
     }
 
-    // Update
     public override void Update()
     {
         // Not completed
         if (!completed)
         {
-            Vector3 euler = Vector3.Lerp(Vector3.zero, _end, (Time.frameCount - _start_frame) / (float)_duration);
-            // Update rotation
+            Vector3 euler = Vector3.Lerp(Vector3.zero, _end, (float)(Globals.LevelController.frameCount - _start_frame) / (float)_duration);
+
             fovEye.dirCache =
                 Quaternion.Euler(euler) * _start_dir;
             // Reached target position
-            if (Time.frameCount - _start_frame >= _duration)
+            if (Globals.LevelController.frameCount - _start_frame >= _duration)
             {
                 EndAction();
             }

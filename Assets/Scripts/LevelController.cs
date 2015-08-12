@@ -5,7 +5,9 @@
     UnityEngine.Camera MiniMapCamera;
     public UnityEngine.GameObject fogPlane;
     public UnityEngine.Camera fogCam;
+    public UnityEngine.Camera fogCam_2;
     protected UnityEngine.Texture2D fogTex;
+    public int frameCount;
     
     public override void Awake()
     {
@@ -33,7 +35,23 @@
         if (UnityEngine.GameObject.Find("FogCamera") != null)
         {
             fogCam = UnityEngine.GameObject.Find("FogCamera").GetComponent<UnityEngine.Camera>();
-            fogPlane = UnityEngine.GameObject.Find("FogPlane");            
+            fogPlane = UnityEngine.GameObject.Find("FogPlane");
+
+            UnityEngine.GameObject cam2 = UnityEngine.GameObject.Find("FogCamera_2");
+            if(cam2 != null)
+            {
+                fogCam_2 = cam2.GetComponent<UnityEngine.Camera>();
+            }                                 
+        }
+        frameCount = 0;
+    }
+
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+        if (Globals.maze != null)
+        {
+            Globals.maze.ClearMaze();
         }        
     }
 
@@ -103,13 +121,15 @@
     protected int rose_bonus = 5;
     public virtual void MagicianGotCash(float value)
     {        
-//         if (bIsPerfectStealing)
-//         {
-//             return;
-//         }
+        if (bIsPerfectStealing)
+        {
+            return;
+        }
+
 //        bIsPerfectStealing = true;
 //        PerfectStealing();
 //        return;
+
         // 检查宝石
         Gem[] gems = UnityEngine.GameObject.FindObjectsOfType<Gem>();
         foreach(Gem gem in gems)
@@ -192,12 +212,111 @@
 
     }
 
-    public override void Update()
+    public virtual void Update()
     {
-        base.Update();
+        FrameFunc();
+    }
+
+    public override void FrameFunc()
+    {
+        // 和Globals.replaySystem.UpdateInStealthLevel()的调用点保持一致
+        Globals.input.FrameFunc();
+
+        base.FrameFunc();
+
+        foreach (Actor actor in Globals.to_add_actors)
+        {
+            if (!Globals.actors.Contains(actor))
+            {
+                Globals.actors.Add(actor);
+            }
+        }
+            
+        Globals.to_add_actors.Clear();
+
+        for (int idx_a = 0; idx_a < Globals.actors.Count;++idx_a )
+        {
+            Actor a = Globals.actors[idx_a];
+            for (int idx_b = idx_a + 1; idx_b < Globals.actors.Count; ++idx_b)
+            {
+                Actor b = Globals.actors[idx_b];                
+                if(a.characterController && b.characterController &&
+                   a.characterController.enabled && b.characterController.enabled &&
+                    !UnityEngine.Physics.GetIgnoreLayerCollision(a.gameObject.layer, b.gameObject.layer))// 如果是要碰撞的
+                {
+
+                    UnityEngine.Vector3 a_pos = a.GetWorldCenterPos();
+                    UnityEngine.Vector3 b_pos = b.GetWorldCenterPos();
+
+                    float dis = UnityEngine.Vector3.Distance(a_pos, b_pos);
+
+                    if(Globals.DEBUG_REPLAY)
+                    {
+                        System.String content_test = a.gameObject.name + " " + b.gameObject.name;
+                    content_test += " dis:" + dis.ToString("F5") + " a_radius:" + a.GetWorldRadius().ToString("F5") + " b_radius:" + b.GetWorldRadius().ToString("F5");
+                    Globals.record("testReplay", content_test);
+                    }
+
+                    
+
+                    if (dis < a.GetWorldRadius() + b.GetWorldRadius())
+                    {
+                        if (!a.IsTouching(b))
+                        {
+                            a.TouchBegin(b);
+                            b.TouchBegin(a);
+                        }
+                        else
+                        {
+                            a.TouchStay(b);
+                            b.TouchStay(a);
+                        }                        
+                    }
+                    else
+                    {
+                        if (a.IsTouching(b))
+                        {
+                            a.TouchOut(b);
+                            b.TouchOut(a);
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach (Actor a in Globals.actors)
+        {
+            if(a != null)
+            {
+                if(a != this && a.gameObject.activeSelf)
+                {
+                    a.FrameFunc();
+                }
+            }            
+        }
+
+        foreach (Actor a in Actor.to_be_remove)
+        {
+            if (a != null)
+            {
+                if (a as Guard)
+                {
+                    Globals.DestroyGuard(a as Guard);
+                }
+                else
+                {
+                    DestroyObject(a.gameObject);
+                }
+            }
+            
+            Globals.actors.Remove(a);
+        }
+
+        Actor.to_be_remove.Clear();        
+
         UnityEngine.SpriteRenderer[] sprites = UnityEngine.GameObject.FindObjectsOfType<UnityEngine.SpriteRenderer>();
         foreach (UnityEngine.SpriteRenderer sprite in sprites)
-        {
+        {            
             // floor
             if (sprite.gameObject.layer != 9)
             {
@@ -223,14 +342,16 @@
                 }
                 else
                 {
-                    sprite.sortingOrder = UnityEngine.Mathf.RoundToInt((1000 + sprite.transform.position.y) * 10f) * -1;
+                    sprite.sortingOrder = UnityEngine.Mathf.RoundToInt((2000 + sprite.transform.position.y)) * -1;
                 }
             }
             else
             {
                 sprite.sortingOrder = -20000;
             }
-        }
+        }        
+
+        ++frameCount;        
     }
 
     public void SyncWithChestData(PlayerInfo player)

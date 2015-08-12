@@ -2,10 +2,10 @@
 {            
     UnityEngine.GameObject thief_prefab;
     public TutorialThief currentThief;    
-    UnityEngine.Vector2 piecesDropDuration = new UnityEngine.Vector2(100, 200);
-    int chestFallingDuration = 50;
-    float piecesFarDis = 20;
-    bool ShowDroppingProcess = false;
+    UnityEngine.Vector2 piecesDropDuration = new UnityEngine.Vector2(25, 40);
+    int chestFallingDuration = 30;
+    float piecesFarDis = 800;
+    bool ShowDroppingProcess = true;
     int thiefIdx = 0;
 
     UnityEngine.GameObject GuardFullFillHisDutyTipPrefab;
@@ -21,17 +21,26 @@
         FindObjectOfType<CameraFollow>().GetComponent<UnityEngine.Camera>().enabled = false;
 
         GuardFullFillHisDutyTipPrefab = UnityEngine.Resources.Load("UI/GuardFullFillHisDuty") as UnityEngine.GameObject;
-        fogPlane.SetActive(false);
+        fogPlane.SetActive(false);        
+    }
+
+    public override void Start()
+    {
+        base.Start();
+        Globals.cameraFollowMagician.audioSource.clip = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/尋問");
+        Globals.cameraFollowMagician.audioSource.Play();
+        Globals.cameraFollowMagician.audioSource.volume = 0.25f;
     }
 
     public override void BeforeGenerateMaze()
     {
+        Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().enabled = false;
         if (Globals.canvasForMyMaze.enhanceDefenseUI.mazeInfo.isUpgradingMaze)
         {
             Globals.self.currentMazeRandSeedCache = (int)System.DateTime.Now.Ticks;
             Globals.self.UpgradeMaze();
-            Globals.canvasForMyMaze.enhanceDefenseUI.mazeInfo.isUpgradingMaze = false;
         }
+
         if (Globals.self.currentMazeLevel == 0)
         {
             Globals.iniFileName = "MyMaze_1";
@@ -53,11 +62,14 @@
     }
 
     public override void MazeFinished()
-    {
-        Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().enabled = true;
+    {        
         base.MazeFinished();
         
-        Globals.canvasForMyMaze.ShowUnclickedGuardsRedPointsOnEnhanceDefBtn();
+        if (Globals.canvasForMyMaze.enhanceDefenseUI.mazeInfo.isUpgradingMaze)
+        {
+            Globals.transition.Stop();
+            Globals.canvasForMyMaze.enhanceDefenseUI.mazeInfo.isUpgradingMaze = false;
+        }
 
         if (Globals.maze.guards.Count != 0)
         {
@@ -71,9 +83,9 @@
             Globals.canvasForMyMaze.roomConsumed = 0;
             Globals.canvasForMyMaze.ChangeMazeRoom(0);
         }
-
-        Globals.canvasForMyMaze.CheckRoomFullUses();
-        
+        Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().enabled = true;
+        Globals.cameraFollowMagician.Reset();
+        Globals.canvasForMyMaze.CheckRoomFullUses();        
         
         Globals.EnableAllInput(true);
         Globals.canvasForMagician.RoseNumberBg.SetActive(true);
@@ -82,6 +94,11 @@
         Globals.canvasForMagician.HideTricksPanel();
         Globals.maze.SetRestrictToCamera(Globals.cameraFollowMagician);
         Globals.maze.RegistGuardArrangeEvent();
+        for (int idx = 0; idx < Globals.self.guardsHired.Count; ++idx)
+        {
+            System.String guardname = Globals.self.guardsHired[idx];
+            Globals.GetGuardData(guardname).hired = true;
+        }
 
         if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
         {
@@ -89,52 +106,37 @@
             Globals.maze.ClearGuards();
 
             thief_prefab = UnityEngine.Resources.Load("Avatar/Tutorial_Thief") as UnityEngine.GameObject;
-            //Globals.selectGuard.EnableBtns(false);            
             foreach (Cell cell in Globals.maze.EveryCells)
             {
-                if ((cell.chest != null) || cell == Globals.maze.entryOfMaze)
+                if (cell.chest != null)
                 {
                     cell.HideEverythingExceptFloor();
                 }
                 else
                 {
-                    UnityEngine.SpriteRenderer[] renderers = cell.GetComponentsInChildren<UnityEngine.SpriteRenderer>();
-                    foreach (UnityEngine.SpriteRenderer renderer in renderers)
-                    {
-                        renderer.enabled = false;
-                    }
+                    cell.gameObject.SetActive(false);                    
                 }
-            }            
-
+            }
+           
+            Globals.canvasForMyMaze.gameObject.SetActive(true);
+            Globals.canvasForMyMaze.enhanceDefenseUI.gameObject.SetActive(false);
             Globals.canvasForMyMaze.TipBuyHereAsHome.BeginMove(Globals.uiMoveAndScaleDuration);
         }
         else
         {
             SyncWithChestData(Globals.self);
-            
-            Globals.Assert(Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.Over);
-            Globals.canvasForMyMaze.TutorialEnd();
-        }
-        
-        for (int idx = 0; idx < Globals.self.guardsHired.Count; ++idx)
-        {
-            System.String guardname = Globals.self.guardsHired[idx];
-            Globals.GetGuardData(guardname).hired = true;
-        }
-
-        Globals.cameraFollowMagician.audioSource.clip = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/尋問");
-        Globals.cameraFollowMagician.audioSource.Play();
-        Globals.cameraFollowMagician.audioSource.volume = 0.25f;
+            StartDropPieces();
+        }        
     }
 
     public override void MoneyFull(bool full)
     {
         base.MoneyFull(full);
-        Globals.canvasForMyMaze.add_box_tip_pointer.transform.parent.gameObject.SetActive(full);
+        Globals.canvasForMyMaze.enhanceDefenseUI.add_box_tip_pointer.transform.parent.gameObject.SetActive(full);
         if(full)
         {
-            Globals.canvasForMyMaze.add_box_tip_pointer.ClearAllActions();
-            Globals.canvasForMyMaze.add_box_tip_pointer.Blink();
+            Globals.canvasForMyMaze.enhanceDefenseUI.add_box_tip_pointer.ClearAllActions();
+            Globals.canvasForMyMaze.enhanceDefenseUI.add_box_tip_pointer.BlinkForever();
         }        
     }
 
@@ -142,8 +144,8 @@
     {        
         AddAction(new Sequence(
             new SleepFor(10), new FunctionCall(() => AddSafeBox()),
-            new SleepFor(chestFallingDuration + 30), new FunctionCall(() => AddSafeBox()),
-            new SleepFor(chestFallingDuration + 30), new FunctionCall(() => ChestsFallingEnd())));
+            new SleepFor(chestFallingDuration + 20), new FunctionCall(() => AddSafeBox()),
+            new SleepFor(chestFallingDuration + 20), new FunctionCall(() => ChestsFallingEnd())));
         Globals.canvasForMyMaze.TipBuyHereAsHome.Goback(Globals.uiMoveAndScaleDuration);
     }
     
@@ -171,6 +173,8 @@
 
     public void StartDropPieces()
     {
+        Globals.canvasForMyMaze.gameObject.SetActive(false);
+        Globals.canvasForMagician.gameObject.SetActive(false);
         StartCoroutine(MazePieces());
     }
 
@@ -179,14 +183,16 @@
         System.Collections.Generic.List<Cocos2dAction> action_list = new System.Collections.Generic.List<Cocos2dAction>();
         foreach (Cell cell in Globals.maze.EveryCells)
         {
+            cell.gameObject.SetActive(true);
             if (cell.GetFloor() == null)
             {
                 continue;
             }
-            UnityEngine.SpriteRenderer[] renderers = cell.GetComponentsInChildren<UnityEngine.SpriteRenderer>();
+            
+            UnityEngine.SpriteRenderer[] renderers = cell.GetComponentsInChildren<UnityEngine.SpriteRenderer>(true);
             foreach (UnityEngine.SpriteRenderer renderer in renderers)
             {
-                if (!renderer.enabled)
+                if (renderer.enabled)
                 {
                     if (ShowDroppingProcess)
                     {                        
@@ -194,11 +200,11 @@
                         double directionRatio = UnityEngine.Random.Range(0.0f, 1.0f);
                         if (directionRatio < 0.5f)
                         {
-                            dir.x = piecesFarDis;
+                            dir.x = UnityEngine.Random.Range(piecesFarDis/3, piecesFarDis);
                         }
                         else
                         {
-                            dir.y = piecesFarDis;
+                            dir.y = UnityEngine.Random.Range(piecesFarDis / 3, piecesFarDis);
                         }
 
                         if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.5f)
@@ -214,24 +220,32 @@
                         renderer.transform.localPosition += dir;
                     }                    
                     
-                    renderer.enabled = true;
+                    //renderer.enabled = true;
                     if(ShowDroppingProcess)
                     {
-                        //yield return new UnityEngine.WaitForSeconds(dropPieceTimeGap * 1.5f); 
+                        //yield return new UnityEngine.WaitForSeconds(0.1f * 1.5f); 
                     }                    
                 }                    
             }
         }
-
-        Globals.maze.chests[0].AddAction(new Cocos2dParallel(action_list.ToArray()));
-
-        if (ShowDroppingProcess)
+       
+        if(Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
         {
-            yield return new UnityEngine.WaitForSeconds(7.0f);
-        }
+            AddAction(new Cocos2dParallel(action_list.ToArray()));
+            if (ShowDroppingProcess)
+            {
+                yield return new UnityEngine.WaitForSeconds(3.5f);
+            }
 
-        ThiefAboutToMove();
-        SleepThenCallFunction(Globals.uiMoveAndScaleDuration, ()=>Globals.canvasForMyMaze.ShowSelectGuardPanelTip());        
+            ThiefAboutToMove();
+            SleepThenCallFunction(Globals.uiMoveAndScaleDuration, () => Globals.canvasForMyMaze.ShowSelectGuardPanelTip());
+        }
+        else
+        {            
+            AddAction(new Sequence(new Cocos2dParallel(action_list.ToArray()), 
+                new SleepFor(30),
+                new FunctionCall(() => Globals.canvasForMyMaze.TutorialEnd())));
+        }
     }
 
     public void ThiefAboutToMove()
@@ -253,18 +267,18 @@
 
     public override void GuardDestroyed(Guard guard)
     {        
-        Globals.canvasForMyMaze.btnEnhanceDef.gameObject.SetActive(true);
+        Globals.canvasForMyMaze.enhanceDefenseUI.Open();
         Globals.canvasForMyMaze.ChangeMazeRoom(-guard.data.roomConsume);        
         base.GuardDestroyed(guard);
         Globals.canvasForMyMaze.CheckRoomFullUses();
         Globals.maze.guards.Remove(guard);
-        Globals.self.UploadGuards();        
+        Globals.self.UploadGuards();
     }
 
     public override void GuardChoosen(Guard guard)
     {
         base.GuardChoosen(guard);
-        Globals.canvasForMyMaze.btnEnhanceDef.gameObject.SetActive(false);
+        Globals.canvasForMyMaze.enhanceDefenseUI.gameObject.SetActive(false);
     }
 
     public override void GuardDropped(Guard guard)
@@ -280,7 +294,7 @@
         }
         else
         {
-            Globals.canvasForMyMaze.btnEnhanceDef.gameObject.SetActive(true);
+            Globals.canvasForMyMaze.enhanceDefenseUI.gameObject.SetActive(true);
         }
         base.GuardDropped(guard);
     }
@@ -307,7 +321,8 @@
         Globals.canvasForMyMaze.ChangeMazeRoom(-lastGuard.data.roomConsume);
         DestroyObject(lastGuard.gameObject);
         
-        Globals.canvasForMyMaze.btnEnhanceDef.gameObject.SetActive(true);
+        
+        Globals.canvasForMyMaze.enhanceDefenseUI.gameObject.SetActive(true);
         currentThief.targetChest.ResetGold();
         currentThief.HideTip();
         currentThief.currentAction = null;
@@ -348,7 +363,8 @@
     {
         currentThief.HideTip();
         ThiefAboutToMove();
-        Globals.canvasForMyMaze.btnEnhanceDef.gameObject.SetActive(true);
+
+        Globals.canvasForMyMaze.enhanceDefenseUI.gameObject.SetActive(true);
     }
 
     public UnityEngine.Vector3 AddSafeBox()
@@ -371,9 +387,10 @@
         return falling_pos;
     }
 
-    public override void Update()
+    public override void FrameFunc()
     {
-        base.Update();
+        base.FrameFunc();
+        AstarPath.CalculatePaths(AstarPath.threadInfos[0]);
         // 拖动的guard要在雾上面
         if (Globals.maze.choosenGuard != null)
         {
@@ -387,8 +404,16 @@
             {
                 guard.spriteRenderer.sortingOrder = 10;
                 UnityEngine.Vector3 pos = guard.transform.position;
-                guard.heightOriginCache = -0.6f;
-                guard.transform.position = new UnityEngine.Vector3(pos.x, pos.y, -0.6f);
+                if (fogPlane.activeSelf)
+                {
+                    guard.heightOriginCache = -0.6f;
+                }
+                else
+                {
+                    guard.heightOriginCache = 0.0f;
+                }
+
+                guard.transform.position = new UnityEngine.Vector3(pos.x, pos.y, (float)guard.heightOriginCache);
             }
         }
     }

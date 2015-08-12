@@ -2,18 +2,16 @@
 {
     UnityEngine.RectTransform draggingDownImage;
     public TrickUsingSlotData data;
-    UnityEngine.UI.Button btn;
     public UnityEngine.UI.Text powerCost;
     public UnityEngine.GameObject lockImage;
     public int index;
-    public MultiLanguageUIText cashCost;
+    public UnityEngine.UI.Text cashCost;
     public override void Awake()
     {
         base.Awake();
-        btn = GetComponent<UnityEngine.UI.Button>();
         btn.onClick.AddListener(() => TrickSlotClicked());
         index = System.Convert.ToInt32(gameObject.name);
-        cashCost = Globals.getChildGameObject<MultiLanguageUIText>(gameObject, "CashCost");
+        cashCost = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "CashCost");
         
         powerCost = GetComponentInChildren<UnityEngine.UI.Text>();
         powerCost.text = "";
@@ -127,7 +125,7 @@
         {
             Globals.canvasForMagician.cast_tip.gameObject.SetActive(true);
             Globals.canvasForMagician.cast_tip.parent = rectTransform;
-            Globals.canvasForMagician.cast_tip.anchoredPosition = new UnityEngine.Vector2(-rectTransform.sizeDelta.x, 120);
+            Globals.canvasForMagician.cast_tip.anchoredPosition = new UnityEngine.Vector2(0, 164);
 
             if (data.statu == "-1")
             {

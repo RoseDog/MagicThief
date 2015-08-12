@@ -57,6 +57,8 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     public System.Collections.Generic.List<Guard> guards = new System.Collections.Generic.List<Guard>();
     public System.Collections.Generic.List<Chest> chests = new System.Collections.Generic.List<Chest>();
     public System.Collections.Generic.List<UnityEngine.GameObject> gemHolders = new System.Collections.Generic.List<UnityEngine.GameObject>();
+
+    public System.String pieces_dir = "";        
     
     // 每一次挖走廊，都会重新创建这个类型的对象来选择方向
     public class DirectionPicker
@@ -1032,9 +1034,10 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 //         UnityEngine.Sprite buttom_corner = UnityEngine.Resources.Load<UnityEngine.Sprite>("Props/buttom_corner");
 //         UnityEngine.Sprite wall_hor_small = UnityEngine.Resources.Load<UnityEngine.Sprite>("Props/wall_hor_small");
 //         UnityEngine.Sprite wall_ver_small = UnityEngine.Resources.Load<UnityEngine.Sprite>("Props/wall_ver_small");
+        
 
-        UnityEngine.Sprite s_w_corner = UnityEngine.Resources.Load<UnityEngine.Sprite>("Props/S_W_Corner");
-        UnityEngine.Sprite s_e_corner = UnityEngine.Resources.Load<UnityEngine.Sprite>("Props/S_E_Corner");
+        UnityEngine.Sprite s_w_corner = UnityEngine.Resources.Load<UnityEngine.Sprite>(pieces_dir + "/S_W_Corner");
+        UnityEngine.Sprite s_e_corner = UnityEngine.Resources.Load<UnityEngine.Sprite>(pieces_dir + "/S_E_Corner");
         
         // 如果没有地板，墙体也不需要显示出来
         foreach (Cell cell in EveryCells)
@@ -1187,7 +1190,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                 S_W_Corner.GetComponent<UnityEngine.Collider>().enabled = false;
             }
 
-            Cell N_Cell = cell.GetAdjacentCell(Globals.SOUTH);
+            Cell N_Cell = cell.GetAdjacentCell(Globals.NORTH);
             UnityEngine.Collider N_W_Corner = Globals.getChildGameObject<UnityEngine.Collider>(cell.gameObject, "N-W-Corner");
             UnityEngine.Collider N_E_Corner = Globals.getChildGameObject<UnityEngine.Collider>(cell.gameObject, "N-E-Corner");
             if (N_Cell)
@@ -1195,12 +1198,12 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                 UnityEngine.SpriteRenderer north_cell_E_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(N_Cell.gameObject, "E");
                 UnityEngine.SpriteRenderer north_cell_W_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(N_Cell.gameObject, "W");
 
-                if (E_sprite != null && E_sprite.enabled && (north_cell_E_sprite == null || north_cell_E_sprite.enabled == false))
+                if (E_sprite != null && E_sprite.enabled)
                 {
                     N_E_Corner.enabled = true;
                 }
 
-                if (W_sprite != null && W_sprite.enabled && (north_cell_E_sprite == null || north_cell_E_sprite.enabled == false))
+                if (W_sprite != null && W_sprite.enabled)
                 {
                     N_W_Corner.enabled = true;
                 }
@@ -1229,7 +1232,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 
         
         // 要等一下生成路径，不然会出问题。
-        Globals.LevelController.SleepThenCallFunction(30, () => finished());
+        Globals.LevelController.SleepThenCallFunction(30, () => finished());        
     }
 
     void finished()
@@ -1588,6 +1591,36 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         }
 
         Globals.LevelController.BeforeGenerateMaze();
+
+        PlayerInfo owner_of_maze = null;
+        if (Globals.guardPlayer != null)
+        {
+            owner_of_maze = Globals.guardPlayer;
+        }
+        else if(Globals.visitPlayer != null)
+        {
+            owner_of_maze = Globals.visitPlayer;
+        }
+        else
+        {
+            owner_of_maze = Globals.self;
+        }
+
+        if (owner_of_maze.isBot)
+        {
+            pieces_dir = "Props/Maze-Pieces/pve";
+        }
+        else
+        {
+            if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
+            {
+                pieces_dir = "Props/Maze-Pieces/1";
+            }
+            else
+            {
+                pieces_dir = "Props/Maze-Pieces/" + owner_of_maze.currentMazeLevel.ToString();
+            }
+        }
                 
         cells = new Cell[Y_CELLS_COUNT, X_CELLS_COUNT];
         bounds = new UnityEngine.Rect(0, 0, X_CELLS_COUNT, Y_CELLS_COUNT);
@@ -1615,7 +1648,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 //         center_pos = new UnityEngine.Vector3(-(X_CELLS_COUNT * cell_side_length) / 2.0f - cell_side_length / 2.0f,
 //            (Y_CELLS_COUNT * cell_side_length) / 2.0f - cell_side_length / 2.0f, 0);
 
-        UnityEngine.GameObject cell_prefab = UnityEngine.Resources.Load("Props/Cell_2d") as UnityEngine.GameObject;
+        UnityEngine.GameObject cell_prefab = UnityEngine.Resources.Load(pieces_dir + "/Cell_2d") as UnityEngine.GameObject;
         // 从左上开始，一一构造cells
         for (int y = 0; y < Y_CELLS_COUNT; ++y)
         {
@@ -1681,14 +1714,9 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         guards.Clear();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        foreach (UnityEngine.GameObject gem in gemHolders)
-        {
-            gem.GetComponent<UnityEngine.CharacterController>().Move(new UnityEngine.Vector3(0.001f, 0.0f, 0.0f));
-            gem.GetComponent<UnityEngine.CharacterController>().Move(new UnityEngine.Vector3(-0.001f, 0.0f, 0.0f));
-        }        
+        
     }
 
     public void GuardsTargetVanish(UnityEngine.GameObject obj)
@@ -1707,7 +1735,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             MachineActiveArea area = guard.GetComponentInChildren<MachineActiveArea>();
             if (area)
             {
-                area.enemiesInArea.Remove(obj);
+                area.actorsInTouch.Remove(obj.GetComponent<Actor>());
             }
         }
     }

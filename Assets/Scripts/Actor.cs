@@ -1,5 +1,6 @@
 ﻿public class Actor : UnityEngine.MonoBehaviour 
 {
+    public int update_eye_idx;
     [UnityEngine.HideInInspector]
     public UnityEngine.Animation anim;
     [UnityEngine.HideInInspector]
@@ -7,7 +8,10 @@
     [UnityEngine.HideInInspector]
     public SpriteSheet spriteSheet;
     [UnityEngine.HideInInspector]
-    public UnityEngine.CharacterController controller;
+    public UnityEngine.CharacterController characterController;
+    [UnityEngine.HideInInspector]
+    public UnityEngine.SpriteRenderer shadow;
+    public System.Collections.Generic.List<Actor> actorsInTouch = new System.Collections.Generic.List<Actor>();
 
     public Action currentAction;
 
@@ -57,14 +61,23 @@
 
     public UnityEngine.AudioSource audioSource;
 
+    public UnityEngine.GameObject head_on_minimap;
+
+    public static System.Collections.Generic.List<Actor> to_be_remove = new System.Collections.Generic.List<Actor>();    
+
     public virtual void Awake()
     {
         scaleCache = transform.localScale;
         heightOriginCache = transform.position.z;
         spriteRenderer = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(gameObject, "Sprite");
+        shadow = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(gameObject, "shadow");
         spriteSheet = GetComponentInChildren<SpriteSheet>();
-        anim = GetComponent<UnityEngine.Animation>();        
-        controller = GetComponent<UnityEngine.CharacterController>();
+        anim = GetComponent<UnityEngine.Animation>();
+        characterController = GetComponent<UnityEngine.CharacterController>();
+        if (characterController != null)
+        {
+            characterController.enabled = true;
+        }
         hitted = GetComponent<Hitted>();
         lifeOver = GetComponent<LifeOver>();
         moving = GetComponent<GuardMoving>();
@@ -80,43 +93,117 @@
         pathMeshPrefab = UnityEngine.Resources.Load("Misc/PathMesh") as UnityEngine.GameObject;
 
         audioSource = GetComponent<UnityEngine.AudioSource>();
+
+        head_on_minimap = Globals.getChildGameObject(gameObject, "head_on_minimap");
+
+        if (!Globals.to_add_actors.Contains(this))
+        {
+            Globals.to_add_actors.Add(this);
+        }        
+    }
+
+    public virtual void OnDestroy()
+    {
+        Globals.actors.Remove(this);
     }
 
     public virtual void Start()
     {
+        
+    }
 
-    }      
+    public float GetWorldScale()
+    {
+        float world_scale = transform.localScale.x;
+        if (transform.parent != null)
+        {
+            world_scale = world_scale * transform.parent.localScale.x;
+        }
+        return world_scale;
+    }
 
-    // Update is called once per frame
-    public virtual void Update()
+    public float GetWorldRadius()
+    {
+        return characterController.radius * GetWorldScale();
+    }
+
+    public UnityEngine.Vector3 GetWorldCenterPos()
+    {
+        return transform.position + characterController.center * GetWorldScale();
+    }
+
+    public virtual void TouchBegin(Actor other)
+    {
+        actorsInTouch.Add(other);
+    }
+
+    public virtual void TouchStay(Actor other)
+    {
+
+    }
+
+    public virtual void TouchOut(Actor other)
+    {
+        actorsInTouch.Remove(other);
+    }
+
+    public bool IsTouching(Actor other)
+    {
+        return actorsInTouch.Contains(other);       
+    }
+
+    public virtual void FrameFunc()
     {
         // Run actions
         UpdateActions();
+
+        if ((Globals.LevelController.frameCount + update_eye_idx) % 5 == 0)
+        {
+            if (eye != null && eye.gameObject.activeSelf)
+            {
+                eye.FrameFunc();
+            }
+        }       
+
+        if(currentAction != null)
+        {
+            currentAction.FrameFunc();
+        }
+
+        if(moving != null)
+        {
+            moving.FrameFunc();
+        }
+
+        if (spriteSheet != null)
+        {
+            spriteSheet.FrameFunc();
+        }
     }
     [UnityEngine.HideInInspector]
     public System.Collections.Generic.List<Cocos2dAction> actions = new System.Collections.Generic.List<Cocos2dAction>();
     [UnityEngine.HideInInspector]
-    System.Collections.Generic.List<Cocos2dAction> to_remove = new System.Collections.Generic.List<Cocos2dAction>();
+    System.Collections.Generic.List<Cocos2dAction> to_remove_actions = new System.Collections.Generic.List<Cocos2dAction>();
     [UnityEngine.HideInInspector]
-    public System.Collections.Generic.List<Cocos2dAction> to_add = new System.Collections.Generic.List<Cocos2dAction>();
-    // Update actions
+    public System.Collections.Generic.List<Cocos2dAction> to_add_actions = new System.Collections.Generic.List<Cocos2dAction>();
+
     protected void UpdateActions()
     {
-        foreach (Cocos2dAction action in to_remove)
-            to_add.Remove(action);
+        foreach (Cocos2dAction action in to_remove_actions)
+            to_add_actions.Remove(action);
 
-        foreach (Cocos2dAction action in to_remove)
+        foreach (Cocos2dAction action in to_remove_actions)
             actions.Remove(action);
-        to_remove.Clear();
+        to_remove_actions.Clear();
 
-        foreach (Cocos2dAction action in to_add)
+        foreach (Cocos2dAction action in to_add_actions)
             actions.Add(action);
-        to_add.Clear();        
+        to_add_actions.Clear();        
 
         // Run actions
         if (actions.Count > 0)
         {
-            to_remove = new System.Collections.Generic.List<Cocos2dAction>();
+            to_remove_actions = new System.Collections.Generic.List<Cocos2dAction>();
             foreach (Cocos2dAction action in actions)
             {
 
@@ -129,14 +216,12 @@
 
                 if(!action.paused)
                 {
-                    // Update action
                     action.Update();
                 }
-                
 
                 // Remove action when completed
                 if (action.IsCompleted()) 
-                    to_remove.Add(action);
+                    to_remove_actions.Add(action);
 
             }
         }        
@@ -152,7 +237,7 @@
     // Add Action
     public void AddAction(Cocos2dAction action)
     {        
-        to_add.Add(action);
+        to_add_actions.Add(action);
         // Assign parent to action
         action.parent = this;
     }
@@ -160,7 +245,7 @@
     public void RemoveAction(ref Cocos2dAction action)
     {
         //to_add.Remove(action);
-        to_remove.Add(action);        
+        to_remove_actions.Add(action);        
         action = null;
     }
 

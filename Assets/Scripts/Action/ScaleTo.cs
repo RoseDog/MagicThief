@@ -28,23 +28,21 @@ public class ScaleTo : Cocos2dAction
 	public override void Init () {
         
 		// get start time
-		_start_frame = Time.frameCount;
+        _start_frame = Globals.LevelController.frameCount;
 		// get starting scale
 		_start = _transform.localScale;
 		
 		initialized = true;
 	}
 
-	// Update
 	public override void Update () {
 		
 		// Not completed
 		if(!completed)
 		{
-			// Update scale
-            _transform.localScale = Vector3.Lerp(_start, _end, (Time.frameCount - _start_frame) / (float)_duration);
+            _transform.localScale = Vector3.Lerp(_start, _end, (Globals.LevelController.frameCount - _start_frame) / (float)_duration);
 
-            if (Time.frameCount - _start_frame >= _duration)
+            if (Globals.LevelController.frameCount - _start_frame >= _duration)
             {
                 EndAction();
                 _transform.localScale = _end;

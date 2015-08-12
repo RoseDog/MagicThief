@@ -1,9 +1,10 @@
-﻿public class BarkSoundWave : UnityEngine.MonoBehaviour
+﻿public class BarkSoundWave : Actor
 {
     public Guard owner;
-    void OnTriggerEnter(UnityEngine.Collider other)
+    public override void TouchBegin(Actor other)    
     {
-        Guard guard = other.GetComponent<Guard>();
+        base.TouchBegin(other);
+        Guard guard = other as Guard;
         if (owner != guard && guard.heardAlert != null && /*guard.heardAlert.alertTeammate == null &&*/ guard.spot.target == null)
         {
             guard.heardAlert.HeardSound(transform.position);
@@ -18,9 +19,10 @@
         }
     }
 
-    void OnTriggerStay(UnityEngine.Collider other)
+    public override void TouchStay(Actor other)
     {
-        Guard guard = other.GetComponent<Guard>();
+        base.TouchStay(other);        
+        Guard guard = other as Guard;
         if (owner != guard && guard.heardAlert != null && /*guard.heardAlert.alertTeammate == null &&*/ guard.spot.target == null)
         {
             guard.heardAlert.HeardSound(transform.position);

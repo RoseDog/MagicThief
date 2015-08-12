@@ -21,9 +21,9 @@ public class CustomEventTrigger : Actor
         rectTransform = GetComponent<UnityEngine.RectTransform>();        
     }
 
-    public override void Update()
+    public void Update()
     {
-        base.Update();
+        base.FrameFunc();
         Finger finger = Globals.input.GetFingerByID(0);
         if (finger.IsUp())
         {

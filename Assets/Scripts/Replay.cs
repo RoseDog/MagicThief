@@ -1,7 +1,7 @@
 ﻿public class Replay : UnityEngine.MonoBehaviour 
 {
-    public int frameBeginNo;
     public System.String pveFile;
+    public int playSpeed = 1;
     public class TrickRecord
     {
         public int frame_no;
@@ -17,6 +17,13 @@
     }
     public System.Collections.Generic.List<ClickRecord> clickRecords = new System.Collections.Generic.List<ClickRecord>();
 
+    public class FlashGrenadeRecord
+    {
+        public int frame_no;
+        public UnityEngine.Vector3 pos;
+    }
+    public System.Collections.Generic.List<FlashGrenadeRecord> flashRecords = new System.Collections.Generic.List<FlashGrenadeRecord>();
+    
     public class ClickOnGuard
     {
         public int frame_no;
@@ -58,10 +65,21 @@
         if (Globals.playingReplay == null)
         {
             TrickRecord record = new TrickRecord();
-            record.frame_no = UnityEngine.Time.frameCount - frameBeginNo;
+            record.frame_no = Globals.LevelController.frameCount;
             data.CopyTo(record.data);
             trickRecords.Add(record);
         }                
+    }
+
+    public void RecordFlash(UnityEngine.Vector3 pos)
+    {
+        if (Globals.playingReplay == null)
+        {
+            FlashGrenadeRecord record = new FlashGrenadeRecord();
+            record.frame_no = Globals.LevelController.frameCount;
+            record.pos = pos;
+            flashRecords.Add(record);
+        }
     }
 
     public void RecordClickOnGuard(int guard_idx)
@@ -69,7 +87,7 @@
         if (Globals.playingReplay == null)
         {
             ClickOnGuard record = new ClickOnGuard();
-            record.frame_no = UnityEngine.Time.frameCount - frameBeginNo;
+            record.frame_no = Globals.LevelController.frameCount;
             record.guard_idx = guard_idx;
             clickOnGuardRecords.Add(record);
         }                
@@ -80,7 +98,7 @@
         if (Globals.playingReplay == null)
         {
             ClickRecord record = new ClickRecord();
-            record.frame_no = UnityEngine.Time.frameCount - frameBeginNo;
+            record.frame_no = Globals.LevelController.frameCount;
             record.ray_origin = ray.origin;
             record.ray_direction = ray.direction;
             clickRecords.Add(record);
@@ -99,7 +117,7 @@
     {
         if (Globals.playingReplay == null)
         {
-            mageTryEscapeFrameNos.Add(UnityEngine.Time.frameCount - frameBeginNo);
+            mageTryEscapeFrameNos.Add(Globals.LevelController.frameCount);
         }        
     }
 
@@ -107,7 +125,7 @@
     {
         if (Globals.playingReplay == null)
         {
-            mage_falling_down_frame_no = UnityEngine.Time.frameCount - frameBeginNo;
+            mage_falling_down_frame_no = Globals.LevelController.frameCount;
         }
     }
 
@@ -254,12 +272,12 @@
         if (Globals.playingReplay == null)
         {
             return;
-        }        
+        }
 
         if (clickRecords.Count != 0)
         {
             ClickRecord record = clickRecords[0];
-            while (record.frame_no == UnityEngine.Time.frameCount - frameBeginNo)
+            while (record.frame_no == Globals.LevelController.frameCount)
             {
                 UnityEngine.Ray ray = new UnityEngine.Ray(record.ray_origin, record.ray_direction);
                 (Globals.LevelController as StealingLevelController).RayOnMap(ray);
@@ -276,10 +294,10 @@
         if (clickOnGuardRecords.Count != 0)
         {
             ClickOnGuard record = clickOnGuardRecords[0];
-            while (record.frame_no == UnityEngine.Time.frameCount - frameBeginNo)
+            while (record.frame_no == Globals.LevelController.frameCount)
             {
                 Guard hovered = null;
-                foreach(Guard guard in Globals.maze.guards)
+                foreach (Guard guard in Globals.maze.guards)
                 {
                     if (record.guard_idx == guard.idx)
                     {
@@ -295,9 +313,9 @@
                 record = clickOnGuardRecords[0];
             }
         }
-        
 
-        if (mage_falling_down_frame_no == UnityEngine.Time.frameCount - frameBeginNo)
+
+        if (mage_falling_down_frame_no == Globals.LevelController.frameCount)
         {
             (Globals.LevelController as StealingLevelController).MagicianFallingDown();
         }
@@ -305,7 +323,7 @@
         if (mageTryEscapeFrameNos.Count != 0)
         {
             int try_escape_no = mageTryEscapeFrameNos[0];
-            while (try_escape_no == UnityEngine.Time.frameCount - frameBeginNo)
+            while (try_escape_no == Globals.LevelController.frameCount)
             {
                 (Globals.LevelController as StealingLevelController).LeaveBtnClicked();
                 mageTryEscapeFrameNos.RemoveAt(0);
@@ -315,20 +333,17 @@
                 }
                 try_escape_no = mageTryEscapeFrameNos[0];
             }
-        }          
-    }
+        }
 
-    void Update()
-    {
         if (Globals.playingReplay == null)
         {
             return;
-        }  
+        }
 
         if (trickRecords.Count != 0)
         {
             TrickRecord record = trickRecords[0];
-            while (record.frame_no == UnityEngine.Time.frameCount - frameBeginNo)
+            while (record.frame_no == Globals.LevelController.frameCount)
             {
                 Globals.magician.CastMagic(record.data);
                 trickRecords.RemoveAt(0);
@@ -339,5 +354,20 @@
                 record = trickRecords[0];
             }
         }
-    }
+
+        if (flashRecords.Count != 0)
+        {
+            FlashGrenadeRecord record = flashRecords[0];
+            while (record.frame_no == Globals.LevelController.frameCount)
+            {
+                Globals.magician.CastFlash(record.pos);
+                flashRecords.RemoveAt(0);
+                if (flashRecords.Count == 0)
+                {
+                    break;
+                }
+                record = flashRecords[0];
+            }
+        }       
+    }    
 }

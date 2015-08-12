@@ -1,29 +1,25 @@
-﻿public class HireGuards : UnityEngine.MonoBehaviour 
+﻿public class HireGuards : CustomEventTrigger
 {
     public UnityEngine.UI.Button prevBtn;
     public UnityEngine.UI.Button nextBtn;
-    UnityEngine.UI.GridLayoutGroup guardsLayout;
+    public UnityEngine.UI.GridLayoutGroup guardsLayout;
     public System.Collections.Generic.List<GuardData> guardsUnhired = new System.Collections.Generic.List<GuardData>();
     public System.Collections.Generic.List<UnityEngine.GameObject> guardHireBtns = new System.Collections.Generic.List<UnityEngine.GameObject>();
 
     int onePageCount = 3;
 
-    public void Awake()
+    public override void Awake()
     {
-        prevBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(transform.parent.gameObject, "Prev");
+        base.Awake();
+        prevBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(transform.gameObject, "Prev");
         prevBtn.onClick.AddListener(()=>Previous());
-        prevBtn.gameObject.SetActive(false);
-        nextBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(transform.parent.gameObject, "Next");
+        nextBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(transform.gameObject, "Next");
         nextBtn.onClick.AddListener(() => Next());
-        nextBtn.gameObject.SetActive(false);
-
-        guardsLayout = GetComponent<UnityEngine.UI.GridLayoutGroup>();
     }	
 
     public void UpdateGuardsInfo()
     {
         guardUnhiredUIAtLeftIdx = 0;
-        guardsLayout = GetComponent<UnityEngine.UI.GridLayoutGroup>();
 
         foreach (UnityEngine.GameObject hireBtn in guardHireBtns)
         {
@@ -75,7 +71,8 @@
             }
             else
             {
-                Globals.languageTable.SetText(Globals.getChildGameObject<UnityEngine.UI.Text>(hireBtn.gameObject,"CashNumber"),"hired");
+                //Globals.languageTable.SetText(Globals.getChildGameObject<UnityEngine.UI.Text>(hireBtn.gameObject,"CashNumber"),"hired");
+                hireBtn.gameObject.SetActive(false);
             }
             guard_info_object.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => Summon(guardData));
         }
@@ -94,7 +91,7 @@
         MultiLanguageUIText Description = Globals.getChildGameObject<MultiLanguageUIText>(guard_info_object, "Description");
         Globals.languageTable.SetText(Description, guardData.name + "_desc");
 
-        MultiLanguageUIText RoomConsume = Globals.getChildGameObject<MultiLanguageUIText>(guard_info_object, "RoomConsume");
+        UnityEngine.UI.Text RoomConsume = Globals.getChildGameObject<UnityEngine.UI.Text>(iconImage.gameObject, "RoomConsume");
         RoomConsume.text = guardData.roomConsume.ToString();
 
         if (addToHead)
@@ -114,7 +111,8 @@
         {
             hireBtn.onClick.RemoveAllListeners();
             Globals.self.HireGuard(guardData);            
-            Globals.languageTable.SetText(hireBtn.GetComponentInChildren<UnityEngine.UI.Text>(), "hired");
+            //Globals.languageTable.SetText(hireBtn.GetComponentInChildren<UnityEngine.UI.Text>(), "hired");
+            hireBtn.gameObject.SetActive(false);
         }
     }    
 
@@ -124,7 +122,7 @@
         {
             if (Globals.canvasForMyMaze.ChangeMazeRoom(guardInfo.roomConsume))
             {
-                Globals.canvasForMyMaze.enhanceDefenseUI.OnTouchUpOutside(null);
+                Globals.canvasForMyMaze.enhanceDefenseUI.gameObject.SetActive(false);
                 Finger f = Globals.input.GetFingerByID(0);
                 //UnityEngine.Vector3 screenPos = new UnityEngine.Vector3(f.nowPosition.x, f.nowPosition.y, 0);
                 UnityEngine.Vector3 screenPos = new UnityEngine.Vector3(UnityEngine.Input.mousePosition.x, UnityEngine.Input.mousePosition.y, 0);
@@ -136,7 +134,7 @@
         }
         else
         {
-            Globals.tipDisplay.Msg("not_hired_yet"); ;
+            Globals.tipDisplay.Msg("not_hired_yet");
         }        
     }
 
@@ -171,5 +169,13 @@
             guardHireBtns.RemoveAt(0);
             UnityEngine.GameObject guard_info_object = CreateGuardInfoUI(guardsUnhired[guardUnhiredUIAtLeftIdx + onePageCount-1], false);
         }             
+    }
+
+    public override void OnTouchUpOutside(Finger f)
+    {
+        base.OnTouchUpOutside(f);
+        gameObject.SetActive(false);
+        Globals.canvasForMyMaze.enhanceDefenseUI.CheckPointerJumpInTutorial();
+        Globals.canvasForMyMaze.enhanceDefenseUI.guardsTab.image.enabled = false;
     }
 }

@@ -215,7 +215,7 @@ public class Cell : Actor
         UnityEngine.GameObject wall = Globals.getChildGameObject(cell.gameObject, dir);
         if (wall == null)
         {
-            UnityEngine.GameObject cell_prefab = UnityEngine.Resources.Load("Props/Cell_2d") as UnityEngine.GameObject;
+            UnityEngine.GameObject cell_prefab = UnityEngine.Resources.Load(Globals.maze.pieces_dir + "/Cell_2d") as UnityEngine.GameObject;
             UnityEngine.GameObject wall_prefab = Globals.getChildGameObject(cell_prefab, dir);
             wall = UnityEngine.GameObject.Instantiate(wall_prefab) as UnityEngine.GameObject;
             wall.name = dir;            
@@ -233,7 +233,7 @@ public class Cell : Actor
     {
         if (GetFloor() == null)
         {
-            UnityEngine.GameObject cell_prefab = UnityEngine.Resources.Load("Props/Cell_2d") as UnityEngine.GameObject;
+            UnityEngine.GameObject cell_prefab = UnityEngine.Resources.Load(Globals.maze.pieces_dir + "/Cell_2d") as UnityEngine.GameObject;
             UnityEngine.GameObject floor_prefab = Globals.getChildGameObject(cell_prefab, "floor_tile");
             UnityEngine.GameObject floor = UnityEngine.GameObject.Instantiate(floor_prefab) as UnityEngine.GameObject;
             floor.name = "floor_tile";
@@ -300,6 +300,15 @@ public class Cell : Actor
             {
                 renderer.enabled = true;
             }
+        }
+    }
+
+    public void ShowEverything()
+    {        
+        UnityEngine.SpriteRenderer[] renderers = GetComponentsInChildren<UnityEngine.SpriteRenderer>();
+        foreach (UnityEngine.SpriteRenderer renderer in renderers)
+        {
+            renderer.enabled = true;
         }
     }
 

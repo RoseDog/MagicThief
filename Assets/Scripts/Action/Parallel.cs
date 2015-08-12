@@ -20,7 +20,6 @@ public class Cocos2dParallel : Cocos2dAction
 		initialized = true;
 	}
 
-	// Update
 	public override void Update () {
 		
 		// Not completed
@@ -41,7 +40,6 @@ public class Cocos2dParallel : Cocos2dAction
 					action.Init();
 				}
 
-				// Update action
 				action.Update();
 				
 				// Remove action when completed

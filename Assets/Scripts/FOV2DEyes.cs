@@ -9,7 +9,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
 	public int fovAngle = 90;
     public float fovMaxDistance = 15;
     public float aural;
-    public List<UnityEngine.RaycastHit> hits = new List<UnityEngine.RaycastHit>();
+    public List<UnityEngine.Vector3> hits = new List<UnityEngine.Vector3>();
 
     public FOV2DVisionCone[] visionCones;	
 
@@ -17,7 +17,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
 
     public UnityEngine.Vector3 dirCache;
 
-	void Update()
+	public void FrameFunc()
 	{        
         if (guard != null && guard.moving.canMove)
         {
@@ -28,59 +28,63 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
             CastRays(dirCache);
         }
 	}
-	
-	void Start() 
-	{
-        guard = GetComponentInParent<Guard>();
+
+    void Awake()
+    {
         visionCones = GetComponentsInChildren<FOV2DVisionCone>();
-	}
-    
+    }
+	
     public System.Collections.Generic.List<UnityEngine.GameObject> enemiesInEye = new System.Collections.Generic.List<UnityEngine.GameObject>();
     public System.Collections.Generic.List<UnityEngine.GameObject> enemiesOutEyeTemp;
 	public void CastRays(UnityEngine.Vector3 dir, bool needMsg = true)
-	{        
-        if (guard != null)
+	{       
+        if(visionCones.Length != 0)
         {
-            System.Collections.Generic.List<UnityEngine.GameObject> enemiesOutEyeTemp
-                = new System.Collections.Generic.List<UnityEngine.GameObject>(enemiesInEye.ToArray());
-
-            // 8 ,wall
-            // 11,magician
-            // 20,Dove            
-            int cullingMask = 1 << 8 | 1 << 11 | 1 << 20;
-            
-            _castRays(fovAngle, dir, fovMaxDistance, ref enemiesOutEyeTemp, visionCones[0], needMsg, cullingMask);
-            _castRays(360 - fovAngle + 10, dir, aural, ref enemiesOutEyeTemp, visionCones[1], needMsg, cullingMask);
-
-            // 14,Chest
-            cullingMask = 1 << 14;
-            _castRaysOnChest(fovAngle, dir, fovMaxDistance, ref enemiesOutEyeTemp, cullingMask);
-
-            if (needMsg)
+            if (guard != null)
             {
-                foreach (UnityEngine.GameObject enemy in enemiesOutEyeTemp)
+                System.Collections.Generic.List<UnityEngine.GameObject> enemiesOutEyeTemp
+                    = new System.Collections.Generic.List<UnityEngine.GameObject>(enemiesInEye.ToArray());
+
+                // 8 ,wall
+                // 11,magician
+                // 20,Dove            
+                int static_obj_cullingMask = 1 << 8;
+                int move_obj_culling_mask = 1 << 11 | 1 << 20;
+
+                _castRays(fovAngle, dir, fovMaxDistance, ref enemiesOutEyeTemp, visionCones[0], needMsg, static_obj_cullingMask, move_obj_culling_mask);
+                _castRays(360 - fovAngle + 10, dir, aural, ref enemiesOutEyeTemp, visionCones[1], needMsg, static_obj_cullingMask, move_obj_culling_mask);
+
+                // 14,Chest
+                int cullingMask = 1 << 14;
+                _castRaysOnChest(fovAngle, dir, fovMaxDistance, ref enemiesOutEyeTemp, cullingMask);
+
+                if (needMsg)
                 {
-                    if (enemy.GetComponent<Actor>() == null || !enemy.GetComponent<Actor>().inLight)
+                    foreach (UnityEngine.GameObject enemy in enemiesOutEyeTemp)
                     {
-                        guard.EnemyOutEye(enemy);
-                        enemiesInEye.Remove(enemy);
+                        if (enemy != null && (enemy.GetComponent<Actor>() == null || !enemy.GetComponent<Actor>().inLight))
+                        {
+                            guard.EnemyOutEye(enemy);
+                            enemiesInEye.Remove(enemy);
+                        }
                     }
                 }
             }
-        }
-        else
-        {
-            // 8 ,wall
-            // 13,guard
-            // 20,Dove
-            int cullingMask = 1 << 8 | 1 << 13 | 1 << 20;
+            else
+            {
+                // 8 ,wall
+                // 13,guard
+                // 20,Dove
 
-            dir = UnityEngine.Vector3.left;
-            _castRays(fovAngle, dir, fovMaxDistance, ref enemiesOutEyeTemp, visionCones[0], false, cullingMask);
-        }
-        
-        
-        dirCache = dir.normalized;
+
+                int static_obj_cullingMask = 1 << 8;
+                int move_obj_culling_mask = 1 << 13 | 1 << 20;
+
+                dir = UnityEngine.Vector3.left;
+                _castRays(fovAngle, dir, fovMaxDistance, ref enemiesOutEyeTemp, visionCones[0], false, static_obj_cullingMask, move_obj_culling_mask);
+            }
+            dirCache = dir.normalized;
+        }                              
 	}
 
     public void SetVisionStatus(FOV2DVisionCone.Status status)
@@ -96,7 +100,8 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
         ref System.Collections.Generic.List<UnityEngine.GameObject> enemiesOutEye,
         FOV2DVisionCone cone,
         bool needMsg,
-        int cullingMask)
+        int static_obj_cullingMask, 
+        int move_obj_culling_mask)
     {
         hits.Clear();
         float quality = 0.2f;
@@ -104,61 +109,140 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
         float currentAngle = angle / -2;
         for (int i = 0; i < numRays; i++)
         {
-            dir = dir.normalized;
-            dir = new UnityEngine.Vector3((float)System.Math.Round(dir.x, 3), (float)System.Math.Round(dir.y, 3), (float)System.Math.Round(dir.z, 3));
+            dir = dir.normalized;            
             UnityEngine.Vector3 direction = UnityEngine.Quaternion.AngleAxis(currentAngle, UnityEngine.Vector3.back) * dir.normalized;
             // 为了让两个fov连成一片
             if (angle > 180)
             {
                 direction = -direction;
             }
-            UnityEngine.RaycastHit hit = new UnityEngine.RaycastHit();
-            
-            //direction = new UnityEngine.Vector3(Globals.Floor2(direction.x), Globals.Floor2(direction.y), Globals.Floor2(direction.z));
-            rayLength = (float)System.Math.Round(rayLength, 3);         
-   
-            if(i % 30 == 0)
+
+
+            if (Globals.DEBUG_REPLAY && i % 30 == 0)
             {
-                System.String record_content = gameObject.name + " eye ray:";
+                System.String record_content;
+                if (guard)
+                {
+                    record_content = guard.gameObject.name + " " + guard.idx.ToString() + " eye ray:";
+                }
+                else
+                {
+                    record_content = gameObject.name + " eye ray:";
+                }
                 record_content += " " + direction.ToString("F5");
                 record_content += " " + rayLength.ToString("F5");
                 Globals.record("testReplay", record_content);
             }
 
-            UnityEngine.Vector3 rayOrigin = transform.position;
-            if (UnityEngine.Physics.Raycast(rayOrigin, direction, out hit, rayLength, cullingMask) == false)
+
+            UnityEngine.Ray ray = new UnityEngine.Ray(transform.position, direction);
+            UnityEngine.GameObject collide_obj = null;
+            UnityEngine.Vector3 hit_point;
+            if (!RayToObjs(ray, rayLength, static_obj_cullingMask, move_obj_culling_mask, out collide_obj, out hit_point))
             {
-                hit.point = rayOrigin + (direction * rayLength);
+                hit_point = ray.origin + (direction * rayLength);
             }
             else if (needMsg)
             {
-                if (hit.collider.gameObject.layer == 11 ||
-                    hit.collider.gameObject.layer == 20)
+                if (collide_obj.layer == 11 ||
+                    collide_obj.layer == 20)
                 {
-                    if (!enemiesInEye.Contains(hit.collider.gameObject))
+                    if (!enemiesInEye.Contains(collide_obj))
                     {
-                        enemiesInEye.Add(hit.collider.gameObject);
-                        guard.SpotEnemy(hit.collider.gameObject);
+                        enemiesInEye.Add(collide_obj);
+                        guard.SpotEnemy(collide_obj);
                     }
                     else
                     {
-                        guard.EnemyStayInEye(hit.collider.gameObject);
+                        guard.EnemyStayInEye(collide_obj);
                     }
-                    enemiesOutEye.Remove(hit.collider.gameObject);                   
+                    enemiesOutEye.Remove(collide_obj);                   
                 }
             }
             // mage fov
             if(gameObject.layer == 25)
             {
-                hit.point = hit.point + new UnityEngine.Vector3(0, 0.2f, 0);
+                hit_point = hit_point + new UnityEngine.Vector3(0, 0.2f, 0);
             }
-            
-            hits.Add(hit);
+
+            hits.Add(hit_point);
             currentAngle += 1f / quality;
         }
         cone.UpdateMesh(hits);
     }
 
+    public bool RayToObjs(UnityEngine.Ray ray, 
+        float length,
+        int static_obj_cullingMask, 
+        int move_obj_cullingMask, out UnityEngine.GameObject collide_obj, out UnityEngine.Vector3 hit_point)
+    {
+        collide_obj = null;
+        hit_point = UnityEngine.Vector3.zero;
+
+        UnityEngine.GameObject hitted_actor = null;
+        UnityEngine.Vector3 hitted_actor_point = UnityEngine.Vector3.zero;
+        foreach (Actor actor in Globals.actors)
+        {
+            if (actor != null && ((1 << actor.gameObject.layer) & move_obj_cullingMask) != 0)
+            {
+
+                float distance = 0.0f;
+                if (actor.characterController.bounds.IntersectRay(ray, out distance))
+                {
+                    if (distance < length)
+                    {
+                        hitted_actor = actor.gameObject;
+                        hitted_actor_point = ray.origin + distance * ray.direction;
+                        break;
+                    }
+                }
+            }
+        }
+
+        UnityEngine.GameObject hitted_wall = null;
+        UnityEngine.Vector3 hitted_wall_point = UnityEngine.Vector3.zero;
+        UnityEngine.RaycastHit hit = new UnityEngine.RaycastHit();
+        if(UnityEngine.Physics.Raycast(ray, out hit, length, static_obj_cullingMask))
+        {
+            hitted_wall = hit.collider.gameObject;
+            hitted_wall_point = hit.point;            
+        }
+
+        if (hitted_actor == null && hitted_wall == null)
+        {            
+            return false;
+        }
+
+        else if (hitted_actor != null && hitted_wall == null)
+        {
+            collide_obj = hitted_actor;
+            hit_point = hitted_actor_point;
+        }
+
+        else if (hitted_actor == null && hitted_wall != null)
+        {
+            collide_obj = hitted_wall;
+            hit_point = hitted_wall_point;
+        }
+        else
+        {
+            // 如果同时碰到墙和人，选近的那一个
+            if(UnityEngine.Vector3.Distance(hitted_wall_point, ray.origin) < UnityEngine.Vector3.Distance(hitted_actor_point, ray.origin) )
+            {
+                collide_obj = hitted_wall;
+                hit_point = hitted_wall_point;                
+            }
+            else
+            {
+                collide_obj = hitted_actor;
+                hit_point = hitted_actor_point;
+            }
+        }
+
+        return true;
+    }
+
+   
     void _castRaysOnChest(float angle, UnityEngine.Vector3 dir, float rayLength,
         ref System.Collections.Generic.List<UnityEngine.GameObject> enemiesOutEye,
         int cullingMask)
@@ -200,10 +284,10 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
 		
 		if (raysGizmosEnabled && hits.Count() > 0) 
 		{
-            foreach (UnityEngine.RaycastHit hit in hits)
+            foreach (UnityEngine.Vector3 hit in hits)
 			{
-                UnityEngine.Gizmos.DrawSphere(hit.point, 0.04f);
-                UnityEngine.Gizmos.DrawLine(transform.position, hit.point);
+                UnityEngine.Gizmos.DrawSphere(hit, 0.04f);
+                UnityEngine.Gizmos.DrawLine(transform.position, hit);
 			}
 		}
 	}

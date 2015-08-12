@@ -44,9 +44,4 @@
     {
         GetComponent<UnityEngine.Animation>().CrossFade("A_Stand", 0.2f);    
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

@@ -10,11 +10,13 @@
     public LevelTip LevelTip;
     UnityEngine.UI.Button LeaveBtn;
     UnityEngine.UI.Button DiveInBtn;
+    UnityEngine.UI.Button ReplaySpeedBtn;
+    UnityEngine.UI.Text ReplaySpeedText;
     public Number StealingCash;
     public UnityEngine.UI.Text RestartText;    
     public System.Collections.Generic.List<UnityEngine.GameObject> coinsOnFloor = new System.Collections.Generic.List<UnityEngine.GameObject>();
 
-    public int paperMovingDuration = 40;    
+    public int paperMovingDuration = 25;    
 
     UnityEngine.GameObject mark_prefab;
     public UnityEngine.GameObject landingMark;
@@ -39,6 +41,11 @@
         LeaveBtn.gameObject.SetActive(false);
         DiveInBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(canvasForStealing, "DiveInBtn");
         DiveInBtn.gameObject.SetActive(false);
+
+        ReplaySpeedBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(canvasForStealing, "ReplaySpeedBtn");
+        ReplaySpeedText = Globals.getChildGameObject<UnityEngine.UI.Text>(ReplaySpeedBtn.gameObject, "ReplaySpeedText");
+        ReplaySpeedBtn.gameObject.SetActive(false);
+        
         
 
         StealingCash = Globals.getChildGameObject<Number>(canvasForStealing, "StealingCash");
@@ -53,8 +60,8 @@
         landingMark = UnityEngine.GameObject.Instantiate(mark_prefab) as UnityEngine.GameObject;
         
         landingMark.SetActive(false);
-        
-        fogTex = new UnityEngine.Texture2D(512, 512, UnityEngine.TextureFormat.ARGB32, false);        
+
+        fogTex = new UnityEngine.Texture2D(256, 256, UnityEngine.TextureFormat.ARGB32, false);        
         Globals.Assert(fogPlane != null, "no FogPlane");
 
         HypnosisMouseHoverSpriter_prefab = UnityEngine.Resources.Load("Avatar/HypnosisMouseHoverSpriter") as UnityEngine.GameObject;
@@ -65,12 +72,13 @@
     {
         if (Globals.playingReplay == null)
         {
+            ReplaySpeedBtn.gameObject.SetActive(false);
             DiveInBtn.onClick.AddListener(() => DiveInBtnClicked());
             LeaveBtn.onClick.AddListener(() => LeaveBtnClicked());
 
             System.IO.File.Delete(UnityEngine.Application.dataPath + "/Resources/replay.txt");
             System.IO.File.Delete(UnityEngine.Application.dataPath + "/Resources/testReplay_pvp.txt");
-            System.IO.File.Delete(UnityEngine.Application.dataPath + "/Resources/testReplay_reply.txt");
+            System.IO.File.Delete(UnityEngine.Application.dataPath + "/Resources/testReplay_reply.txt");            
         }
         else
         {
@@ -78,70 +86,79 @@
             Globals.replaySystem.Unpack(Globals.playingReplay.ini);
             LeaveBtn.onClick.AddListener(() => StopReplay());
             DiveInBtn.gameObject.SetActive(false);
+
+            ReplaySpeedBtn.gameObject.SetActive(true);
+            ReplaySpeedBtn.onClick.AddListener(() => ReplaySpeed());
+            Globals.languageTable.SetText(ReplaySpeedText, "replay_speed", new System.String[] { Globals.replaySystem.playSpeed.ToString() });
+
+        }
+// 
+//         Globals.guardPlayer = new PlayerInfo();
+//         Globals.guardPlayer.isBot = true;
+//         Globals.iniFileName = "pve_20";
+//         SafeBoxData data = new SafeBoxData();
+//         Globals.guardPlayer.safeBoxDatas.Add(data);
+// 
+//         Globals.guardPlayer.currentMazeRandSeedCache = -1;
+//         Globals.thiefPlayer = Globals.guardPlayer;
+//         Globals.ReadMazeIniFile(Globals.iniFileName, Globals.guardPlayer.currentMazeRandSeedCache);
+        bool is_rand_bot = false;
+        int seed = 0;
+        if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
+        {
+            Globals.iniFileName = "Tutorial_Level_" + Globals.self.TutorialLevelIdx.ToString();
+            seed = -1;
+            
+        }
+        else
+        {
+            if(!Globals.guardPlayer.isBot)
+            {
+                seed = Globals.guardPlayer.currentMazeRandSeedCache;
+                Globals.iniFileName = "MyMaze_" + Globals.guardPlayer.currentMazeLevel.ToString();
+            }
+            else
+            {
+                if(Globals.playingReplay == null)
+                {
+                    Globals.replaySystem.RecordPvEFileName(Globals.iniFileName);
+                }
+                else
+                {
+                    Globals.iniFileName = Globals.replaySystem.pveFile;
+                }
+                UnityEngine.TextAsset textAssets = UnityEngine.Resources.Load(Globals.iniFileName) as UnityEngine.TextAsset;
+                if (textAssets != null && textAssets.text.Length != 0)
+                {
+                    seed = -1;
+                }
+                else
+                {
+                    is_rand_bot = true;
+                    // 寻找到最近有配置的地图
+                    int lv_idx = System.Convert.ToInt32(Globals.iniFileName.Split('_')[1]);
+                    while (UnityEngine.Resources.Load(Globals.iniFileName) == null)
+                    {
+                        Globals.iniFileName = "pve_" + lv_idx.ToString();
+                        --lv_idx;
+                    }
+                    bRandomGuards = true;
+                    seed = Globals.guardPlayer.currentMazeRandSeedCache;
+                }
+            }
         }
 
-        Globals.replaySystem.frameBeginNo = UnityEngine.Time.frameCount;
-
-        Globals.guardPlayer = new PlayerInfo();
-        Globals.guardPlayer.isBot = true;
-        Globals.iniFileName = "Test";
-        SafeBoxData data = new SafeBoxData();
-        Globals.guardPlayer.safeBoxDatas.Add(data);
-
-        Globals.guardPlayer.currentMazeRandSeedCache = -1;
-        Globals.thiefPlayer = Globals.guardPlayer;
-        Globals.ReadMazeIniFile(Globals.iniFileName, Globals.guardPlayer.currentMazeRandSeedCache);
-//         int seed = 0;
-//         if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
-//         {
-//             Globals.iniFileName = "Tutorial_Level_" + Globals.self.TutorialLevelIdx.ToString();
-//             seed = -1;
-//             
-//         }
-//         else
-//         {
-//             if(!Globals.guardPlayer.isBot)
-//             {
-//                 seed = Globals.guardPlayer.currentMazeRandSeedCache;
-//                 Globals.iniFileName = "MyMaze_" + Globals.guardPlayer.currentMazeLevel.ToString();
-//             }
-//             else
-//             {
-//                 if(Globals.playingReplay == null)
-//                 {
-//                     Globals.replaySystem.RecordPvEFileName(Globals.iniFileName);
-//                 }
-//                 else
-//                 {
-//                     Globals.iniFileName = Globals.replaySystem.pveFile;
-//                 }
-//                 UnityEngine.TextAsset textAssets = UnityEngine.Resources.Load(Globals.iniFileName) as UnityEngine.TextAsset;
-//                 if (textAssets != null && textAssets.text.Length != 0)
-//                 {
-//                     seed = -1;
-//                 }
-//                 else
-//                 {
-//                     // 寻找到最近有配置的地图
-//                     int lv_idx = System.Convert.ToInt32(Globals.iniFileName.Split('_')[1]);
-//                     while (UnityEngine.Resources.Load(Globals.iniFileName) == null)
-//                     {
-//                         Globals.iniFileName = "pve_" + lv_idx.ToString();
-//                         --lv_idx;
-//                     }
-//                     bRandomGuards = true;
-//                     seed = Globals.guardPlayer.currentMazeRandSeedCache;
-//                 }
-//             }
-//         }
-// 
-//         IniFile ini = Globals.ReadMazeIniFile(Globals.iniFileName, seed);
-//         if (Globals.guardPlayer.isBot)
-//         {
-//             Globals.guardPlayer.cashAmount = ini.get("CASH", 0);
-//         }
-//         
-//         randSeedCache = UnityEngine.Random.seed;            
+        IniFile ini = Globals.ReadMazeIniFile(Globals.iniFileName, seed);
+        if (Globals.guardPlayer.isBot)
+        {
+            Globals.guardPlayer.cashAmount = ini.get("CASH", 0);
+            if (is_rand_bot)
+            {
+                Globals.guardPlayer.cashAmount /= 3;
+            }
+        }
+        
+        randSeedCache = UnityEngine.Random.seed;            
            
         
         base.BeforeGenerateMaze();
@@ -251,7 +268,7 @@
         }
         else
         {
-            Globals.languageTable.SetText(RestartText, "other_player_maze_name",new System.String[] { Globals.guardPlayer.name });            
+            Globals.languageTable.SetText(RestartText, "other_player_maze_name",new System.String[] { Globals.guardPlayer.name, Globals.guardPlayer.currentMazeLevel.ToString() });            
         }
         
         Globals.magician.ResetLifeAndPower(Globals.thiefPlayer);
@@ -326,11 +343,7 @@
                 Globals.tipDisplay.Msg("cant_bring_flash_to_stealing");
             }
             else
-            {
-                Globals.magician.transform.position = new UnityEngine.Vector3(
-                landingMark.transform.position.x,
-                landingMark.transform.position.y,
-                landingMark.transform.position.z - 0.01f);
+            {                
                 MagicianFallingDown();
             }            
         }
@@ -347,13 +360,21 @@
         DiveInBtn.gameObject.SetActive(false);
         Globals.magician.gameObject.SetActive(true);        
 
-        Globals.cameraFollowMagician.MoveToPoint(Globals.magician.transform.position, 30);
         Globals.EnableAllInput(false);
+
+        if (landingMark.activeSelf)
+        {
+            Globals.magician.transform.position = new UnityEngine.Vector3(
+                landingMark.transform.position.x,
+                landingMark.transform.position.y,
+                landingMark.transform.position.z - 0.01f);
+        }
+
+        Globals.cameraFollowMagician.MoveToPoint(Globals.magician.transform.position, 30);
 
         // 主角降下     
         Globals.magician.falling.from = Globals.magician.transform.position + posOnSky;
         Globals.magician.falling.to = Globals.magician.transform.position;
-        Globals.magician.falling.duration = fallingDuration;
         Globals.magician.falling.Excute();        
     }
 
@@ -405,42 +426,27 @@
         //Globals.canvasForMagician.tricksInUseTip.SetActive(false);
         // 魔术师出场   
         Globals.magician.InStealing();                
+
+        foreach(Chest chest in Globals.maze.chests)
+        {
+            chest.spriteRenderer.GetComponent<UnityEngine.BoxCollider>().enabled = false;
+        }
     }
 
     public override void MagicianLifeOver()
     {
-        // 抛洒钱币。暂时不要
-//         float forceFactor = 2.0f;
-//         float rotateForceFactor = 115.0f;
-// 
-//         UnityEngine.GameObject dropPrefab = UnityEngine.Resources.Load("Props/DroppedCoin") as UnityEngine.GameObject;
-//         for (int i = 0; i < 15; ++i)
-//         {
-//             UnityEngine.GameObject coin = UnityEngine.GameObject.Instantiate(dropPrefab,
-//                 Globals.magician.transform.position + new UnityEngine.Vector3(0, Globals.magician.controller.bounds.size.y * 0.5f, 0),
-//                 Globals.magician.transform.rotation) as UnityEngine.GameObject;
-// 
-//             UnityEngine.Vector3 randForce = new UnityEngine.Vector3(UnityEngine.Random.Range(-1.0f, 1.0f),
-//                 UnityEngine.Random.Range(1.0f, 4.0f),
-//                 UnityEngine.Random.Range(-1.0f, 1.0f));
-//             randForce *= forceFactor;
-// 
-//             UnityEngine.Vector3 randRotForce = new UnityEngine.Vector3(UnityEngine.Random.Range(-1.0f, 1.0f),
-//                                                 UnityEngine.Random.Range(-1.0f, 1.0f),
-//                                                 UnityEngine.Random.Range(-1.0f, 1.0f));
-//             randRotForce *= rotateForceFactor;
-//             coin.GetComponent<UnityEngine.Rigidbody>().velocity = randForce;
-//             coin.GetComponent<UnityEngine.Rigidbody>().angularVelocity = randRotForce;
-//             coinsOnFloor.Add(coin);
-//         }
-
-
         StealingCash.SetToZero();
-        StealingCash.gameObject.SetActive(false);        
+        StealingCash.gameObject.SetActive(false);
+        
         base.MagicianLifeOver();
         if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
         {
             InvokeRepeating("RestartCount", 4.0f, 1.0f);            
+        }
+
+        //if(Globals.DEBUG_REPLAY)
+        {
+            Globals.self.StealingOver(0, 0, false);
         }        
     }
 
@@ -537,6 +543,10 @@
         if (Globals.playingReplay == null && Globals.replaySystem.mage_falling_down_frame_no != -1)
         {
             Globals.self.StealingOver(StealingCash.numberAmont, 0, false);
+            if (StealingCash.numberAmont<1)
+            {
+                Globals.asyncLoad.ToLoadSceneAsync("City");
+            }
         }
         else
         {
@@ -555,6 +565,7 @@
     }
 
     UIMover[] papers;
+    UnityEngine.UI.Text sentences_ui;
     public void Newsreport()
     {
         Globals.magician.gameObject.SetActive(false);
@@ -583,7 +594,10 @@
         // 报纸报道
         // Newsreport.Show();
         papers = MoonNightThief.GetComponentsInChildren<UIMover>();
-        Globals.transition.BlackIn(()=>NewsreportOut());
+        sentences_ui = Globals.getChildGameObject<UnityEngine.UI.Text>(MoonNightThief, "Sentences");
+        sentences_ui.text = "";
+        //Globals.transition.BlackIn(()=>NewsreportOut());
+        Globals.transition.BlackIn(() => GetPaid());
 
         if (!Globals.magician.IsLifeOver())
         {
@@ -596,6 +610,62 @@
             fiddle_gem.SetActive(false);
             Globals.cameraFollowMagician.audioSource.clip = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/23195__kaponja__2trump");
             Globals.cameraFollowMagician.audioSource.Play();
+        }
+    }
+
+    System.String[] strs;
+    int sentence_idx;
+    void GetPaid()
+    {
+        System.String reward_str = Globals.languageTable.GetText("get_paid",new System.String[] { StealingCash.numberAmont.ToString("F0") });
+
+        if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.Over && !Globals.guardPlayer.isBot && bIsPerfectStealing)
+        {
+            reward_str += Globals.languageTable.GetText("perfect_stealing", new System.String[] { perfect_stealing_bonus.ToString(), rose_bonus.ToString() });            
+            Globals.self.ChangeRoseCount(rose_bonus, null);
+            Globals.canvasForMagician.RoseNumber.Add(rose_bonus);
+        }
+        else
+        {
+            reward_str += Globals.languageTable.GetText("then_you_leave", new System.String[] {});
+        }
+
+        strs = reward_str.Split('\n');
+        sentence_idx = 0;
+        sentences_ui.text = "";
+        StartCoroutine(Sentence(strs[sentence_idx]));
+    }
+
+    System.Collections.IEnumerator Sentence(System.String sentence)
+    {
+        sentences_ui.GetComponent<UnityEngine.AudioSource>().Play();
+        // 有颜色的文本，代表奖励，直接一次性加上去
+        if(sentence.Contains("<"))
+        {
+            sentences_ui.text += sentence;
+            yield return new UnityEngine.WaitForSeconds(0.5f);
+        }
+        else
+        {
+            for (int idx = 0; idx < sentence.Length; ++idx)
+            {
+                sentences_ui.text += sentence[idx];
+                yield return new UnityEngine.WaitForSeconds(0.08f);
+            }
+        }
+
+        sentences_ui.GetComponent<UnityEngine.AudioSource>().Stop();
+        yield return new UnityEngine.WaitForSeconds(1.0f);
+        sentences_ui.text += "\n";
+        ++sentence_idx;
+        if (sentence_idx < strs.Length)
+        {
+            StartCoroutine(Sentence(strs[sentence_idx]));
+        }
+        else
+        {
+            yield return new UnityEngine.WaitForSeconds(3.0f);
+            NewsreportOutEnd();
         }
     }
 
@@ -633,7 +703,7 @@
             Globals.canvasForMagician.RoseNumber.Add(rose_bonus);
         }
 
-        seq_action.actions.Add(new SleepFor(paperMovingDuration*6));
+        seq_action.actions.Add(new SleepFor(paperMovingDuration*3));
         seq_action.actions.Add(new FunctionCall(() => NewsreportOutEnd()));
         AddAction(seq_action);
     }
@@ -677,11 +747,52 @@
         Globals.asyncLoad.ToLoadSceneAsync("City");
     }
 
-    public Guard hoveredGuard;
-    MouseHoverSpriter hoveringSpriter;
+    public void ReplaySpeed()
+    {
+        Globals.replaySystem.playSpeed *= 2;
+        // 最大4倍
+        if (Globals.replaySystem.playSpeed > 4)
+        {
+            Globals.replaySystem.playSpeed = 1;
+        }
+
+        if (Globals.replaySystem.playSpeed == 1)
+        {
+            UnityEngine.Application.targetFrameRate = 30;
+        }
+        else
+        {
+            UnityEngine.Application.targetFrameRate = 120;
+        }
+
+        Globals.languageTable.SetText(ReplaySpeedText, "replay_speed", new System.String[] { Globals.replaySystem.playSpeed.ToString() });
+    }
+
     public override void Update()
     {
-        base.Update();
+        FrameFunc();        
+        if(Globals.playingReplay!=null)
+        {
+            if (Globals.replaySystem.playSpeed == 2)
+            {
+                FrameFunc();
+            }
+            else if (Globals.replaySystem.playSpeed == 4)
+            {
+                FrameFunc();
+                FrameFunc();
+            }
+        }        
+    }
+
+    public Guard hoveredGuard;
+    MouseHoverSpriter hoveringSpriter;
+    public override void FrameFunc()
+    {
+        Globals.replaySystem.FrameFunc();
+        base.FrameFunc();        
+        AstarPath.CalculatePaths(AstarPath.threadInfos[0]);        
+
         if (Globals.magician.Stealing && Globals.playingReplay == null)            
         {
             UnityEngine.Ray ray = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().ScreenPointToRay(UnityEngine.Input.mousePosition);
@@ -727,10 +838,10 @@
                 }                
                 hoveredGuard = null;
             }
-        }                        
+        }
 
-        UnityEngine.RenderTexture.active = fogCam.targetTexture;
-        UnityEngine.Rect rectReadPicture = new UnityEngine.Rect(0,0,512,512);
+        UnityEngine.RenderTexture.active = fogCam_2.targetTexture;
+        UnityEngine.Rect rectReadPicture = new UnityEngine.Rect(0,0,256,256);
         // Read pixels
         fogTex.ReadPixels(rectReadPicture, 0, 0);
         UnityEngine.RenderTexture.active = null; // added to avoid errors 
@@ -738,15 +849,15 @@
         foreach(Guard guard in Globals.maze.guards)
         {            
             UnityEngine.Vector3 view_pos = fogCam.WorldToViewportPoint(guard.transform.position);
-            int x = (int)((view_pos.x) * 512.0f);
-            int y = (int)((view_pos.y) * 512.0f);
+            int x = (int)((view_pos.x) * 256.0f);
+            int y = (int)((view_pos.y) * 256.0f);
             UnityEngine.Color32 color = fogTex.GetPixel(x, y);
-            if (color.r > 128)
-            {
+            if (color.a > 50)
+            {                
                 guard.SetInFog(false);
             }
             else
-            {
+            {                   
                 guard.SetInFog(true);
             }
         }
@@ -806,6 +917,10 @@
 
     public void RayOnMap(UnityEngine.Ray ray)
     {
+        System.String content = "RayOnMap：";
+        content += ray.origin.ToString("F3") + " " + ray.direction.ToString();
+
+        Globals.record("testReplay", content);
         UnityEngine.RaycastHit hitInfo;
         int layermask = 1 << 9;
         if (UnityEngine.Physics.Raycast(ray, out hitInfo, 10000, layermask))
@@ -818,7 +933,7 @@
                 landingMark.SetActive(true);
                 landingMark.transform.position = new UnityEngine.Vector3(pos.x, pos.y, fogPlane.transform.position.z - 0.1f);
             }
-            else if (Globals.magician.Stealing && hoveredGuard == null)
+            else if (Globals.magician.Stealing)
             {
                 if (Globals.magician.currentAction == Globals.magician.flyUp)
                 {
@@ -840,15 +955,16 @@
         }
     }
 
-    public void OnDestroy()
+    public override void OnDestroy()
     {
+        base.OnDestroy();
         Clear();
     }
 
     public void Clear()
     {
-        Globals.replaySystem.ResetData();        
-        Globals.maze.ClearMaze();
+        UnityEngine.Application.targetFrameRate = 30;
+        Globals.replaySystem.ResetData();                
         Globals.canvasForMagician.TrickUsingHighlightOff();
         // 这样不会再增加数字了，也不会调用到Globals.LevelController.MagicianGotCash(numberDelta);
         if (StealingCash != null)

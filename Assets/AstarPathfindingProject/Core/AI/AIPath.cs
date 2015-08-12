@@ -39,7 +39,7 @@ public class AIPath : MonoBehaviour {
 	 * If you have fast moving targets or AIs, you might want to set it to a lower value.
 	 * The value is in seconds between path requests.
 	 */
-	int repathRate = 30;
+	protected int repathRate = 30;
 	
 	/** Target to move towards.
 	 * The AI will try to follow/move towards this target.
@@ -106,7 +106,7 @@ public class AIPath : MonoBehaviour {
 	protected Transform tr;
 	
 	/** Time when the last path request was sent */
-	private int lastRepath = -9999;
+	protected int lastRepath = -9999;
 	
 	/** Current path which is followed */
 	protected Path path;
@@ -139,7 +139,7 @@ public class AIPath : MonoBehaviour {
 	 * Used to test if coroutines should be started in OnEnable to prevent calculating paths
 	 * in the awake stage (or rather before start on frame 0).
 	 */
-	private bool startHasRun = false;
+	protected bool startHasRun = false;
 	
 	/** Initializes reference variables.
 	 * If you override this function you should in most cases call base.Awake () at the start of it.
@@ -164,8 +164,8 @@ public class AIPath : MonoBehaviour {
 	 * \see RepeatTrySearchPath
 	 */
 	protected virtual void Start () {
-		startHasRun = true;
-		OnEnable ();
+//		startHasRun = true;
+//		OnEnable ();
 	}
 	
 	/** Run at start and when reenabled.
@@ -173,70 +173,71 @@ public class AIPath : MonoBehaviour {
 	 * 
 	 * \see Start
 	 */
-	protected virtual void OnEnable () {
-		if (startHasRun) StartCoroutine (RepeatTrySearchPath ());
-	}
+// 	protected virtual void OnEnable () {
+// 		if (startHasRun) StartCoroutine (RepeatTrySearchPath ());
+// 	}
 	
 	/** Tries to search for a path every #repathRate seconds.
 	  * \see TrySearchPath
 	  */
-	public IEnumerator RepeatTrySearchPath () {
-		while (true) {
-			TrySearchPath ();
-            int counter = repathRate;
-            while (counter != 0)
-            {
-                counter--;                
-                yield return 0;
-            }			
-		}
-	}
-	
-	/** Tries to search for a path.
-	 * Will search for a new path if there was a sufficient time since the last repath and both
-	 * #canSearchAgain and #canSearch are true.
-	 * Otherwise will start WaitForPath function.
-	 */
-	public void TrySearchPath () {
-		if (Time.frameCount - lastRepath >= repathRate && canSearchAgain && canSearch) {
-			SearchPath ();
-		} else {
-			StartCoroutine (WaitForRepath ());
-		}
-	}
-	
-	/** Is WaitForRepath running */
-	private bool waitingForRepath = false;
-	
-	/** Wait a short time til Time.time-lastRepath >= repathRate.
-	  * Then call TrySearchPath
-	  * 
-	  * \see TrySearchPath
-	  */
-	protected IEnumerator WaitForRepath () {
-		if (waitingForRepath) yield break; //A coroutine is already running
-		
-		waitingForRepath = true;
-		//Wait until it is predicted that the AI should search for a path again
-        if ((Time.frameCount - lastRepath) < repathRate)
-        {
-            yield return 0;
-        }
-        else
-        {
-            yield return 0;
-        }
-				
-		waitingForRepath = false;
-		//Try to search for a path again
-		TrySearchPath ();
-	}
+// 	public IEnumerator RepeatTrySearchPath () {
+// 		while (true) {
+// 			TrySearchPath ();
+//             int counter = repathRate;
+//             while (counter != 0)
+//             {
+//                 counter--;                
+//                 yield return 0;
+//             }			
+// 		}
+// 	}
+// 	
+// 	/** Tries to search for a path.
+// 	 * Will search for a new path if there was a sufficient time since the last repath and both
+// 	 * #canSearchAgain and #canSearch are true.
+// 	 * Otherwise will start WaitForPath function.
+// 	 */
+// 	public void TrySearchPath () {
+//         if (Globals.LevelController.frameCount - lastRepath >= repathRate && canSearchAgain && canSearch)
+//         {
+// 			SearchPath ();
+// 		} else {
+// 			StartCoroutine (WaitForRepath ());
+// 		}
+// 	}
+// 	
+// 	/** Is WaitForRepath running */
+// 	private bool waitingForRepath = false;
+// 	
+// 	/** Wait a short time til Time.time-lastRepath >= repathRate.
+// 	  * Then call TrySearchPath
+// 	  * 
+// 	  * \see TrySearchPath
+// 	  */
+// 	protected IEnumerator WaitForRepath () {
+// 		if (waitingForRepath) yield break; //A coroutine is already running
+// 		
+// 		waitingForRepath = true;
+// 		//Wait until it is predicted that the AI should search for a path again
+//         if ((Globals.LevelController.frameCount - lastRepath) < repathRate)
+//         {
+//             yield return 0;
+//         }
+//         else
+//         {
+//             yield return 0;
+//         }
+// 				
+// 		waitingForRepath = false;
+// 		//Try to search for a path again
+// 		TrySearchPath ();
+// 	}
 	
 	/** Requests a path to the target */
 	public virtual void SearchPath (OnPathDelegate callback = null) {
 		if (target == null) { Debug.LogWarning ("Target is null, aborting all search"); canSearch = false; return; }
-		
-		lastRepath = Time.frameCount;
+
+        lastRepath = Globals.LevelController.frameCount;
 		//This is where we should search to
         Vector3 targetPosition = target.position + targetOffset;
 		
@@ -314,26 +315,7 @@ public class AIPath : MonoBehaviour {
 		return tr.position;
 	}
 	
-	public virtual void Update () {
-		
-		if (!canMove) { return; }
-		
-		Vector3 dir = CalculateVelocity (GetFeetPosition(),speed);
-		
-		//Rotate towards targetDirection (filled in by CalculateVelocity)
-		if (targetDirection != Vector3.zero) {
-			RotateTowards (targetDirection);
-		}
-	
-		if (controller != null) {
-			controller.SimpleMove (dir);
-		} else if (rigid != null) {
-			rigid.AddForce (dir);
-		} else {
-			transform.Translate (dir*Time.deltaTime, Space.World);
-		}
-	}
-	
+
 	/** Point to where the AI is heading.
 	  * Filled in by #CalculateVelocity */
 	protected Vector3 targetPoint;
@@ -360,20 +342,20 @@ public class AIPath : MonoBehaviour {
 	 * /see currentWaypointIndex
 	 */
 	protected Vector3 CalculateVelocity (Vector3 currentPosition, double s) {
-//         currentPosition = new UnityEngine.Vector3(
-//             (float)System.Math.Round(currentPosition.x, 2),
-//             (float)System.Math.Round(currentPosition.y, 2),
-//             (float)System.Math.Round(currentPosition.z, 2));
         if (path == null || path.vectorPath == null || path.vectorPath.Count == 0)
         {
-//             System.String content = gameObject.name;
-//             content += " no path";
-//             Globals.record("testReplay", content);
+            if (Globals.DEBUG_REPLAY)
+            {
+                System.String content = gameObject.name;
+                content += " no path";
+                Globals.record("testReplay", content);
+            }
+            
             return Vector3.zero; 
         }
 		
 		List<Vector3> vPath = path.vectorPath;
-		//Vector3 currentPosition = GetFeetPosition();
+		
 		
 		if (vPath.Count == 1) {
 			vPath.Insert (0,currentPosition);
@@ -391,7 +373,6 @@ public class AIPath : MonoBehaviour {
 			if (waypointIndex < vPath.Count-1) {
 				//There is a "next path segment"
 				double dist = XYSqrMagnitude (vPath[waypointIndex], currentPosition);
-					//Mathfx.DistancePointSegmentStrict (vPath[currentWaypointIndex+1],vPath[currentWaypointIndex+2],currentPosition);
 				if (dist < pickNextWaypointDist*pickNextWaypointDist) {
 					waypointIndex++;
 				} else {
@@ -404,34 +385,26 @@ public class AIPath : MonoBehaviour {
 
 		
 		Vector3 dir = vPath[waypointIndex] - vPath[waypointIndex-1];
-		//Vector3 targetPosition = CalculateTargetPoint (currentPosition,vPath[waypointIndex-1] , vPath[waypointIndex]);
         Vector3 targetPosition = CalculateMovingDir.Calculate(currentPosition, vPath[waypointIndex - 1], vPath[waypointIndex], forwardLook);
-//         targetPosition = new UnityEngine.Vector3(
-//             (float)System.Math.Round(targetPosition.x, 2),
-//             (float)System.Math.Round(targetPosition.y, 2),
-//             (float)System.Math.Round(targetPosition.z, 2));
-        
         
         dir = targetPosition-currentPosition;
-        //dir = new Vector3(Globals.Floor(dir.x), Globals.Floor(dir.y), 0);
-//         dir = new UnityEngine.Vector3(
-//             (float)System.Math.Round(dir.x, 2),
-//             (float)System.Math.Round(dir.y, 2),
-//             0);
 		dir.z = 0;
 
-//         System.String record_content = gameObject.name;
-//         record_content += " vPath " + (waypointIndex - 1).ToString() + ":" + vPath[waypointIndex - 1].ToString("F5");
-//         record_content += "vPath " + waypointIndex.ToString() +":" + vPath[waypointIndex].ToString("F5");
-//         record_content += " currentPosition:" + currentPosition.ToString("F5");
-//         record_content += " targetPosition:" + targetPosition.ToString("F5");
-//         record_content += " dir:" + dir.ToString("F5");
-//         Globals.record("testReplay", record_content);
+        if (Globals.DEBUG_REPLAY)
+        {
+            System.String record_content = gameObject.name;
+            record_content += " vPath " + (waypointIndex - 1).ToString() + ":" + vPath[waypointIndex - 1].ToString("F5");
+            record_content += "vPath " + waypointIndex.ToString() + ":" + vPath[waypointIndex].ToString("F5");
+            record_content += " currentPosition:" + currentPosition.ToString("F5");
+            record_content += " targetPosition:" + targetPosition.ToString("F5");
+            record_content += " dir:" + dir.ToString("F5");
+            Globals.record("testReplay", record_content);
+        }
+        
 
 		double targetDist = dir.magnitude;
 		
 		this.targetDirection = dir;
-		//this.targetPoint = targetPosition;
 		
 		if (targetDist <= endReachedDistance) 
         {
@@ -441,14 +414,16 @@ public class AIPath : MonoBehaviour {
                 OnTargetReached (); 
             }
 
-//             System.String content = gameObject.name;
-//             content += " endReachedDistance:" + endReachedDistance.ToString("F3");
-//             content += " dist:" + targetDist.ToString("F3");
-//             content += " currentPosition:" + currentPosition.ToString("F3");
-//             
-//             Globals.record("testReplay", content);
-			
-			//Send a move request, this ensures gravity is applied
+            if (Globals.DEBUG_REPLAY)
+            {
+                System.String content = gameObject.name;
+                content += " endReachedDistance:" + endReachedDistance.ToString("F3");
+                content += " dist:" + targetDist.ToString("F3");
+                content += " currentPosition:" + currentPosition.ToString("F3");
+
+                Globals.record("testReplay", content);	
+            }
+            				
 			return Vector3.zero;
 		}        
 		

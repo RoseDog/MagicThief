@@ -20,7 +20,6 @@
         gameObject.SetActive(true);
         Globals.languageTable.SetText(cash, "you_have_some_cash", new System.String[]{Globals.self.cashAmount.ToString()});
         Globals.languageTable.SetText(safebox_count, "you_have_some_safeboxes", new System.String[] { Globals.self.safeBoxDatas.Count.ToString() });
-        Globals.languageTable.SetText(total_capacity, "total_capacity");
         System.String str = "=";
         foreach(SafeBoxData data in Globals.self.safeBoxDatas)
         {

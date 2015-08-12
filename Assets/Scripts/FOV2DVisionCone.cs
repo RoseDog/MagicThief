@@ -32,7 +32,7 @@ public class FOV2DVisionCone : UnityEngine.MonoBehaviour
 		meshRenderer.material = materials[0];
     }
 
-	public void UpdateMesh(List<UnityEngine.RaycastHit> hits)
+	public void UpdateMesh(List<UnityEngine.Vector3> hits)
 	{		
 		if (hits == null || hits.Count == 0)
 			return;
@@ -61,7 +61,7 @@ public class FOV2DVisionCone : UnityEngine.MonoBehaviour
         newVertices[0] = UnityEngine.Vector3.zero;
 		for (i = 1; i <= hits.Count; i++)
 		{
-			newVertices[i] = transform.InverseTransformPoint(hits[i-1].point);
+			newVertices[i] = transform.InverseTransformPoint(hits[i-1]);
 		}
         
         newUV = new UnityEngine.Vector2[newVertices.Length];

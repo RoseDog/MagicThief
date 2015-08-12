@@ -5,7 +5,7 @@ public class BackToBirthCell : GuardAction
     public override void Excute()
     {
         base.Excute();
-        UnityEngine.Debug.Log("BackToBirthCell:" + UnityEngine.Time.frameCount.ToString());
+        UnityEngine.Debug.Log("BackToBirthCell:" + Globals.LevelController.frameCount.ToString());
         guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Idle);        
         guard.moving.canMove = true;
         guard.moving.canSearch = false;

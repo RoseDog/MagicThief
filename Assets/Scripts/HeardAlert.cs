@@ -32,19 +32,31 @@
         else if (guard.currentAction == guard.goCovering)
         {
             guard.GoTo(guard.heardAlert.soundPosition);
+
+            if(Globals.DEBUG_REPLAY)
+            {
+                System.String content = gameObject.name;
+                content += " HeardSound";
+                Globals.record("testReplay", content);
+            }
+            
         }
         else
         {
             base.Excute();
             alertTeammate = null;
-            guard.spriteSheet.Play("idle");
+            guard.spriteSheet.Play("wander");
             guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Suspicious);
             goCoverAction = guard.SleepThenCallFunction(20, () => GoCovering());
-        }
-        
-        System.String content = gameObject.name;
-        content += " HeardSound";
-        Globals.record("testReplay", content);    }
+
+            if (Globals.DEBUG_REPLAY)
+            {
+                System.String content = gameObject.name;
+                content += " HeardSound";
+                Globals.record("testReplay", content);
+            }
+        }               
+    }
 
     public override void Stop()
     {

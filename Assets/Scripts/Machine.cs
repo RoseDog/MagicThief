@@ -24,12 +24,13 @@
     {        
         spriteSheet.enabled = false;                
         fixTimer.gameObject.SetActive(true);
-        machineActiveArea.enemiesInArea.Clear();
+        machineActiveArea.actorsInTouch.Clear();
         if (fixingOk == null)
         {
             fixTimer.BeginCountDown(this.gameObject, fixingDuration, UnityEngine.Vector3.zero);
             fixingOk = SleepThenCallFunction(fixingDuration, () => FixingComplete());
             machineActiveArea.gameObject.SetActive(false);
+            machineActiveArea.characterController.enabled = false;
         }
         else
         {
@@ -44,6 +45,7 @@
         fixTimer.gameObject.SetActive(false);
         spriteSheet.enabled = true;
         machineActiveArea.gameObject.SetActive(true);
+        machineActiveArea.characterController.enabled = true;
         fixingOk = null;
     }
 

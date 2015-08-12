@@ -54,11 +54,11 @@ public class GoldPoper : Actor
             systems[i].GetComponent<Renderer>().material.mainTexture = (Texture2D)Resources.Load("Props/Chest/GoldPoper/" + digit, typeof(Texture2D));
         }
 	}
-
+    Cocos2dAction PopAction;
     public void Pop()
     {
         _Pop();
-        InvokeRepeating("_Pop", 1.0f, 1.0f);
+        PopAction = RepeatingCallFunction(40, ()=>_Pop());
     }
 
     public void _Pop()
@@ -76,6 +76,9 @@ public class GoldPoper : Actor
 
     public void StopPop()
     {
-        CancelInvoke("_Pop");
+        if (PopAction != null)
+        {
+            RemoveAction(ref PopAction);
+        }        
     }
 }

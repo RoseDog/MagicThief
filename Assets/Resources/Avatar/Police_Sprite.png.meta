@@ -1,0 +1,759 @@
+fileFormatVersion: 2
+guid: 2fc885dbda0d15d42a17b8c6e5e59718
+timeCreated: 1439291593
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: police_0
+    21300002: police_1
+    21300004: police_2
+    21300006: police_3
+    21300008: police_4
+    21300010: police_5
+    21300012: police_6
+    21300014: police_7
+    21300016: police_8
+    21300018: police_9
+    21300020: police_10
+    21300022: police_11
+    21300024: police_12
+    21300026: police_13
+    21300028: police_14
+    21300030: police_15
+    21300032: police_16
+    21300034: police_17
+    21300036: police_18
+    21300038: police_19
+    21300040: police_20
+    21300042: police_21
+    21300044: police_22
+    21300046: police_23
+    21300048: police_24
+    21300050: police_25
+    21300052: police_26
+    21300054: police_27
+    21300056: police_28
+    21300058: police_29
+    21300060: police_30
+    21300062: police_31
+    21300064: police_32
+    21300066: police_33
+    21300068: police_34
+    21300070: police_35
+    21300072: police_36
+    21300074: police_37
+    21300076: police_38
+    21300078: police_39
+    21300080: police_40
+    21300082: police_41
+    21300084: police_42
+    21300086: police_43
+    21300088: police_44
+    21300090: police_45
+    21300092: police_46
+    21300094: police_47
+    21300096: police_48
+    21300098: police_49
+    21300100: police_50
+    21300102: police_51
+    21300104: police_52
+    21300106: police_53
+    21300108: police_54
+    21300110: police_55
+    21300112: police_56
+    21300114: police_57
+    21300116: police_58
+    21300118: police_59
+    21300120: police_60
+    21300122: police_61
+    21300124: police_62
+    21300126: police_63
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: police_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 400
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_1
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 400
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_2
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 400
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_3
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 400
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_4
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 400
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_5
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 400
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_6
+      rect:
+        serializedVersion: 2
+        x: 690
+        y: 400
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_7
+      rect:
+        serializedVersion: 2
+        x: 805
+        y: 400
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_8
+      rect:
+        serializedVersion: 2
+        x: 920
+        y: 400
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_9
+      rect:
+        serializedVersion: 2
+        x: 1035
+        y: 400
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_10
+      rect:
+        serializedVersion: 2
+        x: 1150
+        y: 400
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_11
+      rect:
+        serializedVersion: 2
+        x: 1265
+        y: 400
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_12
+      rect:
+        serializedVersion: 2
+        x: 1380
+        y: 400
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_13
+      rect:
+        serializedVersion: 2
+        x: 1495
+        y: 400
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_14
+      rect:
+        serializedVersion: 2
+        x: 1610
+        y: 400
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 300
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_16
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 300
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_17
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 300
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_18
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 300
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_19
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 300
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_20
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 300
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_21
+      rect:
+        serializedVersion: 2
+        x: 690
+        y: 300
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_22
+      rect:
+        serializedVersion: 2
+        x: 805
+        y: 300
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_23
+      rect:
+        serializedVersion: 2
+        x: 920
+        y: 300
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_24
+      rect:
+        serializedVersion: 2
+        x: 1035
+        y: 300
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_25
+      rect:
+        serializedVersion: 2
+        x: 1150
+        y: 300
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_26
+      rect:
+        serializedVersion: 2
+        x: 1265
+        y: 300
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_27
+      rect:
+        serializedVersion: 2
+        x: 1380
+        y: 300
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_28
+      rect:
+        serializedVersion: 2
+        x: 1495
+        y: 300
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_29
+      rect:
+        serializedVersion: 2
+        x: 1610
+        y: 300
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 200
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_31
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 200
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_32
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 200
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_33
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 200
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_34
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 200
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_35
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 200
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_36
+      rect:
+        serializedVersion: 2
+        x: 690
+        y: 200
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_37
+      rect:
+        serializedVersion: 2
+        x: 805
+        y: 200
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_38
+      rect:
+        serializedVersion: 2
+        x: 920
+        y: 200
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_39
+      rect:
+        serializedVersion: 2
+        x: 1035
+        y: 200
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_40
+      rect:
+        serializedVersion: 2
+        x: 1150
+        y: 200
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_41
+      rect:
+        serializedVersion: 2
+        x: 1265
+        y: 200
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_42
+      rect:
+        serializedVersion: 2
+        x: 1380
+        y: 200
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_43
+      rect:
+        serializedVersion: 2
+        x: 1495
+        y: 200
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_44
+      rect:
+        serializedVersion: 2
+        x: 1610
+        y: 200
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_45
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 100
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_46
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 100
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_47
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 100
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_48
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 100
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_49
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 100
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_50
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 100
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_51
+      rect:
+        serializedVersion: 2
+        x: 690
+        y: 100
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_52
+      rect:
+        serializedVersion: 2
+        x: 805
+        y: 100
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_53
+      rect:
+        serializedVersion: 2
+        x: 920
+        y: 100
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_54
+      rect:
+        serializedVersion: 2
+        x: 1035
+        y: 100
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_55
+      rect:
+        serializedVersion: 2
+        x: 1150
+        y: 100
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_56
+      rect:
+        serializedVersion: 2
+        x: 1265
+        y: 100
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_57
+      rect:
+        serializedVersion: 2
+        x: 1380
+        y: 100
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_58
+      rect:
+        serializedVersion: 2
+        x: 1495
+        y: 100
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_59
+      rect:
+        serializedVersion: 2
+        x: 1610
+        y: 100
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_60
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_61
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 0
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_62
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 0
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: police_63
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 0
+        width: 115
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

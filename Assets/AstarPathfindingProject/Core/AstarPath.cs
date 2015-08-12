@@ -1068,10 +1068,6 @@ public class AstarPath : MonoBehaviour {
 		for (int i=0;i<threadInfos.Length;i++) {
 			threadInfos[i] = new PathThreadInfo(i,this,new NodeRunData());
 		}
-		for (int i=0;i<threads.Length;i++) {
-			threads[i] = new Thread (new ParameterizedThreadStart (CalculatePathsThreaded));
-			threads[i].IsBackground = true;
-		}
 		
 		Initialize ();
 		
@@ -1102,7 +1098,10 @@ public class AstarPath : MonoBehaviour {
 		//Or if there are no threads, it should run as a coroutine
 		//if (threads.Length == 0)
 			StartCoroutine (CalculatePathsHandler(threadInfos[0]));
-		
+            if (Globals.playingReplay != null)
+            {
+                StartCoroutine(CalculatePathsHandler(threadInfos[0]));
+            }		
 	}
 	
 	/** Called when a major data update has been done, makes sure everything is wired up correctly.
@@ -1678,89 +1677,6 @@ public class AstarPath : MonoBehaviour {
 	
 #endregion
 	
-	private static int waitForPathDepth = 0;
-	
-	/** Wait for the specified path to be calculated.
-	 * Normally it takes a few frames for a path to get calculated and returned.
-	 * This function will ensure that the path will be calculated when this function returns
-	 * and that the callback for that path has been called.
-	 * 
-	 * \note Do not confuse this with Pathfinding.Path.WaitForPath. This one will halt all operations until the path has been calculated
-	 * while Pathfinding.Path.WaitForPath will wait using yield until it has been calculated.
-	 * 
-	 * If requesting a lot of paths in one go and waiting for the last one to complete,
-	 * it will calculate most of the paths in the queue (only most if using multithreading, all if not using multithreading).
-	 * 
-	 * Use this function only if you really need to.
-	 * There is a point to spreading path calculations out over several frames.
-	 * It smoothes out the framerate and makes sure requesting a large
-	 * number of paths at the same time does not cause lag.
-	 * 
-	 * \note Graph updates and other callbacks might get called during the execution of this function.
-	 * 
-	 * When the pathfinder is shutting down. I.e in OnDestroy, this function will not do anything.
-	 * 
-	 * \param p The path to wait for. The path must be started, otherwise an exception will be thrown.
-	 * 
-	 * \throws Exception if pathfinding is not initialized properly for this scene (most likely no AstarPath object exists)
-	 * or if the path has not been started yet.
-	 * Also throws an exception if critical errors ocurr such as when the pathfinding threads have crashed (which should not happen in normal cases).
-	 * This prevents an infinite loop while waiting for the path.
-	 * 
-	 * \see Pathfinding.Path.WaitForPath
-	 */
-	public static void WaitForPath (Path p) {
-		
-		if (active == null)
-			throw new System.Exception ("Pathfinding is not correctly initialized in this scene (yet?). " +
-				"AstarPath.active is null.\nDo not call this function in Awake");
-		
-		if (p == null) throw new System.ArgumentNullException ("Path must not be null");
-		
-		if (!active.acceptNewPaths) return;
-		
-		if (p.GetState () == PathState.Created){
-			throw new System.Exception ("The specified path has not been started yet.");
-		}
-		
-		waitForPathDepth++;
-		
-		if (waitForPathDepth == 5) {
-			Debug.LogError ("You are calling the WaitForPath function recursively (maybe from a path callback). Please don't do this.");
-		}
-		
-		if (p.GetState() < PathState.ReturnQueue) {
-			if (IsUsingMultithreading) {
-				
-				while (p.GetState() < PathState.ReturnQueue) {
-					if (ActiveThreadsCount == 0) {
-						waitForPathDepth--;
-						throw new System.Exception ("Pathfinding Threads seems to have crashed. No threads are running.");
-					}
-					
-					//Wait for threads to calculate paths
-					Thread.Sleep (1);
-					TryCallThreadSafeCallbacks();
-				}
-			} else {
-				while (p.GetState() < PathState.ReturnQueue) {
-					if (pathQueue.Count == 0 && p.GetState () != PathState.Processing) {
-						waitForPathDepth--;
-						throw new System.Exception ("Critical error. Path Queue is empty but the path state is '" + p.GetState() + "'");
-					}
-					
-					//Calculate some paths
-					threadEnumerator.MoveNext ();
-					TryCallThreadSafeCallbacks();
-				}
-			}
-		}
-		
-		active.ReturnPaths (false);
-		
-		waitForPathDepth--;
-	}
-	
 	/** Will send a callback when it is safe to update nodes. This is defined as between the path searches.
 	  * This callback will only be sent once and is nulled directly after the callback has been sent.
 	  * When using more threads than one, calling this often might decrease pathfinding performance due to a lot of idling in the threads.
@@ -1893,14 +1809,11 @@ AstarPath.RegisterSafeUpdate (delegate () {
 		}*/
 		
 		p.Claim (active);
-		
-		lock (pathQueue) {
-			//Will increment to PathQueue
-			p.AdvanceState (PathState.PathQueue);
-			pathQueue.Enqueue (p);
-			if (doSetQueueState)
-				pathQueueFlag.Set ();
-		}
+
+        p.AdvanceState(PathState.PathQueue);
+        pathQueue.Enqueue(p);
+        if (doSetQueueState)
+            pathQueueFlag.Set();
 	}
 	
 #if PhotonImplementation
@@ -1954,7 +1867,7 @@ AstarPath.RegisterSafeUpdate (delegate () {
 	 */
 	public IEnumerator ReturnsPathsHandler () {
 		while (true) {
-			ReturnPaths(true);
+			//ReturnPaths(true);
 			yield return 0;
 		}
 	}
@@ -1963,7 +1876,7 @@ AstarPath.RegisterSafeUpdate (delegate () {
 	 * When some time limit is exceeded in ReturnPaths, paths are put on this queue until the next frame.
 	 * \see ReturnPaths
 	 */
-	private Path pathReturnPop;
+	static private Path pathReturnPop;
 	
 	/** Returns all paths in the return stack.
 	  * Paths which have been processed are put in the return stack.
@@ -1971,7 +1884,7 @@ AstarPath.RegisterSafeUpdate (delegate () {
 	  * 
 	  * \param timeSlice Do not return all paths at once if it takes a long time, instead return some and wait until the next call.
 	  */
-	public void ReturnPaths (bool timeSlice) {
+	public static void ReturnPaths (bool timeSlice) {
 		
 		//Pop all items from the stack
 		Path p = pathReturnStack.PopAll ();
@@ -1984,9 +1897,9 @@ AstarPath.RegisterSafeUpdate (delegate () {
 			tail.next = p;
 		}
 		
-		long targetTick = timeSlice ? System.DateTime.UtcNow.Ticks + 1 * 5000 : 0;
+//		long targetTick = timeSlice ? System.DateTime.UtcNow.Ticks + 1 * 5000 : 0;
 		
-		int counter = 0;
+//		int counter = 0;
 		//Loop through the linked list and return all paths
 		while (pathReturnPop != null) {
 			
@@ -2008,16 +1921,16 @@ AstarPath.RegisterSafeUpdate (delegate () {
 			//However since multithreading is annoying, it might be set to ReturnQueue for a small time until the pathfinding calculation
 			//thread advanced the state as well
 			prev.AdvanceState (PathState.Returned);
-			
-			prev.ReleaseSilent (this);
-			
-			counter++;
-			if (counter > 5 && timeSlice) {
-				counter = 0;
-				if (System.DateTime.UtcNow.Ticks >= targetTick) {
-					return;
-				}
-			}
+
+            prev.ReleaseSilent(active);
+// 			
+// 			counter++;
+// 			if (counter > 5 && timeSlice) {
+// 				counter = 0;
+// 				if (System.DateTime.UtcNow.Ticks >= targetTick) {
+// 					return;
+// 				}
+// 			}
 		}
 	}
 	
@@ -2062,224 +1975,19 @@ AstarPath.RegisterSafeUpdate (delegate () {
 		}
 	}
 	
-	/** Main pathfinding function (multithreaded). This function will calculate the paths in the pathfinding queue when multithreading is enabled.
-	 * \see CalculatePaths
-	 * \astarpro 
-	 */
-	private static void CalculatePathsThreaded (System.Object _threadInfo) {
-		
-		//Increment the counter for how many threads are calculating
-		System.Threading.Interlocked.Increment (ref numActiveThreads);
-		
-		PathThreadInfo threadInfo;
-		
-		try {
-			threadInfo = (PathThreadInfo)_threadInfo;
-		} catch (System.Exception e) {
-			Debug.LogError ("Arguments to pathfinding threads must be of type ThreadStartInfo\n"+e);
-			throw new System.ArgumentException ("Argument must be of type ThreadStartInfo",e);
-		}
-		
-		AstarPath astar = threadInfo.astar;
-		
-#if !ASTAR_FAST_BUT_NO_EXCEPTIONS
-		try {
-#endif
-			
-			//Initialize memory for this thread
-			NodeRunData runData = threadInfo.runData;
-			
-#if !ASTAR_SINGLE_THREAD_OPTIMIZE
-			if (runData.nodes == null)
-				throw new System.NullReferenceException ("NodeRuns must be assigned to the threadInfo.runData.nodes field before threads are started\nthreadInfo is an argument to the thread functions");
-#endif
-			
-			//Max number of ticks before yielding/sleeping
-			long maxTicks = (long)(astar.maxFrameTime*10000);
-			long targetTick = System.DateTime.UtcNow.Ticks + maxTicks;
-			
-			while (true) {
-				
-				//The path we are currently calculating
-				Path p = null;
-				
-				while (true) {
-					//Cancel function (and thus the thread) if no more paths should be accepted.
-					//This is done when the A* object is about to be destroyed
-					if (!astar.acceptNewPaths) {
-						System.Threading.Interlocked.Decrement (ref numActiveThreads);
-						return;
-					}
-					
-					//Wait until there are paths to process
-					pathQueueFlag.WaitOne ();
-					
-					//Cancel function (and thus the thread) if no more paths should be accepted.
-					//This is done when the A* object is about to be destroyed
-					if (!astar.acceptNewPaths) {
-						System.Threading.Interlocked.Decrement (ref numActiveThreads);
-						return;
-					}
-					
-					//Lock on a standard lock, the path queue
-					lock (pathQueue) {
-						
-						//Pop the next path from the path queue
-						if (pathQueue.Count > 0) {
-							p = pathQueue.Dequeue ();
-							break;
-						} else {
-							//Console.WriteLine ("Ran out of paths..."+runIndex +" ("+threadsIdle+")");
-							pathQueueFlag.Reset ();
-						}
-					}
-				}
-				
-				//Aquire lock for this thread
-				//Another thread can try to aquire locks for all threads to be able to update stuff while making sure no pathfinding is run at the same time
-                System.Threading.Monitor.Enter(threadInfo.Lock);
-				
-				//Max number of ticks we are allowed to continue working in one run
-				//One tick is 1/10000 of a millisecond
-				maxTicks = (long)(astar.maxFrameTime*10000);
-				
-				AstarProfiler.StartFastProfile (0);
-				p.PrepareBase (runData);
-				
-				//Now processing the path
-				//Will advance to Processing
-				p.AdvanceState (PathState.Processing);
-				
-				//Call some callbacks
-				if (OnPathPreSearch != null) {
-					OnPathPreSearch (p);
-				}
-				
-				//Tick for when the path started, used for calculating how long time the calculation took
-				long startTicks = System.DateTime.UtcNow.Ticks;
-				long totalTicks = 0;
-				
-				//Prepare the path
-				p.Prepare ();
-				
-				AstarProfiler.EndFastProfile (0);
-				
-				if (!p.IsDone()) {
-					
-					//For debug uses, we set the last computed path to p, so we can view debug info on it in the editor (scene view).
-					astar.debugPath = p;
-					
-					AstarProfiler.StartFastProfile (1);
-					
-					//Initialize the path, now ready to begin search
-					p.Initialize ();
-					
-					AstarProfiler.EndFastProfile (1);
-					
-					//The error can turn up in the Init function
-					while (!p.IsDone ()) {
-						//Do some work on the path calculation.
-						//The function will return when it has taken too much time
-						//or when it has finished calculation
-						AstarProfiler.StartFastProfile (2);
-						p.CalculateStep (targetTick);
-						p.searchIterations++;
-						
-						AstarProfiler.EndFastProfile (2);
-						
-						//If the path has finished calculation, we can break here directly instead of sleeping
-						if (p.IsDone ()) break;
-						
-						//Yield/sleep so other threads can work
-						totalTicks += System.DateTime.UtcNow.Ticks-startTicks;
-						Thread.Sleep (0);
-						startTicks = System.DateTime.UtcNow.Ticks;
-						
-						targetTick = startTicks + maxTicks;
-						
-						//Cancel function (and thus the thread) if no more paths should be accepted.
-						//This is done when the A* object is about to be destroyed
-						//The path is returned and then this function will be terminated (see similar IF statement higher up in the function)
-						if (!astar.acceptNewPaths) {
-							p.Error ();
-						}
-					}
-					
-					totalTicks += System.DateTime.UtcNow.Ticks-startTicks;
-					p.duration = totalTicks*0.0001F;
-					
-#if ProfileAstar
-					Interlocked.Increment (ref PathsCompleted);
-					Interlocked.Add (ref TotalSearchedNodes, p.searchedNodes);
-					Interlocked.Add (ref TotalSearchTime, totalTicks);
-#endif
-				}
-				
-				AstarProfiler.StartFastProfile (9);
-				
-				//Log path results
-				astar.LogPathResults (p);
-				
-				if (OnPathPostSearch != null) {
-					OnPathPostSearch (p);
-				}
-				
-				//Push the path onto the return stack
-				//It will be detected by the main Unity thread and returned as fast as possible (the next late update hopefully)
-				pathReturnStack.Push (p);
-				
-				//Will advance to ReturnQueue
-				p.AdvanceState (PathState.ReturnQueue);
-				
-				AstarProfiler.EndFastProfile (9);
-				
-				//Release lock for this thread
-                System.Threading.Monitor.Exit(threadInfo.Lock);
-				
-				//Wait a bit if we have calculated a lot of paths
-				if (System.DateTime.UtcNow.Ticks > targetTick) {
-					Thread.Sleep (1);
-					targetTick = System.DateTime.UtcNow.Ticks + maxTicks;
-				}
-			}
-#if !ASTAR_FAST_BUT_NO_EXCEPTIONS
-		} catch (System.Exception e) {
-			if (e is System.Threading.ThreadAbortException) {
-				if (astar.logPathResults == PathLog.Heavy)
-					Debug.LogWarning ("Shutting down pathfinding thread #"+threadInfo.threadIndex+" with Thread.Abort call");
-				System.Threading.Interlocked.Decrement (ref numActiveThreads);
-				return;
-			}
-			Debug.LogError (e);
-		}
-#endif
-		
-		Debug.LogError ("Error : This part should never be reached");
-		System.Threading.Interlocked.Decrement (ref numActiveThreads);
-	}
-	
-	/** Handler for the CalculatePaths function.
-	 * Will initialize an IEnumerator from the CalculatePaths function.
-	 * This function has a loop which will increment the CalculatePaths function state by one every time.
-	 * Supposed to be called using StartCoroutine, this enabled other functions to also increment the state of the function when needed
-	 * using the #threadEnumerator variable.
-	 * \see CalculatePaths
-	 * \see threadEnumerator
-	 */
 	private static IEnumerator CalculatePathsHandler (System.Object _threadData) {
-		threadEnumerator = CalculatePaths (_threadData);
-		while (threadEnumerator.MoveNext ()) {
-			yield return 0;
-		}
+// 		threadEnumerator = CalculatePaths (_threadData);
+// 		while (threadEnumerator.MoveNext ()) {
+ 			yield return 0;
+// 		}
 	}
 	/** Main pathfinding function. This function will calculate the paths in the pathfinding queue
 	 * \see CalculatePaths
 	 */
-	private static IEnumerator CalculatePaths (System.Object _threadInfo) {
+	public static void CalculatePaths (System.Object _threadInfo) {
 		
 		
-		//Increment the counter for how many threads are calculating
-		System.Threading.Interlocked.Increment (ref numActiveThreads);
+		
 		
 		PathThreadInfo threadInfo;
 		try {
@@ -2300,9 +2008,6 @@ AstarPath.RegisterSafeUpdate (delegate () {
 				"threadInfo is an argument to the thread functions");
 #endif
 		
-		//Max number of ticks before yielding/sleeping
-		long maxTicks = (long)(active.maxFrameTime*10000);
-		long targetTick = System.DateTime.UtcNow.Ticks + maxTicks;
 		
 		threadSafeUpdateState = true;
 		
@@ -2311,52 +2016,23 @@ AstarPath.RegisterSafeUpdate (delegate () {
 			//The path we are currently calculating
 			Path p = null;
 			
-			AstarProfiler.StartProfile ("Path Queue");
-			
 			//Try to get the next path to be calculated
 			while (true) {
-				//Cancel function (and thus the thread) if no more paths should be accepted.
-				//This is done when the A* object is about to be destroyed
-				if (!active.acceptNewPaths) {
-					System.Threading.Interlocked.Decrement (ref numActiveThreads);
-					yield break;
-				}
+
 				
 				if (pathQueue.Count > 0) {
 					p = pathQueue.Dequeue ();
 				}
-				
-				//System.Threading.Interlocked.Increment(ref threadsIdle);
-				
-				//Last thread alive
-				//Call callbacks if any are requested
-				OnVoidDelegate tmp = OnSafeCallback;
-				OnSafeCallback = null;
-				if (tmp != null) tmp();
-				
-				TryCallThreadSafeCallbacks ();
-				//The threadSafeUpdateState is still enabled since this is coroutine mode
-				//It would be reset in TryCallThreadSafeCallbacks
-				threadSafeUpdateState = true;
-				
+								
 				if (p == null) {
-					AstarProfiler.EndProfile ();
-					yield return 0;
-					AstarProfiler.StartProfile ("Path Queue");
+					return ;
 				}
 				
 				//If we have a path, start calculating it
 				if (p != null) break;
 			}
 			
-			AstarProfiler.EndProfile ();
-			
-			AstarProfiler.StartProfile ("Path Calc");
-			
-			//Max number of ticks we are allowed to continue working in one run
-			//One tick is 1/10000 of a millisecond
-			maxTicks = (long)(active.maxFrameTime*10000);
-			
+		
 			threadSafeUpdateState = false;
 			
 			p.PrepareBase (runData);
@@ -2371,19 +2047,10 @@ AstarPath.RegisterSafeUpdate (delegate () {
 			}
 			
 			numPaths++;
+
 			
-			//Tick for when the path started, used for calculating how long time the calculation took
-			long startTicks = System.DateTime.UtcNow.Ticks;
-			long totalTicks = 0;
-			
-			AstarProfiler.StartFastProfile(8);
-			
-			AstarProfiler.StartFastProfile(0);
-			//Prepare the path
-			AstarProfiler.StartProfile ("Path Prepare");
 			p.Prepare ();
-			AstarProfiler.EndProfile ();
-			AstarProfiler.EndFastProfile (0);
+			
 			
 			if (!p.IsDone()) {
 				
@@ -2391,37 +2058,26 @@ AstarPath.RegisterSafeUpdate (delegate () {
 				active.debugPath = p;
 				
 				//Initialize the path, now ready to begin search
-				AstarProfiler.StartProfile ("Path Initialize");
+
 				p.Initialize ();
-				AstarProfiler.EndProfile ();
 				
 				//The error can turn up in the Init function
 				while (!p.IsDone ()) {
 					//Do some work on the path calculation.
 					//The function will return when it has taken too much time
 					//or when it has finished calculation
-					AstarProfiler.StartFastProfile(2);
 					
-					AstarProfiler.StartProfile ("Path Calc Step");
-					p.CalculateStep (targetTick);
-					AstarProfiler.EndFastProfile(2);
+					p.CalculateStep (0);
+					
 					p.searchIterations++;
 					
-					AstarProfiler.EndProfile ();
+					
 					
 					//If the path has finished calculation, we can break here directly instead of sleeping
 					if (p.IsDone ()) break;
 					
-					AstarProfiler.EndFastProfile(8);
-					totalTicks += System.DateTime.UtcNow.Ticks-startTicks;
-					//Yield/sleep so other threads can work
-						
-					AstarProfiler.EndProfile ();
-					yield return 0;
-					AstarProfiler.StartProfile ("Path Calc");
-					
-					startTicks = System.DateTime.UtcNow.Ticks;
-					AstarProfiler.StartFastProfile(8);
+				
+
 					
 					//Cancel function (and thus the thread) if no more paths should be accepted.
 					//This is done when the A* object is about to be destroyed
@@ -2430,11 +2086,9 @@ AstarPath.RegisterSafeUpdate (delegate () {
 						p.Error ();
 					}
 					
-					targetTick = System.DateTime.UtcNow.Ticks + maxTicks;
+
 				}
 				
-				totalTicks += System.DateTime.UtcNow.Ticks-startTicks;
-				p.duration = totalTicks*0.0001F;
 				
 #if ProfileAstar
 				Interlocked.Increment (ref PathsCompleted);
@@ -2443,35 +2097,23 @@ AstarPath.RegisterSafeUpdate (delegate () {
 			}
 			
 			//Log path results
-			AstarProfiler.StartProfile ("Log Path Results");
-			active.LogPathResults (p);
-			AstarProfiler.EndProfile ();
 			
-			AstarProfiler.EndFastProfile(8);
+			active.LogPathResults (p);			
 			
-			AstarProfiler.StartFastProfile(13);
 			if (OnPathPostSearch != null) {
 				OnPathPostSearch (p);
 			}
-			AstarProfiler.EndFastProfile(13);
+			
 			
 			//Push the path onto the return stack
 			//It will be detected by the main Unity thread and returned as fast as possible (the next late update)
 			pathReturnStack.Push (p);
+            ReturnPaths(false);
 			
 			p.AdvanceState (PathState.ReturnQueue);
 			
-			AstarProfiler.EndProfile ();
-			
 			threadSafeUpdateState = true;
-			
-			//Wait a bit if we have calculated a lot of paths
-			if (System.DateTime.UtcNow.Ticks > targetTick) {
-				//yield return 0;
-				targetTick = System.DateTime.UtcNow.Ticks + maxTicks;
-				numPaths = 0;
-			}
-		}
+		}        
 		
 		//Debug.LogError ("Error : This part should never be reached");
 		//System.Threading.Interlocked.Decrement (ref numActiveThreads);

@@ -26,19 +26,19 @@
             UnityEngine.GameObject itemSlot = UnityEngine.GameObject.Instantiate(itemSlotPrefab) as UnityEngine.GameObject;
             itemSlot.transform.parent = TrickItemsLayout.transform;
             itemSlot.transform.localScale = UnityEngine.Vector3.one;
-                                               
+
+            UnityEngine.UI.Text Unlock_label = Globals.getChildGameObject<UnityEngine.UI.Text>(itemSlot.gameObject, "Unlock_label");
+            Unlock_label.gameObject.SetActive(false);
+            UnityEngine.UI.Text Bought = Globals.getChildGameObject<UnityEngine.UI.Text>(itemSlot.gameObject, "Bought");
+            Bought.gameObject.SetActive(false);
+            UnityEngine.UI.Text Not_Bought = Globals.getChildGameObject<UnityEngine.UI.Text>(itemSlot.gameObject, "Not_Bought");
+            Not_Bought.gameObject.SetActive(false);
+
             if (!data.IsInUse())
             {
                 TrickItem trickItem = (UnityEngine.GameObject.Instantiate(itemPrefab) as UnityEngine.GameObject).GetComponent<TrickItem>();
                 trickItem.trickData = data;
-                if (Globals.self.tricksBought.Contains(data.nameKey))
-                {
-                    trickItem.Buy();
-                }
-                else
-                {
-                    trickItem.GetComponent<UnityEngine.UI.Image>().sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/" + data.nameKey + "_icon_disabled");
-                }
+
                 trickItem.rt.parent = itemSlot.transform;
                 trickItem.rt.localScale = UnityEngine.Vector3.one;
                 trickItem.rt.localPosition = UnityEngine.Vector3.zero;
@@ -46,6 +46,26 @@
                 trickItem.CheckIfUnlock();
                 trickItem.slotInPack = itemSlot;
                 trickItemsInPack.Add(trickItem);
+
+                if (Globals.self.tricksBought.Contains(data.nameKey))
+                {
+                    trickItem.Buy();
+                    Bought.gameObject.SetActive(true);
+                }
+                else
+                {
+                    trickItem.GetComponent<UnityEngine.UI.Image>().sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/" + data.nameKey + "_icon_disabled");
+
+                    if (trickItem.LockImage == null)
+                    {
+                        Not_Bought.gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        Unlock_label.gameObject.SetActive(true);
+                        Globals.languageTable.SetText(Unlock_label, "unlock_need_rose", new System.String[] { data.unlockRoseCount.ToString() });
+                    }
+                }
             }            
             trickSlots.Add(itemSlot);
 
@@ -79,13 +99,21 @@
     public override void OnTouchUpOutside(Finger f)
     {
         base.OnTouchUpOutside(f);
+        
+    }
+
+    public void Close()
+    {
+        Globals.canvasForMagician.itemHighLightFrame.transform.parent = transform;
+        Globals.canvasForMagician.itemHighLightFrame.SetActive(false);
+
         foreach (UnityEngine.GameObject slot in trickSlots)
         {
             DestroyObject(slot);
         }
         trickSlots.Clear();
         trickItemsInPack.Clear();
-        gameObject.SetActive(false);
+        gameObject.SetActive(false);        
         Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();
         StealingLevelController controller = (Globals.LevelController as StealingLevelController);
         if (controller != null)

@@ -41,16 +41,25 @@ public class GuardMoving : AIPath
         base.Awake();
 
 //        animation["moving"].speed = animationSpeed;
-    }
-
-    public new void Start()
-    {
-        base.Start();
+        if (guard != null) actor.RepeatingCallFunction(repathRate, () => TrySearchPath());
     }
 
     public Seeker GetSeeker()
     {
         return seeker;
+    }
+
+    /** Tries to search for a path.
+     * Will search for a new path if there was a sufficient time since the last repath and both
+     * #canSearchAgain and #canSearch are true.
+     * Otherwise will start WaitForPath function.
+     */
+    public void TrySearchPath()
+    {
+        if (canSearch)
+        {
+            SearchPath();
+        }
     }
 
     /** Point for the last spawn of #endOfPathEffect */
@@ -72,7 +81,7 @@ public class GuardMoving : AIPath
         return tr.position;
     }
 
-    public override void Update()
+    public void FrameFunc()
     {
         UnityEngine.Vector3 velocity = UnityEngine.Vector3.zero;
 
@@ -91,19 +100,23 @@ public class GuardMoving : AIPath
                 {
                     s *= 0.3f;
                 }
+
+                
+
                 UnityEngine.Vector3 dir = CalculateVelocity(GetFeetPosition(), s);
-
-                System.String content = gameObject.name;
-                content +=  "movement:" + dir.ToString("F5");
-                Globals.record("testReplay", content);
-
-                if (controller != null)
+                if (Globals.DEBUG_REPLAY)
                 {
-                    controller.Move(dir);
-                    velocity = controller.velocity;
-                    //transform.position += dir;
-                    //velocity = dir;
+                    System.String content = gameObject.name;
+                    content += "movement:" + dir.ToString("F5");
+                    content += " speed:" + s.ToString("F5");
+                    content += " GetFeetPosition():" + GetFeetPosition().ToString("F5");
+
+                    Globals.record("testReplay", content);
                 }
+                
+                
+                transform.position += dir;
+                velocity = dir;
                 if (dir.magnitude > UnityEngine.Mathf.Epsilon)
                 {
                     currentDir = dir;
@@ -114,17 +127,6 @@ public class GuardMoving : AIPath
                 }
                 transform.position = new UnityEngine.Vector3(transform.position.x, transform.position.y, (float)actor.heightOriginCache);                
             }                        
-        }
-
-        if (Globals.playingReplay != null && mage && Globals.replaySystem.magePositions.Count != 0)
-        {
-            transform.position = Globals.replaySystem.magePositions[0];
-            Globals.replaySystem.magePositions.RemoveAt(0);
-        }
-
-        if (mage)
-        {
-            Globals.replaySystem.RecordMagePosition(transform.position);
         }
 
         if (canMove && needAnimation)
@@ -183,11 +185,13 @@ public class GuardMoving : AIPath
                 }
             }
         }
-        
 
-        System.String content_test = gameObject.name;
-        content_test += " pos:" + transform.position.ToString("F5");
-        Globals.record("testReplay", content_test);
+        if (Globals.DEBUG_REPLAY)
+        {
+            System.String content_test = gameObject.name;
+            content_test += " pos:" + transform.position.ToString("F5");
+            Globals.record("testReplay", content_test);
+        }
     }
 
    

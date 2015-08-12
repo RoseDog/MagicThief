@@ -4,10 +4,11 @@
     Guard owner;
     double oneWaveDuration;
     double radiusStart;
-    double radiusLimit = 20;
+    double radiusLimit = 2000;
     double radius;
     bool onlyOneWave = false;
     UnityEngine.GameObject wave_prefab;
+    Cocos2dAction waving_action = null;
     public override void Awake()
     {        
         base.Awake();
@@ -42,50 +43,46 @@
             onlyOneWave = true;
         }
 
-        wave.transform.localScale = UnityEngine.Vector3.one;
+        wave.transform.localScale = UnityEngine.Vector3.zero;
         oneWaveDuration = 30;
     }
 
-    public System.Collections.IEnumerator Waving()
+    int start_frame;
+    public void Waving()
     {
-        int start_frame = UnityEngine.Time.frameCount;
-        CreateOneWave();
-        while (true)
+        float scale = UnityEngine.Mathf.Lerp((float)radiusStart, (float)radius, (Globals.LevelController.frameCount - start_frame) / (float)oneWaveDuration);
+        wave.transform.localScale = new UnityEngine.Vector3(scale, scale, scale);
+
+        if (Globals.DEBUG_REPLAY)
         {
-            float scale = UnityEngine.Mathf.Lerp((float)radiusStart, (float)radius, (UnityEngine.Time.frameCount - start_frame) / (float)oneWaveDuration);
-            wave.transform.localScale = new UnityEngine.Vector3(scale, scale, scale);
             System.String content = "Alert Sound radius";
             content += scale.ToString("F5");
             Globals.record("testReplay", content);
-            if (UnityEngine.Time.frameCount - start_frame > oneWaveDuration)
-            {
-                DestroyObject(wave.gameObject);
-                wave = null;
-                if (!onlyOneWave)
-                {                                        
-                    start_frame = UnityEngine.Time.frameCount;
-                    CreateOneWave();
-                }
-                else
-                {
-                    DestroyObject(gameObject);
-                }                
-            }
-            yield return null;
         }
         
-    }
-
-    public override void Start()
-    {
-        base.Start();        
+        if (Globals.LevelController.frameCount - start_frame > oneWaveDuration)
+        {
+            Actor.to_be_remove.Add(wave.GetComponent<Actor>());            
+            wave = null;
+            if (!onlyOneWave)
+            {
+                start_frame = Globals.LevelController.frameCount;
+                CreateOneWave();
+            }
+            else
+            {
+                Actor.to_be_remove.Add(this);
+            }
+        }
     }
 
 	public void StartAlert()
     {
-        if (wave == null)
+        if (waving_action == null)
         {
-            StartCoroutine(Waving());
+            start_frame = Globals.LevelController.frameCount;
+            CreateOneWave();
+            waving_action = RepeatingCallFunction(0,()=>Waving());
         }        
     }
 
@@ -98,10 +95,10 @@
 
     public void StopAlert()
     {
-        StopAllCoroutines();
+        RemoveAction(ref waving_action);
         if (wave != null)
         {
-            DestroyObject(wave.gameObject);
+            Actor.to_be_remove.Add(wave.GetComponent<Actor>());            
             wave = null;
         }        
     }

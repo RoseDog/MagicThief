@@ -3,7 +3,7 @@
     public override void Awake()
     {
         base.Awake();
-        spriteSheet.CreateAnimationByName("flash", 4.0f, true);
+        spriteSheet.CreateAnimationByName("flash", 7.0f, true);
         spriteSheet.AddAnimationEvent("flash", -1, () => FlashEnd());
         spriteSheet.Play("flash");
     }

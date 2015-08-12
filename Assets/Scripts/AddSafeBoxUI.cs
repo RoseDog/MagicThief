@@ -1,12 +1,13 @@
-﻿public class AddSafeBoxUI : UnityEngine.MonoBehaviour 
+﻿public class AddSafeBoxUI : CustomEventTrigger
 {
     UnityEngine.UI.Button AddBtn;    
     UnityEngine.UI.Text AddPrice;
     UnityEngine.GameObject Lock;
     UnityEngine.UI.Text LockMsg;
     MultiLanguageUIText capacity;
-    public void Awake()
-    {                
+    public override void Awake()
+    {
+        base.Awake();
         AddBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(gameObject, "AddBtn");
         AddBtn.onClick.AddListener(() => ClickToAddSafeBox());
         AddPrice = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "CashNumber");       
@@ -20,7 +21,7 @@
         UnityEngine.Debug.Log("ClickToAddSafeBox");
         if (Globals.canvasForMagician.ChangeCash(-Globals.buySafeBoxPrice))
         {
-            Globals.canvasForMyMaze.enhanceDefenseUI.OnTouchUpOutside(null);
+            OnTouchUpOutside(null);
             UnityEngine.Vector3 falling_pos = (Globals.LevelController as MyMazeLevelController).AddSafeBox();
             Globals.cameraFollowMagician.MoveToPoint(falling_pos, 30);
         }
@@ -47,11 +48,21 @@
             }
             else
             {
+                int maze_lv_add_box_needed = 0;
+                for (int i = Globals.self.currentMazeLevel; i < Globals.mazeLvDatas.Count;++i )
+                {
+                    MazeLvData data = Globals.mazeLvDatas[i];
+                    if (data.safeBoxCount > Globals.self.safeBoxDatas.Count)
+                    {
+                        maze_lv_add_box_needed = i;
+                        break;
+                    }
+                }
                 AddBtn.gameObject.SetActive(false);
                 Lock.gameObject.SetActive(true);
                 LockMsg.gameObject.SetActive(true);
                 Globals.languageTable.SetText(LockMsg,
-                    "upgrade_maze_to_add_safe_box", new System.String[] { (Globals.self.currentMazeLevel + 1).ToString() });
+                    "upgrade_maze_to_add_safe_box", new System.String[] { maze_lv_add_box_needed.ToString() });
             }            
         }
         else if (Globals.self.safeBoxDatas.Count < mazeData.safeBoxCount)
@@ -68,5 +79,13 @@
             }
             Lock.gameObject.SetActive(false);
         }        
+    }
+
+    public override void OnTouchUpOutside(Finger f)
+    {
+        base.OnTouchUpOutside(f);
+        gameObject.SetActive(false);
+        Globals.canvasForMyMaze.enhanceDefenseUI.CheckPointerJumpInTutorial();
+        Globals.canvasForMyMaze.enhanceDefenseUI.safeboxTab.image.enabled = false;
     }
 }

@@ -46,7 +46,6 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
         if (_actor != null)
         {
             _actor.gameObject.name = Globals.StripCloneString(_actor.gameObject.name);
-            UnityEngine.Debug.Log(_actor.gameObject.name);
             _sprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Avatar/" + _actor.gameObject.name + "_Sprite");
         }
         else
@@ -172,7 +171,7 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
         _currentAnim = anim;
         frameIdx = 0;
         frameCount = 1000000;// 这样会立刻切换Frame
-        Update();
+        FrameFunc();
     }
     System.String _currentAnim = "";
     int frameIdx = 0;
@@ -183,7 +182,7 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
         return spriteChangeFrequent;
     }
 
-    void Update()
+    public void FrameFunc()
     {
         ++frameCount;        
         if (_currentAnim != "")
@@ -214,7 +213,14 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
                 System.Collections.Generic.List<UnityEngine.Sprite> spriteList = anim.spriteList;
                 if (_actor.spriteRenderer)
                 {
-                    _actor.spriteRenderer.sprite = spriteList[frameIdx];
+                    try
+                    {
+                        _actor.spriteRenderer.sprite = spriteList[frameIdx];
+                    }
+                    catch (System.Exception)
+                    {
+                        UnityEngine.Debug.Log(_actor.gameObject.name);
+                    }                    
                 }
                 else
                 {

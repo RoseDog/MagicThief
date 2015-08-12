@@ -17,7 +17,7 @@
     public void Open()
     {
         gameObject.SetActive(true);
-        Globals.languageTable.SetText(rose_add_power, "rose_add_power", new System.String[] { Globals.self.GetRoseAddPowerRate().ToString() });
+        Globals.languageTable.SetText(rose_add_power, "rose_add_power", new System.String[] { Globals.self.roseAddPowerRate.ToString("F0") });
         Globals.languageTable.SetText(power_delta, "power_delta", new System.String[] { Globals.self.GetPowerDelta().ToString() });
     }
 

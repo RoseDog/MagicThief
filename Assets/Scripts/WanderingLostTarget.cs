@@ -12,20 +12,20 @@ public class WanderingLostTarget : GuardAction
         {
             guard.alertSound.StopAlert();
         }
-        Debug.Log("WanderingLostTarget:" + UnityEngine.Time.frameCount.ToString());
+        Debug.Log("WanderingLostTarget:" + Globals.LevelController.frameCount.ToString());
         if (guard.heardAlert != null)
         {
             guard.heardAlert.alertTeammate = null;
         }
         guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Suspicious);
-        
-        if (guard.spriteSheet.HasAnimation("wander"))
+
+        if (guard.spriteSheet.HasAnimation("suspicious"))
         {
-            guard.spriteSheet.Play("wander");
+            guard.spriteSheet.Play("suspicious");
         }
         else
         {
-            guard.spriteSheet.Play("idle");
+            guard.spriteSheet.Play("wander");
         }
         guard.spot.target = null;
         guard.moving.target = null;
@@ -35,13 +35,13 @@ public class WanderingLostTarget : GuardAction
         {
             float wandering_angle = 60;
             eyeWandering = new Sequence(
-                new RotateEye(guard.eye, new Vector3(0, 0, wandering_angle), 20),
-                new SleepFor(60),
+                new RotateEye(guard.eye, new Vector3(0, 0, wandering_angle), 10),
+                new SleepFor(40),
                 new RepeatForever(                
-                new RotateEye(guard.eye, new Vector3(0, 0, -wandering_angle*2), 40),
-                new SleepFor(60),
-                new RotateEye(guard.eye, new Vector3(0, 0, wandering_angle*2), 40),
-                new SleepFor(60)));
+                new RotateEye(guard.eye, new Vector3(0, 0, -wandering_angle*2), 25),
+                new SleepFor(40),
+                new RotateEye(guard.eye, new Vector3(0, 0, wandering_angle*2), 25),
+                new SleepFor(40)));
             guard.AddAction(eyeWandering);
         }
         
@@ -51,7 +51,7 @@ public class WanderingLostTarget : GuardAction
         }
         else
         {
-            ((call as Sequence).actions[0] as SleepFor)._start_frame = UnityEngine.Time.frameCount;
+            ((call as Sequence).actions[0] as SleepFor)._start_frame = Globals.LevelController.frameCount;
         }        
     }
 
@@ -60,7 +60,7 @@ public class WanderingLostTarget : GuardAction
         guard.moving.canMove = true;
         guard.RemoveAction(ref call);
         guard.RemoveAction(ref eyeWandering);
-        Debug.Log("stop wandering:" + UnityEngine.Time.frameCount.ToString());
+        Debug.Log("stop wandering:" + Globals.LevelController.frameCount.ToString());
         base.Stop();
     }
 

@@ -6,19 +6,16 @@ public class Spot : GuardAction
     public Transform target;
     public Cocos2dAction chaseCountDown;
     public Cocos2dAction outVisionCountDown;
-
+    public Cocos2dAction turnToAtkReadyAct;
     public override void Awake()
     {
-        base.Awake();
-        if (guard.spriteSheet.HasAnimation("spot"))
-        {
-            actor.spriteSheet.AddAnimationEvent("spot", -1, () => SpotTurnToAtkReady());
-        }        
+        base.Awake();        
+        actor.spriteSheet.AddAnimationEvent("spot", -1, () => SpotTurnToAtkReady());
     }
 
     public void SpotTurnToAtkReady()
     {
-        guard.SleepThenCallFunction(15, ()=>TurnToAtkReady());        
+        turnToAtkReadyAct = guard.SleepThenCallFunction(15, ()=>TurnToAtkReady());        
     }
 
     void TurnToAtkReady()
@@ -36,19 +33,15 @@ public class Spot : GuardAction
         if (guard.CheckIfChangeTarget(newTar))
         {            
             base.Excute();
-            target = newTar.transform;
-            guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Alert);
-
             
-            if (guard.spriteSheet.HasAnimation("spot"))
+            if(target == null)
             {
+                guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Alert);
                 guard.spriteSheet.Play("spot");
-            }
-            else
-            {
-                guard.spriteSheet.Play("idle");
-            }
+            }            
 
+            target = newTar.transform;
+        
             guard.FaceTarget(target);
             guard.moving.ClearPath();
             guard.moving.canMove = false;
@@ -76,8 +69,9 @@ public class Spot : GuardAction
         }        
     }   
 
-    public void Update()
+    public override void FrameFunc()
     {
+        base.FrameFunc();
         if(guard.currentAction == this)
         {
             // 更新守卫的视野体，但是并不发送消息，不触发任何事件
@@ -93,6 +87,11 @@ public class Spot : GuardAction
         {
             guard.RemoveAction(ref chaseCountDown);            
         }
+
+        if (turnToAtkReadyAct != null)
+        {
+            guard.RemoveAction(ref turnToAtkReadyAct);
+        }        
     }
 
     public void EnemyOutVision(int outVisionTime)

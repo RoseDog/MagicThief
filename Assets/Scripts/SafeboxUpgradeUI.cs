@@ -36,8 +36,8 @@
         LvNumber.text = (data.Lv+1).ToString();
 
         CashInBoxNumber.text = ((int)data.cashInBox).ToString();
-        
 
+        UpgradeBtn.onClick.RemoveAllListeners();
         if(data.owner == Globals.self)
         {
             CapacityNumber.text = Globals.safeBoxLvDatas[data.Lv].capacity.ToString();
@@ -81,8 +81,7 @@
     void UpgradeBtnClicked(SafeBoxData data)
     {
         if (Globals.canvasForMagician.ChangeCash(-Globals.safeBoxLvDatas[data.Lv].price))
-        {
-            Globals.canvasForMyMaze.enhanceDefenseUI.OnTouchUpOutside(null);
+        {            
             Globals.self.UpgradeSafebox(data);
             (Globals.LevelController as MyMazeLevelController).PutCashInBox(Globals.self);
             SetSafebox(data);
@@ -101,9 +100,8 @@
         }
     }
 
-    public override void OnTouchUpOutside(Finger f)
-    {
-        base.OnTouchUpOutside(f);
+    public void Close()
+    {        
         DestroyObject(transform.parent.gameObject);
     }
 }

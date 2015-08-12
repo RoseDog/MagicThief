@@ -1,4 +1,4 @@
-
+﻿
 public class TrickData
 {
     public System.String nameKey;
@@ -10,6 +10,7 @@ public class TrickData
     public int price;
     public bool bought = false;
     public bool clickOnGuardToCast = false;
+    public bool clickButtonToCast = false;
 
     public bool IsLocked()
     {
@@ -117,6 +118,9 @@ public class BuildingData
     public bool isPvP;
     public int levelRandSeed;
     public int PvELevelIdx;
+    public float roseGrowLastDuration;
+    public float roseGrowTotalDuration;
+    public float bornNewTargetLastDuration;
 }
 
 public class ReplayData
@@ -125,14 +129,23 @@ public class ReplayData
     public float StealingCash;
     public IniFile ini = new IniFile();
     public bool everClicked = false;
+    public int reward_rose_count;
+    public bool rewardAccepted = false;
     public PlayerInfo thief = new PlayerInfo();
     public PlayerInfo guard = new PlayerInfo();
+}
+
+public class CloudData
+{
+    public int idx;
+    public bool locked;
+    public float price;
 }
 
 public class PlayerInfo
 {
     public System.String separator = "|";
-    // 以后要存到服务器上的
+    
     public enum TutorialLevel
     {
         GetGem = 0,
@@ -145,20 +158,25 @@ public class PlayerInfo
     public System.String name;
     public TutorialLevel TutorialLevelIdx = TutorialLevel.GetGem;
     public float cashAmount = 80000.0f;
-    public int roseCount = 10000;
+    public int roseCount = 80;
+    public float roseAddPowerRate = 2;
     
     public int currentMazeRandSeedCache;    
     public int currentMazeLevel = 0;
 
     public int pveProgress;
 
+    public float roseGrowCycle;
+
     public System.Collections.Generic.List<SafeBoxData> safeBoxDatas = new System.Collections.Generic.List<SafeBoxData>();
     public System.Collections.Generic.List<System.String> tricksBought = new System.Collections.Generic.List<System.String>();
     public System.Collections.Generic.List<TrickUsingSlotData> slotsDatas = new System.Collections.Generic.List<TrickUsingSlotData>();
     public System.Collections.Generic.List<System.String> guardsHired = new System.Collections.Generic.List<System.String>();
     public System.Collections.Generic.List<BuildingData> buildingDatas = new System.Collections.Generic.List<BuildingData>();
+    public System.Collections.Generic.List<CloudData> cloudDatas = new System.Collections.Generic.List<CloudData>();
     public System.Collections.Hashtable defReplays = new System.Collections.Hashtable();
     public System.Collections.Hashtable atkReplays = new System.Collections.Hashtable();
+    public System.Collections.Hashtable beenStolenReports = new System.Collections.Hashtable();    
     
     public BuildingData GetBuildingDataByID(System.String idString)
     {
@@ -206,7 +224,7 @@ public class PlayerInfo
         slotsDatas.Add(data);
 
         buildingDatas.Clear();
-        for (int idx = 1; idx < 5; ++idx)
+        for (int idx = 0; idx < 25; ++idx)
         {
             BuildingData building = new BuildingData();
             building.posID = idx.ToString();
@@ -221,7 +239,12 @@ public class PlayerInfo
             Globals.socket.serverReplyActions.Add("self_stealing_info", (reply) => SelfStealingInfo(reply));            
             
             Globals.socket.serverReplyActions.Add("buildings_ready", (reply) => BuildingsOver(reply));
-            Globals.socket.serverReplyActions.Add("replays_ready", (reply) => ReplaysOver(reply));            
+            Globals.socket.serverReplyActions.Add("replays_ready", (reply) => ReplaysOver(reply));
+            Globals.socket.serverReplyActions.Add("one_cloud", (reply) => OneCloud(reply));
+            Globals.socket.serverReplyActions.Add("clouds_ready", (reply) => CloudsOver(reply));
+
+            Globals.socket.serverReplyActions.Add("download_cloud_rank", (reply) => OneRank(reply));
+            Globals.socket.serverReplyActions.Add("download_clouds_over", (reply) => PlayersRankOver(reply));
 
             Globals.socket.serverReplyActions.Add("download_one_rank", (reply) => OneRank(reply));            
             Globals.socket.serverReplyActions.Add("download_ranks_over", (reply) => PlayersRankOver(reply));
@@ -237,8 +260,11 @@ public class PlayerInfo
             Globals.socket.serverReplyActions.Add("new_target", (reply) => NewTarget(reply));
             Globals.socket.serverReplyActions.Add("new_poor", (reply) => NewPoor(reply));
             Globals.socket.serverReplyActions.Add("new_rosebuilding", (reply) => NewRoseBuilding(reply));
+
+            Globals.socket.serverReplyActions.Add("been_stolen", (reply) => BeenStolen(reply));
+            
         }
-        // 这个顺序根本没有保证�?..�?.
+        // 杩欎釜椤哄簭鏍规湰娌℃湁淇濊瘉鍟?..鏃?.
         Globals.socket.Send("self_stealing_info" + separator + name);        
     }
 
@@ -287,7 +313,7 @@ public class PlayerInfo
 
         TutorialLevelIdx = (TutorialLevel)System.Enum.Parse(typeof(TutorialLevel), reply[0]);
         cashAmount = float.Parse(reply[1]);
-        roseCount = int.Parse(reply[2]);
+        roseCount = int.Parse(reply[2]);        
         currentMazeLevel = int.Parse(reply[3]);
         currentMazeRandSeedCache = (int)long.Parse(reply[4]);
 
@@ -296,10 +322,11 @@ public class PlayerInfo
         for (int idx = 0; idx < slotsDatas.Count; ++idx)
         {
             TrickUsingSlotData slot = slotsDatas[idx];
-            // 由于字符串拼接问题，temp[0]是空字符�?
+            // 鐢变簬瀛楃涓叉嫾鎺ラ棶棰橈紝temp[0]鏄┖瀛楃涓?
             slot.statu = temp[idx+1];
         }
 
+        safeBoxDatas.Clear();
         temp = reply[6].Split(',');
         for (int idx = 1; idx < temp.Length; ++idx)
         {            
@@ -309,6 +336,7 @@ public class PlayerInfo
             data.Lv = System.Convert.ToInt32(temp[idx]);
         }
 
+        guardsHired.Clear();
         temp = reply[7].Split(',');
         for (int idx = 1; idx < temp.Length; ++idx)
         {
@@ -317,6 +345,7 @@ public class PlayerInfo
 
         summonedGuardsStr = reply[8];
 
+        tricksBought.Clear();
         temp = reply[9].Split(',');
         for (int idx = 1; idx < temp.Length; ++idx)
         {
@@ -328,6 +357,10 @@ public class PlayerInfo
         name = reply[11];
 
         pveProgress = System.Convert.ToInt32(reply[12]);
+
+        roseGrowCycle = System.Convert.ToSingle(reply[13]);
+
+        roseAddPowerRate = System.Convert.ToSingle(reply[14]);
     }
 
     void BuildingsOver(System.String[] reply)
@@ -336,6 +369,23 @@ public class PlayerInfo
     }
    
     void ReplaysOver(System.String[] reply)
+    {
+        Globals.socket.Send("download_clouds");
+    }
+
+    void OneCloud(System.String[] reply)
+    {
+        CloudData cloud = new CloudData();
+        cloud.idx = cloudDatas.Count;
+        cloudDatas.Add(cloud);
+
+        Globals.Assert(System.Convert.ToSingle(reply[0]) == cloud.idx);
+
+        cloud.price = System.Convert.ToSingle(reply[1]);
+        cloud.locked = System.Convert.ToBoolean(reply[2]);
+    }
+
+    void CloudsOver(System.String[] reply)
     {
         Globals.socket.Send("download_ranks");
     }
@@ -381,28 +431,30 @@ public class PlayerInfo
         building.targetName = reply[4];
         building.isPvP = System.Convert.ToBoolean(reply[5]);
         building.levelRandSeed = System.Convert.ToInt32(reply[6]);
-        building.PvELevelIdx = System.Convert.ToInt32(reply[7]);        
+        building.PvELevelIdx = System.Convert.ToInt32(reply[7]);  
+        building.roseGrowLastDuration = System.Convert.ToSingle(reply[8]);
+        building.roseGrowTotalDuration = System.Convert.ToSingle(reply[9]);
+        building.bornNewTargetLastDuration = System.Convert.ToSingle(reply[10]);
     }
 
     public void RoseGrow(System.String[] reply)
     {
         BuildingData building = GetBuildingDataByID(reply[0]);
         building.unpickedRose += 1;
-        City city = Globals.LevelController as City;
-        if (city != null && city.buildings.Count != 0)
+        if (Globals.city != null && Globals.city.buildings.Count != 0)
         {
-            city.RoseGrow(building);
+            Globals.city.RoseGrow(building);
         }
     }
 
     public void RoseBuildingEnd(System.String[] reply)
     {
         BuildingData data = GetBuildingDataByID(reply[0]);
+        data.bornNewTargetLastDuration = System.Convert.ToSingle(reply[1]);
         data.type = "None";
-        City city = Globals.LevelController as City;
-        if (city != null && city.buildings.Count != 0)
+        if (Globals.city != null && Globals.city.buildings.Count != 0)
         {
-            city.UpdateBuilding(city.GetBuilding(data));
+            Globals.city.UpdateBuilding(Globals.city.GetBuilding(data), data);
         }
     }
 
@@ -416,10 +468,9 @@ public class PlayerInfo
         data.levelRandSeed = System.Convert.ToInt32(reply[3]);
         data.PvELevelIdx = System.Convert.ToInt32(reply[4]);
         pveProgress = System.Convert.ToInt32(reply[5]);
-        City city = Globals.LevelController as City;
-        if (city != null && city.buildings.Count != 0)
+        if (Globals.city != null && Globals.city.buildings.Count != 0)
         {
-            Building building = city.UpdateBuilding(city.GetBuilding(data));            
+            Building building = Globals.city.UpdateBuilding(Globals.city.GetBuilding(data), data);            
         }
     }
 
@@ -428,22 +479,23 @@ public class PlayerInfo
         BuildingData data = GetBuildingDataByID(reply[0]);
         data.type = "Poor";
         data.targetName = "";
-        City city = Globals.LevelController as City;
-        if (city != null && city.buildings.Count != 0)
+        if (Globals.city != null && Globals.city.buildings.Count != 0)
         {
-            city.UpdateBuilding(city.GetBuilding(data));
+            Globals.city.UpdateBuilding(Globals.city.GetBuilding(data), data);
         }
     }
 
     public void NewRoseBuilding(System.String[] reply)
     {
         BuildingData data = GetBuildingDataByID(reply[0]);
+        data.unpickedRose = System.Convert.ToInt32(reply[1]);
+        data.roseGrowLastDuration = System.Convert.ToSingle(reply[2]);
+        data.roseGrowTotalDuration = System.Convert.ToSingle(reply[3]);        
         data.type = "Rose";
-        data.unpickedRose = 0;
-        City city = Globals.LevelController as City;
-        if (city != null && city.buildings.Count != 0)
+        
+        if (Globals.city != null && Globals.city.buildings.Count != 0)
         {
-            city.UpdateBuilding(city.GetBuilding(data));
+            Globals.city.UpdateBuilding(Globals.city.GetBuilding(data), data);
         }
     }
 
@@ -516,15 +568,11 @@ public class PlayerInfo
         }
         
     }
-
-    public int GetRoseAddPowerRate()
-    {
-        return 2;
-    }
+    
 
     public int GetPowerDelta()
     {
-        return roseCount / GetRoseAddPowerRate();
+        return (int)(roseCount / roseAddPowerRate);
     }
 
     public SafeBoxData AddSafeBox()
@@ -664,7 +712,10 @@ public class PlayerInfo
         replay.ini = Globals.replaySystem.Pack();
         replay.everClicked = false;
 
-        Globals.socket.Send(
+        Globals.canvasForMagician.ChangeCash(StealingCash + PerfectStealingBonus);
+        if(Globals.playingReplay == null)
+        {
+            Globals.socket.Send(
             "stealing_over" + separator +
             replay.date + separator +
             replay.StealingCash.ToString("F0") + separator +
@@ -673,21 +724,28 @@ public class PlayerInfo
             bIsPerfectStealing.ToString() + separator +
             Globals.guardPlayer.cashAmount.ToString() + separator +
             stealingTarget.posID);
-
-        Globals.canvasForMagician.ChangeCash(StealingCash + PerfectStealingBonus);
-        Globals.transition.BlackOut(() => (Globals.LevelController as StealingLevelController).Newsreport());
+        }
+        
+        if (StealingCash > 1.0f)
+        {
+            Globals.transition.BlackOut(() => (Globals.LevelController as StealingLevelController).Newsreport());
+        }        
     }
 
     public void OneAtkReplay(System.String[] reply)
     {
         ReplayData replay = UnpackOneReplayData(reply);
         atkReplays.Add(replay.date.ToString(), replay);
-    }
+    }        
 
     public void OneDefReplay(System.String[] reply)
     {
         ReplayData replay = UnpackOneReplayData(reply);
         defReplays.Add(replay.date.ToString(), replay);
+        if (!replay.everClicked)
+        {
+            beenStolenReports.Add(replay.date.ToString(), replay);
+        }               
     }
 
     ReplayData UnpackOneReplayData(System.String[] reply)
@@ -699,14 +757,42 @@ public class PlayerInfo
         replay.everClicked = System.Convert.ToBoolean(reply[3]);
         replay.thief.StealingInfo(reply[4]);
         replay.guard.StealingInfo(reply[5]);
+        replay.reward_rose_count = System.Convert.ToInt32(reply[6]);
+        replay.rewardAccepted = System.Convert.ToBoolean(reply[7]);
         return replay;
-    }    
+    }
+
+    public void BeenStolen(System.String[] reply)
+    {
+        ReplayData replay = UnpackOneReplayData(reply);
+        beenStolenReports.Add(replay.date.ToString(), replay);
+        if(Globals.city != null)
+        {
+            Globals.city.BeenStolen();
+        }
+    }
 
     public void ReplayClicked(ReplayData replay)
     {
         replay.everClicked = true;
         Globals.socket.Send("click_replay" + separator + replay.date.ToString());
-    }    
+    }
+
+    public void RewardAccepted(ReplayData replay)
+    {
+        replay.rewardAccepted = true;
+        Globals.socket.Send("reward_accepted" + separator + replay.date.ToString());
+    }
+
+    public void CloudUnlock(CloudData data)
+    {
+        Globals.socket.Send("cloud_unlock" + separator + data.idx.ToString());
+    }
+
+    public void BuildingUnlock(BuildingData data)
+    {
+        Globals.socket.Send("building_unlock" + separator + data.posID.ToString());
+    }
 
     public void DontNeedReply(System.String[] reply)
     {
@@ -726,8 +812,8 @@ public class Globals
     public static bool SHOW_MACE_GENERATING_PROCESS = false;
     public static bool SHOW_ROOMS = false;
     public static float CREATE_MAZE_TIME_STEP = 0.1f;
-    public static int cameraMoveDuration = 10;
-    public static int uiMoveAndScaleDuration = 20;
+    public static int cameraMoveDuration = 7;
+    public static int uiMoveAndScaleDuration = 10;
     public static MultiLanguageTable languageTable;
     public static SelectGuard selectGuard;
     public static CanvasForMagician canvasForMagician;
@@ -741,11 +827,11 @@ public class Globals
     public static TipDisplayManager tipDisplay;
     public static Transition transition;
     public static LevelController LevelController;
+    public static City city;
     public static Magician magician;
     public static ClientSocket socket;
     public static System.String iniFileName = "MyMaze_1";
     public static float FLOOR_HEIGHT = 0.1f;
-    public static System.Collections.Generic.List<System.String> AvatarAnimationEventNameCache = new System.Collections.Generic.List<System.String>();
     public static Replay replaySystem;
     public static ReplayData playingReplay;
     public static bool DEBUG_REPLAY = false;
@@ -763,6 +849,9 @@ public class Globals
     public static System.Collections.Generic.List<GuardData> guardDatas = new System.Collections.Generic.List<GuardData>();    
     public static int buySafeBoxPrice;
     public static SafeBoxLvData[] safeBoxLvDatas = null;
+
+    public static System.Collections.Generic.List<Actor> actors = new System.Collections.Generic.List<Actor>();
+    public static System.Collections.Generic.List<Actor> to_add_actors = new System.Collections.Generic.List<Actor>();
 
     
     public static BuildingData currentStealingTargetBuildingData;
@@ -1075,23 +1164,23 @@ public class Globals
     {
         if (DEBUG_REPLAY)
         {
-            content = " rand seed:" + UnityEngine.Random.seed.ToString() + " " + content;
-            content = " frame:" + (UnityEngine.Time.frameCount -  Globals.replaySystem.frameBeginNo).ToString() + content;
-
-            System.String filename = file;
-            if (playingReplay == null)
-            {
-                filename += "_pvp";
-            }
-            else
-            {
-                filename += "_reply";
-            }
-
-            System.IO.StreamWriter stream = new System.IO.StreamWriter(UnityEngine.Application.dataPath + "/Resources/" + filename + ".txt",
-                true, System.Text.Encoding.UTF8);
-            stream.WriteLine(content);
-            stream.Close();
+//             content = " rand seed:" + UnityEngine.Random.seed.ToString() + " " + content;
+//             content = " frame:" + Globals.LevelController.frameCount.ToString() + content;
+// 
+//             System.String filename = file;
+//             if (playingReplay == null)
+//             {
+//                 filename += "_pvp";
+//             }
+//             else
+//             {
+//                 filename += "_reply";
+//             }
+// 
+//             System.IO.StreamWriter stream = new System.IO.StreamWriter(UnityEngine.Application.dataPath + "/Resources/" + filename + ".txt",
+//                 true, System.Text.Encoding.UTF8);
+//             stream.WriteLine(content);
+//             stream.Close();
         }        
     }
 

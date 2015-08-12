@@ -359,7 +359,7 @@ public class InputMgr : MonoBehaviour
     {
         DontDestroyOnLoad(this);
         Globals.input = this;
-        UnityEngine.Application.targetFrameRate = 60;
+        UnityEngine.Application.targetFrameRate = 30;
         for (int idx = 0; idx < 3; ++idx)
         {
             Finger finger = new Finger(idx, this);
@@ -410,8 +410,7 @@ public class InputMgr : MonoBehaviour
         bBlock = false;
     }
 
-    // Update is called once per frame
-    public void Update()
+    public void FrameFunc()
     {
         //UnityEngine.Physics2D.Raycast();
 
@@ -595,9 +594,7 @@ public class InputMgr : MonoBehaviour
 				float deltaMagnitudeDiff = touchDeltaMag - prevTouchDeltaMag;
 				Globals.cameraFollowMagician.SetDisScale(-deltaMagnitudeDiff * cameraPinchZoomingSpeed);
 			}
-		}
-
-        Globals.replaySystem.FrameFunc();
+		}        
 	}	
 	
 	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)

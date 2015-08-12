@@ -34,7 +34,7 @@
         {
             Globals.canvasForMagician.draggingFlashGrenade = true;
             Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();
-            UnityEngine.Cursor.SetCursor(UnityEngine.Resources.Load("UI/flash_grenade_cursor") as UnityEngine.Texture2D, new UnityEngine.Vector2(0,50), UnityEngine.CursorMode.ForceSoftware);            
+            UnityEngine.Cursor.SetCursor(UnityEngine.Resources.Load("UI/flash_grenade_cursor") as UnityEngine.Texture2D, new UnityEngine.Vector2(-50,50), UnityEngine.CursorMode.ForceSoftware);            
         }       
     }
 
@@ -87,10 +87,10 @@
                 {
                     if (Globals.magician.ChangePower(-trickData.powerCost))
                     {
-                        UnityEngine.GameObject flashPrefab = UnityEngine.Resources.Load("Avatar/Flash") as UnityEngine.GameObject;
-                        UnityEngine.GameObject flash = UnityEngine.GameObject.Instantiate(flashPrefab) as UnityEngine.GameObject;
                         UnityEngine.Vector3 finger_pos = UnityEngine.Camera.main.ScreenToWorldPoint(data.position);
-                        flash.transform.position = new UnityEngine.Vector3(finger_pos.x, finger_pos.y, level.landingMark.transform.position.z);
+                        finger_pos.z = level.landingMark.transform.position.z;
+                        Globals.replaySystem.RecordFlash(finger_pos);
+                        Globals.magician.CastFlash(finger_pos);
                     }
                 }
             }
@@ -155,7 +155,8 @@
     {
         if (!trickData.IsLocked())
         {
-            DestroyObject(LockImage);            
+            DestroyObject(LockImage);
+            LockImage = null;
         }                        
     }
 

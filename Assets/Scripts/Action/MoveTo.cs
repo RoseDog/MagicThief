@@ -33,7 +33,7 @@ public class MoveTo : Cocos2dAction
 	public override void Init () 
     {		
 		// get start time
-		_start_frame = Time.frameCount;
+        _start_frame = Globals.LevelController.frameCount;
 		// get starting position
         if (!_isUI)
         {
@@ -56,7 +56,7 @@ public class MoveTo : Cocos2dAction
 		{
             UnityEngine.Vector3 tempResult = UnityEngine.Vector3.zero;
 
-            tempResult = Vector3.Lerp(_start, _end, (Time.frameCount - _start_frame) / (float)_duration);
+            tempResult = Vector3.Lerp(_start, _end, (Globals.LevelController.frameCount - _start_frame) / (float)_duration);
 			/// Update position
             if (!_isUI)
             {
@@ -107,8 +107,8 @@ public class MoveToWithSpeed : Cocos2dAction
     public override void Init()
     {
         // get start time
-        _start_frame = Time.frameCount;
-        // get starting position
+        _start_frame = Globals.LevelController.frameCount;
+        // get starting Globals.LevelController
         _start = _transform.localPosition;
 
         _dir = (_end - _start).normalized;
@@ -125,10 +125,10 @@ public class MoveToWithSpeed : Cocos2dAction
         {
             UnityEngine.Vector3 tempResult = UnityEngine.Vector3.zero;
 
-            _transform.localPosition = _start + (Time.frameCount - _start_frame) * _dir * _speed;                        
+            _transform.localPosition = _start + (Globals.LevelController.frameCount - _start_frame) * _dir * _speed;                        
             
             // Reached target position
-            if (Globals.Vector3AlmostEqual(_transform.localPosition, _end, 0.1f)) EndAction();
+            if (Globals.Vector3AlmostEqual(_transform.localPosition, _end, 5.0f)) EndAction();
         }
 
     }
@@ -167,7 +167,7 @@ public class EaseOut : Cocos2dAction
 	public override void Init () 
     {		
 		// get start time
-		_start_frame = Time.frameCount;
+        _start_frame = Globals.LevelController.frameCount;
 		// get starting position
         if (_isUI)
         {
@@ -190,7 +190,7 @@ public class EaseOut : Cocos2dAction
 		if(!completed)
 		{
             UnityEngine.Vector3 tempResult = UnityEngine.Vector3.zero;
-            float time = (Time.frameCount - _start_frame) / (float)_duration;
+            float time = (Globals.LevelController.frameCount - _start_frame) / (float)_duration;
             
             // exponential 
             //float temp = time == 1 ? 1 : (-UnityEngine.Mathf.Pow(2, -10 * time / 1) + 1);
@@ -208,9 +208,9 @@ public class EaseOut : Cocos2dAction
             {
                 _transform.localPosition = tempResult;
             }
-            
 
-            if (Time.frameCount - _start_frame >= _duration)
+
+            if (Globals.LevelController.frameCount - _start_frame >= _duration)
             {
                 EndAction();
                 (_transform as UnityEngine.RectTransform).anchoredPosition = _end;
@@ -251,13 +251,12 @@ public class JumpTo : Cocos2dAction
 	public override void Init () 
     {		
 		// get start time
-		_start_frame = Time.frameCount;
+        _start_frame = Globals.LevelController.frameCount;
         _start = _transform.localPosition;       
 		
 		initialized = true;
 	}
 
-	// Update
     public float jumpHeight;
 	public override void Update () {
 		
@@ -266,7 +265,7 @@ public class JumpTo : Cocos2dAction
 		{            
             UnityEngine.Vector3 delta = _end - _start;
 
-            float frac = (Time.frameCount - _start_frame) / (float)_duration;
+            float frac = (Globals.LevelController.frameCount - _start_frame) / (float)_duration;
             jumpHeight = _height * 4 * frac * (1 - frac);
             jumpHeight += delta.y * frac;
             float x = delta.x * frac;
@@ -274,7 +273,7 @@ public class JumpTo : Cocos2dAction
             _transform.localPosition = _start + new UnityEngine.Vector3(x, jumpHeight);
 			
 			// Reached target position
-            if (Time.frameCount - _start_frame >= _duration) EndAction();
+            if (Globals.LevelController.frameCount - _start_frame >= _duration) EndAction();
 		}
 		
 	}
@@ -312,15 +311,15 @@ public class Blink : Cocos2dAction
         if (!initialized)
         {
             // get start time
-            _start_frame = Time.frameCount;
+            _start_frame = Globals.LevelController.frameCount;
 
             initialized = true;
         }
         
 		// Not completed
 		if(!completed)
-		{                        
-            int frac = (Time.frameCount - _start_frame) / _visibleDuration;
+		{
+            int frac = (Globals.LevelController.frameCount - _start_frame) / _visibleDuration;
             
             if(frac%2==0)
             {
@@ -332,7 +331,7 @@ public class Blink : Cocos2dAction
             }
 			
 			// Reached target position
-            if (Time.frameCount - _start_frame >= _duration)
+            if (Globals.LevelController.frameCount - _start_frame >= _duration)
             {
                 _target.enabled = false;
                 EndAction();

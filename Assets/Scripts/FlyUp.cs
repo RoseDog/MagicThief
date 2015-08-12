@@ -1,8 +1,8 @@
 ﻿public class FlyUp : MagicianTrickAction
 {
     Guard target;
-    [UnityEngine.HideInInspector]
-    public UnityEngine.Vector3 up = new UnityEngine.Vector3(0,2.5f,0);
+    
+    UnityEngine.Vector3 updis = new UnityEngine.Vector3(0,200f,0);
     [UnityEngine.HideInInspector]
     public UnityEngine.Vector3 destination = UnityEngine.Vector3.zero;
     Cocos2dAction inAirCD;
@@ -28,7 +28,6 @@
 
         actor.moving.ClearPath();
         actor.moving.canMove = false;
-        actor.gameObject.layer = 26;
         actor.spriteRenderer.gameObject.layer = 26;
         actor.spriteSheet.Play("flyup_0");
 
@@ -41,10 +40,11 @@
     int up_duration = 10;
     public void Up()
     {
-        
+        actor.gameObject.layer = 26;
+        Globals.maze.GuardsTargetVanish(gameObject);
 
-        actor.AddAction(new MoveTo(actor.transform, actor.transform.position + up, up_duration));
-        actor.AddAction(new MoveTo(shadow.transform, -up / 2, up_duration));
+        actor.AddAction(new MoveTo(actor.transform, actor.transform.position + updis, up_duration));
+        actor.AddAction(new MoveTo(shadow.transform, -updis / 200, up_duration));
         actor.AddAction(new ScaleTo(shadow.transform, shadowScaleCache / 2, up_duration));
         destination = actor.transform.position;
         actor.spriteSheet.Play("flyup_1");
@@ -54,36 +54,37 @@
     public void UnfoldUmbrella()
     {
         actor.spriteSheet.Play("flyup_2");
-        actor.AddAction(new MoveTo(actor.transform, actor.transform.position - new UnityEngine.Vector3(0, 0.4f, 0), actor.spriteSheet.GetAnimationLengthWithSpeed("flyup_2")));
+        actor.AddAction(new MoveTo(actor.transform, actor.transform.position - new UnityEngine.Vector3(0, 40f, 0), actor.spriteSheet.GetAnimationLengthWithSpeed("flyup_2")));
     }
 
     public void InAir()
     {
         timer = (UnityEngine.GameObject.Instantiate(Globals.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
-        timer.BeginCountDown(gameObject, data.duration, new UnityEngine.Vector3(0, 1.7f, 0));
+        timer.BeginCountDown(gameObject, data.duration, new UnityEngine.Vector3(0, 170f, 0));
         inAirCD = actor.SleepThenCallFunction(data.duration, () => FoldGlider());
         actor.spriteSheet.Play("flying");
         UnityEngine.Debug.Log("flying");
     }
 
-    public void Update()
+    public override void FrameFunc()
     {
+        base.FrameFunc();
         if (inAirCD != null)
         {
-            UnityEngine.Vector3 dir = (destination + up) - actor.transform.position;
-            if (dir.magnitude > 0.1f)
+            UnityEngine.Vector3 dir = (destination + updis) - actor.transform.position;
+            if (dir.magnitude > 10f)
             {
-                actor.controller.Move(dir.normalized * (float)actor.moving.speed);
+                actor.transform.position = actor.transform.position + dir.normalized * (float)actor.moving.speed;
                 actor.FaceDir(dir);
             }        
         }        
     }
 
     public void FoldGlider()
-    {        
-        DestroyObject(timer.gameObject);
+    {                
+        Actor.to_be_remove.Add(timer);
         UnityEngine.Debug.Log("FoldGlider");
-        Pathfinding.Node node = Globals.maze.pathFinder.GetSingleNode(actor.transform.position - up, true);
+        Pathfinding.Node node = Globals.maze.pathFinder.GetSingleNode(actor.transform.position - updis, true);
         
         // 可以落下
         if (node != null)
@@ -91,11 +92,11 @@
             UnityEngine.GameObject UmbrellaPrefab = UnityEngine.Resources.Load("Avatar/FoldUmbrella") as UnityEngine.GameObject;
             UnityEngine.GameObject umbrella = UnityEngine.GameObject.Instantiate(UmbrellaPrefab) as UnityEngine.GameObject;
             umbrella.transform.position = actor.transform.position
-                + new UnityEngine.Vector3(0,1.0f,0);
+                + new UnityEngine.Vector3(0,100f,0);
 
             actor.spriteSheet.Play("falling_success");
             actor.AddAction(new Sequence(
-                new MoveTo(actor.transform, actor.transform.position - up, 20),
+                new MoveTo(actor.transform, actor.transform.position - updis, 20),
                 new FunctionCall(() => SuccessDownOnFloor())));
             actor.AddAction(new MoveTo(shadow.transform, shadowPosCache, 20));
             actor.AddAction(new ScaleTo(shadow.transform, shadowScaleCache, 20));
@@ -103,9 +104,9 @@
         else
         {
             actor.spriteSheet.Play("falling_failed_loop");
-            UnityEngine.Vector3 fall_pos = Globals.GetPathNodePos(Globals.maze.pathFinder.GetNearestWalkableNode(actor.transform.position - up));
+            UnityEngine.Vector3 fall_pos = Globals.GetPathNodePos(Globals.maze.pathFinder.GetNearestWalkableNode(actor.transform.position - updis));
             actor.AddAction(new Sequence(
-                new MoveToWithSpeed(actor.transform, fall_pos, 0.05f),
+                new MoveToWithSpeed(actor.transform, fall_pos, 5f),
                 new FunctionCall(() => FailedDownOnFloor())));
             actor.AddAction(new MoveToWithSpeed(shadow.transform, shadowPosCache, 0.05f));
             shadow.transform.localScale = shadowScaleCache;
@@ -121,6 +122,8 @@
     public void SuccessDownOnFloor()
     {
         standUpAct = actor.SleepThenCallFunction(20, () => StandUp());
+        actor.gameObject.layer = 11;
+        actor.spriteRenderer.gameObject.layer = 11;
 
         System.String content = gameObject.name;
         content += " SuccessDownOnFloor";
@@ -138,6 +141,7 @@
 
         System.String content = gameObject.name;
         content += " FailedDownOnFloor";
+        content += " " + transform.position.ToString("F3");
         Globals.record("testReplay", content);
     }
 
@@ -153,7 +157,7 @@
         System.String content = gameObject.name;
         content += " Landed";
         Globals.record("testReplay", content);
-
+        
         Stop();
     }
 

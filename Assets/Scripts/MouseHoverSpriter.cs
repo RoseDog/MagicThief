@@ -2,17 +2,23 @@
 {
     public float animSpeed = 1.0f;
     public bool DestroyAtEnd = false;
+    public bool clampAnim = false;
     public override void Awake()
     {
         base.Awake();
-        spriteSheet.init();
-        spriteSheet.AddAnim("play", spriteSheet._sprites.Length, animSpeed);
-        spriteSheet.Play("play");
-
-        if (DestroyAtEnd)
+        if(enabled)
         {
-            spriteSheet.AddAnimationEvent("play", -1, () => PlayEnded());
-        }        
+            spriteSheet.init();
+            spriteSheet.AddAnim("play", spriteSheet._sprites.Length, animSpeed, clampAnim);
+            spriteSheet.Play("play");
+
+            if (DestroyAtEnd)
+            {
+                spriteSheet.AddAnimationEvent("play", -1, () => PlayEnded());
+            }        
+
+        }
+        
     }
 
     void PlayEnded()

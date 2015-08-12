@@ -1,30 +1,29 @@
 ﻿public class SpiderAtk : Attack 
 {
+    Actor target;
     public Actor GetTarget()
     {
-        if((guard as Spider).machineActiveArea.enemiesInArea.Count != 0)
+        if((guard as Spider).machineActiveArea.actorsInTouch.Count != 0)
         {
-            return (guard as Spider).machineActiveArea.enemiesInArea[0].GetComponent<Actor>();
+            return (guard as Spider).machineActiveArea.actorsInTouch[0];
         }
         return null;
     }
 
     public override void AtkAnimation()
     {
+        target = GetTarget();
         guard.FaceTarget(GetTarget().transform);
         guard.spriteSheet.Play("Atk");
     }
 
     public override void FireTheHit()
     {
-        if ((guard as Spider).machineActiveArea.enemiesInArea.Count != 0)
-        {            
-            UnityEngine.GameObject netPrefab = UnityEngine.Resources.Load("Avatar/SpiderNet") as UnityEngine.GameObject;
-            UnityEngine.GameObject net = UnityEngine.GameObject.Instantiate(netPrefab) as UnityEngine.GameObject;
-            net.transform.position = transform.position;
-            net.GetComponent<SpiderNet>().Fire(GetTarget());
-            net.GetComponent<SpiderNet>().spider = guard as Spider;            
-        }
+        UnityEngine.GameObject netPrefab = UnityEngine.Resources.Load("Avatar/SpiderNet") as UnityEngine.GameObject;
+        UnityEngine.GameObject net = UnityEngine.GameObject.Instantiate(netPrefab) as UnityEngine.GameObject;
+        net.transform.position = transform.position;
+        net.GetComponent<SpiderNet>().Fire(target);
+        net.GetComponent<SpiderNet>().spider = guard as Spider;
     }
 
     public override bool checkTargetStillAlive()

@@ -5,7 +5,7 @@ public class Transition : Actor
 	private UnityEngine.GameObject cookShadersObject;
     Cocos2dAction fadeInAction;
     Cocos2dAction fadeOutAction;
-    float duration = 0.8f;
+    float duration = 0.6f;
 	public override void Awake()
 	{
         base.Awake();
@@ -22,10 +22,10 @@ public class Transition : Actor
 
 	void Location()
 	{
-		cookShadersObject.transform.parent = UnityEngine.Camera.main.transform;
+		cookShadersObject.transform.parent = Globals.cameraFollowMagician.transform;
         cookShadersObject.transform.localPosition = UnityEngine.Vector3.zero;        
         cookShadersObject.transform.localRotation = UnityEngine.Quaternion.identity;        
-        cookShadersObject.transform.localScale = new UnityEngine.Vector3(40, 40, 1);
+        cookShadersObject.transform.localScale = new UnityEngine.Vector3(4000, 4000, 1);
 	}
 
 	public override void Visible(bool visibility)
@@ -76,5 +76,11 @@ public class Transition : Actor
         Location();
         fadeInAction = new Sequence(new FadeTo(cookShadersObject.GetComponent<UnityEngine.Renderer>(), 1, 0, duration), new FunctionCall(action));
         AddAction(fadeInAction);
-	}    
+	}
+
+    public void Stop()
+    {
+        Visible(false);
+        ClearAllActions();
+    }
 }

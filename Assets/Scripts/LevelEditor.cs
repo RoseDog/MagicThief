@@ -57,11 +57,18 @@
             chest.Visible(true);
         }
         Globals.maze.PlaceGemsAtBoarder();
+        Globals.cameraFollowMagician.Reset();
     }
 
     public override void GuardCreated(Guard guard)
     {
         base.GuardCreated(guard);
         guard.InitArrangeUI();
+    }
+
+    public override void FrameFunc()
+    {
+        base.FrameFunc();
+        AstarPath.CalculatePaths(AstarPath.threadInfos[0]);
     }
 }

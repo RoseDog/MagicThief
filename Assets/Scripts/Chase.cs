@@ -16,28 +16,26 @@
         UnityEngine.Debug.Log("chase");        
     }
 
-    public void Update()
+    public override void FrameFunc()
     {
-        if(guard.currentAction == this)
-        {
-            actor = guard.spot.target.GetComponent<Actor>();
-            mage = actor as Magician;
+        base.FrameFunc();
+        actor = guard.spot.target.GetComponent<Actor>();
+        mage = actor as Magician;
 
-            if (guard.atk != null &&
-                UnityEngine.Vector3.Distance(guard.transform.position, guard.spot.target.position) < guard.data.atkShortestDistance*0.5f)
-            {
-                guard.atk.Excute();
-            }
-            else if (guard.rushAt != null&&
-                UnityEngine.Vector3.Distance(guard.transform.position, guard.spot.target.position) < guard.data.rushAtShortestDistance)
-            {                
-                guard.rushAt.Excute();
-            }
-            else if (mage != null && guard.explode != null &&
-                UnityEngine.Vector3.Distance(guard.transform.position, guard.spot.target.position) < guard.data.atkShortestDistance)
-            {
-                guard.explode.Excute();
-            }
+        if (guard.atk != null &&
+            UnityEngine.Vector3.Distance(guard.transform.position, guard.spot.target.position) < guard.data.atkShortestDistance)
+        {
+            guard.atk.Excute();
+        }
+        else if (guard.rushAt != null &&
+            UnityEngine.Vector3.Distance(guard.transform.position, guard.spot.target.position) < guard.data.rushAtShortestDistance)
+        {
+            guard.rushAt.Excute();
+        }
+        else if (mage != null && guard.explode != null &&
+            UnityEngine.Vector3.Distance(guard.transform.position, guard.spot.target.position) < guard.data.atkShortestDistance)
+        {
+            guard.explode.Excute();
         }
     }
 

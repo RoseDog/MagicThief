@@ -64,8 +64,9 @@
         rushing = true;
     }
 
-    public void Update()
+    public override void FrameFunc()
     {
+        base.FrameFunc();
         if (rushing)
         {            
             if (!targetActor.IsLifeOver())

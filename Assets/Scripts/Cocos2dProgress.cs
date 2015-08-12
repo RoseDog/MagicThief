@@ -25,12 +25,11 @@
 	public override void Init () 
     {		
 		// get start time
-		_start_frame = UnityEngine.Time.frameCount;
+        _start_frame = Globals.LevelController.frameCount;
         _image.fillAmount = 1.0f;
 		initialized = true;
 	}
 
-	// Update
     public override void Update()
     {
         // Not completed
@@ -38,7 +37,7 @@
         {
             UnityEngine.Vector3 tempResult = UnityEngine.Vector3.zero;
 
-            float progress = UnityEngine.Mathf.Lerp(1.0f, 0.0f, (UnityEngine.Time.frameCount - _start_frame) / (float)_frameDuration);
+            float progress = UnityEngine.Mathf.Lerp(1.0f, 0.0f, (Globals.LevelController.frameCount - _start_frame) / (float)_frameDuration);
             _image.fillAmount = progress;
 
             // Reached target position

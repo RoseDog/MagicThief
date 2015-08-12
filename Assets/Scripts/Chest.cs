@@ -18,7 +18,7 @@
     UnityEngine.GameObject SafeboxNotFinishedPrefab;
     UnityEngine.Canvas canvasForSafeboxBtns;
     UnityEngine.GameObject SafeboxNotFinishedTip;
-    UnityEngine.GameObject head_on_minimap;
+    
 
     public SafeBoxData data;
 
@@ -50,9 +50,7 @@
         UnityEngine.Sprite[] sprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Props/chest_open");
         openSprite = sprites[0];
         sprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Props/chest_closed");
-        closedSprite = sprites[0];
-
-        head_on_minimap = Globals.getChildGameObject(gameObject, "head_on_minimap");
+        closedSprite = sprites[0];        
         
 
         foreach (UnityEngine.Renderer renderer in renderers)
@@ -65,8 +63,9 @@
         Globals.maze.chests.Add(this);
     }
 
-    public void OnDestroy()
+    public override void OnDestroy()
     {
+        base.OnDestroy();
         if (Globals.maze != null)
         {
             Globals.maze.chests.Remove(this);
@@ -99,7 +98,7 @@
     public override void Visible(bool visibility)
     {
         base.Visible(visibility);
-        GetComponent<UnityEngine.Collider>().enabled = visibility;        
+        characterController.enabled = visibility;        
     }
 	
 	public void PlaceOnCell(Cell cell, float rotate_angle)
@@ -110,8 +109,9 @@
         //transform.localEulerAngles = new UnityEngine.Vector3(0.0f, rotate_angle, 0.0f);
     }
 
-    void OnTriggerEnter(UnityEngine.Collider other)
+    public override void TouchBegin(Actor other)
     {
+        base.TouchBegin(other);
         Magician mage = other.GetComponent<Magician>();
         if (mage != null && mage.currentAction == mage.beenPressDown)
         {
@@ -131,16 +131,17 @@
         }        
     }
 
-    void OnTriggerStay(UnityEngine.Collider other)
+    public override void TouchStay(Actor other)
     {
-        if (other.GetComponent<Actor>().IsLifeOver())
+        if (other.IsLifeOver())
         {
-            OnTriggerExit(other);
+            TouchOut(other);
         }
     }
 
-    public void OnTriggerExit(UnityEngine.Collider other)
+    public override void TouchOut(Actor other)
     {
+        base.TouchOut(other);
         UnityEngine.Debug.Log("leave chest");
         isMagicianNear = false;
 
@@ -221,10 +222,16 @@
         StealingLevelController controller = Globals.LevelController as StealingLevelController;
         if (controller != null)
         {
-            StartCoroutine(Coins());
+            Sequence seq = new Sequence();
+            for (int times = 0; times < 3; ++times )
+            {
+                seq.actions.Add(new SleepFor(3));
+                seq.actions.Add(new FunctionCall(()=>Coins()));               
+            }
+            AddAction(seq);
         }               
     }
-
+    
     public void ResetGold()
     {
         goldLast = data.cashInBox;
@@ -235,39 +242,33 @@
         {
             renderer.gameObject.SetActive(true);
         }
-        OnTriggerExit(null);
+        TouchOut(null);
     }
 
-    System.Collections.IEnumerator Coins()
+    public void Coins()
     {
-        int time = 3;
-        float gold_every_time = goldLostPersecond / time;
+        float gold_every_time = goldLostPersecond / 3.0f;
         audioSource.Play();
-        while (time > 0)
+        int count = UnityEngine.Random.Range(1, 3);
+        float gold_every_coin = gold_every_time / count;
+        for (int i = 0; i < count; ++i)
         {
-            int count = UnityEngine.Random.Range(1,3);
-            float gold_every_coint = gold_every_time / count;
-            for (int i = 0; i < count; ++i)
-            {
-                UnityEngine.GameObject coin = UnityEngine.GameObject.Instantiate(coinPrefab) as UnityEngine.GameObject;
-                coin.transform.position = new UnityEngine.Vector3(
-                    transform.position.x + UnityEngine.Random.Range(-Globals.maze.GetCellSideLength() / 3, Globals.maze.GetCellSideLength() / 3),
-                    transform.position.y,
-                    transform.position.z + UnityEngine.Random.Range(-Globals.maze.GetCellSideLength() / 3, Globals.maze.GetCellSideLength() / 3));
+            UnityEngine.GameObject coin = UnityEngine.GameObject.Instantiate(coinPrefab) as UnityEngine.GameObject;
+            coin.transform.position = new UnityEngine.Vector3(
+                transform.position.x + UnityEngine.Random.Range(-Globals.maze.GetCellSideLength() / 3, Globals.maze.GetCellSideLength() / 3),
+                transform.position.y,
+                transform.position.z + UnityEngine.Random.Range(-Globals.maze.GetCellSideLength() / 3, Globals.maze.GetCellSideLength() / 3));
 
-                FlyToScreenNumber coin_fly = coin.GetComponent<FlyToScreenNumber>();
-                coin_fly.numberDelta = gold_every_coint;
-                coin_fly.ToCashNumber(true);
-            }
-            --time;            
-            yield return new UnityEngine.WaitForSeconds(0.1f); 
+            FlyToScreenNumber coin_fly = coin.GetComponent<FlyToScreenNumber>();
+            coin_fly.numberDelta = gold_every_coin;
+            coin_fly.ToCashNumber(true);
         }
     }    
 
     public void Falling(int fallingDuration)
     {
         UnityEngine.Vector3 to = transform.position;
-        UnityEngine.Vector3 from = transform.position + new UnityEngine.Vector3(0, 20, 0);
+        UnityEngine.Vector3 from = transform.position + new UnityEngine.Vector3(0, 2000, 0);
         transform.position = from;
         AddAction(new MoveTo(transform, to, fallingDuration));
         Invoke("FallingOver", fallingDuration + 0.3f);
@@ -283,7 +284,7 @@
     {
         AddAction(
                 new Cocos2dParallel(
-                    new Sequence(new ScaleTo(transform, new UnityEngine.Vector3(1.6f, 1.6f, 1.6f), 5),
+                    new Sequence(new ScaleTo(transform, new UnityEngine.Vector3(160f, 160f, 160f), 5),
                         new ScaleTo(transform, scaleCache, 5))
                         )
                         );
@@ -298,7 +299,7 @@
             UpgradeBtn.onClick.AddListener(() => UpgradeBtnClicked());
 
             isShownBtn = true;
-            canvasForSafeboxBtns.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f);
+            canvasForSafeboxBtns.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 120f, 0.0f);
             canvasForSafeboxBtns.GetComponent<Actor>().AddAction(
                 new ScaleTo(canvasForSafeboxBtns.transform, new UnityEngine.Vector3(1.0f, 1.0f, 1.0f), 8));
         } 

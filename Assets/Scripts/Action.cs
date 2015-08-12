@@ -8,6 +8,11 @@ public class Action : UnityEngine.MonoBehaviour
         actor = GetComponent<Actor>();
     }
 
+    public virtual void FrameFunc()
+    {
+
+    }
+
     public virtual void Excute()
     {
         if (actor.currentAction != null)

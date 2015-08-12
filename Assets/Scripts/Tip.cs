@@ -20,8 +20,12 @@
             yield return null;
         }
         
-        StopCoroutine("_FadeAway");
-        Globals.tipDisplay.msgList.RemoveAt(Globals.tipDisplay.msgList.Count-1);
-        DestroyObject(gameObject);
+        StopCoroutine("_FadeAway");        
+        DestroyObject(transform.parent.gameObject);
+    }
+
+    public void OnDestroy()
+    {
+        Globals.tipDisplay.msgList.RemoveAt(Globals.tipDisplay.msgList.Count - 1);
     }
 }

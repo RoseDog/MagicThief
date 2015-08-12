@@ -32,7 +32,7 @@
         {            
             StrengthNumber.text = guard.data.attackValue.ToString();
             VisionNumber.text = guard.eye.fovMaxDistance.ToString();
-            SpeedNumber.text = System.Math.Round(guard.moving.speed * 100.0f).ToString();
+            SpeedNumber.text = System.Math.Round(guard.moving.speed).ToString();
         }
         else
         {
@@ -41,10 +41,9 @@
             SpeedNumber.gameObject.SetActive(false);
         }      
     }
-
-    public override void OnTouchUpOutside(Finger f)
+    
+    public void Close()
     {
-        base.OnTouchUpOutside(f);
         DestroyObject(transform.parent.gameObject);
     }
 }

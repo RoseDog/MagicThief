@@ -15,7 +15,10 @@ public class TipDisplayManager : UnityEngine.MonoBehaviour
         {
             foreach(UnityEngine.RectTransform rt in msgList)
             {
-                DestroyObject(rt.gameObject);
+                if (rt != null)
+                {
+                    DestroyObject(rt.gameObject);
+                }                
             }
             msgList.Clear();
         }
@@ -23,30 +26,11 @@ public class TipDisplayManager : UnityEngine.MonoBehaviour
 
     public void Msg(string msg, float height_ratio = 0.25f, UnityEngine.Transform parent = null)
     {
-        Tip tip = (Instantiate(tipPrefab) as UnityEngine.GameObject).GetComponent<Tip>();
+        Tip tip = (Instantiate(tipPrefab) as UnityEngine.GameObject).GetComponentInChildren<Tip>();
         UnityEngine.RectTransform tipTransform = tip.GetComponent<UnityEngine.RectTransform>();
-        if (parent == null)
-        {
-            UnityEngine.Canvas[] canvases = UnityEngine.GameObject.FindObjectsOfType<UnityEngine.Canvas>();
-            UnityEngine.Canvas topPriorityCanvas = canvases[0];
-            
-            foreach (UnityEngine.Canvas canvas in canvases)
-            {
-                if (canvas.sortingOrder > topPriorityCanvas.sortingOrder)
-                {
-                    topPriorityCanvas = canvas;
-                }
-            }
-            tipTransform.SetParent(topPriorityCanvas.transform);
-        }
-        else
-        {
-            tipTransform.SetParent(parent);
-        }
-        
-        tipTransform.SetAsLastSibling();
-        tipTransform.localScale = new UnityEngine.Vector3(1.0f, 1.0f, 1.0f);
-                
+           
+        tipTransform.parent.SetAsLastSibling();
+               
         Globals.languageTable.SetText(tip.uiText, msg);
         msgList.Add(tipTransform);
         float tip_y_pos = UnityEngine.Screen.height * height_ratio;
@@ -54,7 +38,7 @@ public class TipDisplayManager : UnityEngine.MonoBehaviour
         {
             if (msgList[idx] != null)
             {
-                msgList[idx].localPosition = new UnityEngine.Vector3(0.0f, tip_y_pos, 0.0f);
+                msgList[idx].localPosition = new UnityEngine.Vector3(0, tip_y_pos, 0.0f);
                 tip_y_pos += msgList[idx].rect.height;
             }            
         }

@@ -1,6 +1,6 @@
 ﻿public class Escape : Action
 {
-    int Duration = 150;
+    int Duration = 80;
     public int GetDuration()
     {
         return Duration;
@@ -10,6 +10,7 @@
         UnityEngine.Debug.Log("magician Escape");
         Globals.maze.GuardsTargetVanish(actor.gameObject);
         base.Excute();
+        actor.shadow.enabled = false;
         actor.moving.canMove = false;
         actor.spriteSheet.Play(anim);
         transform.position = transform.position - new UnityEngine.Vector3(0,0,0.6f);
@@ -19,12 +20,16 @@
         if (actor.moving.GetSeeker().GetCurrentPath() != null)
         {
             actor.moving.GetSeeker().GetCurrentPath().Reset();
-        }        
+        }
+
+        actor.head_on_minimap.SetActive(false);
     }
 
     void EscapeOver()
     {        
         Stop();
-        Globals.magician.gameObject.SetActive(false);
+        actor.head_on_minimap.SetActive(true);
+        actor.shadow.enabled = true;
+        Globals.magician.gameObject.SetActive(false);        
     }
 }

@@ -1,7 +1,7 @@
 ﻿GuardCount=3
-(3.3850, 7.8750, -0.0100)=joker
-(-9.8650, -5.3750, -0.0100)=joker
-(-3.6150, 0.8750, -0.0100)=joker
+(338.50, 787.50, -0.0100)=joker
+(-986.50, -537.50, -0.0100)=joker
+(-361.50, 87.50, -0.0100)=joker
 randSeedCacheWhenEditLevel=1258138762
 Z_CELLS_COUNT=6
 X_CELLS_COUNT=5

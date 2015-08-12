@@ -26,6 +26,13 @@
             new MoveTo(transform, originPosition, Globals.uiMoveAndScaleDuration/2, true)));
     }
 
+    public void Scale()
+    {
+        AddAction(new RepeatForever(
+            new ScaleTo(transform, new UnityEngine.Vector3(1.2f,1.2f,1.2f), Globals.uiMoveAndScaleDuration * 2),
+            new ScaleTo(transform, UnityEngine.Vector3.one, Globals.uiMoveAndScaleDuration * 2)));
+    }
+
     public void ForeverMoving(int movingDuration)
     {        
         AddAction(new RepeatForever(

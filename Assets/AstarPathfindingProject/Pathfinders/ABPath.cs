@@ -301,8 +301,6 @@ while the end has not been found and no error has ocurred
 		 */
 		public override void CalculateStep (long targetTick) {
 			
-			int counter = 0;
-			
 			//Continue to search while there hasn't ocurred an error and the end hasn't been found
 			while (CompleteState == PathCompleteState.NotCalculated) {
 				
@@ -330,35 +328,17 @@ while the end has not been found and no error has ocurred
 				}
 				
 				//Select the node with the lowest F score and remove it from the open list
-				currentR = runData.open.Remove ();
-				
-				//Check for time every 500 nodes, roughly every 0.5 ms usually
-				if (counter > 500) {
-					
-					//Have we exceded the maxFrameTime, if so we should wait one frame before continuing the search since we don't want the game to lag
-					if (System.DateTime.UtcNow.Ticks >= targetTick) {
-						
-						//Return instead of yield'ing, a separate function handles the yield (CalculatePaths)
-						//return;
-					}
-					counter = 0;
-				}
-				
-				counter++;
-			
+				currentR = runData.open.Remove ();				
 			}
 			
-			AstarProfiler.StartProfile ("Trace");
+
 			
 			if (CompleteState == PathCompleteState.Complete) {
 				Trace (currentR);
 			} else if (calculatePartial && partialBestTarget != null) {
 				CompleteState = PathCompleteState.Partial;
 				Trace (partialBestTarget);
-			}
-			
-			AstarProfiler.EndProfile ();
-			
+			}						
 		}
 		
 		/** Resets End Node Costs. Costs are updated on the end node at the start of the search to better reflect the end point passed to the path, the previous ones are saved in #endNodeCosts and are reset in this function which is called after the path search is complete */

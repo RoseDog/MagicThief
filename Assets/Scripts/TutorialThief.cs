@@ -23,7 +23,7 @@
         LifeCurrent = LifeAmount;
                
         spriteSheet.AddAnim("idle", 4);
-        spriteSheet.AddAnim("moving", 6, 1.2f);
+        spriteSheet.AddAnim("moving", 6, 2.0f);
         spriteSheet.AddAnim("falling", 1, 0.2f);
         spriteSheet.AddAnim("landing", 1, 0.2f);
         spriteSheet.AddAnim("hitted", 1, 0.2f);
@@ -69,7 +69,9 @@
     public void AimAtTargetChest(Chest chest)
     {
         targetChest = chest;
-        ShowPathToPoint(targetChest.transform.position);               
+        //ShowPathToPoint(targetChest.transform.position);
+        GoTo(targetChest.GetWorldCenterPos());
+        moving.canMove = false;
     }
     
 

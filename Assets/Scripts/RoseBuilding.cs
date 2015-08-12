@@ -6,6 +6,9 @@
     UnityEngine.GameObject roseIcon_prefab;
     UnityEngine.GameObject RosePickedTip_prefab;
     UnityEngine.Vector3 tipScaleCache;
+    public MultiLanguageUIText rose_total;
+    public MultiLanguageUIText roseTimeLastText;
+    public UnityEngine.UI.Text timeLastText;
     public override void Awake()
     {
         base.Awake();
@@ -14,6 +17,7 @@
         peopleGivesYouRose.localScale = UnityEngine.Vector3.zero;
         roseBtn = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "Rose");
         roseBtn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => RoseClicked());
+        roseBtn.GetComponent<UnityEngine.UI.Image>().enabled = false;
 
         rosefly_prefab = UnityEngine.Resources.Load("Props/RoseFly") as UnityEngine.GameObject;
         roseIcon_prefab = UnityEngine.Resources.Load("Props/RoseIcon") as UnityEngine.GameObject;
@@ -23,10 +27,13 @@
     public override void Start()
     {
         base.Start();
-        for (int idx = 0; idx < data.unpickedRose;++idx )
+        Globals.asyncLoad.AddBuildingRoseTimeUpdate(data);
+        for (int idx = 0; idx < data.unpickedRose; ++idx)
         {
             RoseGrow();
         }
+        int roses = (int)(data.roseGrowTotalDuration / Globals.self.roseGrowCycle) + 1;
+        Globals.languageTable.SetText(rose_total, "rose_total", new System.String[] { roses.ToString() });
     }
 
     public override void Choosen()
@@ -50,15 +57,18 @@
     {
         UnityEngine.UI.Image[] rose_icons = roseBtn.gameObject.GetComponentsInChildren<UnityEngine.UI.Image>(true);
         foreach(UnityEngine.UI.Image icon in rose_icons)
-        {            
-            UnityEngine.GameObject roseFly = UnityEngine.GameObject.Instantiate(rosefly_prefab) as UnityEngine.GameObject;
-            roseFly.transform.position = icon.transform.position;
-            FlyToScreenNumber number = roseFly.GetComponent<FlyToScreenNumber>();
-            number.speed = number.speed * UnityEngine.Random.Range(0.5f, 1.3f);
-            number.numberDelta = 1;
-            number.ToRoseNumber();
+        {
+            if (roseBtn.GetComponent<UnityEngine.UI.Image>() != icon)
+            {
+                UnityEngine.GameObject roseFly = UnityEngine.GameObject.Instantiate(rosefly_prefab) as UnityEngine.GameObject;
+                roseFly.transform.position = icon.transform.position;
+                FlyToScreenNumber number = roseFly.GetComponent<FlyToScreenNumber>();
+                number.speed = number.speed * UnityEngine.Random.Range(0.5f, 1.3f);
+                number.numberDelta = 1;
+                number.ToRoseNumber();
 
-            DestroyObject(icon.gameObject);
+                DestroyObject(icon.gameObject);
+            }            
         }
 
         int delta_before_change = Globals.self.GetPowerDelta();
@@ -70,8 +80,8 @@
         RosePickedTip.GetComponent<UnityEngine.RectTransform>().anchoredPosition = transform.position;        
         UIMover mover = RosePickedTip.GetComponent<UIMover>();
 
-        City city = Globals.LevelController as City;
-        city.AddAction(new Sequence(new EaseOut(mover.transform, mover.to + transform.position, 60), 
+        
+        Globals.city.AddAction(new Sequence(new EaseOut(mover.transform, mover.to + transform.position, 60), 
             new FunctionCall(() => city.DestroyRosePickTip(RosePickedTip))));
 
         Globals.languageTable.SetText(RosePickedTip.GetComponentInChildren<MultiLanguageUIText>(), "rose_pick_tip",
@@ -90,7 +100,24 @@
         UnityEngine.GameObject roseIcon = UnityEngine.GameObject.Instantiate(roseIcon_prefab) as UnityEngine.GameObject;
         roseIcon.GetComponent<UnityEngine.RectTransform>().parent = roseBtn.transform;
         roseIcon.GetComponent<UnityEngine.RectTransform>().anchoredPosition =
-            new UnityEngine.Vector2(UnityEngine.Random.Range(-3.0f, 3.0f),UnityEngine.Random.Range(-1.5f, 4.0f));
-        roseIcon.GetComponent<UnityEngine.RectTransform>().localScale = UnityEngine.Vector3.one;
+            new UnityEngine.Vector2(UnityEngine.Random.Range(-3.0f, 3.0f),UnityEngine.Random.Range(-2.5f, 1.0f));
+        roseIcon.GetComponent<UnityEngine.RectTransform>().localScale = UnityEngine.Vector3.one * 0.5f;        
+    }
+
+    public void FixedUpdate()
+    {
+        if (data.roseGrowLastDuration > 1.0f)
+        {
+            System.String str = GetBuildingTimeLastStr(data.roseGrowLastDuration);
+            
+            timeLastText.text = str;
+            Globals.languageTable.SetText(roseTimeLastText, "roseTimeLastText", new System.String[] { str });            
+        }
+        else
+        {
+            Globals.asyncLoad.RemoveBuildingRoseTimeUpdate(data);
+            timeLastText.text = "";
+            roseTimeLastText.text = "";
+        }
     }
 }

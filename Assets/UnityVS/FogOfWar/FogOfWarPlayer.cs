@@ -11,7 +11,6 @@ public class FogOfWarPlayer : MonoBehaviour {
 	
 	}
 	
-	// Update is called once per frame
 	void Update () {
 		Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
         Ray rayToPlayerPos = Camera.main.ScreenPointToRay(screenPos);

@@ -1,32 +1,29 @@
-﻿public class MazeInfo : UnityEngine.MonoBehaviour 
+﻿public class MazeInfo : CustomEventTrigger
 {
-    UnityEngine.UI.Image MazeIcon;
-    UnityEngine.UI.Text MazeLv;
+    public UnityEngine.UI.Image current_MazeIcon;
+    public UnityEngine.UI.Text current_lv;
+    public UnityEngine.UI.Text current_Room;
+    public UnityEngine.UI.Image next_MazeIcon;
+    public UnityEngine.UI.Text next_lv;
+    public UnityEngine.UI.Text next_Room;
+    
     public UnityEngine.UI.Button TestUpgradeBtn;
-    UnityEngine.UI.Button UpgradeBtn;
-    UnityEngine.GameObject Lock;
-    UnityEngine.UI.Text UpgradePrice;
-    UnityEngine.UI.RawImage RoseIcon;
-    UnityEngine.UI.Text LockMsg;
-    MultiLanguageUIText Room;
+    public UnityEngine.UI.Button UpgradeBtn;
+    public UnityEngine.GameObject Lock;
+    public UnityEngine.UI.Text UpgradePrice;
+
+    public UnityEngine.UI.Text LockMsg;
+
     public bool isUpgradingMaze = false;    
 
-    public void Awake()
+    public override void Awake()
     {
-        MazeIcon = Globals.getChildGameObject<UnityEngine.UI.Image>(gameObject, "Icon");
-        MazeLv = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "LvNumber");
-
+        base.Awake();
         TestUpgradeBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(gameObject, "TestUpgradeBtn");
         TestUpgradeBtn.onClick.AddListener(() => UpgradeMaze());
         //TestUpgradeBtn.gameObject.SetActive(false);
 
-        UpgradeBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(gameObject, "UpgradeBtn");
-        UpgradeBtn.onClick.AddListener(() => ClickToUpgradeMaze());
-        Lock = Globals.getChildGameObject(gameObject, "LockBg");        
-        UpgradePrice = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "CashNumber");
-        RoseIcon = Globals.getChildGameObject<UnityEngine.UI.RawImage>(gameObject, "RoseIcon");
-        LockMsg = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "LockMsg");
-        Room = Globals.getChildGameObject<MultiLanguageUIText>(gameObject, "Room");
+        UpgradeBtn.onClick.AddListener(() => ClickToUpgradeMaze());                    
     }
     
     public void ClickToUpgradeMaze()
@@ -43,18 +40,19 @@
         if (Globals.self.currentMazeLevel == 1)
         {
             Globals.Assert(Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.InitMyMaze);
-            Globals.canvasForMyMaze.InitMazeBtnClicked();
+            Globals.canvasForMyMaze.MazeZeroToOne();
             Globals.canvasForMyMaze.ChangeMazeRoom(0);
         }
         else
         {
-            isUpgradingMaze = true;
-            Globals.self.summonedGuardsStr = "";
-            Globals.maze.UnRegisterGuardArrangeEvent();
+            isUpgradingMaze = true;            
+            Globals.maze.UnRegisterGuardArrangeEvent();            
             Globals.maze.ClearMaze();
-            Globals.maze.Start();
+            Globals.self.summonedGuardsStr = "";
+            Globals.self.UploadGuards();
+            Globals.maze.Start();            
         }
-        Globals.canvasForMyMaze.enhanceDefenseUI.OnTouchUpOutside(null);
+        Globals.canvasForMyMaze.enhanceDefenseUI.gameObject.SetActive(false);
     }
     
 
@@ -62,22 +60,24 @@
     {                
         // 0级迷宫代表还没有通过创建迷宫的教程。没有迷宫的状态
         
-        MazeLv.text = Globals.self.currentMazeLevel.ToString();
-        Globals.languageTable.SetText(Room, "room",
-                new System.String[] { Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport.ToString() });
+        current_lv.text = Globals.self.currentMazeLevel.ToString();
+        current_Room.text = Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport.ToString();
+        current_MazeIcon.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/maze_" + Globals.self.currentMazeLevel.ToString());
+        
         if (Globals.self.currentMazeLevel == Globals.mazeLvDatas.Count - 1)
         {
             UpgradeBtn.gameObject.SetActive(false);
             Lock.gameObject.SetActive(true);
-            RoseIcon.gameObject.SetActive(false);
             LockMsg.gameObject.SetActive(true);
-            Room.gameObject.SetActive(false);
+            next_MazeIcon.gameObject.SetActive(true);
             Globals.languageTable.SetText(LockMsg,"top_maze");
-            MazeIcon.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/maze_" + (Globals.self.currentMazeLevel-1).ToString());
         }
         else
         {
-            MazeIcon.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/maze_" + Globals.self.currentMazeLevel.ToString());                        
+            next_MazeIcon.gameObject.SetActive(true);
+            next_lv.text = (Globals.self.currentMazeLevel + 1).ToString();
+            next_Room.text = Globals.mazeLvDatas[Globals.self.currentMazeLevel+1].roomSupport.ToString();
+            next_MazeIcon.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/maze_" + (Globals.self.currentMazeLevel + 1).ToString());
             if (Globals.self.roseCount >= Globals.mazeLvDatas[Globals.self.currentMazeLevel + 1].roseRequire)
             {
                 UpgradeBtn.gameObject.SetActive(true);
@@ -91,20 +91,25 @@
                     UpgradePrice.color = UnityEngine.Color.white;
                 }
                 Lock.gameObject.SetActive(false);
-
-                // 解锁了，显示出升级会增加的数值
-                Room.text = Room.text + " + " + (Globals.mazeLvDatas[Globals.self.currentMazeLevel + 1].roomSupport - Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport).ToString();
             }
             else
             {
                 UpgradeBtn.gameObject.SetActive(false);
                 Lock.gameObject.SetActive(true);
-                RoseIcon.gameObject.SetActive(true);
+                
                 LockMsg.gameObject.SetActive(true);
                 Globals.languageTable.SetText(LockMsg,
                     "reach_rose_count_will_unlock", new System.String[] { Globals.mazeLvDatas[Globals.self.currentMazeLevel + 1].roseRequire.ToString() });
             }
         }
         
+    }
+
+    public override void OnTouchUpOutside(Finger f)
+    {
+        base.OnTouchUpOutside(f);
+        gameObject.SetActive(false);
+        Globals.canvasForMyMaze.enhanceDefenseUI.CheckPointerJumpInTutorial();
+        Globals.canvasForMyMaze.enhanceDefenseUI.mazeTab.image.enabled = false;
     }
 }

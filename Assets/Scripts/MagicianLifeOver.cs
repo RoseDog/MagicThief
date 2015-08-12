@@ -11,7 +11,7 @@
         (Globals.LevelController as StealingLevelController).canvasForStealing.gameObject.SetActive(false);
 
         actor.AddAction(
-            new Sequence(new SleepFor(actor.spriteSheet.GetAnimationLength("lifeOver")*4)
+            new Sequence(new SleepFor(actor.spriteSheet.GetAnimationLength("lifeOver")*2)
                 , new FunctionCall(() => Escape())));
     }
 

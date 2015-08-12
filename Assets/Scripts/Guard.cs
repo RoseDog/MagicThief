@@ -55,21 +55,21 @@ public class Guard : Actor, System.IComparable<Guard>
         Globals.maze.guards.Add(this);
 
         idx = Globals.maze.guards.Count;
-
+        update_eye_idx = idx;
         
         walkable = true;
         bGoChaseDove = false;
-        base.Awake();               
+        base.Awake();
+
+        if (eye != null)
+        {
+            eye.guard = this;
+        }
     }
 
-    public override void Start()
-    {        
-        //gameObject.name += idx.ToString();
-        base.Start();
-    }
-
-    public void OnDestroy()
+    public override void OnDestroy()
     {
+        base.OnDestroy();
         if (currentAction != null)
         {
             currentAction.Stop();
@@ -116,7 +116,7 @@ public class Guard : Actor, System.IComparable<Guard>
                 foreach (UnityEngine.Vector3 pos in poses)
                 {
                     double dis = UnityEngine.Vector3.Distance(pos, chest.transform.position);
-                    if (dis < fovMaxDistance + (chest.GetComponent<UnityEngine.Collider>() as UnityEngine.BoxCollider).size.x * 0.5f * transform.localScale.x)
+                    if (dis < fovMaxDistance + chest.characterController.radius * 0.5f * transform.localScale.x)
                     {
                         guardedChest = chest;
                         break;
@@ -135,8 +135,8 @@ public class Guard : Actor, System.IComparable<Guard>
         ClearAllActions();
         AddAction(
                 new Cocos2dParallel(
-                    new Sequence(new ScaleTo(transform, new UnityEngine.Vector3(1.6f, 1.6f, 1.6f), 5),
-                        new ScaleTo(transform, scaleCache, 5))
+                    new Sequence(new ScaleTo(transform, scaleCache*1.2f, 2),
+                        new ScaleTo(transform, scaleCache, 2))
                         )
                         );
         ShowArrangeBtns();
@@ -388,14 +388,14 @@ public class Guard : Actor, System.IComparable<Guard>
             skinnedMeshRenderers[idx].material.SetColor("_Color", color);
         }
     }
-    
-	// Update is called once per frame
-	public override void Update () 
+
+    public override void FrameFunc() 
     {
-		base.Update();
+		base.FrameFunc();        
+        
 		if (canvasForCommandBtns != null)
         {
-            canvasForCommandBtns.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 1.0f, -0.6f);
+            canvasForCommandBtns.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 100.0f, -0.6f);
         }        
     }   
 
@@ -404,12 +404,12 @@ public class Guard : Actor, System.IComparable<Guard>
         int spotDuration = 0;
         if (gameObj.layer == 11)
         {
-            spotDuration = 80;
+            spotDuration = 50;
             spot.SpotMagician(gameObj, true, spotDuration);
         }
         else if (gameObj.layer == 20)
         {
-            spotDuration = 20;
+            spotDuration = 15;
             spot.SpotMagician(gameObj, bGoChaseDove, spotDuration);
         }
     }
@@ -482,7 +482,7 @@ public class Guard : Actor, System.IComparable<Guard>
         magicianDir.z = 0;
         UnityEngine.RaycastHit hitInfo;
         int layermask = 1 << 8;
-        float collide_radius = controller.radius * transform.localScale.x * 3.5f;
+        float collide_radius = characterController.radius * transform.localScale.x * 3.5f;
         UnityEngine.Ray ray = new UnityEngine.Ray(transform.position, magicianDir + new UnityEngine.Vector3(collide_radius,0,0));
         UnityEngine.Ray ray1 = new UnityEngine.Ray(transform.position, magicianDir + new UnityEngine.Vector3(-collide_radius,0,0));
         UnityEngine.Ray ray2 = new UnityEngine.Ray(transform.position, magicianDir + new UnityEngine.Vector3(0, collide_radius, 0));
@@ -537,6 +537,7 @@ public class Guard : Actor, System.IComparable<Guard>
         {
             inFog = infog;
             eye.SetVisonConesVisible(!infog);
+            head_on_minimap.SetActive(!infog);
         }        
     }
 }

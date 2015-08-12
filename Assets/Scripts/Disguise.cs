@@ -27,7 +27,7 @@
         {
             base.Excute();
             mage.spriteSheet.Play("disguise");
-            trickCastAction = actor.SleepThenCallFunction(mage.spriteSheet.GetAnimationLength("disguise"), () => TrickActionEnd());
+            trickCastAction = actor.SleepThenCallFunction(mage.spriteSheet.GetAnimationLengthWithSpeed("disguise"), () => TrickActionEnd());
         }
     }
 
@@ -43,15 +43,15 @@
         actor.spriteSheet._sprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Avatar/FakeGuard_Sprite");
         actor.spriteSheet._actor = actor;
         actor.spriteSheet.initialized = true;
-        actor.spriteSheet.AddAnim("idle",4);
-        actor.spriteSheet.AddAnim("moving",6);
+        actor.spriteSheet.AddAnim("idle",4,1.5f);
+        actor.spriteSheet.AddAnim("moving",6, 1.8f);
 
 
         TrickTimer = UnityEngine.GameObject.Instantiate(TrickTimerPrefab) as UnityEngine.GameObject;
-        TrickTimer.GetComponent<TrickTimer>().BeginCountDown(FakeGuard, data.duration, new UnityEngine.Vector3(0, 1.1f, 0));
+        TrickTimer.GetComponent<TrickTimer>().BeginCountDown(FakeGuard, data.duration, new UnityEngine.Vector3(0, 110f, 0));
 
         speedCache = actor.moving.speed;
-        actor.moving.speed = 0.03f;
+        actor.moving.speed = speedCache*0.7f;
         gameObject.layer = 23;
 
         stopAction = actor.SleepThenCallFunction(data.duration, () => Stop());
@@ -74,9 +74,9 @@
         actor.RemoveAction(ref trickCastAction);
                 
         if (sheetCache != null)
-        {
+        {                        
             DestroyObject(FakeGuard);
-            DestroyObject(TrickTimer);
+            Actor.to_be_remove.Add(TrickTimer.GetComponent<Actor>());
             sheetCache.enabled = true;
             actor.spriteSheet = sheetCache;
             actor.moving.speed = speedCache;

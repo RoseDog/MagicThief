@@ -16,22 +16,13 @@ public class PathFinder : UnityEngine.MonoBehaviour
         path = GetComponent<AstarPath>();
         path.logPathResults = PathLog.OnlyErrors;
 	}
-
-    void Start()
-    {        
-    }
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
     public void GenerateGridGraph()
     {
         graph = path.astarData.graphs[0] as Pathfinding.GridGraph;
         graph.nodes = null;
-        graph.width = UnityEngine.Mathf.RoundToInt(Globals.maze.X_CELLS_COUNT * Globals.maze.GetCellSideLength() * (1 / grideNodeSize) * 2);
-        graph.depth = UnityEngine.Mathf.RoundToInt(Globals.maze.Y_CELLS_COUNT * Globals.maze.GetCellSideLength() * (1 / grideNodeSize) * 2);
+        graph.width = UnityEngine.Mathf.RoundToInt(Globals.maze.X_CELLS_COUNT * Globals.maze.GetCellSideLength() * (1 / grideNodeSize));
+        graph.depth = UnityEngine.Mathf.RoundToInt(Globals.maze.Y_CELLS_COUNT * Globals.maze.GetCellSideLength() * (1 / grideNodeSize));
         graph.center = new UnityEngine.Vector3(-Globals.maze.GetCellSideLength(), 0, 0);
         //graph.nodeSize = map.cell_side_length / 2.0f;
         graph.nodeSize = grideNodeSize;

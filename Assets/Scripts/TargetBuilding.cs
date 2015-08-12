@@ -23,10 +23,11 @@
         {
             Globals.languageTable.SetText(tip, data.targetName);
             city.eventsWindow.AddEvent(this);
-        }        
-    }
-
-  
+        }
+        
+        //spriteSheet.AddAnim("idle", 5, 0.2f, false);
+        //spriteSheet.Play("idle");
+    }  
 
     public override void Choosen()
     {
@@ -69,13 +70,8 @@
         Globals.EnableAllInput(false);
 
         Globals.currentStealingTargetBuildingData = data;
-        Invoke("InToBuilding", 0.5f);        
-    }
-
-    void InToBuilding()
-    {
         Globals.thiefPlayer = Globals.self;
         Globals.self.DownloadTarget(data);
         Globals.asyncLoad.ToLoadSceneAsync("StealingLevel");
-    }
+    }    
 }

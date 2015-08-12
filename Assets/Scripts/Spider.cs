@@ -22,7 +22,7 @@
     {
         base.Start();
         // 界面显示会读取这个数字
-        data.atkShortestDistance = (machineActiveArea.GetComponent<UnityEngine.Collider>() as UnityEngine.SphereCollider).radius * scaleCache.x;
+        data.atkShortestDistance = machineActiveArea.characterController.radius * scaleCache.x;
     }
 
     public override void EnterActiveArea(UnityEngine.GameObject other)
@@ -49,5 +49,16 @@
     {
         inFog = infog;
         machineActiveArea.GetComponent<UnityEngine.MeshRenderer>().enabled = !infog;
+        spriteRenderer.enabled = !infog;
+    }
+
+    public override void Broken()
+    {
+        base.Broken();
+        if(currentAction == atk)
+        {
+            atk.Stop();
+            spriteSheet.Play("idle");
+        }
     }
 }

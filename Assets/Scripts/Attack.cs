@@ -3,7 +3,6 @@
     bool isAtkCDing = false;
     Cocos2dAction checkFunc;
     
-
     public override void Excute()
     {
         base.Excute();
@@ -14,14 +13,7 @@
     {
         UnityEngine.Debug.Log("guard stop attack");
         base.Stop();
-        guard.RemoveAction(ref checkFunc);
-        if (atkJumpAction != null)
-        {
-            guard.RemoveAction(ref atkJumpAction);
-        }        
-        
-        guard.spriteSheet.transform.localEulerAngles = new UnityEngine.Vector3(0, 0, 0);
-        guard.spriteRenderer.gameObject.layer = 13;
+        guard.RemoveAction(ref checkFunc);        
     }
 
     void Atk()
@@ -70,10 +62,9 @@
         return false;
     }    
 
-    public void AtkEnd()
+    public virtual void AtkEnd()
     {
-        UnityEngine.Debug.Log("atk end");
-        atkJumpAction = null;
+        UnityEngine.Debug.Log("atk end");        
         if (guard.currentAction == this)
         {
             if (guard.spriteSheet.HasAnimation("atkReady"))
@@ -85,8 +76,7 @@
                 guard.spriteSheet.Play("idle");
             }
             
-            checkFunc = guard.RepeatingCallFunction(5, () => DuringAtkIdle());
-            guard.gameObject.layer = 13;
+            checkFunc = guard.RepeatingCallFunction(5, () => DuringAtkIdle());            
         }
     }
 
@@ -119,45 +109,19 @@
         }
     }
 
-    Cocos2dAction atkJumpAction;
+    
     public virtual void AtkAnimation()
     {
-        guard.FaceTarget(guard.spot.target);
-        if (!checkIfTargetPressDown())
-        {
-            if(guard.spriteSheet.HasAnimation("kick") && Globals.magician.currentAction == Globals.magician.catchByNet)
-            {
-                guard.spriteSheet.Play("kick");
-            }
-            else
-            {
-                guard.spriteSheet.Play("Atk");
-                atkJumpAction = new Sequence(new JumpTo(transform, guard.spot.target.transform.position, 1.0f,
-guard.spriteSheet.GetAnimationLengthWithSpeed("Atk") + 15), new FunctionCall(() => AtkEnd()));
-                guard.AddAction(atkJumpAction);
-                guard.spriteRenderer.gameObject.layer = 21;
-            }            
-        }
-        else
-        {
-            if (guard.spriteSheet.HasAnimation("atkReady"))
-            {
-                guard.spriteSheet.Play("atkReady");
-            }
-            else
-            {
-                guard.spriteSheet.Play("idle");
-            }
-        }
+       
     }
 
     public virtual void FireTheHit()
     {
-        UnityEngine.Vector3 magicianDir = guard.spot.target.position - guard.transform.position;
         Actor targetActor = guard.spot.target.GetComponent<Actor>();
+        UnityEngine.Vector3 magicianDir = targetActor.GetWorldCenterPos() - guard.transform.position;   
         if (!checkIfTargetPressDown() && !targetActor.IsLifeOver())
         {
-            if (magicianDir.magnitude < guard.data.atkShortestDistance + 0.3f)
+            if (magicianDir.magnitude < guard.data.atkShortestDistance + 50f)
             {
                 UnityEngine.Vector3 faceDir = UnityEngine.Vector3.left;
                 if (transform.localEulerAngles.y > 179)
@@ -168,8 +132,7 @@ guard.spriteSheet.GetAnimationLengthWithSpeed("Atk") + 15), new FunctionCall(() 
                 double angle = UnityEngine.Vector3.Angle(magicianDir, faceDir);
                 if (angle < 100 && angle > -100)
                 {
-                    targetActor.ChangeLife(-guard.data.attackValue);
-                    //targetActor.ChangeLife(-25);
+                    targetActor.ChangeLife(-guard.data.attackValue);                    
                     targetActor.hitted.Excute();
                     targetActor.FaceDir(magicianDir);
                 }
@@ -194,7 +157,7 @@ guard.spriteSheet.GetAnimationLengthWithSpeed("Atk") + 15), new FunctionCall(() 
         float atkShortestDistance = guard.data.atkShortestDistance;
         if (guard.spriteSheet.HasAnimation("kick") && Globals.magician.currentAction == Globals.magician.catchByNet)
         {
-            atkShortestDistance = 0.5f;
+            atkShortestDistance = 50f;
         }
         if (UnityEngine.Vector3.Distance(guard.spot.target.position, guard.transform.position) > atkShortestDistance)
         {

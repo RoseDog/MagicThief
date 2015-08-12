@@ -5,9 +5,13 @@
     public City city;
     public UnityEngine.UI.Text unclickedCount;
     UnityEngine.RectTransform ReplayDetail;
+    MultiLanguageUIText time_stamp;
     MultiLanguageUIText cash_back_then;
     MultiLanguageUIText stealing_cash;
     UnityEngine.UI.Button replay_btn;
+    UnityEngine.UI.Button defense_reward_btn;
+    MultiLanguageUIText defense_reward_number;
+    public UnityEngine.GameObject highLightFrame;
     public override void Awake()
     {
         eventPrefab = UnityEngine.Resources.Load("UI/CityEvent") as UnityEngine.GameObject;
@@ -16,28 +20,87 @@
         unclickedCount.transform.parent.gameObject.SetActive(false);
 
         ReplayDetail = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "ReplayDetail");
+        time_stamp = Globals.getChildGameObject<MultiLanguageUIText>(ReplayDetail.gameObject, "time_stamp");
         cash_back_then = Globals.getChildGameObject<MultiLanguageUIText>(ReplayDetail.gameObject, "cash_back_then");
-        stealing_cash = Globals.getChildGameObject<MultiLanguageUIText>(ReplayDetail.gameObject, "stealing_cash");
-        replay_btn = Globals.getChildGameObject<UnityEngine.UI.Button>(ReplayDetail.gameObject, "replay");        
+        stealing_cash = Globals.getChildGameObject<MultiLanguageUIText>(ReplayDetail.gameObject, "stealing_cash");        
+        replay_btn = Globals.getChildGameObject<UnityEngine.UI.Button>(ReplayDetail.gameObject, "replay");
+        defense_reward_btn = Globals.getChildGameObject<UnityEngine.UI.Button>(ReplayDetail.gameObject, "defense_reward");
+        defense_reward_number = Globals.getChildGameObject<MultiLanguageUIText>(defense_reward_btn.gameObject, "Text");
         ReplayDetail.localScale = UnityEngine.Vector3.zero;
+
+
+        highLightFrame = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "highLightFrame").gameObject;
+        highLightFrame.SetActive(false);
+
         base.Awake();
+        gameObject.SetActive(false);
     }    
 
     public void ReplayEventBtnClicked(ReplayData replay, CityEvent ce)
     {
+        System.DateTime then = System.Convert.ToDateTime(replay.date);
+        System.TimeSpan date_diff = System.DateTime.Now - then;
+
+        if (date_diff.Days != 0)
+        {
+            Globals.languageTable.SetText(time_stamp,"few_days_ago",
+            new System.String[] { date_diff.Days.ToString() });
+        }
+        else if (date_diff.Hours != 0)
+        {
+            Globals.languageTable.SetText(time_stamp, "few_hours_ago",
+            new System.String[] { date_diff.Hours.ToString() });
+        }
+        else
+        {
+            Globals.languageTable.SetText(time_stamp, "few_minutes_ago");
+        }
+
         Globals.languageTable.SetText(cash_back_then,"cash_back_then",
             new System.String[] { replay.guard.cashAmount.ToString("F0") });
         Globals.languageTable.SetText(stealing_cash, "stealing_cash",
-            new System.String[] { replay.StealingCash.ToString("F0") });        
-        ReplayDetail.parent = ce.gameObject.transform;
-        ReplayDetail.localScale = UnityEngine.Vector3.one;
-        ReplayDetail.anchoredPosition = new UnityEngine.Vector2(
-            ce.GetComponent<UnityEngine.RectTransform>().rect.width,0);
+            new System.String[] { replay.StealingCash.ToString("F0") });
+
+        defense_reward_btn.onClick.RemoveAllListeners();
+
+        if (replay.StealingCash < 1 && replay.guard.name == Globals.self.name)
+        {
+            defense_reward_btn.gameObject.SetActive(true);
+            if (replay.rewardAccepted)
+            {
+                Globals.languageTable.SetText(defense_reward_number, "reward_accepted");
+            }
+            else
+            {
+                defense_reward_number.text = "x" + replay.reward_rose_count.ToString();
+                defense_reward_btn.onClick.AddListener(() => Reward(defense_reward_btn, defense_reward_number, replay));
+            }            
+        }
+        else
+        {
+            defense_reward_btn.gameObject.SetActive(false);
+        }
+        
+        
+        ReplayDetail.localScale = UnityEngine.Vector3.one;        
         replay_btn.onClick.RemoveAllListeners();
         replay_btn.onClick.AddListener(() => ReplayClicked(replay));
+        
         ce.newText.enabled = false;
         Globals.self.ReplayClicked(replay);
         Globals.UpdateUnclickedRedPointsText(unclickedCount);
+
+        ShowHightlight(ce.GetComponent<UnityEngine.UI.Button>());
+    }
+
+    public void Reward(UnityEngine.UI.Button btn, MultiLanguageUIText btn_text, ReplayData replay)
+    {
+        btn.onClick.RemoveAllListeners();
+        Globals.canvasForMagician.RoseNumber.Add(replay.reward_rose_count);
+        Globals.canvasForMagician.RoseNumber.audioSource.Play();        
+
+        Globals.languageTable.SetText(defense_reward_number, "reward_accepted");
+        Globals.self.RewardAccepted(replay);
     }
 
     public void ReplayClicked(ReplayData replay)
@@ -72,7 +135,7 @@
         float padding = 3;
         for (int idx = cityEvents.Count - 1; idx >= 0; --idx)
         {
-            cityEvents[idx].rectTransform.localPosition = new UnityEngine.Vector3(0.0f, event_y_pos, 0.0f);
+            cityEvents[idx].rectTransform.localPosition = new UnityEngine.Vector3(12.5f, event_y_pos, 0.0f);
             event_y_pos -= cityEvents[idx].rectTransform.rect.height;
             event_y_pos -= padding;
         }
@@ -101,6 +164,17 @@
         Globals.UpdateUnclickedRedPointsText(unclickedCount);
 
         ReplayDetail.localScale = UnityEngine.Vector3.zero;
+
+        ShowHightlight(btn);
+    }
+
+    void ShowHightlight(UnityEngine.UI.Button btn)
+    {
+        highLightFrame.SetActive(true);
+        highLightFrame.transform.parent = btn.transform;
+        highLightFrame.transform.localScale = UnityEngine.Vector3.one;
+        highLightFrame.GetComponent<UnityEngine.RectTransform>().anchoredPosition = UnityEngine.Vector3.zero;
+        highLightFrame.transform.SetAsFirstSibling();
     }
 
     public CityEvent EventClicked(System.String clickedTarget)
@@ -120,13 +194,16 @@
 
     public void OpenBtnClicked()
     {
-        GetComponent<UIMover>().BeginMove(Globals.uiMoveAndScaleDuration);
+        gameObject.SetActive(true);
+        highLightFrame.SetActive(false);
+        city.ranksWindow.CloseBtnClcked();
+        city.ChooseBuilding(null);
     }
 
     public void CloseBtnClcked()
     {
-        GetComponent<UIMover>().Goback(Globals.uiMoveAndScaleDuration);
         ReplayDetail.localScale = UnityEngine.Vector3.zero;
+        gameObject.SetActive(false);
     }
 
     public override void OnTouchUpOutside(Finger f)

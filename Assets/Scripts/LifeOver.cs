@@ -10,7 +10,7 @@
 
         base.Excute();
         actor.OutStealing();
-        actor.controller.enabled = false;
+        actor.characterController.enabled = false;
         //actor.moving.GetSeeker().GetCurrentPath().Reset();        
         actor.moving.canMove = false;
         actor.moving.ClearPath();
@@ -20,7 +20,7 @@
         {
             if (chest.isMagicianNear)
             {
-                chest.OnTriggerExit(actor.GetComponent<UnityEngine.Collider>());
+                chest.TouchOut(actor);
             }
         }
     }

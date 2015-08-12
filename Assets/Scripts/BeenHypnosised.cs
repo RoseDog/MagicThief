@@ -21,7 +21,7 @@
         guard.gameObject.layer = 0;
 
         
-        timer.BeginCountDown(gameObject, duration, new UnityEngine.Vector3(0, 1.0f, 0));
+        timer.BeginCountDown(gameObject, duration, new UnityEngine.Vector3(0, 100f, 0));
 
         guard.SleepThenCallFunction(duration, ()=>Stop());
     }
@@ -36,7 +36,7 @@
         base.Stop();
         if (timer != null)
         {
-            DestroyObject(timer.gameObject);
+            Actor.to_be_remove.Add(timer);
             timer = null;
         }        
         guard.gameObject.layer = 13;
