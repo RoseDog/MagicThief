@@ -1,4 +1,4 @@
-﻿public class TargetBuilding : BuildingCouldDivedIn
+public class TargetBuilding : BuildingCouldDivedIn
 {    
     public UnityEngine.UI.Text tip;
     UnityEngine.RectTransform intro;
@@ -21,7 +21,16 @@
         base.Start();
         if (data != null)
         {
-            Globals.languageTable.SetText(tip, data.targetName);
+            if (data.isPvP)
+            {
+                tip.text = data.targetName;
+                
+            }
+            else
+            {
+                Globals.languageTable.SetText(tip, data.targetName);                
+            }
+            tip.text = "<color=red>Lv." + data.maze_lv.ToString() + "</color> " + tip.text;
             city.eventsWindow.AddEvent(this);
         }
         
@@ -39,12 +48,12 @@
             new ScaleTo(intro.transform, introScaleCache, Globals.uiMoveAndScaleDuration / 4)));
             if (data.isPvP)
             {
-                Globals.languageTable.SetText(intro.GetComponentInChildren<UnityEngine.UI.Text>(), "pvp_intro");
+                Globals.languageTable.SetText(intro.GetComponentInChildren<UnityEngine.UI.Text>(), "pvp_intro", new System.String[] { data.maze_lv.ToString() });
             }
             else
             {
-                Globals.languageTable.SetText(intro.GetComponentInChildren<UnityEngine.UI.Text>(), "pve_intro");
-            }
+                Globals.languageTable.SetText(intro.GetComponentInChildren<UnityEngine.UI.Text>(), "pve_intro", new System.String[] { data.maze_lv.ToString() });
+            }            
         
             if (tip)
             {

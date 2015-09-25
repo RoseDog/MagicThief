@@ -1,4 +1,4 @@
-﻿public class RoseBuilding : Building 
+public class RoseBuilding : Building 
 {
     UnityEngine.RectTransform peopleGivesYouRose;
     UnityEngine.RectTransform roseBtn;
@@ -70,27 +70,20 @@
                 DestroyObject(icon.gameObject);
             }            
         }
-
-        int delta_before_change = Globals.self.GetPowerDelta();
-        Globals.self.ChangeRoseCount(data.unpickedRose, data);
-        int delta_after_change = Globals.self.GetPowerDelta();
+  
+        Globals.self.PickRose(data.unpickedRose, data);
 
         UnityEngine.GameObject RosePickedTip = UnityEngine.GameObject.Instantiate(RosePickedTip_prefab) as UnityEngine.GameObject;
 
         RosePickedTip.GetComponent<UnityEngine.RectTransform>().anchoredPosition = transform.position;        
         UIMover mover = RosePickedTip.GetComponent<UIMover>();
 
-        
         Globals.city.AddAction(new Sequence(new EaseOut(mover.transform, mover.to + transform.position, 60), 
             new FunctionCall(() => city.DestroyRosePickTip(RosePickedTip))));
 
         Globals.languageTable.SetText(RosePickedTip.GetComponentInChildren<MultiLanguageUIText>(), "rose_pick_tip",
-            new System.String[] { data.unpickedRose.ToString(), (delta_after_change - delta_before_change).ToString() });
+            new System.String[] { data.unpickedRose.ToString()});
         data.unpickedRose = 0;
-
-        Globals.magician.ResetLifeAndPower(Globals.self);
-
-        Globals.canvasForMagician.PowerNumber.UpdateText(Globals.magician.PowerCurrent, Globals.magician.PowerAmount + Globals.self.GetPowerDelta());
     }
 
     
@@ -98,7 +91,7 @@
     public void RoseGrow()
     {
         UnityEngine.GameObject roseIcon = UnityEngine.GameObject.Instantiate(roseIcon_prefab) as UnityEngine.GameObject;
-        roseIcon.GetComponent<UnityEngine.RectTransform>().parent = roseBtn.transform;
+        roseIcon.GetComponent<UnityEngine.RectTransform>().SetParent(roseBtn.transform);
         roseIcon.GetComponent<UnityEngine.RectTransform>().anchoredPosition =
             new UnityEngine.Vector2(UnityEngine.Random.Range(-3.0f, 3.0f),UnityEngine.Random.Range(-2.5f, 1.0f));
         roseIcon.GetComponent<UnityEngine.RectTransform>().localScale = UnityEngine.Vector3.one * 0.5f;        

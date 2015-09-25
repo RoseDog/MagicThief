@@ -1,4 +1,4 @@
-﻿public class AddSafeBoxUI : CustomEventTrigger
+public class AddSafeBoxUI : CustomEventTrigger
 {
     UnityEngine.UI.Button AddBtn;    
     UnityEngine.UI.Text AddPrice;

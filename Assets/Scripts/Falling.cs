@@ -1,4 +1,4 @@
-﻿public class Falling : Action
+public class Falling : Action
 {
     public UnityEngine.Vector3 from;
     public UnityEngine.Vector3 to;

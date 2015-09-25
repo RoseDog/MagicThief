@@ -20,7 +20,7 @@ using Pathfinding;
  * 
  * \nosubgrouping
  * \ingroup relevant */
-public class AstarPath : MonoBehaviour {
+public class AstarPath : Photon.MonoBehaviour {
 	
 	/** The version number for the A* %Pathfinding Project
 	 */

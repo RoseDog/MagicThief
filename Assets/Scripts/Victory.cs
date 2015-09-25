@@ -1,4 +1,4 @@
-﻿public class Victory : Action
+public class Victory : Action
 {
     public override void Excute()
     {        

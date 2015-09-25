@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -122,9 +122,10 @@ public class Patrol : GuardAction
     public override void Excute()
     {
         base.Excute();
-        guard.moving.canMove = true;        
+        guard.moving.canMove = true;
+        guard.moving.move_anim = "walking";
         _beginPatrol();
-        UnityEngine.Debug.Log("patrol");
+        UnityEngine.Debug.Log("patrol");        
     }
 
     Cocos2dAction beginPatrolAction;
@@ -149,7 +150,8 @@ public class Patrol : GuardAction
     public override void Stop()
     {
         base.Stop();
-        guard.moving.canMove = false;        
+        guard.moving.canMove = false;
+        guard.moving.move_anim = "running";
         guard.RemoveAction(ref beginPatrolAction);
         UnityEngine.Debug.Log("stop Patrol");
     }

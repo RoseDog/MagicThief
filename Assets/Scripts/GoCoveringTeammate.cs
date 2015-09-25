@@ -1,4 +1,4 @@
-﻿public class GoCoveringTeammate : GuardAction 
+public class GoCoveringTeammate : GuardAction 
 {
     public override void Excute()
     {

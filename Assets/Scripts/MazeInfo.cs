@@ -1,4 +1,4 @@
-﻿public class MazeInfo : CustomEventTrigger
+public class MazeInfo : CustomEventTrigger
 {
     public UnityEngine.UI.Image current_MazeIcon;
     public UnityEngine.UI.Text current_lv;
@@ -62,7 +62,15 @@
         
         current_lv.text = Globals.self.currentMazeLevel.ToString();
         current_Room.text = Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport.ToString();
-        current_MazeIcon.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/maze_" + Globals.self.currentMazeLevel.ToString());
+        if (Globals.self.currentMazeLevel == 0)
+        {
+            current_MazeIcon.sprite = null;
+        }
+        else
+        {
+            current_MazeIcon.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/maze_" + Globals.self.currentMazeLevel.ToString());
+        }
+        
         
         if (Globals.self.currentMazeLevel == Globals.mazeLvDatas.Count - 1)
         {

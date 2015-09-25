@@ -1,8 +1,8 @@
-﻿public class Hitted : Action 
+public class Hitted : Action 
 {    
     public virtual void Start()
     {
-        actor.spriteSheet.AddAnimationEvent("hitted", -1, () => hitteAnimEnd());
+        
     }
 
 	public override void Excute()
@@ -11,6 +11,7 @@
         base.Excute();
         actor.moving.canMove = false;
         actor.spriteSheet.Play("hitted");
+        actor.SleepThenCallFunction(actor.spriteSheet.GetAnimationLengthWithSpeed("hitted"), () => hitteAnimEnd());
     }
        
     public virtual void hitteAnimEnd()

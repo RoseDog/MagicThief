@@ -334,7 +334,7 @@ public class Finger
 public delegate bool KeyEvent(string key);
 public delegate bool MouseEvent(UnityEngine.Vector2 pos);
 
-public class InputMgr : MonoBehaviour
+public class InputMgr : Photon.MonoBehaviour
 {
     public ArrayList fingers = new ArrayList();
 
@@ -346,8 +346,12 @@ public class InputMgr : MonoBehaviour
     public KeyEvent Evt_WASD;
     public KeyEvent Evt_WASD_Up;
     public KeyEvent Evt_SpaceDown;
-    public KeyEvent Evt_KeyAlpha0Up;
-    public KeyEvent Evt_KeyAlpha1Up;
+    
+    public KeyEvent Evt_KeyQ;
+    public KeyEvent Evt_KeyW;
+    public KeyEvent Evt_KeyE;
+    public KeyEvent Evt_KeyDownR;
+    public KeyEvent Evt_KeyUpR;
     public MouseEvent Evt_MouseLeftDown;
     public MouseEvent Evt_MouseRightDown;
     public MouseEvent Evt_MouseLeftUp;
@@ -364,7 +368,8 @@ public class InputMgr : MonoBehaviour
         {
             Finger finger = new Finger(idx, this);
             fingers.Add(finger);
-        }        
+        }
+        UnityEngine.Screen.SetResolution(960, 600, false, 30);        
     }    
 
     void OnLevelWasLoaded(int scene_id)
@@ -415,6 +420,7 @@ public class InputMgr : MonoBehaviour
         //UnityEngine.Physics2D.Raycast();
 
         // �ֱ�����iphone��PC��ѯ����
+        UnityEngine.Cursor.lockState = UnityEngine.CursorLockMode.Confined;
         if (!bBlock)
         {
 #if UNITY_IPHONE
@@ -452,17 +458,11 @@ public class InputMgr : MonoBehaviour
 
 				finger.ResolveState();
 			}
-#else
+#else            
             for (int idx = 0; idx < 3; ++idx)
             {
-
                 Finger finger = GetFingerByID(idx);
-
-                // �����Ĵ���������ָ�Ƿ�������UI�ϣ������ǵĻ����Ͳ�����finger��Ϣ��
-                // ���ڻ��и����⡣������ָ���µ�ʱ����UI�ϣ��Ժ��ƶ���ָ���Ƴ���ui��Χ�����ǻ���������FingerMoving��������Ϣ
-                // ������������ָ��û�Ӵ�����Ļ��ʱ��Ӧ��ɾ�������յ�down����Ϣ�Ŵ������������䵽Ui�ϵ�touch�Ͳ��ᴴ��finger����û�к�������Ϣ��
                 Vector2 mousePos = Input.mousePosition;
-
 
                 string fingerName = "Finger" + idx.ToString();
                 if (Input.GetButtonDown(fingerName) || Input.GetButtonUp(fingerName) || Input.GetButton(fingerName))
@@ -496,31 +496,46 @@ public class InputMgr : MonoBehaviour
                 finger.ResolveState();
             }
 
-
-            // ����
-            if (Input.GetKeyUp(KeyCode.Alpha1))
+            if (Input.GetKeyUp(KeyCode.Q))
             {
-                if (Evt_KeyAlpha0Up != null)
+                if (Evt_KeyQ != null)
                 {
-                    Evt_KeyAlpha0Up("0");
+                    Evt_KeyQ("Q");
                 }
             }
 
-            if (Input.GetKeyUp(KeyCode.Alpha2))
+            if (Input.GetKeyUp(KeyCode.W))
             {
-                if (Evt_KeyAlpha1Up != null)
+                if (Evt_KeyW != null)
                 {
-                    Evt_KeyAlpha1Up("1");
+                    Evt_KeyW("W");
                 }
             }
 
-            //             if (Input.GetButtonDown("Space"))
-            //             {
-            //                 if (Evt_SpaceDown != null)
-            //                 {
-            //                     Evt_SpaceDown("");
-            //                 }
-            //             }
+            if (Input.GetKeyUp(KeyCode.E))
+            {
+                if (Evt_KeyE != null)
+                {
+                    Evt_KeyE("E");
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                if (Evt_KeyDownR != null)
+                {
+                    Evt_KeyDownR("R");
+                }
+            }
+
+            if (Input.GetKeyUp(KeyCode.R))
+            {
+                if (Evt_KeyUpR != null)
+                {
+                    Evt_KeyUpR("R");
+                }
+            }
+
 
             if (Input.GetButtonDown("Horizontal") || Input.GetButton("Horizontal"))
             {
@@ -597,7 +612,7 @@ public class InputMgr : MonoBehaviour
 		}        
 	}	
 	
-	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
+	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 	{
 		// Send data to server
         if (stream.isWriting)

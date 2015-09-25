@@ -1,4 +1,4 @@
-﻿public class CanvasForMyMaze : Actor
+public class CanvasForMyMaze : Actor
 {
     public MyMazeLevelController myMaze;
     
@@ -82,6 +82,7 @@
     {
         Globals.MessageBox("property_is_safe_now", () => TutorialEnd());
         Globals.self.AdvanceTutorial();
+        Globals.self.UpgradeMaze();
     }
 
     public void TutorialEnd()
@@ -121,7 +122,7 @@
         else
         {
             roomConsumed = roomTemp;
-            MazeRoomNumber.UpdateCurrentLife(roomTemp, Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport);            
+            MazeRoomNumber.UpdateCurrentLife(roomTemp.ToString("F0"), Globals.mazeLvDatas[Globals.self.currentMazeLevel].roomSupport);            
             return true;
         }
     }

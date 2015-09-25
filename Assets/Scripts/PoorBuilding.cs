@@ -1,4 +1,4 @@
-﻿public class PoorBuilding : Building 
+public class PoorBuilding : Building 
 {
     UnityEngine.RectTransform poorsNeedMoneyTip;
     
@@ -51,6 +51,7 @@
         if (Globals.canvasForMagician.ChangeCash(-cost))
         {
             Globals.self.TurnPoorToRose(data);
+            yesBtn.interactable = false;
         }                
     }
 

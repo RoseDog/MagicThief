@@ -1,4 +1,4 @@
-﻿public class NoneBuilding : Building  
+public class NoneBuilding : Building  
 {
     public UnityEngine.UI.Text bornNewTargetTimeLastText;
     public override void Start()

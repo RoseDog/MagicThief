@@ -1,7 +1,7 @@
 ﻿GuardCount=3
-(563.50, 1075.00, -0.0100)=joker
-(163.50, -675.00, -0.0100)=joker
-(-1136.50, 275.00, -0.0100)=joker
+(563.50, 1075.00, -0.0100)=Police
+(163.50, -675.00, -0.0100)=Police
+(-1136.50, 275.00, -0.0100)=Police
 randSeedCacheWhenEditLevel=-1596906175
 Z_CELLS_COUNT=7
 X_CELLS_COUNT=6
@@ -17,3 +17,4 @@ GEMS_COUNT=3
 LAMPS_COUNT=0
 LevelTipText=
 CASH=4100
+droppedItemsStr=,dove,flash_grenade,flash_grenade,flyUp

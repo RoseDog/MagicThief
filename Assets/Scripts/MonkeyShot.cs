@@ -1,4 +1,4 @@
-﻿public class MonkeyShot : Attack
+public class MonkeyShot : Attack
 {
     public override void AtkAnimation()
     {

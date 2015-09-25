@@ -1,4 +1,4 @@
-﻿public class LevelTipBillboard : Actor
+public class LevelTipBillboard : Actor
 {
     UnityEngine.RectTransform LevelTipCanvas;
     public override void Start()

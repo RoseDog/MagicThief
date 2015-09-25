@@ -1,4 +1,4 @@
-﻿public class Tip : UnityEngine.MonoBehaviour 
+public class Tip : UnityEngine.MonoBehaviour 
 {
     public UnityEngine.UI.Text uiText;
     public int fadeAwaySpeed = 3;

@@ -1,11 +1,20 @@
-﻿public class SpiderNet : Projectle 
+public class SpiderNet : Projectle 
 {
     public Spider spider;
     public override void Awake()
     {
         base.Awake();
         hit_target_dis = 110f;
-        jumpDuration = 40;
+        jumpDuration = 30;
+        spriteSheet.init();
+        spriteSheet.AddAnim("play", spriteSheet._sprites.Length, 5.0f);
+        spriteSheet.Play("play");        
+    }
+
+    public override void Start()
+    {
+        base.Start();
+        ((jumpAction as Sequence).actions[0] as JumpTo)._changeDir = true;
     }
 
     public override void HitTarget()

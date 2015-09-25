@@ -1,4 +1,4 @@
-﻿public class Chest : Actor, System.IComparable<Chest>
+public class Chest : Actor, System.IComparable<Chest>
 {
     public bool isMagicianNear = false;
     bool isPlayingBack = false;
@@ -21,6 +21,8 @@
     
 
     public SafeBoxData data;
+
+    public System.String stolenTrickItem;
 
     public int CompareTo(Chest other)
     {
@@ -79,7 +81,7 @@
     }
 
     public void SyncWithData(SafeBoxData boxdata)
-    {
+    {        
         data = boxdata;
         data.unlocked = true;
         if (goldPoper == null)
@@ -117,6 +119,7 @@
         {
             return;
         }
+        mage.isOpenChest = true;
         UnityEngine.Debug.Log("touch chest");
         isMagicianNear = true;
         if (SafeboxNotFinishedTip != null)
@@ -127,7 +130,7 @@
         if (goldLast > 1)
         {
             unlockProgressSprite.transform.parent.gameObject.SetActive(true);
-            AddAction(new Sequence(new Cocos2dProgress(unlockProgressSprite, 120), new FunctionCall(()=> ChestOpened())));
+            AddAction(new Sequence(new Cocos2dProgress(unlockProgressSprite, mage.GetUnlockSafeDuration()), new FunctionCall(() => ChestOpened())));
         }        
     }
 
@@ -144,37 +147,43 @@
         base.TouchOut(other);
         UnityEngine.Debug.Log("leave chest");
         isMagicianNear = false;
-
-        if (goldLast > 1)
+        if (Globals.stealingController != null)
         {
-            ClearAllActions();
-            unlockProgressSprite.transform.parent.gameObject.SetActive(false);
-            if (spriteRenderer.sprite == openSprite)
+            Globals.stealingController.magician.isOpenChest = false;
+            Globals.stealingController.magician.isTakingMoneny = false;
+            if (goldLast > 1)
             {
-                ChestClosed();
+                ClearAllActions();
+                unlockProgressSprite.transform.parent.gameObject.SetActive(false);
+                if (spriteRenderer.sprite == openSprite)
+                {
+                    ChestClosed();
+                }
+
+                if (Globals.stealingController.magician.Stealing && SafeboxNotFinishedTip == null)
+                {
+                    SafeboxNotFinishedTip = UnityEngine.GameObject.Instantiate(SafeboxNotFinishedPrefab) as UnityEngine.GameObject;
+                    SafeboxNotFinishedTip.GetComponent<UnityEngine.Canvas>().worldCamera = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>();
+                    SafeboxNotFinishedTip.GetComponentInChildren<UIMover>().Jump();
+                    SafeboxNotFinishedTip.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 170.0f, 0.0f);
+                }
             }
-
-            if (Globals.magician.Stealing && SafeboxNotFinishedTip == null)
-            {
-                SafeboxNotFinishedTip = UnityEngine.GameObject.Instantiate(SafeboxNotFinishedPrefab) as UnityEngine.GameObject;
-                SafeboxNotFinishedTip.GetComponent<UnityEngine.Canvas>().worldCamera = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>();
-                SafeboxNotFinishedTip.GetComponentInChildren<UIMover>().Jump();
-                SafeboxNotFinishedTip.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f);
-            }            
-        }
-
-        goldPoper.StopPop();       
+            goldPoper.StopPop();
+        }                        
     }
 
     public void ChestOpened()
     {
         isPlayingBack = true;
+        
         UnityEngine.Debug.Log("ChestOpened");
         if (isMagicianNear)
         {
             unlockProgressSprite.transform.parent.gameObject.SetActive(false);
             spriteRenderer.sprite = openSprite;
-            goldPoper.Pop();
+            Globals.stealingController.magician.isOpenChest = false;
+            Globals.stealingController.magician.isTakingMoneny = true;
+            goldPoper.Pop();            
         }        
     }
 
@@ -193,6 +202,8 @@
             }
         }
         isPlayingBack = false;
+        Globals.stealingController.magician.isOpenChest = false;
+        Globals.stealingController.magician.isTakingMoneny = false;
     }
 
     public void LostGold()
@@ -215,12 +226,13 @@
                 renderer.gameObject.SetActive(false);
             }
             goldPoper.StopPop();
+            Globals.stealingController.magician.isOpenChest = false;
+            Globals.stealingController.magician.isTakingMoneny = false;
             Globals.LevelController.OneChestGoldAllLost(this);
         }
 
-        // 在教程中，TutorialThief偷东西的时候，不生成往界面上飞的金币
-        StealingLevelController controller = Globals.LevelController as StealingLevelController;
-        if (controller != null)
+        // 在教程中，TutorialThief偷东西的时候，不生成往界面上飞的金币        
+        if (Globals.stealingController != null)
         {
             Sequence seq = new Sequence();
             for (int times = 0; times < 3; ++times )
@@ -229,13 +241,22 @@
                 seq.actions.Add(new FunctionCall(()=>Coins()));               
             }
             AddAction(seq);
-        }               
+        }
+
+        audioSource.Play();                
+        UnityEngine.GameObject soundPrefab = UnityEngine.Resources.Load("Misc/GunSound") as UnityEngine.GameObject;
+        GuardAlertSound sound = (UnityEngine.GameObject.Instantiate(soundPrefab) as UnityEngine.GameObject).GetComponent<GuardAlertSound>();
+        sound.transform.position = (transform.position + GetWorldCenterPos()) * 0.5f;
+        sound.SetRadiusLimit(400);
+        sound.SetRadiusStart(250);
+        sound.SetOneWaveDuration(8);
+        sound.StartAlert();            
     }
     
     public void ResetGold()
     {
         goldLast = data.cashInBox;
-        // 总共需要3sec偷完整个箱子
+        // 总共需要3次偷完整个箱子
         goldLostPersecond = goldLast / 3.0f;
         goldPoper.InitParticleTex((int)goldLostPersecond);
         foreach (UnityEngine.Renderer renderer in goldMeshes)
@@ -247,8 +268,7 @@
 
     public void Coins()
     {
-        float gold_every_time = goldLostPersecond / 3.0f;
-        audioSource.Play();
+        float gold_every_time = goldLostPersecond / 3.0f;        
         int count = UnityEngine.Random.Range(1, 3);
         float gold_every_coin = gold_every_time / count;
         for (int i = 0; i < count; ++i)

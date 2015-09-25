@@ -1,8 +1,8 @@
-﻿public class GuardAlertSound : Actor 
+public class GuardAlertSound : Actor 
 {
     public UnityEngine.GameObject wave;
     Guard owner;
-    double oneWaveDuration;
+    double oneWaveDuration = 30;
     double radiusStart;
     double radiusLimit = 2000;
     double radius;
@@ -13,17 +13,28 @@
     {        
         base.Awake();
         owner = GetComponentInParent<Guard>();
-        wave_prefab = UnityEngine.Resources.Load("Avatar/DogBark/barkSoundWave") as UnityEngine.GameObject;        
+        wave_prefab = UnityEngine.Resources.Load("Avatar/DogBark/barkSoundWave") as UnityEngine.GameObject;
+        radiusStart = 1;
     }
 
-    public void SetRadius(double radius)
+    public void SetRadiusLimit(double radius)
     {
         radiusLimit = radius;
     }
 
+    public void SetRadiusStart(double start)
+    {
+        radiusStart = start;
+    }
+
+    public void SetOneWaveDuration(int duration)
+    {
+        oneWaveDuration = duration;
+    }
+
     void CreateOneWave()
     {
-        radiusStart = 1;
+        
         radius = radiusLimit;
 
         wave = UnityEngine.GameObject.Instantiate(wave_prefab) as UnityEngine.GameObject;
@@ -43,8 +54,7 @@
             onlyOneWave = true;
         }
 
-        wave.transform.localScale = UnityEngine.Vector3.zero;
-        oneWaveDuration = 30;
+        wave.transform.localScale = UnityEngine.Vector3.zero;        
     }
 
     int start_frame;

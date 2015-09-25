@@ -1,4 +1,4 @@
-﻿
+
 public class Joker : Guard 
 {
     public override void Awake()

@@ -1,4 +1,4 @@
-﻿public class ViewRankPlayer : CustomEventTrigger
+public class ViewRankPlayer : CustomEventTrigger
 {
     PlayerInfo player;
     UnityEngine.UI.Text PlayerName;
@@ -19,7 +19,7 @@
         VisitBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(gameObject, "Visit");
         VisitBtn.onClick.AddListener(()=>VisitMaze());
 
-        recordPrefab = UnityEngine.Resources.Load("UI/CityEvent") as UnityEngine.GameObject;
+        recordPrefab = UnityEngine.Resources.Load("UI/OtherPlayerStealRecord") as UnityEngine.GameObject;
 
         ReplayDetail = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "ReplayDetail");
         cash_back_then = Globals.getChildGameObject<MultiLanguageUIText>(ReplayDetail.gameObject, "cash_back_then");
@@ -33,6 +33,15 @@
 
     public void Open(PlayerInfo playerOnRank)
     {
+        highLightFrame.transform.parent = transform;
+        highLightFrame.SetActive(false);
+        ReplayDetail.transform.parent = transform;
+        foreach (CityEvent record in stealingRecords)
+        {
+            DestroyObject(record.gameObject);
+        }
+        stealingRecords.Clear();
+
         gameObject.SetActive(true);
         player = playerOnRank;
         PlayerName.text = playerOnRank.name;
@@ -50,7 +59,8 @@
         UnityEngine.RectTransform ceTransform = record.GetComponent<UnityEngine.RectTransform>();
         ceTransform.SetParent(transform);
         ceTransform.localScale = new UnityEngine.Vector3(1, 1, 1);
-        Globals.languageTable.SetText(record.uiText, "stealing_event",new System.String[] { replay.thief.name, "???" });        
+        replay.guard.name = new System.String('?', replay.guard.name.Length);
+        Globals.languageTable.SetText(record.uiText, "stealing_event", new System.String[] { replay.thief.name, replay.guard.name });        
         record.newText.enabled = false;
         stealingRecords.Add(record);
 
@@ -61,7 +71,7 @@
         float padding = 3;
         for (int idx = stealingRecords.Count - 1; idx >= 0; --idx)
         {
-            stealingRecords[idx].rectTransform.localPosition = new UnityEngine.Vector3(68,event_y_pos, 0.0f);
+            stealingRecords[idx].rectTransform.localPosition = new UnityEngine.Vector3(79,event_y_pos, 0.0f);
             event_y_pos -= stealingRecords[idx].rectTransform.rect.height;
             event_y_pos -= padding;
         }
@@ -100,21 +110,12 @@
     {
         city.Exit();
         Globals.visitPlayer = player;
-        Globals.self.DownloadOtherPlayer(player,null);
+        Globals.self.DownloadOtherPlayer(Globals.visitPlayer, null);
         Globals.asyncLoad.ToLoadSceneAsync("VisitOtherPlayer");        
     }
 
     public override void OnTouchUpOutside(Finger f)
     {
         base.OnTouchUpOutside(f);
-        gameObject.SetActive(false);
-        highLightFrame.transform.parent = transform;
-        highLightFrame.SetActive(false);
-        ReplayDetail.transform.parent = transform;
-        foreach (CityEvent record in stealingRecords)
-        {
-            DestroyObject(record.gameObject);
-        }
-        stealingRecords.Clear();
     }
 }

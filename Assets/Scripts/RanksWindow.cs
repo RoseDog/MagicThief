@@ -1,4 +1,4 @@
-﻿public class RanksWindow : CustomEventTrigger 
+public class RanksWindow : CustomEventTrigger 
 {
     UnityEngine.GameObject playerRankPrefab;
     public System.Collections.Generic.List<CityEvent> records = new System.Collections.Generic.List<CityEvent>();
@@ -72,7 +72,7 @@
     public void CloseBtnClcked()
     {
         gameObject.SetActive(false);
-        viewRankPlayer.OnTouchUpOutside(null);
+        viewRankPlayer.gameObject.SetActive(false);
     }
 
     public override void OnTouchUpOutside(Finger f)

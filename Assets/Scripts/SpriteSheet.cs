@@ -1,4 +1,4 @@
-﻿public struct SpriteAnim
+public struct SpriteAnim
 {
     public System.Collections.Generic.List<UnityEngine.Sprite> spriteList;
     public System.Collections.Generic.Dictionary<int, UnityEngine.Events.UnityAction> events;
@@ -157,6 +157,13 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
         _animationList[name].events.Add(frame, action);
     }
 
+    public void ModifyAnimSpeed(System.String name, double speed)
+    {
+        SpriteAnim anim = _animationList[name];
+        anim.speed = speed;
+        _animationList[name] = anim;
+    }
+
 
     public void Play(System.String anim)
     {
@@ -173,8 +180,8 @@ public class SpriteSheet : UnityEngine.MonoBehaviour
         frameCount = 1000000;// 这样会立刻切换Frame
         FrameFunc();
     }
-    System.String _currentAnim = "";
-    int frameIdx = 0;
+    public System.String _currentAnim = "";
+    public int frameIdx = 0;
     int frameCount;
     int spriteChangeFrequent = 6;
     public int GetSpriteChangeFrequent()

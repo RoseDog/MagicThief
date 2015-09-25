@@ -1,6 +1,7 @@
-﻿public class ClientSocket : UnityEngine.MonoBehaviour 
+public class ClientSocket : UnityEngine.MonoBehaviour 
 {
-    public WebSocketSharp.WebSocket ws;
+    //public WebSocketSharp.WebSocket ws;
+    public WebSocket4Net.WebSocket ws;
     public System.Collections.Generic.List<UnityEngine.Events.UnityAction> threadTempActions = new System.Collections.Generic.List<UnityEngine.Events.UnityAction>();
     public System.Collections.Generic.Dictionary<System.String, UnityEngine.Events.UnityAction<System.String[]>> serverReplyActions =
         new System.Collections.Generic.Dictionary<System.String, UnityEngine.Events.UnityAction<System.String[]>>();
@@ -8,7 +9,7 @@
 
     UnityEngine.GameObject WaitingForServer_prefab;
     UnityEngine.GameObject WaitingForServer;
-    bool ready = true;
+    bool ready = false;
     public bool IsReady() { return ready; }
     public void SetReady(bool value) { ready = value; }
     bool fromLoginScene = false;
@@ -23,19 +24,33 @@
             ready = false;
         }
 
-        //ws = new WebSocketSharp.WebSocket("ws://96.126.116.192:42788");
-        ws = new WebSocketSharp.WebSocket("ws://127.0.0.1:42788");
+        //
+//         ws = new WebSocketSharp.WebSocket("ws://127.0.0.1:42788");
+// 
+//         ws.OnMessage += OnMessage;
+//         ws.OnError += OnError;
+//         ws.OnClose += OnClose;        
+// 
+//         ws.ConnectAsync();
 
-        ws.OnMessage += OnMessage;
-        ws.OnError += OnError;
-        ws.OnClose += OnClose;        
+        //ws = new WebSocket4Net.WebSocket("ws://96.126.116.192:42788");
+        ws = new WebSocket4Net.WebSocket("ws://192.168.1.4:42788/");
 
-        ws.ConnectAsync();
+        ws.Closed += new System.EventHandler(OnClose);
+        ws.MessageReceived += new System.EventHandler<WebSocket4Net.MessageReceivedEventArgs>(OnMessage);
+        ws.Error += new System.EventHandler<SuperSocket.ClientEngine.ErrorEventArgs>(OnError);
+
+        if (ws.State == WebSocket4Net.WebSocketState.None)
+        {
+            ws.Open();
+        }        
 
         serverReplyActions.Add("login", (reply) => OnLoginReply(reply));
+        Globals.self.MsgActions();
+
         if (!fromLoginScene)
         {
-            Invoke("Login", 0.5f);
+            Invoke("Login", 1.5f);
         }
     }    
 
@@ -46,13 +61,13 @@
 
     void Login()
     {
-        System.String name = "玫瑰狗";
-        Send("login"+ Globals.self.separator + name + Globals.self.separator + UnityEngine.SystemInfo.deviceUniqueIdentifier);
+        System.String name = "rosedog";
+        Send("login" + Globals.self.separator + name + Globals.self.separator + UnityEngine.SystemInfo.deviceUniqueIdentifier + Globals.self.separator + Globals.versionString);
         Globals.self.name = name;
     }    
 
     void OnLoginReply(System.String[] reply)
-    {
+    {                
         if (reply[0] == "ok")
         {            
             Globals.self.SyncWithServer();
@@ -63,10 +78,19 @@
         }
         else if (reply[0] == "duplicated")
         {
-            Globals.canvasForLogin.DiveInBtn.gameObject.SetActive(true);
-            Globals.tipDisplay.Msg("name_duplicated", 0.1f, Globals.canvasForLogin.transform);
+            Globals.canvasForLogin.LoginUIVisible(true);
+            Globals.MessageBox("name_duplicated");
+        }
+        else if (reply[0] == "version_error")
+        {            
+            Globals.MessageBox("version_error", ()=>VersionErrorTips());
         }
         Globals.socket.CloseWaitingUI();
+    }
+
+    public void VersionErrorTips()
+    {
+        Globals.canvasForLogin.version.text = Globals.languageTable.GetText("version_error") + "\n" + Globals.canvasForLogin.version.text;
     }
 
     System.Collections.IEnumerator WaitingForSyncRead()
@@ -78,9 +102,9 @@
             {
                 break;
             }
-        }        
-        
-        if (Globals.city)
+        }
+
+        if (Globals.city && Globals.city.canvasForCity.activeSelf)
         {
             Globals.city.Start();
         }
@@ -93,7 +117,7 @@
 
     void OnDestroy()
     {
-        if (ws != null && ws.IsAlive)
+        if (ws != null)
         {
             ws.Close();
         }
@@ -112,10 +136,11 @@
     {        
         if (ws != null)
         {
-            msgCache.Add(msg);
-            if (msgCache.Count == 1)
+//            msgCache.Add(msg);
+//            if (msgCache.Count == 1)
             {
-                ws.SendAsync(msg, OnSendComplete);
+                UnityEngine.Debug.Log(msg);
+                ws.Send(msg);
             }            
         }        
     }
@@ -138,21 +163,23 @@
         threadTempActions.Add(() => SendCompleteInvoke(complete));
     }
 
-    void OnMessage(object sender, WebSocketSharp.MessageEventArgs e)
-    {
-        UnityEngine.Debug.Log(e.Data);
-        threadTempActions.Add(() => MessageInvoke(e.Data));
-    }
-
-    void OnError(object sender, WebSocketSharp.ErrorEventArgs e)
+    void OnMessage(object sender, WebSocket4Net.MessageReceivedEventArgs e)
     {
         UnityEngine.Debug.Log(e.Message);
-        threadTempActions.Add(() => ErrorInvoke(e));
+        threadTempActions.Add(() => MessageInvoke(e.Message));
     }
 
-    void OnClose(object sender, WebSocketSharp.CloseEventArgs e)
+    void OnError(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
     {
-        UnityEngine.Debug.Log(e.Reason);
+        UnityEngine.Debug.Log(e.Exception.Message);
+        UnityEngine.Debug.Log(e.Exception.Source);
+        UnityEngine.Debug.Log(e.Exception.Data);
+        threadTempActions.Add(() => ErrorInvoke(e));
+    }
+    
+    void OnClose(object sender, System.EventArgs e)
+    {
+        UnityEngine.Debug.Log(e);
         threadTempActions.Add(() => CloseInvoke(e));
     }    
 
@@ -163,7 +190,8 @@
             msgCache.RemoveAt(0);
             if (msgCache.Count != 0)
             {
-                ws.SendAsync(msgCache[0], OnSendComplete);
+                UnityEngine.Debug.Log(msgCache[0]);
+                ws.Send(msgCache[0]);
             }            
         }
         else
@@ -172,13 +200,13 @@
         }
     }
 
-    void ErrorInvoke(WebSocketSharp.ErrorEventArgs e)
+    void ErrorInvoke(System.EventArgs e)
     {
         CloseWaitingUI();
         Globals.MessageBox("cannot_connect_server",() => BackToLoginScene());
     }
 
-    void CloseInvoke(WebSocketSharp.CloseEventArgs e)
+    void CloseInvoke(System.EventArgs e)
     {
         CloseWaitingUI();
         Globals.MessageBox("cannot_connect_server", () => BackToLoginScene());

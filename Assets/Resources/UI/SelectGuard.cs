@@ -1,4 +1,4 @@
-﻿public class SelectGuard : AlphaFadeUI
+public class SelectGuard : AlphaFadeUI
 {    
     [UnityEngine.HideInInspector]
     public GuardBtn[] btns;

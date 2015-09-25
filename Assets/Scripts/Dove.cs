@@ -1,4 +1,4 @@
-﻿public class Dove : Actor 
+public class Dove : Actor 
 {
     public System.String animalName;
     TrickTimer timer;
@@ -6,39 +6,10 @@
     {
         base.Awake();
 
-        double rand = UnityEngine.Random.Range(0.0f, 1.0f);
-        if (rand < 0.25f)
-        {
-            animalName = "dove";
-        }
-        else if (rand >= 0.2f && rand < 0.4f)
-        {
-            animalName = "fog";
-            spriteSheet.transform.localPosition = UnityEngine.Vector3.zero;
-            moving.speed *= 0.7f;
-        }
-        else if (rand >= 0.4f && rand < 0.6f)
-        {
-            animalName = "chicken";
-            spriteSheet.transform.localPosition = UnityEngine.Vector3.zero;
-            moving.speed *= 0.7f;
-        }
-        else if (rand >= 0.6f && rand < 0.8f)
-        {
-            animalName = "cat";
-            spriteSheet.transform.localPosition = UnityEngine.Vector3.zero;
-            moving.speed *= 0.7f;
-        }
-        else if (rand >= 0.8f && rand <= 1.0f)
-        {
-            animalName = "mouse";
-            spriteSheet.transform.localPosition = UnityEngine.Vector3.zero;
-            moving.speed *= 0.8f;
-        }
-        
-        spriteSheet.CreateAnimationByName(animalName + "_moving_left");
-        spriteSheet.CreateAnimationByName(animalName + "_moving_down");
-        spriteSheet.CreateAnimationByName(animalName + "_moving_up");
+        animalName = "dove";               
+        spriteSheet.CreateAnimationByName(animalName + "_moving_left",4.0f);
+        spriteSheet.CreateAnimationByName(animalName + "_moving_down", 4.0f);
+        spriteSheet.CreateAnimationByName(animalName + "_moving_up", 4.0f);
 
         moving.needAnimation = false;        
     }
@@ -50,7 +21,7 @@
         Globals.record("testReplay", content_test);
         GoTo(pos);
         SleepThenCallFunction(data.duration, () => Vanish());
-        timer = (UnityEngine.GameObject.Instantiate(Globals.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
+        timer = (UnityEngine.GameObject.Instantiate(Globals.stealingController.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
         timer.BeginCountDown(spriteSheet.gameObject, data.duration, new UnityEngine.Vector3(0, 70f, 0));
     }
 

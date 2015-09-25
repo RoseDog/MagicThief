@@ -1,4 +1,4 @@
-﻿public class CatchingMagician : GuardAction 
+public class CatchingMagician : GuardAction 
 {
     public override void Awake()
     {

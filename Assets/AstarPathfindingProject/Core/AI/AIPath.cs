@@ -405,8 +405,8 @@ public class AIPath : MonoBehaviour {
 		double targetDist = dir.magnitude;
 		
 		this.targetDirection = dir;
-		
-		if (targetDist <= endReachedDistance) 
+
+        if (targetDist <= s) 
         {
 			if (!targetReached) 
             { 
@@ -423,8 +423,8 @@ public class AIPath : MonoBehaviour {
 
                 Globals.record("testReplay", content);	
             }
-            				
-			return Vector3.zero;
+
+            return dir.normalized * (float)targetDist;
 		}        
 		
 #if ASTARDEBUG

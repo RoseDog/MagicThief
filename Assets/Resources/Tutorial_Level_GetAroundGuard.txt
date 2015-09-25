@@ -1,5 +1,5 @@
 ﻿GuardCount=1
-(-411.50, -137.50, -0.0200)=joker
+(-411.50, -137.50, -0.0200)=Police
 randSeedCacheWhenEditLevel=1653179144
 Z_CELLS_COUNT=5
 X_CELLS_COUNT=3
@@ -13,4 +13,4 @@ minRoomZCellsCount=2
 maxRoomZCellsCount=2
 GEMS_COUNT=2
 LAMPS_COUNT=0
-LevelTipText=“小心那些守卫”
+LevelTipText=watch_out_guard

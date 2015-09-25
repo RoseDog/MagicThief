@@ -1,4 +1,4 @@
-﻿public class Actor : UnityEngine.MonoBehaviour 
+public class Actor : UnityEngine.MonoBehaviour 
 {
     public int update_eye_idx;
     [UnityEngine.HideInInspector]
@@ -46,12 +46,11 @@
 
     [UnityEngine.HideInInspector]
     public int LifeAmount;
+
     [UnityEngine.HideInInspector]
-    public int LifeCurrent;
+    public float LifeCurrent;
     [UnityEngine.HideInInspector]
-    public int PowerAmount;
-    [UnityEngine.HideInInspector]
-    public int PowerCurrent;
+    public float PowerCurrent;
     [UnityEngine.HideInInspector]
     public UnityEngine.Vector3 scaleCache;
     [UnityEngine.HideInInspector]
@@ -64,6 +63,9 @@
     public UnityEngine.GameObject head_on_minimap;
 
     public static System.Collections.Generic.List<Actor> to_be_remove = new System.Collections.Generic.List<Actor>();    
+
+    public bool isOpenChest = false;
+    public bool isTakingMoneny = false;
 
     public virtual void Awake()
     {
@@ -408,7 +410,7 @@
     }
 
 
-    public virtual void ChangeLife(int delta)
+    public virtual void ChangeLife(float delta, bool needUIJump = true)
     {
         LifeCurrent += delta;
         LifeCurrent = UnityEngine.Mathf.Clamp(LifeCurrent, 0, LifeAmount);
@@ -431,5 +433,20 @@
         {
             transform.localEulerAngles = UnityEngine.Vector3.zero;
         }
+    }
+
+    public virtual void SpotByEnemy(Guard guard)
+    {
+
+    }
+
+    public virtual void EnemyStopChasing(Guard guard)
+    {
+
+    }
+
+    public virtual double GetSpeed()
+    {
+        return moving.speed;
     }
 }

@@ -1,4 +1,4 @@
-﻿public class CityEvent : Actor 
+public class CityEvent : Actor 
 {
     public UnityEngine.RectTransform rectTransform;
     public UnityEngine.UI.Text uiText;

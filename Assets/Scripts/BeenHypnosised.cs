@@ -1,4 +1,4 @@
-﻿public class BeenHypnosised : GuardAction
+public class BeenHypnosised : GuardAction
 {    
     public TrickTimer timer;
     public override void Awake()
@@ -9,7 +9,7 @@
 
     public void GoToSleep(int duration)
     {
-        timer = (UnityEngine.GameObject.Instantiate(Globals.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
+        timer = (UnityEngine.GameObject.Instantiate(Globals.stealingController.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
 
         base.Excute();
         actor.spriteSheet.Play("BeenHypnosised");

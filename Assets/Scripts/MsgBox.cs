@@ -1,4 +1,4 @@
-﻿public class MsgBox : AlphaFadeUI 
+public class MsgBox : AlphaFadeUI 
 {
     public AlphaFadeUI MsgBoxBG;
     public UnityEngine.UI.Text msgBoxText;

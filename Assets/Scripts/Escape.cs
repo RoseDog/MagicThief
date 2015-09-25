@@ -1,4 +1,4 @@
-﻿public class Escape : Action
+public class Escape : Action
 {
     int Duration = 80;
     public int GetDuration()
@@ -7,8 +7,7 @@
     }
     public void Go(System.String anim)
     {
-        UnityEngine.Debug.Log("magician Escape");
-        Globals.maze.GuardsTargetVanish(actor.gameObject);
+        UnityEngine.Debug.Log("magician Escape");        
         base.Excute();
         actor.shadow.enabled = false;
         actor.moving.canMove = false;
@@ -30,6 +29,6 @@
         Stop();
         actor.head_on_minimap.SetActive(true);
         actor.shadow.enabled = true;
-        Globals.magician.gameObject.SetActive(false);        
+        Globals.stealingController.magician.gameObject.SetActive(false);        
     }
 }

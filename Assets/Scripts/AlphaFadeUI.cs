@@ -1,4 +1,4 @@
-﻿public class AlphaFadeUI : Actor 
+public class AlphaFadeUI : Actor 
 {
     public UnityEngine.UI.Graphic[] graphics;
     public override void Awake()

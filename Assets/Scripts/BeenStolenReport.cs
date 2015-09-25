@@ -1,4 +1,4 @@
-﻿public class BeenStolenReport : CustomEventTrigger
+public class BeenStolenReport : CustomEventTrigger
 {
     public UnityEngine.GameObject eventPrefab;
     public UnityEngine.UI.GridLayoutGroup layout;
@@ -8,11 +8,20 @@
         transform.parent.parent.gameObject.SetActive(true);
         Globals.city.mainCanvas.gameObject.SetActive(false);
 
+
+        System.Collections.ArrayList dateArray = new System.Collections.ArrayList();
         foreach (System.Collections.DictionaryEntry entry in Globals.self.beenStolenReports)
         {
-            ReplayData replay = entry.Value as ReplayData;
-            AddEvent(replay);
+            dateArray.Add(System.Convert.ToDateTime(entry.Key));
         }
+
+        dateArray.Sort();
+
+        for (int idx = dateArray.Count-1; idx >= 0; --idx)
+        {
+            ReplayData replay = Globals.self.beenStolenReports[dateArray[idx].ToString()] as ReplayData;
+            AddEvent(replay);
+        }        
     }
 
     public void AddEvent(ReplayData replay)

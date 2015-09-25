@@ -1,4 +1,4 @@
-﻿public class TutorialThief : Actor 
+public class TutorialThief : Actor 
 {
     UnityEngine.GameObject ThiefTip;        
     public UnityEngine.RectTransform TipToShowMazeBtn;

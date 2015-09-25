@@ -1,4 +1,4 @@
-﻿public class CashIntroUI : CustomEventTrigger
+public class CashIntroUI : CustomEventTrigger
 {
     MultiLanguageUIText cash;
     MultiLanguageUIText safebox_count;

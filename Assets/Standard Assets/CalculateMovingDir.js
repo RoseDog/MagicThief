@@ -1,4 +1,4 @@
-﻿#pragma strict
+#pragma strict
 
 static function  NearestPointFactor (lineStart : Vector3,  lineEnd : Vector3,  point : Vector3) : double
 {

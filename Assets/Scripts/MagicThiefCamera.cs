@@ -1,7 +1,8 @@
-﻿
+
 public class MagicThiefCamera : Actor
 {
     float dragCamSpeed = 0.02f;    
+    float touchBorderMoveSpeed = 0.3f;
     [UnityEngine.HideInInspector]
     public float disScale = 1.0f;
 
@@ -68,11 +69,17 @@ public class MagicThiefCamera : Actor
     {
         enabled = true;
         SetDragSpeed(6f);
+        SetTouchBorderMoveSpeed(25.0f);
     }
 
     public void SetDragSpeed(float speed)
     {
         dragCamSpeed = speed;
+    }
+
+    public void SetTouchBorderMoveSpeed(float speed)
+    {
+        touchBorderMoveSpeed = speed;
     }
     
     public UnityEngine.Vector3 GetHorForward()
@@ -142,16 +149,47 @@ public class MagicThiefCamera : Actor
 
     public void DragToMove(Finger finger)
     {      
-        // two fingers touch , drag camaera not allowed
-        Finger finger0 = Globals.input.GetFingerByID(0);
-        Finger finger1 = Globals.input.GetFingerByID(1);
-        if (!(finger0.enabled && finger1.enabled))
+        if(UnityEngine.Application.isMobilePlatform)
         {
-            UnityEngine.Vector2 finger_move_delta = finger.MovmentDelta();
-            UnityEngine.Vector3 movementDirection = -finger_move_delta;
-            transform.position += movementDirection * dragCamSpeed;
-            transform.position = RestrictPosition(transform.position);
+            // 移动平台，拖动
+            // two fingers touch , drag camaera not allowed
+            Finger finger0 = Globals.input.GetFingerByID(0);
+            Finger finger1 = Globals.input.GetFingerByID(1);
+            if (!(finger0.enabled && finger1.enabled))
+            {
+                UnityEngine.Vector2 finger_move_delta = finger.MovmentDelta();
+                UnityEngine.Vector3 movementDirection = -finger_move_delta;
+                transform.position += movementDirection * dragCamSpeed;
+                transform.position = RestrictPosition(transform.position);
+            }
+        }                
+    }
+
+    public void TouchBorderToMove()
+    {
+        UnityEngine.Vector3 mousePos = UnityEngine.Input.mousePosition;
+        UnityEngine.Vector3 movementDirection = UnityEngine.Vector3.zero;
+
+        if (UnityEngine.Screen.width - mousePos.x < 10)
+        {
+            movementDirection += UnityEngine.Vector3.right;
         }
+            // 上
+        if (UnityEngine.Screen.height - mousePos.y < 10)
+        {
+            movementDirection += UnityEngine.Vector3.up;
+        }
+        if (mousePos.x < 10)
+        {
+            movementDirection += UnityEngine.Vector3.left;
+        }
+        if (mousePos.y < 10)
+        {
+            movementDirection += UnityEngine.Vector3.down;
+        }
+        movementDirection.Normalize();
+        transform.position += movementDirection * touchBorderMoveSpeed;
+        transform.position = RestrictPosition(transform.position);
     }
 
     public void DragOnMiniMap(Finger finger)
@@ -175,13 +213,15 @@ public class MagicThiefCamera : Actor
         if (bStaring)
         {
             //transform.LookAt(Globals.magician.transform.position + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f));           
-            transform.position = Globals.magician.transform.position + new UnityEngine.Vector3(0, 0, zCache);
+            transform.position = Globals.stealingController.magician.transform.position + new UnityEngine.Vector3(0, 0, zCache);
         }
         else if (target != null)
         {
             transform.position = target.position;
             transform.position = RestrictPosition(transform.position);
-        }        
+        }
+
+        TouchBorderToMove();
     }
 
     public UnityEngine.Vector3 RestrictPosition(UnityEngine.Vector3 pos)

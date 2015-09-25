@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -10,6 +10,15 @@ public class Cell : Actor
     public MazeGenerate maze;
     public Chest chest;
     public MazeGenerate.Room room;
+    public UnityEngine.SpriteRenderer Floor_Sprite;
+    public UnityEngine.SpriteRenderer E_Sprite;
+    public UnityEngine.SpriteRenderer W_Sprite;
+    public UnityEngine.SpriteRenderer S_Sprite;
+    public UnityEngine.SpriteRenderer N_Sprite;    
+    public UnityEngine.SpriteRenderer S_W_Corner_Sprite;
+    public UnityEngine.SpriteRenderer S_E_Corner_Sprite;
+    public UnityEngine.Collider N_E_Corner_Collider;
+    public UnityEngine.Collider N_W_Corner_Collider;
     public bool Visited
     {
         get { return visited; }
@@ -214,9 +223,8 @@ public class Cell : Actor
     {
         UnityEngine.GameObject wall = Globals.getChildGameObject(cell.gameObject, dir);
         if (wall == null)
-        {
-            UnityEngine.GameObject cell_prefab = UnityEngine.Resources.Load(Globals.maze.pieces_dir + "/Cell_2d") as UnityEngine.GameObject;
-            UnityEngine.GameObject wall_prefab = Globals.getChildGameObject(cell_prefab, dir);
+        {            
+            UnityEngine.GameObject wall_prefab = Globals.getChildGameObject(Globals.maze.cell_prefab, dir);
             wall = UnityEngine.GameObject.Instantiate(wall_prefab) as UnityEngine.GameObject;
             wall.name = dir;            
             UnityEngine.Vector3 pos_cache = wall.transform.localPosition;
@@ -233,8 +241,7 @@ public class Cell : Actor
     {
         if (GetFloor() == null)
         {
-            UnityEngine.GameObject cell_prefab = UnityEngine.Resources.Load(Globals.maze.pieces_dir + "/Cell_2d") as UnityEngine.GameObject;
-            UnityEngine.GameObject floor_prefab = Globals.getChildGameObject(cell_prefab, "floor_tile");
+            UnityEngine.GameObject floor_prefab = Globals.getChildGameObject(Globals.maze.cell_prefab, "floor_tile");
             UnityEngine.GameObject floor = UnityEngine.GameObject.Instantiate(floor_prefab) as UnityEngine.GameObject;
             floor.name = "floor_tile";
             UnityEngine.Vector3 scale_cache = floor.transform.localScale;
@@ -285,7 +292,11 @@ public class Cell : Actor
             if (renderer.gameObject != floor)
             {
                 renderer.enabled = false;
-                renderer.GetComponent<UnityEngine.Collider>().enabled = false;
+                UnityEngine.Collider collider = renderer.GetComponent<UnityEngine.Collider>();
+                if (collider)
+                {
+                    collider.enabled = false;
+                }                
             }            
         }
     }

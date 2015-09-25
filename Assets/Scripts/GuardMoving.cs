@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -25,6 +25,8 @@ public class GuardMoving : AIPath
     Actor actor;
     Guard guard;
     Magician mage;
+    public bool isMoving;
+    public System.String move_anim;
     /** Minimum velocity for moving */
     public double sleepVelocity = 0.4f;    
 
@@ -37,6 +39,8 @@ public class GuardMoving : AIPath
         actor = GetComponent<Actor>();
         guard = actor as Guard;
         mage = actor as Magician;
+
+        isMoving = false;
         
         base.Awake();
 
@@ -85,49 +89,31 @@ public class GuardMoving : AIPath
     {
         UnityEngine.Vector3 velocity = UnityEngine.Vector3.zero;
 
-//         if (Globals.PLAY_RECORDS && mage && Globals.replay.magePositions.Count != 0)
-//         {
-//             transform.position = Globals.replay.magePositions[0];
-//             Globals.replay.magePositions.RemoveAt(0);
-//         }
-//         else
-        {            
-            if (canMove)
+        if (canMove)
+        {
+            double s = actor.GetSpeed();
+            UnityEngine.Vector3 dir = CalculateVelocity(GetFeetPosition(), s);
+            if (Globals.DEBUG_REPLAY)
             {
-                //Calculate desired velocity
-                double s = speed;
-                if (guard != null && guard.currentAction == guard.patrol)
-                {
-                    s *= 0.3f;
-                }
+                System.String content = gameObject.name;
+                content += "movement:" + dir.ToString("F5");
+                content += " speed:" + s.ToString("F5");
+                content += " GetFeetPosition():" + GetFeetPosition().ToString("F5");
 
-                
-
-                UnityEngine.Vector3 dir = CalculateVelocity(GetFeetPosition(), s);
-                if (Globals.DEBUG_REPLAY)
+                Globals.record("testReplay", content);
+            }
+            transform.position += dir;
+            velocity = dir;
+            if (dir.magnitude > UnityEngine.Mathf.Epsilon)
+            {
+                currentDir = dir;
+                if (velocity.sqrMagnitude > 0.1f)
                 {
-                    System.String content = gameObject.name;
-                    content += "movement:" + dir.ToString("F5");
-                    content += " speed:" + s.ToString("F5");
-                    content += " GetFeetPosition():" + GetFeetPosition().ToString("F5");
-
-                    Globals.record("testReplay", content);
+                    actor.FaceDir(velocity);
                 }
-                
-                
-                transform.position += dir;
-                velocity = dir;
-                if (dir.magnitude > UnityEngine.Mathf.Epsilon)
-                {
-                    currentDir = dir;
-                    if (velocity.sqrMagnitude > 0.1f)
-                    {
-                        actor.FaceDir(velocity);
-                    }
-                }
-                transform.position = new UnityEngine.Vector3(transform.position.x, transform.position.y, (float)actor.heightOriginCache);                
-            }                        
-        }
+            }
+            transform.position = new UnityEngine.Vector3(transform.position.x, transform.position.y, (float)actor.heightOriginCache);
+        }      
 
         if (canMove && needAnimation)
         {
@@ -137,12 +123,24 @@ public class GuardMoving : AIPath
             relVelocity.z = 0;
             if (velocity.sqrMagnitude <= sleepVelocity * sleepVelocity)
             {
+                isMoving = false;
                 //Fade out walking animation
                 if (target == null)
                 {
                     if (actor.spriteSheet != null)
-                    {
-                        actor.spriteSheet.Play("idle");
+                    {                       
+                        if (actor.isOpenChest)
+                        {
+                            actor.spriteSheet.Play("open_chest");
+                        }
+                        else if (actor.isTakingMoneny)
+                        {
+                            actor.spriteSheet.Play("take_money");
+                        }
+                        else
+                        {
+                            actor.spriteSheet.Play("idle");
+                        }                        
                     }
                 }
                 else
@@ -152,7 +150,6 @@ public class GuardMoving : AIPath
                     {
                         throw new InvalidOperationException("guard moving error");
                     }
-                    //actor.anim.CrossFade("atkReady");
                     if (actor.spriteSheet.HasAnimation("atkReady"))
                     {
                         actor.spriteSheet.Play("atkReady");
@@ -164,24 +161,11 @@ public class GuardMoving : AIPath
                 }
             }
             else
-            {
+            {                
                 if (actor.spriteSheet != null)
                 {
-                    if (actor.spriteSheet.HasAnimation("walking"))
-                    {
-                        if (guard != null && guard.currentAction == guard.patrol)
-                        {
-                            actor.spriteSheet.Play("walking");
-                        }
-                        else
-                        {
-                            actor.spriteSheet.Play("running");
-                        }
-                    }
-                    else
-                    {
-                        actor.spriteSheet.Play("moving");
-                    }
+                    isMoving = true;
+                    actor.spriteSheet.Play(move_anim);
                 }
             }
         }
@@ -211,5 +195,5 @@ public class GuardMoving : AIPath
 
         Globals.Assert(false,"no walkable node nearby");
         return transform.position;
-    }
+    }    
 }

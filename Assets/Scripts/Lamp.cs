@@ -1,11 +1,12 @@
-﻿public class Lamp : Machine 
+public class Lamp : Machine 
 {
     Cocos2dAction moveAction;
     
     public override void Awake()
     {
         base.Awake();
-        spriteSheet.AddAnim("idle", 3);
+        spriteSheet.AddAnim("idle", 4,1.5f);
+        fixTimer_offset = new UnityEngine.Vector3(-6.9f,-84.3f,0);
     }
 
     public override void Start()
@@ -18,19 +19,19 @@
             moveAction = new RepeatForever(
                 new MoveTo(transform, transform.localPosition + new UnityEngine.Vector3(0, 0.08f, 0), duration / 2),
                 new MoveTo(transform, pos_cache, duration / 2));
-            AddAction(moveAction);
+            //AddAction(moveAction);
         }        
     }
 
-    public override void Broken()
+    public override void Broken(int fixDuration)
     {
-        base.Broken();                
-        moveAction.paused = true;        
+        base.Broken(fixDuration);                
+        //moveAction.paused = true;        
     }
 
     public override void FixingComplete()
     {
         base.FixingComplete();
-        moveAction.paused = false;        
+        //moveAction.paused = false;        
     }
 }

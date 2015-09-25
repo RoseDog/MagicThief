@@ -1,4 +1,4 @@
-﻿public class City : LevelController
+public class City : LevelController
 {
     UnityEngine.GameObject firstTarget;
     UnityEngine.GameObject myMazeBuilding;
@@ -7,7 +7,7 @@
     Building choosenBuilding;
     
     public System.Collections.Generic.List<Building> buildings = new System.Collections.Generic.List<Building>();
-    UnityEngine.GameObject canvasForCity;
+    public UnityEngine.GameObject canvasForCity;
     public UIMover cityEventsOpenBtn;
     public UIMover rankOpenBtn;
     public CityEventsWindow eventsWindow;
@@ -19,8 +19,6 @@
     {
         Globals.city = this;
         base.Awake();        
-        canvasForCity = UnityEngine.GameObject.Find("CanvasForCity");
-        mainCanvas = canvasForCity.GetComponent<UnityEngine.Canvas>();
         cityEventsOpenBtn = Globals.getChildGameObject<UIMover>(canvasForCity, "CityEventsOpenBtn");
         rankOpenBtn = Globals.getChildGameObject<UIMover>(canvasForCity, "RankOpenBtn");
         whoIsYourTarget = Globals.getChildGameObject<UnityEngine.UI.Text>(canvasForCity, "who_is_your_target");
@@ -88,9 +86,11 @@
         Globals.canvasForMagician.SetRoseVisible(true);
         Globals.canvasForMagician.ShowTricksPanel();
         Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();
-        Globals.magician.ResetLifeAndPower(Globals.self);
-                
-        ranksWindow.viewRankPlayer.OnTouchUpOutside(null);
+        Globals.canvasForMagician.UpdateTrickInUseSlots(Globals.self, null);
+        Globals.canvasForMagician.UpdateCharacter(Globals.self);
+
+
+        ranksWindow.viewRankPlayer.gameObject.SetActive(false);
         if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.Over)
         {            
             firstTarget.SetActive(false);
@@ -141,9 +141,9 @@
         
         MoneyFull(Globals.canvasForMagician.money_full.activeSelf);
 
-        Globals.cameraFollowMagician.audioSource.clip = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/city_bgm");
+        Globals.cameraFollowMagician.audioSource.clip = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/The_Night_Falling");
         Globals.cameraFollowMagician.audioSource.Play();
-        Globals.cameraFollowMagician.audioSource.volume = 0.25f;
+        Globals.cameraFollowMagician.audioSource.volume = 1.0f;
 
         if (Globals.self.beenStolenReports.Count != 0)
         {
@@ -207,12 +207,12 @@
         System.String new_building_name = "";
         if (new_data.isPvP)
         {
-            new_building_name = "City/pvp";
+            new_building_name = "City/pvp_";
         }
         else
         {
             int idx = UnityEngine.Random.Range(0, 4);
-            new_building_name = "City/pve_" + idx.ToString();
+            new_building_name = "City/pve_" + idx.ToString() + "_";
         }
         new_building_name += new_data.type;
 
@@ -304,7 +304,6 @@
     public bool OnDragFingerMoving(object sender)
     {
         Globals.cameraFollowMagician.DragToMove(fingerDownOnMap);
-
         return true;
     }
 

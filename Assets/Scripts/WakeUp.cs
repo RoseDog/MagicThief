@@ -1,4 +1,4 @@
-﻿public class WakeUp : GuardAction 
+public class WakeUp : GuardAction 
 {
     public override void Awake()
     {

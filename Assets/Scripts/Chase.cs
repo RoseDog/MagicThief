@@ -1,4 +1,4 @@
-﻿public class Chase : GuardAction 
+public class Chase : GuardAction 
 {
     Actor actor;
     Magician mage;

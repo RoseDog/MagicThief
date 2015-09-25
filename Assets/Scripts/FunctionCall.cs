@@ -1,4 +1,4 @@
-﻿public class FunctionCall : Cocos2dAction 
+public class FunctionCall : Cocos2dAction 
 {
     public UnityEngine.MonoBehaviour callback;
     public System.String method;

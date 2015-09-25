@@ -1,4 +1,4 @@
-﻿public class LevelTip : AlphaFadeUI 
+public class LevelTip : AlphaFadeUI 
 {
     [UnityEngine.HideInInspector]
     float fade = 1.0f;

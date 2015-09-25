@@ -1,4 +1,4 @@
-﻿public class MagicianLifeOver : LifeOver
+public class MagicianLifeOver : LifeOver
 {
     public override void Awake()
     {
@@ -13,6 +13,7 @@
         actor.AddAction(
             new Sequence(new SleepFor(actor.spriteSheet.GetAnimationLength("lifeOver")*2)
                 , new FunctionCall(() => Escape())));
+        Globals.maze.GuardsTargetVanish(actor.gameObject);
     }
 
 //     void DownOnFloor()

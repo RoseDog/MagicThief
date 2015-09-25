@@ -1,4 +1,4 @@
-﻿public class UIMover : Actor
+public class UIMover : Actor
 {
     public UnityEngine.Vector3 originPosition;
     public UnityEngine.Vector3 to;

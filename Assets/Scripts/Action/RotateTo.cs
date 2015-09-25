@@ -17,7 +17,7 @@ public class RotateTo : Cocos2dAction
     private bool _loop = false;
 
 	// Constructor
-    public RotateTo(Vector3 from, Vector3 to, int duration = 30, bool loop = false)
+    public RotateTo(Vector3 from, Vector3 to, int duration = 30, bool loop = false, Transform trans = null)
 	{
         _start = from;
 
@@ -26,12 +26,18 @@ public class RotateTo : Cocos2dAction
 		_duration = duration;
         
         _loop = loop;
+
+        _transform = trans;
 	}
 	
 	// Init
 	public override void Init () {
 		// get transformer instance
-		_transform = parent.transform;
+        if (_transform == null)
+        {
+            _transform = parent.transform;
+        }
+		
 		// get start time
         _start_frame = Globals.LevelController.frameCount;
         _transform.rotation = Quaternion.Euler(_start);

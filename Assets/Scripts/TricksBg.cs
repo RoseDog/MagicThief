@@ -1,4 +1,4 @@
-﻿public class TricksBg : CustomEventTrigger
+public class TricksBg : CustomEventTrigger
 {
     UnityEngine.UI.Button TrickItemsTabBtn;
     public UnityEngine.UI.GridLayoutGroup TrickItemsLayout;
@@ -12,7 +12,6 @@
         TrickItemsTabBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(gameObject, "TrickItemsTabBtn");
         TrickItemsLayout = Globals.getChildGameObject<UnityEngine.UI.GridLayoutGroup>(gameObject, "TrickItemsLayout");        
 
-        ClickHypnosisPointer = Globals.getChildGameObject<UIMover>(gameObject, "ClickHypnosisPointer");
         ClickHypnosisPointer.transform.parent.gameObject.SetActive(false);
     }
 
@@ -21,18 +20,18 @@
         UnityEngine.GameObject itemSlotPrefab = UnityEngine.Resources.Load<UnityEngine.GameObject>("UI/TrickItemSlot");
         UnityEngine.GameObject itemPrefab = UnityEngine.Resources.Load<UnityEngine.GameObject>("UI/TrickItem");
         ClickHypnosisPointer.transform.parent.gameObject.SetActive(false);
-        foreach (TrickData data in Globals.tricks)
+        foreach (TrickData data in Globals.self.tricks)
         {
             UnityEngine.GameObject itemSlot = UnityEngine.GameObject.Instantiate(itemSlotPrefab) as UnityEngine.GameObject;
-            itemSlot.transform.parent = TrickItemsLayout.transform;
+            itemSlot.transform.SetParent(TrickItemsLayout.transform);
             itemSlot.transform.localScale = UnityEngine.Vector3.one;
 
             UnityEngine.UI.Text Unlock_label = Globals.getChildGameObject<UnityEngine.UI.Text>(itemSlot.gameObject, "Unlock_label");
             Unlock_label.gameObject.SetActive(false);
-            UnityEngine.UI.Text Bought = Globals.getChildGameObject<UnityEngine.UI.Text>(itemSlot.gameObject, "Bought");
-            Bought.gameObject.SetActive(false);
-            UnityEngine.UI.Text Not_Bought = Globals.getChildGameObject<UnityEngine.UI.Text>(itemSlot.gameObject, "Not_Bought");
-            Not_Bought.gameObject.SetActive(false);
+            UnityEngine.UI.Text Inventory = Globals.getChildGameObject<UnityEngine.UI.Text>(itemSlot.gameObject, "inventory");
+            Inventory.gameObject.SetActive(false);
+            UnityEngine.UI.Text Not_Learned = Globals.getChildGameObject<UnityEngine.UI.Text>(itemSlot.gameObject, "Not_Learned");
+            Not_Learned.gameObject.SetActive(false);
 
             if (!data.IsInUse())
             {
@@ -47,10 +46,11 @@
                 trickItem.slotInPack = itemSlot;
                 trickItemsInPack.Add(trickItem);
 
-                if (Globals.self.tricksBought.Contains(data.nameKey))
+                if (data.learned)
                 {
-                    trickItem.Buy();
-                    Bought.gameObject.SetActive(true);
+                    trickItem.Learn();
+                    Inventory.gameObject.SetActive(true);
+                    Globals.languageTable.SetText(Inventory, "inventory", new System.String[] { data.inventory.ToString() });
                 }
                 else
                 {
@@ -58,19 +58,19 @@
 
                     if (trickItem.LockImage == null)
                     {
-                        Not_Bought.gameObject.SetActive(true);
+                        Not_Learned.gameObject.SetActive(true);
                     }
                     else
                     {
                         Unlock_label.gameObject.SetActive(true);
-                        Globals.languageTable.SetText(Unlock_label, "unlock_need_rose", new System.String[] { data.unlockRoseCount.ToString() });
+                        Globals.languageTable.SetText(Unlock_label, "need_rose", new System.String[] { data.unlockRoseCount.ToString() });
                     }
                 }
             }            
             trickSlots.Add(itemSlot);
 
             // 如果在教程阶段，还没有购买催眠
-            if (data == Globals.tricks[0] && Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.FirstTrick && !data.bought)
+            if (data == Globals.self.tricks[0] && Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.FirstTrick && !data.learned)
             {
                 ClickHypnosisPointer.transform.parent.gameObject.SetActive(true);
                 ClickHypnosisPointer.BlinkForever();
@@ -113,7 +113,8 @@
         }
         trickSlots.Clear();
         trickItemsInPack.Clear();
-        gameObject.SetActive(false);        
+        gameObject.SetActive(false);
+        Globals.canvasForMagician.charSelect.gameObject.SetActive(false);
         Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();
         StealingLevelController controller = (Globals.LevelController as StealingLevelController);
         if (controller != null)

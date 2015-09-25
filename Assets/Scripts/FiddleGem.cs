@@ -1,4 +1,4 @@
-﻿public class FiddleGem : Actor 
+public class FiddleGem : Actor 
 {
     public override void Awake()
     {

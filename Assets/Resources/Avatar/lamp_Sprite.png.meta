@@ -1,10 +1,16 @@
 fileFormatVersion: 2
 guid: 424ef2ad60ed8bd458a585e4472d740d
+timeCreated: 1439725434
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: idle_0
     21300002: lamp_1
     21300004: idle_1
+    21300006: lamp_Sprite_0
+    21300008: lamp_Sprite_1
+    21300010: lamp_Sprite_2
+    21300012: lamp_Sprite_3
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -23,6 +29,9 @@ TextureImporter:
   isReadable: 0
   grayScaleToAlpha: 0
   generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
   maxTextureSize: 1024
@@ -33,6 +42,7 @@ TextureImporter:
     wrapMode: 1
   nPOTScale: 0
   lightmap: 0
+  rGBM: 0
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
@@ -46,35 +56,47 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: idle_0
+    - name: lamp_Sprite_0
       rect:
         serializedVersion: 2
-        x: 14
-        y: 121
-        width: 30
-        height: 27
-      alignment: 7
-      pivot: {x: .5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: lamp_1
-      rect:
-        serializedVersion: 2
-        x: 15
-        y: 63
-        width: 27
-        height: 22
-      alignment: 7
+        x: 0
+        y: 0
+        width: 90
+        height: 188
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: idle_1
+    - name: lamp_Sprite_1
       rect:
         serializedVersion: 2
-        x: 14
-        y: 1
-        width: 30
-        height: 27
-      alignment: 7
-      pivot: {x: .5, y: 0}
+        x: 90
+        y: 0
+        width: 90
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: lamp_Sprite_2
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 0
+        width: 90
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: lamp_Sprite_3
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 0
+        width: 90
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

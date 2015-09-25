@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Spot : GuardAction 
@@ -15,7 +15,10 @@ public class Spot : GuardAction
 
     public void SpotTurnToAtkReady()
     {
-        turnToAtkReadyAct = guard.SleepThenCallFunction(15, ()=>TurnToAtkReady());        
+        if (turnToAtkReadyAct == null)
+        {
+            turnToAtkReadyAct = guard.SleepThenCallFunction(15, () => TurnToAtkReady());        
+        }        
     }
 
     void TurnToAtkReady()
@@ -38,6 +41,7 @@ public class Spot : GuardAction
             {
                 guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Alert);
                 guard.spriteSheet.Play("spot");
+                newTar.GetComponent<Actor>().SpotByEnemy(guard);
             }            
 
             target = newTar.transform;

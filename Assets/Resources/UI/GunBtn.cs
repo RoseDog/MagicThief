@@ -1,4 +1,4 @@
-﻿[UnityEngine.RequireComponent(typeof(UnityEngine.EventSystems.EventTrigger))]
+[UnityEngine.RequireComponent(typeof(UnityEngine.EventSystems.EventTrigger))]
 public class GunBtn : Actor
 {
     public UnityEngine.GameObject tip;

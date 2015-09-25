@@ -1,4 +1,4 @@
-﻿public class Building : Actor 
+public class Building : Actor 
 {
     public City city;
     public BuildingData data;

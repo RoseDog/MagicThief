@@ -1,5 +1,3 @@
-﻿using System.Collections;
-
 public class BackToBirthCell : GuardAction 
 {
     public override void Excute()

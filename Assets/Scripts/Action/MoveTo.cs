@@ -236,8 +236,10 @@ public class JumpTo : Cocos2dAction
 	// parent transformer
 	private Transform _transform;
 
+    public bool _changeDir;
+
 	// Constructor
-    public JumpTo(Transform target, Vector3 to, float height = 1.5f, int duration = 100)
+    public JumpTo(Transform target, Vector3 to, float height = 1.5f, int duration = 100, bool changeDir = false)
 	{
         _transform = target;
 		// define destination point
@@ -245,6 +247,8 @@ public class JumpTo : Cocos2dAction
         _height = height;
 		// define movement duration
 		_duration = duration;
+
+        _changeDir = changeDir;
 	}
 	
 	// Init
@@ -270,7 +274,19 @@ public class JumpTo : Cocos2dAction
             jumpHeight += delta.y * frac;
             float x = delta.x * frac;
 
+            UnityEngine.Vector3 pos_cache = _transform.localPosition;
+
             _transform.localPosition = _start + new UnityEngine.Vector3(x, jumpHeight);
+
+            if (_changeDir)
+            {
+                float angle = UnityEngine.Vector3.Angle(_transform.localPosition - pos_cache,UnityEngine.Vector3.left);
+                if (delta.y > 0)
+                {
+                    angle = -angle;
+                }
+                _transform.rotation = UnityEngine.Quaternion.AngleAxis(angle, UnityEngine.Vector3.forward);
+            }            
 			
 			// Reached target position
             if (Globals.LevelController.frameCount - _start_frame >= _duration) EndAction();

@@ -1,4 +1,4 @@
-﻿public class HeardAlert : GuardAction 
+public class HeardAlert : GuardAction 
 {
     public Guard alertTeammate;
     public Cocos2dAction goCoverAction;

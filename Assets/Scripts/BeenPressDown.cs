@@ -1,4 +1,4 @@
-﻿public class BeenPressDown : Action 
+public class BeenPressDown : Action 
 {
     TrickTimer timer;
     int duration = 100;
@@ -23,7 +23,7 @@
             actor.moving.canMove = false;
             actor.spriteSheet.Play("down_on_floor");
 
-            timer = (UnityEngine.GameObject.Instantiate(Globals.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
+            timer = (UnityEngine.GameObject.Instantiate(Globals.stealingController.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
             timer.BeginCountDown(gameObject, duration, new UnityEngine.Vector3(0, 150f, 0));
 
             pushAwayAction = actor.SleepThenCallFunction(duration, () => PushGuardsAway());
@@ -81,8 +81,8 @@
         stopCall = null;
         jumpSequence = null;
         if(!actor.IsLifeOver())
-        {            
-            if(actor == Globals.magician)
+        {
+            if (actor == Globals.stealingController.magician)
             {
                 // 教程中的盗贼被扑倒一次就不会逃跑了
                 actor.moving.canMove = true;

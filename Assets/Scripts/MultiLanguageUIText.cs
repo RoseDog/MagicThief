@@ -1,4 +1,4 @@
-﻿public class MultiLanguageUIText : UnityEngine.UI.Text 
+public class MultiLanguageUIText : UnityEngine.UI.Text 
 {
     protected override void Awake()
     {

@@ -1,21 +1,26 @@
-﻿public class Spider : Machine 
+public class Spider : Machine 
 {
     UnityEngine.GameObject appearSpot;
+    UnityEngine.GameObject scanner;
     public override void Awake()
     {
         base.Awake();
-        spriteSheet.AddAnim("idle", 12);        
-        spriteSheet.AddAnim("Atk", 4);
+        spriteSheet.AddAnim("idle", 4, UnityEngine.Random.Range(0.5f,0.7f));        
+        spriteSheet.AddAnim("Atk", 8, 1.7f);
         spriteSheet.AddAnimationEvent("Atk", -1, () => atk.AtkEnd());
-        spriteSheet.AddAnimationEvent("Atk", 1, () => atk.FireTheHit());
+        spriteSheet.AddAnimationEvent("Atk", 5, () => atk.FireTheHit());
 
         appearSpot = Globals.getChildGameObject(gameObject, "appearSpot");
         appearSpot.SetActive(false);
 
+        scanner = Globals.getChildGameObject(machineActiveArea.gameObject, "scanner");
+        AddAction(new RotateTo(new UnityEngine.Vector3(0, 0, 0), new UnityEngine.Vector3(0, 0, -360),
+            UnityEngine.Random.Range(60, 90), true, scanner.transform));
+
         if(Globals.LevelController as StealingLevelController != null)
         {
-            machineActiveArea.GetComponent<UnityEngine.MeshRenderer>().enabled = false;
-        }        
+            scanner.SetActive(false);
+        }                        
     }
 
     public override void Start()
@@ -48,13 +53,14 @@
     public override void SetInFog(bool infog)
     {
         inFog = infog;
-        machineActiveArea.GetComponent<UnityEngine.MeshRenderer>().enabled = !infog;
+        scanner.SetActive(!infog);
+        machineActiveArea.GetComponent<UnityEngine.SpriteRenderer>().enabled = !infog;
         spriteRenderer.enabled = !infog;
     }
 
-    public override void Broken()
+    public override void Broken(int fixDuration)
     {
-        base.Broken();
+        base.Broken(fixDuration);
         if(currentAction == atk)
         {
             atk.Stop();

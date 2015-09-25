@@ -88,24 +88,24 @@ public class AstarDebugger : MonoBehaviour {
 	int maxNodePool = 0;
 	
 	PathTypeDebug[] debugTypes = new PathTypeDebug[] {
-		new PathTypeDebug ("ABPath", PathPool<ABPath>.GetSize, PathPool<ABPath>.GetTotalCreated)		
+		//new PathTypeDebug ("ABPath", PathPool<ABPath>.GetSize, PathPool<ABPath>.GetTotalCreated)		
 	};
 	
 	struct PathTypeDebug {
 		string name;
-		System.Func<int> getSize;
-		System.Func<int> getTotalCreated;
-		public PathTypeDebug (string name, System.Func<int> getSize, System.Func<int> getTotalCreated) {
-			this.name = name;
-			this.getSize = getSize;
-			this.getTotalCreated = getTotalCreated;
-		}
+		//System.Func<int> getSize;
+		//System.Func<int> getTotalCreated;
+// 		public PathTypeDebug (string name, System.Func<int> getSize, System.Func<int> getTotalCreated) {
+// 			this.name = name;
+// 			//this.getSize = getSize;
+// 			//this.getTotalCreated = getTotalCreated;
+// 		}
 		
 		public void Print (StringBuilder text) {
-			int totCreated = getTotalCreated ();
-			if (totCreated > 0) {
-				text.Append("\n").Append (("  " + name).PadRight (25)).Append (getSize()).Append("/").Append(totCreated);
-			}
+// 			int totCreated = getTotalCreated ();
+// 			if (totCreated > 0) {
+// 				text.Append("\n").Append (("  " + name).PadRight (25)).Append (getSize()).Append("/").Append(totCreated);
+// 			}
 		}
 	}
 	

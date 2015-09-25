@@ -1,4 +1,4 @@
-﻿public class TrickTimer : Actor 
+public class TrickTimer : Actor 
 {
     public UnityEngine.GameObject actor;
     UnityEngine.UI.Image unlockProgressSprite;

@@ -1,4 +1,4 @@
-﻿public class Attack : GuardAction
+public class Attack : GuardAction
 {
     bool isAtkCDing = false;
     Cocos2dAction checkFunc;
@@ -118,26 +118,29 @@
     public virtual void FireTheHit()
     {
         Actor targetActor = guard.spot.target.GetComponent<Actor>();
-        UnityEngine.Vector3 magicianDir = targetActor.GetWorldCenterPos() - guard.transform.position;   
-        if (!checkIfTargetPressDown() && !targetActor.IsLifeOver())
+        if (targetActor != null)
         {
-            if (magicianDir.magnitude < guard.data.atkShortestDistance + 50f)
+            UnityEngine.Vector3 magicianDir = targetActor.GetWorldCenterPos() - guard.transform.position;
+            if (!checkIfTargetPressDown() && !targetActor.IsLifeOver())
             {
-                UnityEngine.Vector3 faceDir = UnityEngine.Vector3.left;
-                if (transform.localEulerAngles.y > 179)
+                if (magicianDir.magnitude < guard.data.atkShortestDistance + 50f)
                 {
-                    faceDir = UnityEngine.Vector3.right;
-                }
-                faceDir.z = 0;
-                double angle = UnityEngine.Vector3.Angle(magicianDir, faceDir);
-                if (angle < 100 && angle > -100)
-                {
-                    targetActor.ChangeLife(-guard.data.attackValue);                    
-                    targetActor.hitted.Excute();
-                    targetActor.FaceDir(magicianDir);
+                    UnityEngine.Vector3 faceDir = UnityEngine.Vector3.left;
+                    if (transform.localEulerAngles.y > 179)
+                    {
+                        faceDir = UnityEngine.Vector3.right;
+                    }
+                    faceDir.z = 0;
+                    double angle = UnityEngine.Vector3.Angle(magicianDir, faceDir);
+                    if (angle < 100 && angle > -100)
+                    {
+                        targetActor.ChangeLife(-guard.data.attackValue);
+                        targetActor.hitted.Excute();
+                        targetActor.FaceDir(magicianDir);
+                    }
                 }
             }
-        }
+        }        
     }
 
     public virtual bool checkTargetStillAlive()
@@ -155,7 +158,7 @@
         System.Diagnostics.Debug.Assert(guard.spot.target != null);
 
         float atkShortestDistance = guard.data.atkShortestDistance;
-        if (guard.spriteSheet.HasAnimation("kick") && Globals.magician.currentAction == Globals.magician.catchByNet)
+        if (guard.spriteSheet.HasAnimation("kick") && Globals.stealingController.magician.currentAction == Globals.stealingController.magician.catchByNet)
         {
             atkShortestDistance = 50f;
         }

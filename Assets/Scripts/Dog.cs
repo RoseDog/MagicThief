@@ -1,4 +1,4 @@
-﻿public class Dog : Guard 
+public class Dog : Guard 
 {
     UnityEngine.GameObject appearSpot;
     public override void Awake()
@@ -21,7 +21,7 @@
     public override bool CheckIfChangeTarget(UnityEngine.GameObject newTar)
     {
         // 如果本来的target是Dove，则不换目标
-        return base.CheckIfChangeTarget(newTar) && (spot.target == null ||  spot.target.gameObject.layer != 20);
+        return spot.target != newTar.transform && (spot.target == null || spot.target.gameObject.layer != 20);
     }
 
     public override void SetInFog(bool infog)

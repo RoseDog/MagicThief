@@ -1,4 +1,4 @@
-﻿public class SpannerIcon : AlphaFadeUI 
+public class SpannerIcon : AlphaFadeUI 
 {
     public override void Start()
     {

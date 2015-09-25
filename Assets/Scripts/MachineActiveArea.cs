@@ -1,4 +1,4 @@
-﻿public class MachineActiveArea : Actor
+public class MachineActiveArea : Actor
 {
     public Machine machine;
        

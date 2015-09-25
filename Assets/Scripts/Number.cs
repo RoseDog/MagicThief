@@ -1,4 +1,4 @@
-﻿public class Number : Actor
+public class Number : Actor
 {
     UnityEngine.UI.Text numberText;
     public float numberAmont = 0;

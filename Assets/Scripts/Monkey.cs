@@ -1,4 +1,4 @@
-﻿public class Monkey : Guard 
+public class Monkey : Guard 
 {
     public override void Awake()
     {
@@ -9,7 +9,7 @@
         spriteSheet.AddAnim("spot", 2, 1.0f, true);        
         spriteSheet.AddAnim("running", 4, 1.5f);
         spriteSheet.AddAnim("atkReady", 4);
-        spriteSheet.AddAnim("Atk", 9, 0.5f, true);
+        spriteSheet.AddAnim("Atk", 9, 2.0f, true);
         spriteSheet.AddAnim("BeenHypnosised", 4, 0.5f);
         spriteSheet.AddAnim("Sleeping", 7, 0.2f);
         spriteSheet.AddAnim("wander", 4, 0.25f);
@@ -19,5 +19,17 @@
         base.Awake();
         spriteSheet.AddAnimationEvent("Atk", 5, () => atk.FireTheHit());
         spriteSheet.AddAnimationEvent("Atk", -1, () => atk.AtkEnd());
+    }
+
+    public override void SetInFog(bool infog)
+    {
+        base.SetInFog(infog);
+        shadow.enabled = !infog;
+        spriteRenderer.enabled = !infog;
+
+        if (currentAction == spot)
+        {
+            eye.SetVisonConesVisible(true);
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿public class CatchByNet : Action
+public class CatchByNet : Action
 {
     TrickTimer timer;
     int duration = 200;
@@ -45,7 +45,7 @@
             UnityEngine.GameObject soundPrefab = UnityEngine.Resources.Load("Misc/GunSound") as UnityEngine.GameObject;
             GuardAlertSound sound = (UnityEngine.GameObject.Instantiate(soundPrefab) as UnityEngine.GameObject).GetComponent<GuardAlertSound>();
             sound.transform.position = transform.position;
-            sound.SetRadius(1500);
+            sound.SetRadiusLimit(1500);
             sound.StartAlert();
 
             if (timer == null)
@@ -54,7 +54,7 @@
                 actor.moving.canMove = false;
                 actor.spriteSheet.Play("catch_by_net");
 
-                timer = (UnityEngine.GameObject.Instantiate(Globals.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
+                timer = (UnityEngine.GameObject.Instantiate(Globals.stealingController.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
                 timer.BeginCountDown(gameObject, netTime, new UnityEngine.Vector3(0, 150f, 0));
 
                 breakNetAction = actor.SleepThenCallFunction(netTime, () => BreakNet());
@@ -85,7 +85,7 @@
         breakNetAction = null;
         Actor.to_be_remove.Add(timer);
         timer = null;
-        int jump_up_duration = actor.spriteSheet.GetAnimationLength("disguise");
+        int jump_up_duration = actor.spriteSheet.GetAnimationLengthWithSpeed("break_net");
         UnityEngine.Vector3 originPosition = actor.transform.position;
         UnityEngine.Vector3 to = originPosition + new UnityEngine.Vector3(0, 50f, 0);
         jumpSequence = new Sequence(

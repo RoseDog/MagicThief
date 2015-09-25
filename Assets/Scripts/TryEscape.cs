@@ -1,4 +1,4 @@
-﻿public class TryEscape : Action
+public class TryEscape : Action
 {
     int Duration = 100;
     public void Start()
@@ -22,16 +22,15 @@
         UnityEngine.GameObject SmokePrefab = UnityEngine.Resources.Load("Avatar/EscapeSmoke") as UnityEngine.GameObject;
         UnityEngine.GameObject smoke = UnityEngine.GameObject.Instantiate(SmokePrefab) as UnityEngine.GameObject;
         smoke.transform.position = new UnityEngine.Vector3(transform.position.x, transform.position.y-50, transform.position.z);
-        Globals.magician.OutStealing();
-        Globals.magician.Visible(false);
+        Globals.stealingController.magician.OutStealing();
+        Globals.stealingController.magician.Visible(false);
         actor.SleepThenCallFunction(20,()=>End());
     }
 
     void End()
     {
-        Globals.magician.Visible(true);
-        Stop();        
-        Globals.magician.escape.Go("victoryEscape");
-        (Globals.LevelController as StealingLevelController).PvPEscaped();
+        Globals.stealingController.magician.Visible(true);
+        Stop();
+        Globals.stealingController.magician.escape.Go("victoryEscape");
     }    
 }

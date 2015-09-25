@@ -1,0 +1,391 @@
+fileFormatVersion: 2
+guid: ba06f817bef38884bb9bb72b63b69fa1
+timeCreated: 1439813782
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: FakeGuard_pve_0
+    21300002: FakeGuard_pve_1
+    21300004: FakeGuard_pve_2
+    21300006: FakeGuard_pve_3
+    21300008: FakeGuard_pve_4
+    21300010: FakeGuard_pve_5
+    21300012: FakeGuard_pve_6
+    21300014: FakeGuard_pve_7
+    21300016: FakeGuard_pve_8
+    21300018: FakeGuard_pve_9
+    21300020: FakeGuard_pve_10
+    21300022: FakeGuard_pve_11
+    21300024: FakeGuard_pve_12
+    21300026: FakeGuard_pve_13
+    21300028: FakeGuard_pve_14
+    21300030: FakeGuard_pve_15
+    21300032: FakeGuard_pve_16
+    21300034: FakeGuard_pve_17
+    21300036: FakeGuard_pve_18
+    21300038: FakeGuard_pve_19
+    21300040: FakeGuard_pve_20
+    21300042: FakeGuard_pve_21
+    21300044: FakeGuard_pve_22
+    21300046: FakeGuard_pve_23
+    21300048: FakeGuard_pve_24
+    21300050: FakeGuard_pve_25
+    21300052: FakeGuard_pve_26
+    21300054: FakeGuard_pve_27
+    21300056: FakeGuard_pve_Sprite_0
+    21300058: FakeGuard_pve_Sprite_1
+    21300060: FakeGuard_pve_Sprite_2
+    21300062: FakeGuard_pve_Sprite_3
+    21300064: FakeGuard_pve_Sprite_4
+    21300066: FakeGuard_pve_Sprite_5
+    21300068: FakeGuard_pve_Sprite_6
+    21300070: FakeGuard_pve_Sprite_7
+    21300072: FakeGuard_pve_Sprite_8
+    21300074: FakeGuard_pve_Sprite_9
+    21300076: FakeGuard_pve_Sprite_10
+    21300078: FakeGuard_pve_Sprite_11
+    21300080: FakeGuard_pve_Sprite_12
+    21300082: FakeGuard_pve_Sprite_13
+    21300084: FakeGuard_pve_Sprite_14
+    21300086: FakeGuard_pve_Sprite_15
+    21300088: FakeGuard_pve_Sprite_16
+    21300090: FakeGuard_pve_Sprite_17
+    21300092: FakeGuard_pve_Sprite_18
+    21300094: FakeGuard_pve_Sprite_19
+    21300096: FakeGuard_pve_Sprite_20
+    21300098: FakeGuard_pve_Sprite_21
+    21300100: FakeGuard_pve_Sprite_22
+    21300102: FakeGuard_pve_Sprite_23
+    21300104: FakeGuard_pve_Sprite_24
+    21300106: FakeGuard_pve_Sprite_25
+    21300108: FakeGuard_pve_Sprite_26
+    21300110: FakeGuard_pve_Sprite_27
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: FakeGuard_pve_Sprite_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_1
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_2
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_3
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_4
+      rect:
+        serializedVersion: 2
+        x: 248
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_5
+      rect:
+        serializedVersion: 2
+        x: 310
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_6
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_7
+      rect:
+        serializedVersion: 2
+        x: 434
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_8
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_9
+      rect:
+        serializedVersion: 2
+        x: 558
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_10
+      rect:
+        serializedVersion: 2
+        x: 620
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_11
+      rect:
+        serializedVersion: 2
+        x: 682
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_12
+      rect:
+        serializedVersion: 2
+        x: 744
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_13
+      rect:
+        serializedVersion: 2
+        x: 806
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_14
+      rect:
+        serializedVersion: 2
+        x: 868
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_16
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_17
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_18
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_19
+      rect:
+        serializedVersion: 2
+        x: 248
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_20
+      rect:
+        serializedVersion: 2
+        x: 310
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_21
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_22
+      rect:
+        serializedVersion: 2
+        x: 434
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_23
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_24
+      rect:
+        serializedVersion: 2
+        x: 558
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_25
+      rect:
+        serializedVersion: 2
+        x: 620
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_26
+      rect:
+        serializedVersion: 2
+        x: 682
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_pve_Sprite_27
+      rect:
+        serializedVersion: 2
+        x: 744
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

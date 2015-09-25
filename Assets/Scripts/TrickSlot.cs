@@ -1,4 +1,4 @@
-﻿public class TrickSlot : CustomEventTrigger
+public class TrickSlot : CustomEventTrigger
 {
     UnityEngine.RectTransform draggingDownImage;
     public TrickUsingSlotData data;
@@ -6,6 +6,7 @@
     public UnityEngine.GameObject lockImage;
     public int index;
     public UnityEngine.UI.Text cashCost;
+    public TrickItem trickItem;
     public override void Awake()
     {
         base.Awake();
@@ -18,31 +19,51 @@
         lockImage = Globals.getChildGameObject(gameObject, "lock");
     }
 
-    public void UpdateData(TrickUsingSlotData d)
+    public void UpdateData(TrickUsingSlotData d, PlayerInfo player)
     {
         data = d;
         cashCost.text = data.price.ToString();
+        if (trickItem != null)
+        {
+            DestroyObject(trickItem.gameObject);
+            trickItem = null;
+        }
         if(data.statu != "-1")
         {
             Buy();
-            if (data.statu != "0")
+            TrickData trickData = player.GetTrickBySlotIdx(d.idx);
+            if (trickData != null)
             {
                 // Slot里的魔术道具
-                UnityEngine.GameObject itemPrefab = UnityEngine.Resources.Load<UnityEngine.GameObject>("UI/TrickItem");
-                TrickData trickData = Globals.GetTrickByName(data.statu);
-                TrickItem trickItem = (UnityEngine.GameObject.Instantiate(itemPrefab) as UnityEngine.GameObject).GetComponent<TrickItem>();
+                UnityEngine.GameObject itemPrefab = UnityEngine.Resources.Load<UnityEngine.GameObject>("UI/TrickItem");                
+                trickItem = (UnityEngine.GameObject.Instantiate(itemPrefab) as UnityEngine.GameObject).GetComponent<TrickItem>();
                 trickItem.trickData = trickData;                
                 trickItem.name = trickData.nameKey;
-                trickItem.Buy();
+                trickItem.Learn();
                 trickItem.PutItemInUse(this);
                 trickItem.CheckIfUnlock();
-            }            
+            }
+        }
+        else
+        {
+            cashCost.gameObject.SetActive(true);
+            lockImage.gameObject.SetActive(true);
+        }
+
+        if (trickItem != null)
+        {
+            powerCost.text = trickItem.trickData.powerCost.ToString();
+        }
+        else
+        {
+            powerCost.text = "";
         }        
     }
 
     public void TrickSlotClicked()
     {
-        if(!Globals.magician.Stealing)
+        if (!(Globals.stealingController != null && Globals.stealingController.magician.Stealing) 
+            && Globals.playingReplay == null)
         {
             // 如果是锁住的，询问是否购买
             if (data.statu == "-1")
@@ -123,33 +144,45 @@
         base.OnPointerEnter(d);
         if(!Globals.canvasForMagician.tricksBg.gameObject.activeSelf)
         {
-            Globals.canvasForMagician.cast_tip.gameObject.SetActive(true);
-            Globals.canvasForMagician.cast_tip.parent = rectTransform;
-            Globals.canvasForMagician.cast_tip.anchoredPosition = new UnityEngine.Vector2(0, 164);
-
-            if (data.statu == "-1")
-            {
-                Globals.languageTable.SetText(Globals.canvasForMagician.cast_tip.GetComponentInChildren<MultiLanguageUIText>(), "unlock_to_bring_more_item");
-            }
-            else if (data.statu == "0")
-            {
-                Globals.languageTable.SetText(Globals.canvasForMagician.cast_tip.GetComponentInChildren<MultiLanguageUIText>(), "plz_bring_more_item");
-            }
-            else
-            {
-                TrickData trick = Globals.GetTrickByName(data.statu);
+            Globals.canvasForMagician.cast_tip.gameObject.SetActive(true);            
+            MultiLanguageUIText tip = Globals.canvasForMagician.cast_tip.GetComponentInChildren<MultiLanguageUIText>();
+            TrickData trick = Globals.self.GetTrickBySlotIdx(data.idx);
+            if (trick != null)
+            {                
                 if (trick.nameKey == "flash_grenade")
                 {
-                    Globals.languageTable.SetText(Globals.canvasForMagician.cast_tip.GetComponentInChildren<MultiLanguageUIText>(), "drag_to_cast");
+                    Globals.languageTable.SetText(tip, "drag_to_cast");
                 }
                 else if (trick.clickOnGuardToCast)
                 {
-                    Globals.languageTable.SetText(Globals.canvasForMagician.cast_tip.GetComponentInChildren<MultiLanguageUIText>(), "click_guard_to_cast");
+                    Globals.languageTable.SetText(tip, "click_guard_to_cast");
                 }
                 else
                 {
-                    Globals.languageTable.SetText(Globals.canvasForMagician.cast_tip.GetComponentInChildren<MultiLanguageUIText>(), "click_to_cast");
+                    System.String shortcut_str = "";
+                    if (data.idx == 0)
+                    {
+                        shortcut_str = "Q";
+                    }
+                    if (data.idx == 1)
+                    {
+                        shortcut_str = "W";
+                    }
+                    if (data.idx == 2)
+                    {
+                        shortcut_str = "E";
+                    }
+                    tip.text = Globals.languageTable.GetText("click_to_cast") + " " + Globals.languageTable.GetText("shortcut",
+                        new System.String[] { shortcut_str });
                 }
+            }
+            else if (data.statu == "-1")
+            {
+                Globals.languageTable.SetText(tip, "unlock_to_bring_more_item");
+            }
+            else if (data.statu == "0")
+            {
+                Globals.languageTable.SetText(tip, "plz_bring_more_item");
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿public class TrickBtnOnGuardHead : CustomEventTrigger
+public class TrickBtnOnGuardHead : CustomEventTrigger
 {
     public Guard guard;    
 

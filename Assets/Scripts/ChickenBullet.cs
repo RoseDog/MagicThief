@@ -1,11 +1,11 @@
-﻿public class ChickenBullet : Projectle
+public class ChickenBullet : Projectle
 {
     public Guard monkey;
     public override void Awake()
     {
         base.Awake();
         hit_target_dis = 110f;
-        jumpDuration = 60;
+        jumpDuration = 30;
         spriteSheet.AddAnim("flying", 2);
         spriteSheet.Play("flying");
     }

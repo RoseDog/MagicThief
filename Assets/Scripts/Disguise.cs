@@ -1,4 +1,4 @@
-﻿public class Disguise : MagicianTrickAction 
+public class Disguise : MagicianTrickAction 
 {
     double speedCache;
     UnityEngine.GameObject FakeGuard_prefab;
@@ -40,11 +40,26 @@
         sheetCache = actor.spriteSheet;
         sheetCache.enabled = false;
         actor.spriteSheet = FakeGuard.GetComponent<SpriteSheet>();
-        actor.spriteSheet._sprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Avatar/FakeGuard_Sprite");
-        actor.spriteSheet._actor = actor;
-        actor.spriteSheet.initialized = true;
-        actor.spriteSheet.AddAnim("idle",4,1.5f);
-        actor.spriteSheet.AddAnim("moving",6, 1.8f);
+        if(Globals.guardPlayer.isBot)
+        {
+            actor.spriteSheet._sprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Avatar/FakeGuard_pve_Sprite");
+            actor.spriteSheet._actor = actor;
+            actor.spriteSheet.initialized = true;
+            actor.spriteSheet.AddAnim("idle", 4, 1.5f);
+            actor.spriteSheet.AddAnim("moving", 4, 1.8f);
+            actor.spriteSheet.AddAnim("open_chest", 4);
+            actor.spriteSheet.AddAnim("take_money", 16);
+        }
+        else
+        {
+            actor.spriteSheet._sprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Avatar/FakeGuard_Sprite");
+            actor.spriteSheet._actor = actor;
+            actor.spriteSheet.initialized = true;
+            actor.spriteSheet.AddAnim("idle", 4, 1.5f);
+            actor.spriteSheet.AddAnim("moving", 6, 1.8f);
+            actor.spriteSheet.AddAnim("open_chest", 4);
+            actor.spriteSheet.AddAnim("take_money", 16);
+        }        
 
 
         TrickTimer = UnityEngine.GameObject.Instantiate(TrickTimerPrefab) as UnityEngine.GameObject;
@@ -57,14 +72,14 @@
         stopAction = actor.SleepThenCallFunction(data.duration, () => Stop());
         actor.moving.canMove = true;
 
-        // 易容可以逃脱狗和Armed
-        foreach (Guard guard in Globals.maze.guards)
-        {
-            if (guard.data.name != "guard" && guard.spot != null && guard.spot.target == actor.transform)
-            {
-                guard.wandering.Excute();
-            }
-        }
+//         // 易容可以逃脱狗和Armed
+//         foreach (Guard guard in Globals.maze.guards)
+//         {
+//             if (guard.data.name != "guard" && guard.spot != null && guard.spot.target == actor.transform)
+//             {
+//                 guard.wandering.Excute();
+//             }
+//         }
     }
    
     public override void Stop()

@@ -1,4 +1,4 @@
-﻿public class MageGirlOpening : UnityEngine.MonoBehaviour 
+public class MageGirlOpening : UnityEngine.MonoBehaviour 
 {
     System.Collections.ArrayList animationNamesArray = new System.Collections.ArrayList();
     int anim_idx = 0;

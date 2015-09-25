@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class WanderingLostTarget : GuardAction 
@@ -52,7 +52,8 @@ public class WanderingLostTarget : GuardAction
         else
         {
             ((call as Sequence).actions[0] as SleepFor)._start_frame = Globals.LevelController.frameCount;
-        }        
+        }
+        Globals.stealingController.magician.EnemyStopChasing(guard);
     }
 
     public override void Stop()

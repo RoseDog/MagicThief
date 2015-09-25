@@ -1,4 +1,4 @@
-﻿public class LevelController : Actor
+public class LevelController : Actor
 {
     public int randSeedCache;
     public UnityEngine.Canvas mainCanvas;
@@ -6,8 +6,9 @@
     public UnityEngine.GameObject fogPlane;
     public UnityEngine.Camera fogCam;
     public UnityEngine.Camera fogCam_2;
-    protected UnityEngine.Texture2D fogTex;
+    public UnityEngine.Texture2D fogTex;
     public int frameCount;
+    public Magician magician;
     
     public override void Awake()
     {
@@ -17,14 +18,7 @@
         {
             UnityEngine.GameObject mgrs_prefab = UnityEngine.Resources.Load("GlobalMgrs") as UnityEngine.GameObject;
             UnityEngine.GameObject.Instantiate(mgrs_prefab);
-        }
-        if (Globals.magician == null)
-        {
-            // 魔术师出场
-            UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/Rosa") as UnityEngine.GameObject;
-            UnityEngine.GameObject.Instantiate(magician_prefab);
-            Globals.magician.gameObject.SetActive(false);
-        }
+        }        
         
         UnityEngine.GameObject minimapCamObj = UnityEngine.GameObject.Find("MiniMapCamera");
         if (minimapCamObj != null)
@@ -58,7 +52,7 @@
     public override void Start()
     {
         base.Start();
-        if (Globals.canvasForMagician == null && (this as LevelEditor) == null)
+        if (Globals.canvasForMagician == null && (this as LevelEditor) == null && (this as LoadingSceneLevelController) == null)
         {
             UnityEngine.GameObject canvas_prefab = UnityEngine.Resources.Load("CanvasForMagician") as UnityEngine.GameObject;
             UnityEngine.GameObject.Instantiate(canvas_prefab);
@@ -114,6 +108,11 @@
             (Globals.maze.X_CELLS_COUNT > Globals.maze.Y_CELLS_COUNT ? Globals.maze.X_CELLS_COUNT : Globals.maze.Y_CELLS_COUNT) 
             * Globals.maze.GetCellSideLength() * 0.5f;
         Globals.cameraFollowMagician.OpenMinimap();
+        if (Globals.maze.droppedItemsStr != "")
+        {
+            Globals.maze.owner_of_maze.UnpackDroppedItemStr(Globals.maze.droppedItemsStr);            
+        }
+        Globals.maze.owner_of_maze.SpreadItemsDroppedFromThiefInMaze();
 	}
 
     protected bool bIsPerfectStealing = false;
@@ -131,10 +130,10 @@
 //        return;
 
         // 检查宝石
-        Gem[] gems = UnityEngine.GameObject.FindObjectsOfType<Gem>();
-        foreach(Gem gem in gems)
+        PickedItem[] items = UnityEngine.GameObject.FindObjectsOfType<PickedItem>();
+        foreach(PickedItem item in items)
         {
-            if (gem.GetCash() != 0)
+            if (item.holder && item.GetCash() != 0)
             {
                 return;
             }
@@ -322,9 +321,18 @@
             {
                 // 魔术师下落的过程中，看得到魔术师。但是不开拓出任何视野
                 if (sprite.gameObject.layer == 11 && 
-                    (Globals.magician.currentAction == Globals.magician.falling || Globals.magician.currentAction == Globals.magician.escape))
+                    (magician.currentAction == magician.falling || magician.currentAction == magician.escape))
                 {
                     sprite.sortingOrder = 10;
+                }
+                    // shadow
+                else if (sprite.gameObject.layer == 18)
+                {
+                }
+                    // Wall, E, W
+                else if (sprite.gameObject.layer == 8 && sprite.sortingOrder == -1)
+                {
+
                 }
                 // LightSource,FlyUp
                 else if (sprite.gameObject.layer == 21 || sprite.gameObject.layer == 26)
@@ -358,7 +366,7 @@
     {
         PutCashInBox(player);
         for (int idx = 0; idx < player.safeBoxDatas.Count; ++idx)
-        {            
+        {
             Globals.maze.chests[idx].SyncWithData(player.safeBoxDatas[idx]);
         }        
     }

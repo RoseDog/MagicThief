@@ -1,4 +1,4 @@
-﻿public class MyMazeLevelController : LevelController 
+public class MyMazeLevelController : LevelController 
 {            
     UnityEngine.GameObject thief_prefab;
     public TutorialThief currentThief;    
@@ -21,15 +21,16 @@
         FindObjectOfType<CameraFollow>().GetComponent<UnityEngine.Camera>().enabled = false;
 
         GuardFullFillHisDutyTipPrefab = UnityEngine.Resources.Load("UI/GuardFullFillHisDuty") as UnityEngine.GameObject;
-        fogPlane.SetActive(false);        
+        fogPlane.SetActive(false);
+        Globals.guardPlayer = null;
     }
 
     public override void Start()
     {
         base.Start();
-        Globals.cameraFollowMagician.audioSource.clip = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/尋問");
+        Globals.cameraFollowMagician.audioSource.clip = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/Bluesy_Vibes");
         Globals.cameraFollowMagician.audioSource.Play();
-        Globals.cameraFollowMagician.audioSource.volume = 0.25f;
+        Globals.cameraFollowMagician.audioSource.volume = 1.25f;
     }
 
     public override void BeforeGenerateMaze()
@@ -38,7 +39,10 @@
         if (Globals.canvasForMyMaze.enhanceDefenseUI.mazeInfo.isUpgradingMaze)
         {
             Globals.self.currentMazeRandSeedCache = (int)System.DateTime.Now.Ticks;
-            Globals.self.UpgradeMaze();
+            if(Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.InitMyMaze)
+            {
+                Globals.self.UpgradeMaze();
+            }            
         }
 
         if (Globals.self.currentMazeLevel == 0)
@@ -63,7 +67,7 @@
 
     public override void MazeFinished()
     {        
-        base.MazeFinished();
+        base.MazeFinished();        
         
         if (Globals.canvasForMyMaze.enhanceDefenseUI.mazeInfo.isUpgradingMaze)
         {

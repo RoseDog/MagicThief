@@ -1,7 +1,7 @@
 ﻿GuardCount=3
-(-336.50, -462.50, -0.0100)=Spider
-(-786.50, -487.50, -0.0100)=joker
-(13.50, -162.50, -0.0100)=dog
+(-324.0000, -425.0000, -0.0100)=Spider
+(-674.0000, 150.0000, -0.0100)=joker
+(1.0000, 75.0000, -0.0100)=joker
 randSeedCacheWhenEditLevel=-63009503
 Z_CELLS_COUNT=5
 X_CELLS_COUNT=3

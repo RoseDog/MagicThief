@@ -1,4 +1,4 @@
-﻿public class FlyUp : MagicianTrickAction
+public class FlyUp : MagicianTrickAction
 {
     Guard target;
     
@@ -59,7 +59,7 @@
 
     public void InAir()
     {
-        timer = (UnityEngine.GameObject.Instantiate(Globals.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
+        timer = (UnityEngine.GameObject.Instantiate(Globals.stealingController.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
         timer.BeginCountDown(gameObject, data.duration, new UnityEngine.Vector3(0, 170f, 0));
         inAirCD = actor.SleepThenCallFunction(data.duration, () => FoldGlider());
         actor.spriteSheet.Play("flying");

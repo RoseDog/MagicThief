@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -41,6 +41,8 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     public System.String LevelTipText;
 
     public int CASH = 0;
+
+    public System.String droppedItemsStr;
     
 
     UnityEngine.GameObject maze;
@@ -698,7 +700,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             }
         }
         // 如果一扇门都没有，随机选择一面墙来开门
-        if (room.doors.Count == 0)
+        if (room.doors.Count == 0 && room.couldBeDoors.Count != 0)
         {
             Cell door = room.couldBeDoors[UnityEngine.Random.Range(0, room.couldBeDoors.Count)];
             foreach(System.String dir in Globals.DIRECTIONS)
@@ -764,6 +766,26 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                         yield return cell;
                 }
         }
+    }
+
+    public Cell GetRandomCorridorCell()
+    {
+        Cell corridor = null;
+        while (corridor == null)
+        {
+            int x = UnityEngine.Random.Range(0, X_CELLS_COUNT);
+
+            // Loop while the current cell is the visited cell
+
+            int y = UnityEngine.Random.Range(0, Y_CELLS_COUNT);
+
+            Cell random_cell = GetCell(y,x);
+            if (random_cell.IsCorridor)
+            {
+                corridor = random_cell;
+            }
+        }
+        return corridor;
     }
 
     public IEnumerable<Cell> EveryCells
@@ -1137,26 +1159,26 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 
         foreach (Cell cell in EveryCells)
         {
-            UnityEngine.SpriteRenderer S_W_Corner = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "S-W-Corner");
-            UnityEngine.SpriteRenderer S_E_Corner = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "S-E-Corner");
-            
-            UnityEngine.SpriteRenderer E_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "E");
-            UnityEngine.SpriteRenderer W_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(cell.gameObject, "W");
+            UnityEngine.SpriteRenderer S_W_Corner = cell.S_W_Corner_Sprite;
+            UnityEngine.SpriteRenderer S_E_Corner = cell.S_E_Corner_Sprite;
+
+            UnityEngine.SpriteRenderer E_sprite = cell.E_Sprite;
+            UnityEngine.SpriteRenderer W_sprite = cell.W_Sprite;
+
+            UnityEngine.Collider N_W_Corner = cell.N_W_Corner_Collider;
+            UnityEngine.Collider N_E_Corner = cell.N_E_Corner_Collider;
 
             Cell S_Cell = cell.GetAdjacentCell(Globals.SOUTH);
             if (S_Cell)
             {
-                UnityEngine.SpriteRenderer south_cell_E_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(S_Cell.gameObject, "E");
-                UnityEngine.SpriteRenderer south_cell_W_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(S_Cell.gameObject, "W");
-
-                if (E_sprite != null && E_sprite.enabled && (south_cell_E_sprite == null || south_cell_E_sprite.enabled == false))
+                if (E_sprite != null && E_sprite.enabled && (S_Cell.E_Sprite == null || S_Cell.E_Sprite.enabled == false))
                 {
                     S_E_Corner.sprite = s_e_corner;
                     S_E_Corner.enabled = true;
                     S_E_Corner.GetComponent<UnityEngine.Collider>().enabled = true;
                 }
 
-                if (W_sprite != null && W_sprite.enabled && (south_cell_W_sprite == null || south_cell_W_sprite.enabled == false))
+                if (W_sprite != null && W_sprite.enabled && (S_Cell.W_Sprite == null || S_Cell.W_Sprite.enabled == false))
                 {
                     S_W_Corner.sprite = s_w_corner;
                     S_W_Corner.enabled = true;
@@ -1191,8 +1213,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             }
 
             Cell N_Cell = cell.GetAdjacentCell(Globals.NORTH);
-            UnityEngine.Collider N_W_Corner = Globals.getChildGameObject<UnityEngine.Collider>(cell.gameObject, "N-W-Corner");
-            UnityEngine.Collider N_E_Corner = Globals.getChildGameObject<UnityEngine.Collider>(cell.gameObject, "N-E-Corner");
+            
             if (N_Cell)
             {
                 UnityEngine.SpriteRenderer north_cell_E_sprite = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(N_Cell.gameObject, "E");
@@ -1207,6 +1228,16 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                 {
                     N_W_Corner.enabled = true;
                 }
+
+                if (north_cell_E_sprite == null || north_cell_E_sprite.enabled == false)
+                {
+                    N_E_Corner.GetComponent<UnityEngine.BoxCollider>().center = new UnityEngine.Vector3(0, -0.65f, 0);
+                }
+
+                if (north_cell_W_sprite == null || north_cell_W_sprite.enabled == false)
+                {
+                    N_W_Corner.GetComponent<UnityEngine.BoxCollider>().center = new UnityEngine.Vector3(0, -0.65f, 0);
+                }
             }
             else
             {
@@ -1220,6 +1251,52 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                     N_E_Corner.enabled = true;
                 }
 
+            }
+
+            if (S_E_Corner != null && S_E_Corner.enabled && (E_sprite == null || E_sprite.enabled == false))
+            {                
+                S_E_Corner.GetComponent<UnityEngine.BoxCollider>().center = new UnityEngine.Vector3(0, -0.65f, 0);
+            }
+
+            if (S_W_Corner != null && S_W_Corner.enabled && (W_sprite == null || W_sprite.enabled == false))
+            {
+                S_W_Corner.GetComponent<UnityEngine.BoxCollider>().center = new UnityEngine.Vector3(0, -0.65f, 0);
+            }
+
+            // 阴影
+            if (N_W_Corner)
+            {
+                UnityEngine.SpriteRenderer shadow = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(N_W_Corner.gameObject, "wall_shadow");
+                shadow.enabled = N_W_Corner.enabled;
+            }
+            if (N_E_Corner)
+            {
+                UnityEngine.SpriteRenderer shadow = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(N_E_Corner.gameObject, "wall_shadow");
+                shadow.enabled = N_E_Corner.enabled;
+            }
+            
+            if(W_sprite && W_sprite.gameObject.activeSelf)
+            {
+                UnityEngine.SpriteRenderer shadow = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(W_sprite.gameObject,"wall_shadow");
+                shadow.enabled = W_sprite.enabled;
+            }
+
+            if (S_W_Corner && S_W_Corner.gameObject.activeSelf)
+            {
+                UnityEngine.SpriteRenderer shadow = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(S_W_Corner.gameObject, "wall_shadow");
+                shadow.enabled = S_W_Corner.enabled;
+            }
+
+            if (E_sprite && E_sprite.gameObject.activeSelf)
+            {
+                UnityEngine.SpriteRenderer shadow = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(E_sprite.gameObject, "wall_shadow");
+                shadow.enabled = E_sprite.enabled;
+            }
+
+            if (S_E_Corner && S_E_Corner.gameObject.activeSelf)
+            {
+                UnityEngine.SpriteRenderer shadow = Globals.getChildGameObject<UnityEngine.SpriteRenderer>(S_E_Corner.gameObject, "wall_shadow");
+                shadow.enabled = S_E_Corner.enabled;
             }
         }
         
@@ -1344,7 +1421,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     {
         if (fingerDownOnMap != null && !Globals.canvasForMagician.draggingFlashGrenade)
         {
-            Globals.cameraFollowMagician.DragToMove(fingerDownOnMap);
+            Globals.cameraFollowMagician.DragToMove(fingerDownOnMap);            
         }
         else
         {
@@ -1485,12 +1562,22 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         else if (choosenGuard == null)
         {
             mask = 1 << 14;
-            Chest chest = Globals.FingerRayToObj<Chest>(Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), mask, fingerDownOnMap.nowPosition);
-            if (chest != null)
+            PickedItem picked = Globals.FingerRayToObj<PickedItem>(Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), mask, fingerDownOnMap.nowPosition);
+            if (picked != null)
             {
-                chest.ShowUpgradeBtn();
-                choosenChest = chest;
-            }            
+                picked.Picked();
+                Globals.self.AddTrickItem(Globals.self.GetTrickByName(picked.gameObject.name));
+                Globals.self.RemoveDroppedItem(picked.gameObject.name);
+            }
+            else
+            {
+                Chest chest = Globals.FingerRayToObj<Chest>(Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), mask, fingerDownOnMap.nowPosition);
+                if (chest != null)
+                {
+                    chest.ShowUpgradeBtn();
+                    choosenChest = chest;
+                }      
+            }
         }
         
         return true;
@@ -1582,6 +1669,8 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     }
 
     UnityEngine.GameObject chest_prefab;
+    public PlayerInfo owner_of_maze;
+    public UnityEngine.GameObject cell_prefab;
     // Use this for initialization
     public void Start()
     {
@@ -1589,10 +1678,8 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         {
             return;
         }
-
-        Globals.LevelController.BeforeGenerateMaze();
-
-        PlayerInfo owner_of_maze = null;
+     
+        owner_of_maze = null;
         if (Globals.guardPlayer != null)
         {
             owner_of_maze = Globals.guardPlayer;
@@ -1605,6 +1692,8 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         {
             owner_of_maze = Globals.self;
         }
+        
+        Globals.LevelController.BeforeGenerateMaze();
 
         if (owner_of_maze.isBot)
         {
@@ -1618,7 +1707,12 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             }
             else
             {
-                pieces_dir = "Props/Maze-Pieces/" + owner_of_maze.currentMazeLevel.ToString();
+                int maze_lv = owner_of_maze.currentMazeLevel;
+                if (maze_lv > 5)
+                {
+                    maze_lv = 5;
+                }
+                pieces_dir = "Props/Maze-Pieces/" + maze_lv.ToString();
             }
         }
                 
@@ -1648,7 +1742,15 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 //         center_pos = new UnityEngine.Vector3(-(X_CELLS_COUNT * cell_side_length) / 2.0f - cell_side_length / 2.0f,
 //            (Y_CELLS_COUNT * cell_side_length) / 2.0f - cell_side_length / 2.0f, 0);
 
-        UnityEngine.GameObject cell_prefab = UnityEngine.Resources.Load(pieces_dir + "/Cell_2d") as UnityEngine.GameObject;
+        cell_prefab = UnityEngine.Resources.Load("Props/Maze-Pieces/Cell_2d") as UnityEngine.GameObject;
+        Cell cell_script_in_prefab = cell_prefab.GetComponent<Cell>();
+        cell_script_in_prefab.Floor_Sprite.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>(pieces_dir + "/Floor");
+        cell_script_in_prefab.E_Sprite.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>(pieces_dir + "/Wall_04");
+        cell_script_in_prefab.W_Sprite.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>(pieces_dir + "/Wall_04");
+        cell_script_in_prefab.N_Sprite.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>(pieces_dir + "/Wall_01");
+        cell_script_in_prefab.S_Sprite.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>(pieces_dir + "/Wall_01");
+        cell_script_in_prefab.S_E_Corner_Sprite.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>(pieces_dir + "/S_E_Corner");
+        cell_script_in_prefab.S_W_Corner_Sprite.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>(pieces_dir + "/S_W_Corner");
         // 从左上开始，一一构造cells
         for (int y = 0; y < Y_CELLS_COUNT; ++y)
         {
@@ -1748,7 +1850,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             {
                 foreach(UnityEngine.GameObject spottedEnemy in guard.eye.enemiesInEye)
                 {
-                    if (spottedEnemy == Globals.magician.gameObject)
+                    if (spottedEnemy == Globals.stealingController.magician.gameObject)
                     {
                         return true;
                     }

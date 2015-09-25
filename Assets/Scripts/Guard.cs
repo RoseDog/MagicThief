@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 
 public class Guard : Actor, System.IComparable<Guard>
 {
@@ -416,7 +416,8 @@ public class Guard : Actor, System.IComparable<Guard>
 
     public virtual bool CheckIfChangeTarget(UnityEngine.GameObject newTar)
     {
-        return spot.target != newTar.transform;
+        // 如果本来是主角，则不更换目标
+        return spot.target != newTar.transform && (spot.target == null || spot.target.gameObject.layer != 11);
     }
 
     public void CheckChest(UnityEngine.GameObject gameObj)
@@ -461,6 +462,10 @@ public class Guard : Actor, System.IComparable<Guard>
 
     public bool IsSeenEnemy(UnityEngine.GameObject enemy)
     {
+        if(!eye.gameObject.activeSelf)
+        {
+            return false;
+        }
         // 如果守卫面对着魔术师
         UnityEngine.Vector3 magicianDir = enemy.transform.position - transform.position;
         magicianDir.z = 0;
@@ -482,21 +487,21 @@ public class Guard : Actor, System.IComparable<Guard>
         magicianDir.z = 0;
         UnityEngine.RaycastHit hitInfo;
         int layermask = 1 << 8;
-        float collide_radius = characterController.radius * transform.localScale.x * 3.5f;
+        float collide_radius = characterController.radius * transform.localScale.x;
         UnityEngine.Ray ray = new UnityEngine.Ray(transform.position, magicianDir + new UnityEngine.Vector3(collide_radius,0,0));
         UnityEngine.Ray ray1 = new UnityEngine.Ray(transform.position, magicianDir + new UnityEngine.Vector3(-collide_radius,0,0));
         UnityEngine.Ray ray2 = new UnityEngine.Ray(transform.position, magicianDir + new UnityEngine.Vector3(0, collide_radius, 0));
         UnityEngine.Ray ray3 = new UnityEngine.Ray(transform.position, magicianDir + new UnityEngine.Vector3(0, -collide_radius, 0));
-        if (UnityEngine.Physics.Raycast(ray, out hitInfo, magicianDir.magnitude, layermask) ||
-            UnityEngine.Physics.Raycast(ray1, out hitInfo, magicianDir.magnitude, layermask) ||
-            UnityEngine.Physics.Raycast(ray2, out hitInfo, magicianDir.magnitude, layermask) ||
-            UnityEngine.Physics.Raycast(ray3, out hitInfo, magicianDir.magnitude, layermask))
+        if (!UnityEngine.Physics.Raycast(ray, out hitInfo, magicianDir.magnitude, layermask) ||
+            !UnityEngine.Physics.Raycast(ray1, out hitInfo, magicianDir.magnitude, layermask) ||
+            !UnityEngine.Physics.Raycast(ray2, out hitInfo, magicianDir.magnitude, layermask) ||
+            !UnityEngine.Physics.Raycast(ray3, out hitInfo, magicianDir.magnitude, layermask))
         {
-            return true;
+            return false;
         }
         else
         {
-            return false;
+            return true;
         }
     }
 
@@ -523,8 +528,8 @@ public class Guard : Actor, System.IComparable<Guard>
         {
             return 0;
         }
-        if (UnityEngine.Vector3.Distance(transform.position, Globals.magician.transform.position) >
-            UnityEngine.Vector3.Distance(other.transform.position, Globals.magician.transform.position))
+        if (UnityEngine.Vector3.Distance(transform.position, Globals.stealingController.magician.transform.position) >
+            UnityEngine.Vector3.Distance(other.transform.position, Globals.stealingController.magician.transform.position))
         {
             return 1;
         }
@@ -539,5 +544,15 @@ public class Guard : Actor, System.IComparable<Guard>
             eye.SetVisonConesVisible(!infog);
             head_on_minimap.SetActive(!infog);
         }        
+    }
+
+    public override double GetSpeed()
+    {
+        double s = data.moveSpeed;
+        if (currentAction == patrol)
+        {
+            s *= 0.3f;
+        }
+        return s;
     }
 }

@@ -1,4 +1,4 @@
-﻿public class Projectle : Actor
+public class Projectle : Actor
 {
     protected Actor targetActor;
     protected Cocos2dAction jumpAction;
@@ -10,7 +10,7 @@
     public void Fire(Actor target)
     {
         targetActor = target;        
-        jumpAction = new Sequence(new JumpTo(transform, targetActor.transform.position, 100.0f,
+        jumpAction = new Sequence(new JumpTo(transform, targetActor.transform.position, 140.0f,
             jumpDuration),
             new FunctionCall(() => HitMiss()));
         AddAction(jumpAction);

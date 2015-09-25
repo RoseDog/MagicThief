@@ -1,4 +1,4 @@
-﻿[UnityEngine.RequireComponent(typeof(UnityEngine.EventSystems.EventTrigger))]
+[UnityEngine.RequireComponent(typeof(UnityEngine.EventSystems.EventTrigger))]
 public class CustomEventTrigger : Actor
 {
     public UnityEngine.EventSystems.EventTrigger eventTrigger = null;

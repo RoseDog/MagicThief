@@ -1,4 +1,4 @@
-﻿public class HireGuards : CustomEventTrigger
+public class HireGuards : CustomEventTrigger
 {
     public UnityEngine.UI.Button prevBtn;
     public UnityEngine.UI.Button nextBtn;

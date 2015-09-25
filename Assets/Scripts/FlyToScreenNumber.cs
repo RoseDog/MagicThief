@@ -1,4 +1,4 @@
-﻿public class FlyToScreenNumber : Actor
+public class FlyToScreenNumber : Actor
 {
     // 这个是跟相机的projection matrix有关的。每次调整相机的距离可能需要调整这个参数
     public float numberDelta;
@@ -22,7 +22,7 @@
         }
         FlyOff(rotate);
 
-        if (Globals.magician.LifeCurrent > 0 && numberFlyTo.gameObject.activeSelf)
+        if (Globals.stealingController.magician.LifeCurrent > 0 && numberFlyTo.gameObject.activeSelf)
         {
             controller.MagicianGotCash(numberDelta);
         }        
@@ -77,7 +77,7 @@
             if (disNow < 1.0f)
             {
                 DestroyImmediate(gameObject);
-                if (Globals.magician.LifeCurrent > 0 && numberFlyTo.gameObject.activeSelf)
+                if (Globals.stealingController == null || (Globals.stealingController.magician.LifeCurrent > 0 && numberFlyTo.gameObject.activeSelf))
                 {
                     numberFlyTo.Add(numberDelta);
                     //numberFlyTo.audioSource.Play();

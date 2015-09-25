@@ -1,4 +1,4 @@
-﻿public class PathMesh : UnityEngine.MonoBehaviour 
+public class PathMesh : UnityEngine.MonoBehaviour 
 {
     UnityEngine.Vector3[] newVertices;
     UnityEngine.Vector2[] newUV;

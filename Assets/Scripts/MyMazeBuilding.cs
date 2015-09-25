@@ -1,4 +1,4 @@
-﻿public class MyMazeBuilding : BuildingCouldDivedIn
+public class MyMazeBuilding : BuildingCouldDivedIn
 {   
     public void IntoHomeMaze()
     {

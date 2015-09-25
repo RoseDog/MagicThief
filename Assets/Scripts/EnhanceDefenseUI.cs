@@ -1,4 +1,4 @@
-﻿public class EnhanceDefenseUI : Actor
+public class EnhanceDefenseUI : Actor
 {
     public UnityEngine.UI.Button mazeTab;
     public UnityEngine.UI.Button guardsTab;

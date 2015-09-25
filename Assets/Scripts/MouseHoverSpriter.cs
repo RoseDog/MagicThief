@@ -1,4 +1,4 @@
-﻿public class MouseHoverSpriter : Actor
+public class MouseHoverSpriter : Actor
 {
     public float animSpeed = 1.0f;
     public bool DestroyAtEnd = false;

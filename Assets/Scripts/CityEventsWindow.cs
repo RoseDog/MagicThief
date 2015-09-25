@@ -1,4 +1,4 @@
-﻿public class CityEventsWindow : CustomEventTrigger 
+public class CityEventsWindow : CustomEventTrigger 
 {
     public System.Collections.Generic.List<CityEvent> cityEvents = new System.Collections.Generic.List<CityEvent>();    
     UnityEngine.GameObject eventPrefab;
@@ -96,6 +96,7 @@
     public void Reward(UnityEngine.UI.Button btn, MultiLanguageUIText btn_text, ReplayData replay)
     {
         btn.onClick.RemoveAllListeners();
+        Globals.self.ChangeRose(replay.reward_rose_count);
         Globals.canvasForMagician.RoseNumber.Add(replay.reward_rose_count);
         Globals.canvasForMagician.RoseNumber.audioSource.Play();        
 
@@ -135,7 +136,7 @@
         float padding = 3;
         for (int idx = cityEvents.Count - 1; idx >= 0; --idx)
         {
-            cityEvents[idx].rectTransform.localPosition = new UnityEngine.Vector3(12.5f, event_y_pos, 0.0f);
+            cityEvents[idx].rectTransform.localPosition = new UnityEngine.Vector3(17.5f, event_y_pos, 0.0f);
             event_y_pos -= cityEvents[idx].rectTransform.rect.height;
             event_y_pos -= padding;
         }
@@ -151,7 +152,7 @@
         System.String clickedBuilding = ce.name;
 
         // 相机移动
-        Globals.cameraFollowMagician.MoveToPoint(city.GetTargetPosition(ce.name), Globals.cameraMoveDuration);
+        Globals.cameraFollowMagician.MoveToPoint(city.GetTargetPosition(ce.name)+new UnityEngine.Vector3(0,2,0), Globals.cameraMoveDuration);
         // 选中建筑
         Building building = city.GetTargetBuilding(ce.name);
         city.ChooseBuilding(building);

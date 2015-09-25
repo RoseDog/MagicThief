@@ -1,4 +1,4 @@
-﻿[UnityEditor.CustomEditor(typeof(MazeGenerate))]
+[UnityEditor.CustomEditor(typeof(MazeGenerate))]
 public class MapSaver : UnityEditor.Editor 
 {
     public override void OnInspectorGUI () 

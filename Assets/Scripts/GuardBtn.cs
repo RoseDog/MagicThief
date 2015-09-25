@@ -1,4 +1,4 @@
-﻿public class GuardBtn : CustomEventTrigger
+public class GuardBtn : CustomEventTrigger
 {
     public UnityEngine.GameObject guardSelectedImage;
             

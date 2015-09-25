@@ -1,4 +1,4 @@
-﻿public class SpiderAtk : Attack 
+public class SpiderAtk : Attack 
 {
     Actor target;
     public Actor GetTarget()

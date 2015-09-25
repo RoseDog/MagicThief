@@ -1,4 +1,4 @@
-﻿public class BuildingCouldDivedIn : Building 
+public class BuildingCouldDivedIn : Building 
 {
     public UnityEngine.GameObject DiveInBtn;
     UnityEngine.Vector3 diveInBtnScaleCache;

@@ -1,4 +1,4 @@
-﻿public class SafeboxUpgradeUI : CustomEventTrigger
+public class SafeboxUpgradeUI : CustomEventTrigger
 {
     UnityEngine.UI.Text Name;
     UnityEngine.UI.Text Desc;

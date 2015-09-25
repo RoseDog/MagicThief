@@ -1,4 +1,4 @@
-﻿public class Explode : GuardAction 
+public class Explode : GuardAction 
 {
     public void Start()
     {
@@ -10,6 +10,7 @@
     {
         base.Excute();
         actor.spriteSheet.Play("Atk");
+        UnityEngine.Debug.Log("Explode");
     }
 
     public void Fire()

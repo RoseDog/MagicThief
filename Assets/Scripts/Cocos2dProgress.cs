@@ -1,4 +1,4 @@
-﻿public class Cocos2dProgress : Cocos2dAction
+public class Cocos2dProgress : Cocos2dAction
 {
     // duration
 	private int _frameDuration;

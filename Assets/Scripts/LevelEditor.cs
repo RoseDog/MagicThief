@@ -1,4 +1,4 @@
-﻿public class LevelEditor : LevelController 
+public class LevelEditor : LevelController 
 {    
     public override void Awake()
     {

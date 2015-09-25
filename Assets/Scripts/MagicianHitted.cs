@@ -1,9 +1,8 @@
-﻿public class MagicianHitted : Hitted 
+public class MagicianHitted : Hitted 
 {
     public override void Start()
     {
         base.Start();
-        actor.spriteSheet.AddAnimationEvent("hitted_in_net", -1, () => hitteInNetEnd());
     }
 
     public override void Excute()
@@ -12,6 +11,7 @@
         if (actor.currentAction == actor.catchByNet && actor.catchByNet.jumpSequence == null)
         {
             actor.spriteSheet.Play("hitted_in_net");
+            actor.SleepThenCallFunction(actor.spriteSheet.GetAnimationLengthWithSpeed("hitted_in_net"), ()=>hitteInNetEnd());
         }
         else
         {

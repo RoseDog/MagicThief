@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 8730fd4bd14b7744bac9dd4d4ca5dd2e
-timeCreated: 1435134233
+timeCreated: 1439546814
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -23,6 +23,26 @@ TextureImporter:
     21300032: FakeGuard_Sprite_7
     21300034: FakeGuard_Sprite_8
     21300036: FakeGuard_Sprite_9
+    21300038: FakeGuard_Sprite_10
+    21300040: FakeGuard_Sprite_11
+    21300042: FakeGuard_Sprite_12
+    21300044: FakeGuard_Sprite_13
+    21300046: FakeGuard_Sprite_14
+    21300048: FakeGuard_Sprite_15
+    21300050: FakeGuard_Sprite_16
+    21300052: FakeGuard_Sprite_17
+    21300054: FakeGuard_Sprite_18
+    21300056: FakeGuard_Sprite_19
+    21300058: FakeGuard_Sprite_20
+    21300060: FakeGuard_Sprite_21
+    21300062: FakeGuard_Sprite_22
+    21300064: FakeGuard_Sprite_23
+    21300066: FakeGuard_Sprite_24
+    21300068: FakeGuard_Sprite_25
+    21300070: FakeGuard_Sprite_26
+    21300072: FakeGuard_Sprite_27
+    21300074: FakeGuard_Sprite_28
+    21300076: FakeGuard_Sprite_29
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -72,8 +92,8 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 49
+        y: 61
+        width: 62
         height: 61
       alignment: 7
       pivot: {x: 0, y: 0}
@@ -81,9 +101,9 @@ TextureImporter:
     - name: FakeGuard_Sprite_1
       rect:
         serializedVersion: 2
-        x: 49
-        y: 0
-        width: 49
+        x: 62
+        y: 61
+        width: 62
         height: 61
       alignment: 7
       pivot: {x: 0, y: 0}
@@ -91,9 +111,9 @@ TextureImporter:
     - name: FakeGuard_Sprite_2
       rect:
         serializedVersion: 2
-        x: 98
-        y: 0
-        width: 49
+        x: 124
+        y: 61
+        width: 62
         height: 61
       alignment: 7
       pivot: {x: 0, y: 0}
@@ -101,9 +121,9 @@ TextureImporter:
     - name: FakeGuard_Sprite_3
       rect:
         serializedVersion: 2
-        x: 147
-        y: 0
-        width: 49
+        x: 186
+        y: 61
+        width: 62
         height: 61
       alignment: 7
       pivot: {x: 0, y: 0}
@@ -111,9 +131,9 @@ TextureImporter:
     - name: FakeGuard_Sprite_4
       rect:
         serializedVersion: 2
-        x: 196
-        y: 0
-        width: 49
+        x: 248
+        y: 61
+        width: 62
         height: 61
       alignment: 7
       pivot: {x: 0, y: 0}
@@ -121,9 +141,9 @@ TextureImporter:
     - name: FakeGuard_Sprite_5
       rect:
         serializedVersion: 2
-        x: 245
-        y: 0
-        width: 49
+        x: 310
+        y: 61
+        width: 62
         height: 61
       alignment: 7
       pivot: {x: 0, y: 0}
@@ -131,9 +151,9 @@ TextureImporter:
     - name: FakeGuard_Sprite_6
       rect:
         serializedVersion: 2
-        x: 294
-        y: 0
-        width: 49
+        x: 372
+        y: 61
+        width: 62
         height: 61
       alignment: 7
       pivot: {x: 0, y: 0}
@@ -141,9 +161,9 @@ TextureImporter:
     - name: FakeGuard_Sprite_7
       rect:
         serializedVersion: 2
-        x: 343
-        y: 0
-        width: 49
+        x: 434
+        y: 61
+        width: 62
         height: 61
       alignment: 7
       pivot: {x: 0, y: 0}
@@ -151,9 +171,9 @@ TextureImporter:
     - name: FakeGuard_Sprite_8
       rect:
         serializedVersion: 2
-        x: 392
-        y: 0
-        width: 49
+        x: 496
+        y: 61
+        width: 62
         height: 61
       alignment: 7
       pivot: {x: 0, y: 0}
@@ -161,9 +181,209 @@ TextureImporter:
     - name: FakeGuard_Sprite_9
       rect:
         serializedVersion: 2
-        x: 441
+        x: 558
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_10
+      rect:
+        serializedVersion: 2
+        x: 620
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_11
+      rect:
+        serializedVersion: 2
+        x: 682
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_12
+      rect:
+        serializedVersion: 2
+        x: 744
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_13
+      rect:
+        serializedVersion: 2
+        x: 806
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_14
+      rect:
+        serializedVersion: 2
+        x: 868
+        y: 61
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_15
+      rect:
+        serializedVersion: 2
+        x: 0
         y: 0
-        width: 49
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_16
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_17
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_18
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_19
+      rect:
+        serializedVersion: 2
+        x: 248
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_20
+      rect:
+        serializedVersion: 2
+        x: 310
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_21
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_22
+      rect:
+        serializedVersion: 2
+        x: 434
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_23
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_24
+      rect:
+        serializedVersion: 2
+        x: 558
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_25
+      rect:
+        serializedVersion: 2
+        x: 620
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_26
+      rect:
+        serializedVersion: 2
+        x: 682
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_27
+      rect:
+        serializedVersion: 2
+        x: 744
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_28
+      rect:
+        serializedVersion: 2
+        x: 806
+        y: 0
+        width: 62
+        height: 61
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: FakeGuard_Sprite_29
+      rect:
+        serializedVersion: 2
+        x: 868
+        y: 0
+        width: 62
         height: 61
       alignment: 7
       pivot: {x: 0, y: 0}

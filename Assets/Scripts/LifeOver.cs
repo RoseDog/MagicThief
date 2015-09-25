@@ -1,4 +1,4 @@
-﻿public class LifeOver : Action
+public class LifeOver : Action
 {
     public override void Awake()
     {

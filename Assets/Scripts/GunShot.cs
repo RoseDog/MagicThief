@@ -1,4 +1,4 @@
-﻿public class GunShot : MagicianTrickAction 
+public class GunShot : MagicianTrickAction 
 {    
     public UnityEngine.GameObject target;
         
@@ -37,7 +37,7 @@
 
     public void ShotTargetEnd()
     {
-        target.GetComponentInParent<Machine>().Broken();
+        target.GetComponentInParent<Machine>().Broken(data.duration);
         target = null;
      
         base.Stop();

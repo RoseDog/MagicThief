@@ -1,23 +1,30 @@
-﻿public class CanvasForLogin : UnityEngine.MonoBehaviour 
+public class CanvasForLogin : LevelController
 {
     public UnityEngine.UI.InputField EnterName;
     public MultiLanguageUIText PlaceHolder;
     public UnityEngine.UI.Button DiveInBtn;
-
-    void Awake()
+    UnityEngine.RectTransform caret;
+    public MultiLanguageUIText version;
+    public override void Awake()
     {
-        UnityEngine.GameObject mgrs_prefab = UnityEngine.Resources.Load("GlobalMgrs") as UnityEngine.GameObject;
-        UnityEngine.GameObject.Instantiate(mgrs_prefab);
+        base.Awake();
         Globals.canvasForLogin = this;
+        version.text = "ver"+Globals.versionString;
         //UnityEngine.Screen.SetResolution(332, 589, false);
     }
     
 	// Use this for initialization
-	void Start () 
-    {        
+    public override void Start() 
+    {
+        //base.Start();
         EnterName = Globals.getChildGameObject<UnityEngine.UI.InputField>(gameObject, "EnterName");
+        
         PlaceHolder = Globals.getChildGameObject<MultiLanguageUIText>(gameObject, "PlaceHolder");
         DiveInBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(gameObject, "DiveInBtn");
+        DiveInBtn.onClick.AddListener(() => Submit());
+        DiveInBtn.interactable = false;
+        EnterName.onValueChange.AddListener((str) => OnValueChange(str));
+        Invoke("CaretOffset", 0.5f);
 
         if (System.IO.File.Exists(UnityEngine.Application.persistentDataPath + "/name.txt"))
         {
@@ -28,43 +35,56 @@
         }
         
         if (EnterName.text == "")
-        {
-            EnterName.onValueChange.AddListener((str) => OnValueChange(str));
-            DiveInBtn.onClick.AddListener(() => Submit());
-            DiveInBtn.enabled = false;
-            Globals.transition.BlackIn();        
+        {            
+            Globals.transition.BlackIn();            
         }
         else
-        {
-            EnterName.gameObject.SetActive(false);
-            PlaceHolder.gameObject.SetActive(false);
-            DiveInBtn.gameObject.SetActive(false);
-            Invoke("Submit", 3.0f);
+        {            
+            LoginUIVisible(false);
+            Invoke("Submit", 1.5f);
         }                        
 	}
 
-    void OnValueChange(System.String str)
+    public void LoginUIVisible(bool visible)
     {
+        EnterName.gameObject.SetActive(visible);
+        PlaceHolder.gameObject.SetActive(visible);
+        DiveInBtn.gameObject.SetActive(visible);
+        Invoke("CaretOffset", 0.3f);
+    }
+
+    public void CaretOffset()
+    {
+        caret = Globals.getChildGameObject<UnityEngine.RectTransform>(EnterName.gameObject, "EnterName Input Caret");
+        if (caret != null)
+        {
+            caret.offsetMin = new UnityEngine.Vector2(5, 15);
+            caret.offsetMax = new UnityEngine.Vector2(10, 0);
+        }        
+    }
+
+    void OnValueChange(System.String str)
+    {       
         if(str == "")
         {
             PlaceHolder.gameObject.SetActive(true);
-            DiveInBtn.enabled = false;
+            DiveInBtn.interactable = false;
         }
         else
         {
             PlaceHolder.gameObject.SetActive(false);
-            DiveInBtn.enabled = true;
+            DiveInBtn.interactable = true;
         }        
     }
 	    
     public void Submit()
     {
-        if (Globals.socket.ws.ReadyState == WebSocketSharp.WebSocketState.CONNECTING)
-        {
-            Globals.socket.ws.ConnectAsync();
-        }
+//         if (Globals.socket.ws.State == WebSocketSharp.WebSocketState.Connecting)
+//         {
+//             Globals.socket.ws.ConnectAsync();
+//         }
         Globals.socket.OpenWaitingUI();
         Globals.self.name = EnterName.text;
-        Globals.socket.Send("login" + Globals.self.separator + EnterName.text + Globals.self.separator + UnityEngine.SystemInfo.deviceUniqueIdentifier);
+        Globals.socket.Send("login" + Globals.self.separator + Globals.self.name + Globals.self.separator + UnityEngine.SystemInfo.deviceUniqueIdentifier + Globals.self.separator + Globals.versionString);
     }    
 }

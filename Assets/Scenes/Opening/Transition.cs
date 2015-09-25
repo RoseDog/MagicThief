@@ -22,7 +22,7 @@ public class Transition : Actor
 
 	void Location()
 	{
-		cookShadersObject.transform.parent = Globals.cameraFollowMagician.transform;
+        cookShadersObject.transform.parent = transform;        		
         cookShadersObject.transform.localPosition = UnityEngine.Vector3.zero;        
         cookShadersObject.transform.localRotation = UnityEngine.Quaternion.identity;        
         cookShadersObject.transform.localScale = new UnityEngine.Vector3(4000, 4000, 1);

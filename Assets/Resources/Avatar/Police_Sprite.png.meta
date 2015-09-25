@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 2fc885dbda0d15d42a17b8c6e5e59718
-timeCreated: 1439291593
+timeCreated: 1439553352
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -68,6 +68,76 @@ TextureImporter:
     21300122: police_61
     21300124: police_62
     21300126: police_63
+    21300128: Police_Sprite_0
+    21300130: Police_Sprite_1
+    21300132: Police_Sprite_2
+    21300134: Police_Sprite_3
+    21300136: Police_Sprite_4
+    21300138: Police_Sprite_5
+    21300140: Police_Sprite_6
+    21300142: Police_Sprite_7
+    21300144: Police_Sprite_8
+    21300146: Police_Sprite_9
+    21300148: Police_Sprite_10
+    21300150: Police_Sprite_11
+    21300152: Police_Sprite_12
+    21300154: Police_Sprite_13
+    21300156: Police_Sprite_14
+    21300158: Police_Sprite_15
+    21300160: Police_Sprite_16
+    21300162: Police_Sprite_17
+    21300164: Police_Sprite_18
+    21300166: Police_Sprite_19
+    21300168: Police_Sprite_20
+    21300170: Police_Sprite_21
+    21300172: Police_Sprite_22
+    21300174: Police_Sprite_23
+    21300176: Police_Sprite_24
+    21300178: Police_Sprite_25
+    21300180: Police_Sprite_26
+    21300182: Police_Sprite_27
+    21300184: Police_Sprite_28
+    21300186: Police_Sprite_29
+    21300188: Police_Sprite_30
+    21300190: Police_Sprite_31
+    21300192: Police_Sprite_32
+    21300194: Police_Sprite_33
+    21300196: Police_Sprite_34
+    21300198: Police_Sprite_35
+    21300200: Police_Sprite_36
+    21300202: Police_Sprite_37
+    21300204: Police_Sprite_38
+    21300206: Police_Sprite_39
+    21300208: Police_Sprite_40
+    21300210: Police_Sprite_41
+    21300212: Police_Sprite_42
+    21300214: Police_Sprite_43
+    21300216: Police_Sprite_44
+    21300218: Police_Sprite_45
+    21300220: Police_Sprite_46
+    21300222: Police_Sprite_47
+    21300224: Police_Sprite_48
+    21300226: Police_Sprite_49
+    21300228: Police_Sprite_50
+    21300230: Police_Sprite_51
+    21300232: Police_Sprite_52
+    21300234: Police_Sprite_53
+    21300236: Police_Sprite_54
+    21300238: Police_Sprite_55
+    21300240: Police_Sprite_56
+    21300242: Police_Sprite_57
+    21300244: Police_Sprite_58
+    21300246: Police_Sprite_59
+    21300248: Police_Sprite_60
+    21300250: Police_Sprite_61
+    21300252: Police_Sprite_62
+    21300254: Police_Sprite_63
+    21300256: Police_Sprite_64
+    21300258: Police_Sprite_65
+    21300260: Police_Sprite_66
+    21300262: Police_Sprite_67
+    21300264: Police_Sprite_68
+    21300266: Police_Sprite_69
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -113,642 +183,702 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: police_0
+    - name: Police_Sprite_0
       rect:
         serializedVersion: 2
         x: 0
         y: 400
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_1
+    - name: Police_Sprite_1
       rect:
         serializedVersion: 2
-        x: 115
+        x: 105
         y: 400
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_2
+    - name: Police_Sprite_2
       rect:
         serializedVersion: 2
-        x: 230
+        x: 210
         y: 400
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_3
+    - name: Police_Sprite_3
       rect:
         serializedVersion: 2
-        x: 345
+        x: 315
         y: 400
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_4
+    - name: Police_Sprite_4
       rect:
         serializedVersion: 2
-        x: 460
+        x: 420
         y: 400
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_5
+    - name: Police_Sprite_5
       rect:
         serializedVersion: 2
-        x: 575
+        x: 525
         y: 400
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_6
+    - name: Police_Sprite_6
       rect:
         serializedVersion: 2
-        x: 690
+        x: 630
         y: 400
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_7
+    - name: Police_Sprite_7
       rect:
         serializedVersion: 2
-        x: 805
+        x: 735
         y: 400
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_8
+    - name: Police_Sprite_8
       rect:
         serializedVersion: 2
-        x: 920
+        x: 840
         y: 400
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_9
+    - name: Police_Sprite_9
       rect:
         serializedVersion: 2
-        x: 1035
+        x: 945
         y: 400
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_10
+    - name: Police_Sprite_10
       rect:
         serializedVersion: 2
-        x: 1150
+        x: 1050
         y: 400
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_11
+    - name: Police_Sprite_11
       rect:
         serializedVersion: 2
-        x: 1265
+        x: 1155
         y: 400
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_12
+    - name: Police_Sprite_12
       rect:
         serializedVersion: 2
-        x: 1380
+        x: 1260
         y: 400
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_13
+    - name: Police_Sprite_13
       rect:
         serializedVersion: 2
-        x: 1495
+        x: 1365
         y: 400
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_14
+    - name: Police_Sprite_14
       rect:
         serializedVersion: 2
-        x: 1610
+        x: 1470
         y: 400
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_15
+    - name: Police_Sprite_15
       rect:
         serializedVersion: 2
         x: 0
         y: 300
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_16
+    - name: Police_Sprite_16
       rect:
         serializedVersion: 2
-        x: 115
+        x: 105
         y: 300
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_17
+    - name: Police_Sprite_17
       rect:
         serializedVersion: 2
-        x: 230
+        x: 210
         y: 300
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_18
+    - name: Police_Sprite_18
       rect:
         serializedVersion: 2
-        x: 345
+        x: 315
         y: 300
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_19
+    - name: Police_Sprite_19
       rect:
         serializedVersion: 2
-        x: 460
+        x: 420
         y: 300
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_20
+    - name: Police_Sprite_20
       rect:
         serializedVersion: 2
-        x: 575
+        x: 525
         y: 300
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_21
+    - name: Police_Sprite_21
       rect:
         serializedVersion: 2
-        x: 690
+        x: 630
         y: 300
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_22
+    - name: Police_Sprite_22
       rect:
         serializedVersion: 2
-        x: 805
+        x: 735
         y: 300
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_23
+    - name: Police_Sprite_23
       rect:
         serializedVersion: 2
-        x: 920
+        x: 840
         y: 300
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_24
+    - name: Police_Sprite_24
       rect:
         serializedVersion: 2
-        x: 1035
+        x: 945
         y: 300
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_25
+    - name: Police_Sprite_25
       rect:
         serializedVersion: 2
-        x: 1150
+        x: 1050
         y: 300
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_26
+    - name: Police_Sprite_26
       rect:
         serializedVersion: 2
-        x: 1265
+        x: 1155
         y: 300
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_27
+    - name: Police_Sprite_27
       rect:
         serializedVersion: 2
-        x: 1380
+        x: 1260
         y: 300
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_28
+    - name: Police_Sprite_28
       rect:
         serializedVersion: 2
-        x: 1495
+        x: 1365
         y: 300
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_29
+    - name: Police_Sprite_29
       rect:
         serializedVersion: 2
-        x: 1610
+        x: 1470
         y: 300
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_30
+    - name: Police_Sprite_30
       rect:
         serializedVersion: 2
         x: 0
         y: 200
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_31
+    - name: Police_Sprite_31
       rect:
         serializedVersion: 2
-        x: 115
+        x: 105
         y: 200
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_32
+    - name: Police_Sprite_32
       rect:
         serializedVersion: 2
-        x: 230
+        x: 210
         y: 200
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_33
+    - name: Police_Sprite_33
       rect:
         serializedVersion: 2
-        x: 345
+        x: 315
         y: 200
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_34
+    - name: Police_Sprite_34
       rect:
         serializedVersion: 2
-        x: 460
+        x: 420
         y: 200
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_35
+    - name: Police_Sprite_35
       rect:
         serializedVersion: 2
-        x: 575
+        x: 525
         y: 200
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_36
+    - name: Police_Sprite_36
       rect:
         serializedVersion: 2
-        x: 690
+        x: 630
         y: 200
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_37
+    - name: Police_Sprite_37
       rect:
         serializedVersion: 2
-        x: 805
+        x: 735
         y: 200
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_38
+    - name: Police_Sprite_38
       rect:
         serializedVersion: 2
-        x: 920
+        x: 840
         y: 200
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_39
+    - name: Police_Sprite_39
       rect:
         serializedVersion: 2
-        x: 1035
+        x: 945
         y: 200
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_40
+    - name: Police_Sprite_40
       rect:
         serializedVersion: 2
-        x: 1150
+        x: 1050
         y: 200
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_41
+    - name: Police_Sprite_41
       rect:
         serializedVersion: 2
-        x: 1265
+        x: 1155
         y: 200
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_42
+    - name: Police_Sprite_42
       rect:
         serializedVersion: 2
-        x: 1380
+        x: 1260
         y: 200
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_43
+    - name: Police_Sprite_43
       rect:
         serializedVersion: 2
-        x: 1495
+        x: 1365
         y: 200
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_44
+    - name: Police_Sprite_44
       rect:
         serializedVersion: 2
-        x: 1610
+        x: 1470
         y: 200
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_45
+    - name: Police_Sprite_45
       rect:
         serializedVersion: 2
         x: 0
         y: 100
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_46
+    - name: Police_Sprite_46
       rect:
         serializedVersion: 2
-        x: 115
+        x: 105
         y: 100
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_47
+    - name: Police_Sprite_47
       rect:
         serializedVersion: 2
-        x: 230
+        x: 210
         y: 100
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_48
+    - name: Police_Sprite_48
       rect:
         serializedVersion: 2
-        x: 345
+        x: 315
         y: 100
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_49
+    - name: Police_Sprite_49
       rect:
         serializedVersion: 2
-        x: 460
+        x: 420
         y: 100
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_50
+    - name: Police_Sprite_50
       rect:
         serializedVersion: 2
-        x: 575
+        x: 525
         y: 100
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_51
+    - name: Police_Sprite_51
       rect:
         serializedVersion: 2
-        x: 690
+        x: 630
         y: 100
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_52
+    - name: Police_Sprite_52
       rect:
         serializedVersion: 2
-        x: 805
+        x: 735
         y: 100
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_53
+    - name: Police_Sprite_53
       rect:
         serializedVersion: 2
-        x: 920
+        x: 840
         y: 100
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_54
+    - name: Police_Sprite_54
       rect:
         serializedVersion: 2
-        x: 1035
+        x: 945
         y: 100
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_55
+    - name: Police_Sprite_55
       rect:
         serializedVersion: 2
-        x: 1150
+        x: 1050
         y: 100
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_56
+    - name: Police_Sprite_56
       rect:
         serializedVersion: 2
-        x: 1265
+        x: 1155
         y: 100
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_57
+    - name: Police_Sprite_57
       rect:
         serializedVersion: 2
-        x: 1380
+        x: 1260
         y: 100
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_58
+    - name: Police_Sprite_58
       rect:
         serializedVersion: 2
-        x: 1495
+        x: 1365
         y: 100
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_59
+    - name: Police_Sprite_59
       rect:
         serializedVersion: 2
-        x: 1610
+        x: 1470
         y: 100
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_60
+    - name: Police_Sprite_60
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_61
+    - name: Police_Sprite_61
       rect:
         serializedVersion: 2
-        x: 115
+        x: 105
         y: 0
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_62
+    - name: Police_Sprite_62
       rect:
         serializedVersion: 2
-        x: 230
+        x: 210
         y: 0
-        width: 115
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: police_63
+    - name: Police_Sprite_63
       rect:
         serializedVersion: 2
-        x: 345
+        x: 315
         y: 0
-        width: 115
+        width: 105
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Police_Sprite_64
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 0
+        width: 105
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Police_Sprite_65
+      rect:
+        serializedVersion: 2
+        x: 525
+        y: 0
+        width: 105
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Police_Sprite_66
+      rect:
+        serializedVersion: 2
+        x: 630
+        y: 0
+        width: 105
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Police_Sprite_67
+      rect:
+        serializedVersion: 2
+        x: 735
+        y: 0
+        width: 105
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Police_Sprite_68
+      rect:
+        serializedVersion: 2
+        x: 840
+        y: 0
+        width: 105
+        height: 100
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Police_Sprite_69
+      rect:
+        serializedVersion: 2
+        x: 945
+        y: 0
+        width: 105
         height: 100
       alignment: 7
       pivot: {x: 0, y: 0}

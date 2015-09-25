@@ -1,4 +1,4 @@
-﻿public class BarkSoundWave : Actor
+public class BarkSoundWave : Actor
 {
     public Guard owner;
     public override void TouchBegin(Actor other)    

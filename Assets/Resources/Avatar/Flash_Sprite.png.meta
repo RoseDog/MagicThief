@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: b69637a2666399d4797541227d2ff820
+timeCreated: 1439635155
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: flash_0
@@ -67,6 +69,13 @@ TextureImporter:
     21300124: flash_62
     21300126: flash_63
     21300128: flash_64
+    21300130: Flash_Sprite_0
+    21300132: Flash_Sprite_1
+    21300134: Flash_Sprite_2
+    21300136: Flash_Sprite_3
+    21300138: Flash_Sprite_4
+    21300140: Flash_Sprite_5
+    21300142: Flash_Sprite_6
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -85,6 +94,9 @@ TextureImporter:
   isReadable: 0
   grayScaleToAlpha: 0
   generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
   maxTextureSize: 1024
@@ -95,6 +107,7 @@ TextureImporter:
     wrapMode: 1
   nPOTScale: 0
   lightmap: 0
+  rGBM: 0
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
@@ -108,145 +121,77 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: flash_0
+    - name: Flash_Sprite_0
       rect:
         serializedVersion: 2
-        x: 7
-        y: 41
-        width: 19
-        height: 23
+        x: 0
+        y: 0
+        width: 380
+        height: 380
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: flash_1
+    - name: Flash_Sprite_1
       rect:
         serializedVersion: 2
-        x: 30
-        y: 38
-        width: 23
-        height: 30
+        x: 380
+        y: 0
+        width: 380
+        height: 380
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: flash_2
+    - name: Flash_Sprite_2
       rect:
         serializedVersion: 2
-        x: 56
-        y: 36
-        width: 26
-        height: 35
+        x: 760
+        y: 0
+        width: 380
+        height: 380
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: flash_3
+    - name: Flash_Sprite_3
       rect:
         serializedVersion: 2
-        x: 85
-        y: 41
-        width: 20
-        height: 24
+        x: 1140
+        y: 0
+        width: 380
+        height: 380
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: flash_4
+    - name: Flash_Sprite_4
       rect:
         serializedVersion: 2
-        x: 108
-        y: 45
-        width: 16
-        height: 16
+        x: 1520
+        y: 0
+        width: 380
+        height: 380
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: flash_45
+    - name: Flash_Sprite_5
       rect:
         serializedVersion: 2
-        x: 176
-        y: 42
-        width: 21
-        height: 21
+        x: 1900
+        y: 0
+        width: 380
+        height: 380
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: flash_10
+    - name: Flash_Sprite_6
       rect:
         serializedVersion: 2
-        x: 224
-        y: 44
-        width: 17
-        height: 17
+        x: 2280
+        y: 0
+        width: 380
+        height: 380
       alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: flash_11
-      rect:
-        serializedVersion: 2
-        x: 244
-        y: 42
-        width: 21
-        height: 21
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: flash_12
-      rect:
-        serializedVersion: 2
-        x: 268
-        y: 37
-        width: 26
-        height: 30
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: flash_5
-      rect:
-        serializedVersion: 2
-        x: 127
-        y: 47
-        width: 16
-        height: 12
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: flash_6
-      rect:
-        serializedVersion: 2
-        x: 146
-        y: 48
-        width: 13
-        height: 10
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: flash_7
-      rect:
-        serializedVersion: 2
-        x: 162
-        y: 49
-        width: 11
-        height: 7
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: flash_8
-      rect:
-        serializedVersion: 2
-        x: 200
-        y: 49
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: flash_9
-      rect:
-        serializedVersion: 2
-        x: 210
-        y: 47
-        width: 11
-        height: 11
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

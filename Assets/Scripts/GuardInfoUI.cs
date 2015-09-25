@@ -1,21 +1,14 @@
-﻿public class GuardInfoUI : CustomEventTrigger
+public class GuardInfoUI : CustomEventTrigger
 {
-    UnityEngine.UI.Image GuardIcon;
-    UnityEngine.UI.Text Name;
-    UnityEngine.UI.Text Desc;
-    UnityEngine.UI.Text StrengthNumber;
-    UnityEngine.UI.Text VisionNumber;
-    UnityEngine.UI.Text SpeedNumber;
+    public UnityEngine.UI.Image GuardIcon;
+    public UnityEngine.UI.Text Name;
+    public UnityEngine.UI.Text Desc;
+    public UnityEngine.UI.Text StrengthNumber;
+    public UnityEngine.UI.Text VisionNumber;
+    public UnityEngine.UI.Text SpeedNumber;
     public override void Awake()
     {
         base.Awake();
-        GuardIcon = Globals.getChildGameObject<UnityEngine.UI.Image>(gameObject, "GuardIcon");
-        Name = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "Name");
-        Desc = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "Desc");
-        StrengthNumber = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "StrengthNumber");
-        VisionNumber = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "VisionNumber");
-        SpeedNumber = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "SpeedNumber");
-
     }
 
 	public void SetGuard(Guard guard)
@@ -32,7 +25,7 @@
         {            
             StrengthNumber.text = guard.data.attackValue.ToString();
             VisionNumber.text = guard.eye.fovMaxDistance.ToString();
-            SpeedNumber.text = System.Math.Round(guard.moving.speed).ToString();
+            SpeedNumber.text = guard.moving.speed.ToString("F1");
         }
         else
         {

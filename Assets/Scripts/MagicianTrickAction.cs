@@ -1,4 +1,4 @@
-﻿public class MagicianTrickAction : Action 
+public class MagicianTrickAction : Action 
 {
     public TrickData data;
     protected Magician mage;        

@@ -1,4 +1,4 @@
-﻿public class LightCone : MachineActiveArea
+public class LightCone : MachineActiveArea
 {
     public override void TouchBegin(Actor other)
     {
@@ -12,17 +12,15 @@
         other.GetComponent<Actor>().inLight = false;
     }
 
-    void OnTriggerStay(UnityEngine.Collider other)
+    public override void TouchStay(Actor enemy)
     {
-        foreach (Actor enemy in actorsInTouch)
+        base.TouchStay(enemy);
+        foreach (Guard guard in Globals.maze.guards)
         {
-            foreach (Guard guard in Globals.maze.guards)
+            if (guard.spot != null && guard.spot.target == null && guard.IsSeenEnemy(enemy.gameObject))
             {
-                if (guard.spot != null && guard.spot.target == null && guard.IsSeenEnemy(enemy.gameObject))
-                {
-                    guard.SpotEnemy(enemy.gameObject);
-                    guard.eye.enemiesInEye.Add(enemy.gameObject);                    
-                }
+                guard.SpotEnemy(enemy.gameObject);
+                guard.eye.enemiesInEye.Add(enemy.gameObject);
             }
         }
     }

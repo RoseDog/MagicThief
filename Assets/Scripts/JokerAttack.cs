@@ -1,4 +1,4 @@
-﻿public class JokerAttack : Attack 
+public class JokerAttack : Attack 
 {
     protected Cocos2dAction atkJumpAction;
     public override void AtkAnimation()
@@ -6,7 +6,7 @@
         guard.FaceTarget(guard.spot.target);
         if (!checkIfTargetPressDown())
         {
-            if (guard.spriteSheet.HasAnimation("kick") && Globals.magician.currentAction == Globals.magician.catchByNet)
+            if (guard.spriteSheet.HasAnimation("kick") && Globals.stealingController.magician.currentAction == Globals.stealingController.magician.catchByNet)
             {
                 guard.spriteSheet.Play("kick");
             }

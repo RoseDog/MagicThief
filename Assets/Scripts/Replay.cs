@@ -1,4 +1,4 @@
-﻿public class Replay : UnityEngine.MonoBehaviour 
+public class Replay : UnityEngine.MonoBehaviour 
 {
     public System.String pveFile;
     public int playSpeed = 1;
@@ -30,12 +30,18 @@
         public int guard_idx;
     }
     public System.Collections.Generic.List<ClickOnGuard> clickOnGuardRecords = new System.Collections.Generic.List<ClickOnGuard>();
+
+    public class KeyRecord
+    {
+        public System.String key;
+        public int frame_no;
+    }
+    public System.Collections.Generic.List<KeyRecord> KeyDownRecords = new System.Collections.Generic.List<KeyRecord>();
+    public System.Collections.Generic.List<KeyRecord> KeyUpRecords = new System.Collections.Generic.List<KeyRecord>();
     
     public int mage_falling_down_frame_no = -1;
     
-    public System.Collections.Generic.List<int> mageTryEscapeFrameNos = new System.Collections.Generic.List<int>();
-
-    public System.Collections.Generic.List<UnityEngine.Vector3> magePositions = new System.Collections.Generic.List<UnityEngine.Vector3>();
+    public System.Collections.Generic.List<int> mageTryEscapeFrameNos = new System.Collections.Generic.List<int>();   
 
     public void Awake()
     {
@@ -52,7 +58,8 @@
         trickRecords.Clear();
         clickRecords.Clear();
         clickOnGuardRecords.Clear();
-        magePositions.Clear();
+        KeyDownRecords.Clear();
+        KeyUpRecords.Clear();
     }
 
     public void RecordPvEFileName(System.String pve)
@@ -105,14 +112,6 @@
         }        
     }
 
-    public void RecordMagePosition(UnityEngine.Vector3 pos)
-    {
-        if (Globals.playingReplay == null)
-        {
-            magePositions.Add(pos);            
-        }        
-    }
-
     public void RecordMagicianTryEscape()
     {
         if (Globals.playingReplay == null)
@@ -129,6 +128,28 @@
         }
     }
 
+    public void RecordKeyDown(System.String key)
+    {
+        if (Globals.playingReplay == null)
+        {
+            KeyRecord record = new KeyRecord();
+            record.frame_no = Globals.LevelController.frameCount;
+            record.key = key;
+            KeyDownRecords.Add(record);
+        }
+    }
+
+    public void RecordKeyUp(System.String key)
+    {
+        if (Globals.playingReplay == null)
+        {
+            KeyRecord record = new KeyRecord();
+            record.frame_no = Globals.LevelController.frameCount;
+            record.key = key;
+            KeyUpRecords.Add(record);
+        }
+    }
+
     public IniFile Pack()
     {
         IniFile ini = new IniFile();
@@ -141,13 +162,28 @@
             TrickRecords += record.frame_no + ",";
             TrickRecords += record.data.nameKey + ",";
             TrickRecords += record.data.duration.ToString() + ",";
-            TrickRecords += record.data.powerCost.ToString();
+            TrickRecords += record.data.powerCost.ToString() + ",";
+            TrickRecords += record.data.clickOnGuardToCast.ToString() + ",";
+            TrickRecords += record.data.clickButtonToCast.ToString();
             if (record != trickRecords[trickRecords.Count - 1])
             {
                 TrickRecords += " ";
             }
         }
         ini.set("TrickRecords", TrickRecords);
+
+        System.String FlashRecordStr = "";
+        foreach (FlashGrenadeRecord record in flashRecords)
+        {
+            FlashRecordStr += record.frame_no + "_";
+            FlashRecordStr += record.pos.ToString("F3");
+
+            if (record != flashRecords[flashRecords.Count - 1])
+            {
+                FlashRecordStr += ";";
+            }
+        }
+        ini.set("FlashRecords", FlashRecordStr);
 
         System.String clickOnGuardStr = "";
         foreach (ClickOnGuard record in clickOnGuardRecords)
@@ -175,9 +211,37 @@
             }
         }
         ini.set("ClickRecords", ClickRecords);                
+        
+
+        System.String KeyRecords = "";
+        foreach (KeyRecord record in KeyDownRecords)
+        {
+            KeyRecords += record.frame_no + "_";
+            KeyRecords += record.key;
+
+            if (record != KeyDownRecords[KeyDownRecords.Count - 1])
+            {
+                KeyRecords += ";";
+            }
+        }
+        ini.set("KeyDownRecords", KeyRecords);
+
+        KeyRecords = "";
+        foreach (KeyRecord record in KeyUpRecords)
+        {
+            KeyRecords += record.frame_no + "_";
+            KeyRecords += record.key;
+
+            if (record != KeyUpRecords[KeyUpRecords.Count - 1])
+            {
+                KeyRecords += ";";
+            }
+        }
+        ini.set("KeyUpRecords", KeyRecords);
+
         ini.set("mage_falling_down_frame_no", mage_falling_down_frame_no);
         mage_falling_down_frame_no = -1;
-
+        
 
         System.String tryEscapeNoStr = "";
         for (int idx = 0; idx < mageTryEscapeFrameNos.Count;++idx )
@@ -192,11 +256,6 @@
         mageTryEscapeFrameNos.Clear();
 
         ini.set("mageTryEscapeFrameNos", tryEscapeNoStr);
-
-
-        System.String magePositionsChars = System.Convert.ToBase64String(Globals.ConvertVector3ToByteArray(magePositions));                
-        ini.set("magePositions", magePositionsChars);
-        magePositions.Clear();
 
         return ini;        
     }
@@ -218,7 +277,23 @@
                 record.data.nameKey = trick_data_str[1];
                 record.data.duration = int.Parse(trick_data_str[2]);
                 record.data.powerCost = int.Parse(trick_data_str[3]);
+                record.data.clickOnGuardToCast = bool.Parse(trick_data_str[4]);
+                record.data.clickButtonToCast = bool.Parse(trick_data_str[5]);       
                 trickRecords.Add(record);
+            }
+        }
+
+        records_str = ini.get("FlashRecords");
+        if (records_str != "")
+        {
+            temp = records_str.Split(';');
+            foreach (System.String str in temp)
+            {
+                System.String[] strs = str.Split('_');
+                FlashGrenadeRecord record = new FlashGrenadeRecord();
+                record.frame_no = int.Parse(strs[0]);
+                record.pos = Globals.StringToVector3(strs[1]);
+                flashRecords.Add(record);
             }
         }
 
@@ -251,6 +326,34 @@
             }
         }
 
+        records_str = ini.get("KeyDownRecords");
+        if (records_str != "")
+        {
+            temp = records_str.Split(';');
+            foreach (System.String click_str in temp)
+            {
+                System.String[] strs = click_str.Split('_');
+                KeyRecord record = new KeyRecord();
+                record.frame_no = int.Parse(strs[0]);
+                record.key = strs[1];
+                KeyDownRecords.Add(record);
+            }
+        }
+
+        records_str = ini.get("KeyUpRecords");
+        if (records_str != "")
+        {
+            temp = records_str.Split(';');
+            foreach (System.String click_str in temp)
+            {
+                System.String[] strs = click_str.Split('_');
+                KeyRecord record = new KeyRecord();
+                record.frame_no = int.Parse(strs[0]);
+                record.key = strs[1];
+                KeyUpRecords.Add(record);
+            }
+        }
+
         mage_falling_down_frame_no = ini.get("mage_falling_down_frame_no", -1);
         records_str = ini.get("mageTryEscapeFrameNos");
         if (records_str != "")
@@ -262,9 +365,9 @@
             }
         }
 
-        System.String magePositionsChars = ini.get("magePositions");
-        var bytes = System.Convert.FromBase64String(magePositionsChars);
-        magePositions = Globals.ConvertByteArrayToVector3List(bytes);
+//         System.String magePositionsChars = ini.get("magePositions");
+//         var bytes = System.Convert.FromBase64String(magePositionsChars);
+//         magePositions = Globals.ConvertByteArrayToVector3List(bytes);
     }
 
     public void FrameFunc()
@@ -280,7 +383,7 @@
             while (record.frame_no == Globals.LevelController.frameCount)
             {
                 UnityEngine.Ray ray = new UnityEngine.Ray(record.ray_origin, record.ray_direction);
-                (Globals.LevelController as StealingLevelController).RayOnMap(ray);
+                Globals.stealingController.RayOnMap(ray);
                 clickRecords.RemoveAt(0);
                 if (clickRecords.Count == 0)
                 {
@@ -290,6 +393,35 @@
             }
         }
 
+        if (KeyDownRecords.Count != 0)
+        {
+            KeyRecord record = KeyDownRecords[0];
+            while (record.frame_no == Globals.LevelController.frameCount)
+            {
+                Globals.stealingController.magician.OnKeyDownR(record.key);
+                KeyDownRecords.RemoveAt(0);
+                if (KeyDownRecords.Count == 0)
+                {
+                    break;
+                }
+                record = KeyDownRecords[0];
+            }
+        }
+
+        if (KeyUpRecords.Count != 0)
+        {
+            KeyRecord record = KeyUpRecords[0];
+            while (record.frame_no == Globals.LevelController.frameCount)
+            {
+                Globals.stealingController.magician.OnKeyUpR(record.key);
+                KeyUpRecords.RemoveAt(0);
+                if (KeyUpRecords.Count == 0)
+                {
+                    break;
+                }
+                record = KeyUpRecords[0];
+            }
+        }
 
         if (clickOnGuardRecords.Count != 0)
         {
@@ -345,7 +477,7 @@
             TrickRecord record = trickRecords[0];
             while (record.frame_no == Globals.LevelController.frameCount)
             {
-                Globals.magician.CastMagic(record.data);
+                Globals.stealingController.magician.CastMagic(record.data);
                 trickRecords.RemoveAt(0);
                 if (trickRecords.Count == 0)
                 {
@@ -360,7 +492,7 @@
             FlashGrenadeRecord record = flashRecords[0];
             while (record.frame_no == Globals.LevelController.frameCount)
             {
-                Globals.magician.CastFlash(record.pos);
+                Globals.stealingController.magician.CastFlash(record.pos);
                 flashRecords.RemoveAt(0);
                 if (flashRecords.Count == 0)
                 {

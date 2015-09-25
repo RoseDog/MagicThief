@@ -52,7 +52,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
                 int move_obj_culling_mask = 1 << 11 | 1 << 20;
 
                 _castRays(fovAngle, dir, fovMaxDistance, ref enemiesOutEyeTemp, visionCones[0], needMsg, static_obj_cullingMask, move_obj_culling_mask);
-                _castRays(360 - fovAngle + 10, dir, aural, ref enemiesOutEyeTemp, visionCones[1], needMsg, static_obj_cullingMask, move_obj_culling_mask);
+//                 _castRays(360 - fovAngle + 10, dir, aural, ref enemiesOutEyeTemp, visionCones[1], needMsg, static_obj_cullingMask, move_obj_culling_mask);
 
                 // 14,Chest
                 int cullingMask = 1 << 14;
@@ -111,7 +111,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
         {
             dir = dir.normalized;            
             UnityEngine.Vector3 direction = UnityEngine.Quaternion.AngleAxis(currentAngle, UnityEngine.Vector3.back) * dir.normalized;
-            // ÎªÁËÈÃÁ½¸öfovÁ¬³ÉÒ»Æ¬
+            // Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½fovï¿½ï¿½ï¿½ï¿½Ò»Æ¬
             if (angle > 180)
             {
                 direction = -direction;
@@ -226,7 +226,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
         }
         else
         {
-            // Èç¹ûÍ¬Ê±Åöµ½Ç½ºÍÈË£¬Ñ¡½üµÄÄÇÒ»¸ö
+            // ï¿½ï¿½ï¿½ï¿½Í¬Ê±ï¿½ï¿½ï¿½ï¿½Ç½ï¿½ï¿½ï¿½Ë£ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
             if(UnityEngine.Vector3.Distance(hitted_wall_point, ray.origin) < UnityEngine.Vector3.Distance(hitted_actor_point, ray.origin) )
             {
                 collide_obj = hitted_wall;

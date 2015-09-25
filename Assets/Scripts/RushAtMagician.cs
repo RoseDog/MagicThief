@@ -1,4 +1,4 @@
-﻿public class RushAtMagician : GuardAction
+public class RushAtMagician : GuardAction
 {
     Cocos2dAction jumpAction;
     public bool rushing = false;

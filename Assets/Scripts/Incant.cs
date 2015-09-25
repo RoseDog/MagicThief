@@ -1,4 +1,4 @@
-﻿public class Incant : Action 
+public class Incant : Action 
 {
     bool bReadyToReleaseDove = false;
     UnityEngine.GameObject dovePrefab;

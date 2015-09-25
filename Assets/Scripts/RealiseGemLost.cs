@@ -1,4 +1,4 @@
-﻿public class RealiseGemLost : GuardAction 
+public class RealiseGemLost : GuardAction 
 {
     System.Collections.Generic.List<Pathfinding.Path> tempPathes = new System.Collections.Generic.List<Pathfinding.Path>();
     Cocos2dAction call;
