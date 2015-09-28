@@ -110,8 +110,12 @@ public class StealingLevelController : LevelController
 
         Globals.guardPlayer = new PlayerInfo();
         Globals.guardPlayer.isBot = true;
-        Globals.iniFileName = "pve_0";
+        Globals.iniFileName = "Test";
         SafeBoxData data = new SafeBoxData();
+        Globals.guardPlayer.safeBoxDatas.Add(data);
+        data = new SafeBoxData();
+        Globals.guardPlayer.safeBoxDatas.Add(data);
+        data = new SafeBoxData();
         Globals.guardPlayer.safeBoxDatas.Add(data);
 
         Globals.guardPlayer.currentMazeRandSeedCache = -1;
