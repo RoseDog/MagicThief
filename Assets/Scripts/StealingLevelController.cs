@@ -108,14 +108,17 @@ public class StealingLevelController : LevelController
             Globals.languageTable.SetText(ReplaySpeedText, "replay_speed", new System.String[] { Globals.replaySystem.playSpeed.ToString() });
         }
 
+        Globals.thiefPlayer = Globals.self;
         Globals.guardPlayer = new PlayerInfo();
+        Globals.guardPlayer.slotsDatas[0].statu = "0";
+        Globals.guardPlayer.slotsDatas[1].statu = "0";
+        Globals.guardPlayer.slotsDatas[2].statu = "0";
         Globals.guardPlayer.isBot = true;
         Globals.iniFileName = "Test";
 
 
         Globals.guardPlayer.currentMazeRandSeedCache = -1;
-        Globals.guardPlayer.currentMazeLevel = 5;
-        Globals.thiefPlayer = Globals.guardPlayer;
+        Globals.guardPlayer.currentMazeLevel = 5;        
         Globals.ReadMazeIniFile(Globals.iniFileName, Globals.guardPlayer.currentMazeRandSeedCache);
         for (int idx = 0; idx < Globals.maze.noOfRoomsToPlace; ++idx)
         {

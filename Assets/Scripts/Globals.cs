@@ -346,9 +346,9 @@ public class PlayerInfo
         mage_data.agilityAllot = 0;
         mage_data.wisdomBase = 80;
         mage_data.wisdomAllot = 0;
-        mage_data.strengthGrowth = 1.5f;
-        mage_data.agilityGrowth = 1.2f;
-        mage_data.wisdomGrowth = 1.7f;
+        mage_data.strengthGrowth = 1f;
+        mage_data.agilityGrowth = 1f;
+        mage_data.wisdomGrowth = 1f;
         mage_data.idx = 0;
         magicians.Add(mage_data);
 
@@ -366,9 +366,9 @@ public class PlayerInfo
         mage_data.agilityAllot = 0;
         mage_data.wisdomBase = 30;
         mage_data.wisdomAllot = 0;
-        mage_data.strengthGrowth = 0.9f;
-        mage_data.agilityGrowth = 1.9f;
-        mage_data.wisdomGrowth = 0.7f;
+        mage_data.strengthGrowth = 1f;
+        mage_data.agilityGrowth = 1f;
+        mage_data.wisdomGrowth = 1f;
         mage_data.idx = 1;
         magicians.Add(mage_data);
 

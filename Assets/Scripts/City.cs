@@ -92,7 +92,7 @@ public class City : LevelController
 
         ranksWindow.viewRankPlayer.gameObject.SetActive(false);
         if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.Over)
-        {            
+        {
             firstTarget.SetActive(false);
             myMazeBuilding.SetActive(true);
 

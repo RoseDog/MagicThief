@@ -25,16 +25,17 @@ public class ClientSocket : UnityEngine.MonoBehaviour
         }
 
         //
-//         ws = new WebSocketSharp.WebSocket("ws://127.0.0.1:42788");
-// 
-//         ws.OnMessage += OnMessage;
-//         ws.OnError += OnError;
-//         ws.OnClose += OnClose;        
-// 
-//         ws.ConnectAsync();
+        //         ws = new WebSocketSharp.WebSocket("ws://127.0.0.1:42788");
+        // 
+        //         ws.OnMessage += OnMessage;
+        //         ws.OnError += OnError;
+        //         ws.OnClose += OnClose;        
+        // 
+        //         ws.ConnectAsync();
 
         //ws = new WebSocket4Net.WebSocket("ws://96.126.116.192:42788");
-        ws = new WebSocket4Net.WebSocket("ws://192.168.1.4:42788/");
+        //ws = new WebSocket4Net.WebSocket("ws://192.168.1.4:42788/");
+        ws = new WebSocket4Net.WebSocket("ws://127.0.0.1:42788");
 
         ws.Closed += new System.EventHandler(OnClose);
         ws.MessageReceived += new System.EventHandler<WebSocket4Net.MessageReceivedEventArgs>(OnMessage);
