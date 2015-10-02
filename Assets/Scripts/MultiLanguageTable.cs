@@ -45,8 +45,8 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("flyUp_desc", new System.String[] { "可以瞬间脱离守卫的追击。移动无视地形。", "Enable the magician to move across landforms" });
         table.Add("dove", new System.String[] { "鸽子戏法", "Dove Trick" });
         table.Add("dove_desc", new System.String[] { "放出鸽子吸引守卫的注意力。用来对付玩具狗效果显著。", "Release a dove to distract security guards.It is remarkbly effective for Robo-dog." });
-        table.Add("flash_grenade", new System.String[] { "照明弹", "Flare" });
-        table.Add("flash_grenade_desc", new System.String[] { "拖拽照明弹进行投掷，可驱散迷雾。只能在潜入之前使用。", "Drag the flare and drop it to clear the mist, you can only use this before you sneak in." });                       
+        table.Add("flashGrenade", new System.String[] { "照明弹", "Flare" });
+        table.Add("flashGrenade_desc", new System.String[] { "拖拽照明弹进行投掷，可驱散迷雾。只能在潜入之前使用。", "Drag the flare and drop it to clear the mist, you can only use this before you sneak in." });                       
         table.Add("level_loading_progress", new System.String[] { "场景加载{0}%", "Level Loading:{0}%" });
         table.Add("power_cost", new System.String[] { "魔力消耗:{0}", "Power Cost:{0}" });
         table.Add("drop_odds", new System.String[] { "遗落几率:{0}%", "drop_odds:{0}%" });
@@ -84,8 +84,10 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("lamp_cant_be_on_road", new System.String[] { "这个装置不能放在路上", "The Machine can't be on the road" });
         table.Add("not_enough_power", new System.String[] { "魔力值不够了", "MP used up" });
         table.Add("city_events", new System.String[] { "城市事件", "City Events" });
-        table.Add("my_maze", new System.String[] { "我的迷宫", "My Maze" });
+        table.Add("my_maze_intro", new System.String[] { "自己的迷宫，来自马戏团的守卫们在这里进行演出，为你带来收入：{0}/h\n未装入保险箱的现金：{1}", "My Maze" });
+        table.Add("income_intro", new System.String[] { "守卫表演收入：{0}/h\n未装入保险箱的现金：{1}", "income_intro" });
         table.Add("dive_in", new System.String[] { "潜入", "Sneak in" });
+        table.Add("enter", new System.String[] { "进入", "Enter" });
         table.Add("spy", new System.String[] { "窥视", "Take a peep" });
         table.Add("target_tonight", new System.String[] { "你是个小偷，\n这是你今晚的目标", "you are a thief,\nthis is your target tonight" });
         table.Add("buy", new System.String[] { "购买:${0}", "Buy:${0}" });
@@ -111,7 +113,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("guard", new System.String[] { "警卫", "Guard" });
         table.Add("guard_desc", new System.String[] { "接受过良好教育的执法者。他们会奋力制服并活捉来犯的盗贼。<color=red>当发现自己守护的保险箱箱被偷的时候，会去支援其他保险箱的守卫工作。\n它的视野不会驱散迷雾。</color>", "guard description.." });
         table.Add("dog", new System.String[] { "玩具狗", "Robo-Dog" });
-        table.Add("dog_desc", new System.String[] { "当发现异常情况会立刻发出警报，呼叫周围的守卫。\n自爆攻击。它的视野不会驱散迷雾。\n自爆攻击</color>\n容易被鸽子引开。", "Bark to call teammates when spot anything unusual.not so smart, like to chase anything movable.Vision won't clear mist.Explose to cause damage." });
+        table.Add("dog_desc", new System.String[] { "当发现异常情况会立刻发出警报，呼叫周围的守卫。\n自爆攻击。它的视野不会驱散迷雾。\n自爆攻击\n容易被鸽子引开。", "Bark to call teammates when spot anything unusual.not so smart, like to chase anything movable.Vision won't clear mist.Explose to cause damage." });
         table.Add("Spider", new System.String[] { "蜘蛛", "Robo-Spider" });
         table.Add("Spider_desc", new System.String[] { "栖息在墙上，喷射蛛网。\n它的视野不会驱散迷雾。\n可被魔术牌手枪破坏。", "Perch on wall, spit web. Vision won't clear mist. Can be broken by Poker Pistol." });
         table.Add("Monkey", new System.String[] { "马戏猴子", "Circus Monkey" });
@@ -161,9 +163,10 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("room_not_full_used", new System.String[] { "坑位未完全使用，请放置更多守卫", "toilet not full used, place more guards" });
         table.Add("enter_name", new System.String[] { "请输入你的名字", "Enter your name" });
         table.Add("name_duplicated", new System.String[] { "名字重复，请重新输入", "Name Duplicated" });
-        table.Add("spotted_cant_escape", new System.String[] { "被守卫发现！无法逃离！", "Spotted！Can't escape！" });        
-        table.Add("cash_back_then", new System.String[] { "迷宫金钱:{0}", "Total Cash:{0}" });
-        table.Add("stealing_cash", new System.String[] { "失窃金钱:{0}", "Stolen:{0}" });
+        table.Add("spotted_cant_escape", new System.String[] { "被守卫发现！无法逃离！", "Spotted！Can't escape！" });
+        table.Add("stealing_cash_info", new System.String[] { "箱子中的金钱:{0}\n散落在迷宫角落中的金钱：{1}\n从箱子里失窃的金钱:{2}\n从地上捡起来的金钱：{3}", "Total Cash:{0}" });
+        table.Add("stealing_cash", new System.String[] { "失窃金钱：{0}", "Total Cash:{0}" });
+        
         table.Add("stolen_by_others_event_guards_failed", new System.String[] { "{0}(魅力{1})盗取了你的钱财！", "{0}(Rose {1}) steal your wealth!" });
         table.Add("stolen_by_others_event_guards_success", new System.String[] { "你的守卫成功的赶走了{0}(魅力{1})！", "Your guard successfully drive {0}(Rose {1}) away！" });
         table.Add("you_stole_others_event", new System.String[] { "你潜入了{0}的迷宫", "You sneak into {0}'s Maze" });
@@ -285,6 +288,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("speed", new System.String[] { "追击速度", "Speed" });
         table.Add("vision", new System.String[] { "视野", "Vision" });
         table.Add("damage", new System.String[] { "伤害", "Damage" });
+        table.Add("Performing_income", new System.String[] { "表演收入", "Performing income" });
 
         table.Add("operate_guide_info", new System.String[] { "<color=red>鼠标右键移动角色\n鼠标接近屏幕边缘滚动地图</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
 

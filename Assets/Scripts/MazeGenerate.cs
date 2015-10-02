@@ -3,15 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MazeGenerate : UnityEngine.MonoBehaviour
-{
-    //float cell_side_length = 226.8f;
-    float cell_side_length = 324.0f;
-    public float GetCellSideLength()
-    {
-        return cell_side_length;
-    }    
-    
-
+{          
     [UnityEngine.Range(0, 30)]
     public int Y_CELLS_COUNT;
     [UnityEngine.Range(0, 30)]
@@ -44,6 +36,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     public int CASH = 0;
 
     public System.String droppedItemsStr;
+    public System.String cashOnFloorStr;
     
 
     UnityEngine.GameObject maze;
@@ -129,43 +122,43 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     {
         get 
         {
-            UnityEngine.Rect r = new UnityEngine.Rect(WestNorthCornerCell.GetFloorPos().x - cell_side_length * 0.5f,
-                WestNorthCornerCell.GetFloorPos().y + cell_side_length*0.5f,
-                EastNorthCornerCell.GetFloorPos().x - WestNorthCornerCell.GetFloorPos().x + cell_side_length,
-                WestNorthCornerCell.GetFloorPos().y - WestSouthCornerCell.GetFloorPos().y + cell_side_length);
+            UnityEngine.Rect r = new UnityEngine.Rect(WestNorthCornerCell.GetFloorPos().x - Globals.GetCellSideLength() * 0.5f,
+                WestNorthCornerCell.GetFloorPos().y + Globals.GetCellSideLength()*0.5f,
+                EastNorthCornerCell.GetFloorPos().x - WestNorthCornerCell.GetFloorPos().x + Globals.GetCellSideLength(),
+                WestNorthCornerCell.GetFloorPos().y - WestSouthCornerCell.GetFloorPos().y + Globals.GetCellSideLength());
             return r; 
         }
     }
 
     public float EastPosInPixel()
     {
-        return EastNorthCornerCell.transform.position.x + cell_side_length*0.5f;
+        return EastNorthCornerCell.transform.position.x + Globals.GetCellSideLength()*0.5f;
     }
 
     public float SouthPosInPixel()
     {
-        return EastSouthCornerCell.transform.position.y - cell_side_length * 0.5f;
+        return EastSouthCornerCell.transform.position.y - Globals.GetCellSideLength() * 0.5f;
     }
 
     public float WestPosInPixel()
     {
-        return WestNorthCornerCell.transform.position.x - cell_side_length * 0.5f;
+        return WestNorthCornerCell.transform.position.x - Globals.GetCellSideLength() * 0.5f;
     }
 
     public float NorthPosInPixel()
     {
-        return WestNorthCornerCell.transform.position.y + cell_side_length * 0.5f;
+        return WestNorthCornerCell.transform.position.y + Globals.GetCellSideLength() * 0.5f;
     }
 
     public UnityEngine.Vector2 GetMiniMapProjectPosition(float x_ratio, float y_ratio)
     {
         UnityEngine.Vector2 left_bottom_corner_pos = new UnityEngine.Vector3(
             left_up_corner_pos.x,
-            left_up_corner_pos.y - cell_side_length * Y_CELLS_COUNT,
+            left_up_corner_pos.y - Globals.GetCellSideLength() * Y_CELLS_COUNT,
             0);
         return new UnityEngine.Vector2(
-            left_bottom_corner_pos.x + x_ratio * cell_side_length * X_CELLS_COUNT,
-            left_bottom_corner_pos.y + y_ratio * cell_side_length * Y_CELLS_COUNT);
+            left_bottom_corner_pos.x + x_ratio * Globals.GetCellSideLength() * X_CELLS_COUNT,
+            left_bottom_corner_pos.y + y_ratio * Globals.GetCellSideLength() * Y_CELLS_COUNT);
     }
 
     private Cell[,] cells;
@@ -183,8 +176,8 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 
     public Cell GetCellByPos(UnityEngine.Vector3 pos)
     {
-        int y = UnityEngine.Mathf.RoundToInt(UnityEngine.Mathf.Abs(left_up_corner_pos.y - pos.y) / cell_side_length);
-        int x = UnityEngine.Mathf.RoundToInt(UnityEngine.Mathf.Abs(left_up_corner_pos.x - pos.x) / cell_side_length);
+        int y = UnityEngine.Mathf.RoundToInt(UnityEngine.Mathf.Abs(left_up_corner_pos.y - pos.y) / Globals.GetCellSideLength());
+        int x = UnityEngine.Mathf.RoundToInt(UnityEngine.Mathf.Abs(left_up_corner_pos.x - pos.x) / Globals.GetCellSideLength());
         return GetCell(y, x);
     }
 
@@ -724,13 +717,13 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             cell = GetCell(upper_left_cell.y, upper_left_cell.x + x);
             if (!cell.HasWallInDirection(Globals.NORTH))
             {
-                room.doorsPositions.Add(cell.GetFloorPos() + new UnityEngine.Vector3(0,cell_side_length*0.5f,0));
+                room.doorsPositions.Add(cell.GetFloorPos() + new UnityEngine.Vector3(0,Globals.GetCellSideLength()*0.5f,0));
             }            
 
             cell = GetCell(upper_left_cell.y + room.Y_CELLS_COUNT - 1, upper_left_cell.x + x);
             if (!cell.HasWallInDirection(Globals.SOUTH))
             {
-                room.doorsPositions.Add(cell.GetFloorPos() - new UnityEngine.Vector3(0, cell_side_length * 0.5f, 0));
+                room.doorsPositions.Add(cell.GetFloorPos() - new UnityEngine.Vector3(0, Globals.GetCellSideLength() * 0.5f, 0));
             }            
         }
         // 第一列和最后一列，留下东西墙
@@ -739,13 +732,13 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             cell = GetCell(upper_left_cell.y + y, upper_left_cell.x + room.X_CELLS_COUNT - 1);
             if (!cell.HasWallInDirection(Globals.EAST))
             {
-                room.doorsPositions.Add(cell.GetFloorPos() + new UnityEngine.Vector3(cell_side_length * 0.5f, 0,0));
+                room.doorsPositions.Add(cell.GetFloorPos() + new UnityEngine.Vector3(Globals.GetCellSideLength() * 0.5f, 0,0));
             }            
 
             cell = GetCell(upper_left_cell.y + y, upper_left_cell.x);
             if (!cell.HasWallInDirection(Globals.WEST))
             {
-                room.doorsPositions.Add(cell.GetFloorPos() - new UnityEngine.Vector3(cell_side_length * 0.5f, 0,0));
+                room.doorsPositions.Add(cell.GetFloorPos() - new UnityEngine.Vector3(Globals.GetCellSideLength() * 0.5f, 0,0));
             }            
         }
 
@@ -875,7 +868,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     {
         UnityEngine.GameObject gem_prefab = UnityEngine.Resources.Load("Props/purple diamond base") as UnityEngine.GameObject;
         UnityEngine.GameObject gem = UnityEngine.GameObject.Instantiate(gem_prefab) as UnityEngine.GameObject;
-        float offset = cell_side_length / 4.0f;
+        float offset = Globals.GetCellSideLength() / 4.0f;
         UnityEngine.Vector3 gem_pos = cell.GetFloorPos() +
             new UnityEngine.Vector3(UnityEngine.Random.Range(-offset, offset), UnityEngine.Random.Range(-offset, offset), 0);
         gem.transform.position = gem_pos;
@@ -974,7 +967,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 
                 pos = chests[chestIdxA].locate.room.doorsPositions[UnityEngine.Random.Range(0, doors_count)];
 
-                float offset_limit = cell_side_length * 0.3f;
+                float offset_limit = Globals.GetCellSideLength() * 0.3f;
                 pos += new UnityEngine.Vector3(UnityEngine.Random.Range(-offset_limit, offset_limit), UnityEngine.Random.Range(-offset_limit, offset_limit), 0.0f);
             }
             if (guard.name == "Spider")
@@ -1312,7 +1305,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         // 要等一下生成路径，不然会出问题。
         Globals.LevelController.SleepThenCallFunction(30, () => finished());        
     }
-
+    public bool isGenerateFinished = false;
     void finished()
     {
         pathFinder.GenerateGridGraph();
@@ -1327,11 +1320,12 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 
         // pve关卡
         Globals.LevelController.MazeFinished();
+        isGenerateFinished = true;
     }
 
     public void SetRestrictToCamera(MagicThiefCamera camera)
     {
-        float half_cell_length = cell_side_length / 2.0f;
+        float half_cell_length = Globals.GetCellSideLength() / 2.0f;
         camera.restriction_x = new UnityEngine.Vector2(WestPosInPixel() + half_cell_length, EastPosInPixel() - half_cell_length);
         camera.restriction_y = new UnityEngine.Vector2(SouthPosInPixel(), NorthPosInPixel());        
     }
@@ -1566,9 +1560,18 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             PickedItem picked = Globals.FingerRayToObj<PickedItem>(Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), mask, fingerDownOnMap.nowPosition);
             if (picked != null)
             {
-                picked.Picked();
-                Globals.self.AddTrickItem(Globals.self.GetTrickByName(picked.gameObject.name));
-                Globals.self.RemoveDroppedItem(picked.gameObject.name);
+                if (picked.GetCash() > 0)
+                {
+                    Globals.canvasForMagician.ChangeCash(picked.GetCash());
+                    Globals.self.RemoveCashOnFloor(picked.item_id);
+                    Globals.canvasForMyMaze.UpdateIncomeIntro();
+                }
+                else
+                {
+                    Globals.self.AddTrickItem(Globals.self.GetTrickByName(picked.gameObject.name));
+                    Globals.self.RemoveDroppedItem(picked.item_id);
+                }
+                picked.Picked();                
             }
             else
             {
@@ -1665,13 +1668,13 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 
     void Awake()
     {
-        Globals.maze = this;        
+        Globals.maze = this;                
         pathFinder = GetComponent<PathFinder>();        
     }
 
     UnityEngine.GameObject chest_prefab;
     public PlayerInfo owner_of_maze;
-    public UnityEngine.GameObject cell_prefab;
+    
     // Use this for initialization
     public void Start()
     {
@@ -1679,6 +1682,8 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         {
             return;
         }
+
+        Globals.LevelController.BeforeGenerateMaze();
      
         owner_of_maze = null;
         if (Globals.guardPlayer != null)
@@ -1692,9 +1697,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         else
         {
             owner_of_maze = Globals.self;
-        }
-        
-        Globals.LevelController.BeforeGenerateMaze();
+        }                
 
         if (owner_of_maze.isBot)
         {
@@ -1735,16 +1738,11 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         maze = new UnityEngine.GameObject("Maze");
 
         // 左上角
-        left_up_corner_pos = new UnityEngine.Vector3(
-            -(X_CELLS_COUNT * cell_side_length) / 2.0f - cell_side_length / 2.0f,
-           (Y_CELLS_COUNT * cell_side_length) / 2.0f - cell_side_length / 2.0f, 
-           0);
+        left_up_corner_pos = Globals.CalcMazeLeftUpCornerPos(X_CELLS_COUNT, Y_CELLS_COUNT);
 
 //         center_pos = new UnityEngine.Vector3(-(X_CELLS_COUNT * cell_side_length) / 2.0f - cell_side_length / 2.0f,
-//            (Y_CELLS_COUNT * cell_side_length) / 2.0f - cell_side_length / 2.0f, 0);
-
-        cell_prefab = UnityEngine.Resources.Load("Props/Maze-Pieces/Cell_2d") as UnityEngine.GameObject;
-        Cell cell_script_in_prefab = cell_prefab.GetComponent<Cell>();
+//            (Y_CELLS_COUNT * cell_side_length) / 2.0f - cell_side_length / 2.0f, 0);        
+        Cell cell_script_in_prefab = Globals.cell_prefab.GetComponent<Cell>();
         cell_script_in_prefab.Floor_Sprite.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>(pieces_dir + "/Floor");
         cell_script_in_prefab.E_Sprite.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>(pieces_dir + "/Wall_04");
         cell_script_in_prefab.W_Sprite.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>(pieces_dir + "/Wall_04");
@@ -1758,10 +1756,10 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             for (int x = 0; x < X_CELLS_COUNT; ++x)
             {
                 UnityEngine.Vector3 cell_pos = new UnityEngine.Vector3(
-                    left_up_corner_pos.x + x * cell_side_length,
-                  left_up_corner_pos.y - y * cell_side_length, 
+                    left_up_corner_pos.x + x * Globals.GetCellSideLength(),
+                  left_up_corner_pos.y - y * Globals.GetCellSideLength(), 
                   0);
-                UnityEngine.GameObject cell_gameobj = UnityEngine.GameObject.Instantiate(cell_prefab) as UnityEngine.GameObject;
+                UnityEngine.GameObject cell_gameobj = UnityEngine.GameObject.Instantiate(Globals.cell_prefab) as UnityEngine.GameObject;
                 Cell cell = cell_gameobj.GetComponent<Cell>();
                 cell_gameobj.transform.parent = maze.transform;
                 cell_gameobj.transform.position = cell_pos;
@@ -1859,5 +1857,15 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             }            
         }
         return false;
+    }
+
+    public UnityEngine.Vector3 GetPickedItemBasedOnRandomPos(System.String[] item_data)
+    {
+        float rand_x = System.Convert.ToSingle(item_data[0]);
+        float rand_y = System.Convert.ToSingle(item_data[1]);
+
+        return Globals.GetPathNodePos(pathFinder.GetNearestWalkableNode(new UnityEngine.Vector3(left_up_corner_pos.x + Globals.GetCellSideLength() * X_CELLS_COUNT * rand_x,
+                left_up_corner_pos.y - Globals.GetCellSideLength() * Y_CELLS_COUNT * rand_y,
+                0)));            
     }
 }

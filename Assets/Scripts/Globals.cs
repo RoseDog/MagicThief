@@ -89,6 +89,7 @@ public class GuardData
     public int doveOutVisionTime = 100;
     public float attackSpeed = 1.0f;
     public float moveSpeed = 1.0f;
+    public int income;
 
     public GuardData()
     {
@@ -253,7 +254,8 @@ public class BuildingData
 public class ReplayData
 {
     public System.DateTime date;        
-    public float StealingCash;
+    public float StealingCashInSafebox;
+    public float PickedCash;
     public IniFile ini = new IniFile();
     public bool everClicked = false;
     public int reward_rose_count;
@@ -309,7 +311,8 @@ public class PlayerInfo
 
     public System.Collections.Generic.List<MagicianData> magicians = new System.Collections.Generic.List<MagicianData>();
     public MagicianData selectedMagician;
-    public System.Collections.Generic.List<System.String> droppedItemsFromThief = new System.Collections.Generic.List<System.String>();    
+    public System.Collections.Generic.List<System.String> droppedItemsFromThief = new System.Collections.Generic.List<System.String>();
+    public System.Collections.Generic.List<System.String> cashOnFloor = new System.Collections.Generic.List<System.String>();    
 
     public BuildingData GetBuildingDataByID(System.String idString)
     {
@@ -435,8 +438,8 @@ public class PlayerInfo
             tricks.Add(trick);
 
             trick = new TrickData();
-            trick.nameKey = "flash_grenade";
-            trick.descriptionKey = "flash_grenade_desc";
+            trick.nameKey = "flashGrenade";
+            trick.descriptionKey = "flashGrenade_desc";
             trick.duration = 0;
             trick.powerCost = 2;
             trick.unlockRoseCount = 25;
@@ -518,7 +521,7 @@ public class PlayerInfo
         guard_data.atkShortestDistance = 120f;
         guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
-        guard_data.moveSpeed = 6;
+        guard_data.moveSpeed = 6;        
         Globals.guardDatas.Add(guard_data);
 
         guard_data = new GuardData();
@@ -532,6 +535,7 @@ public class PlayerInfo
         guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
         guard_data.moveSpeed = 6;
+        guard_data.income = 150;
         Globals.guardDatas.Add(guard_data);
 
         guard_data = new GuardData();
@@ -543,6 +547,7 @@ public class PlayerInfo
         guard_data.atkShortestDistance = 80f;
         guard_data.doveOutVisionTime = 300;
         guard_data.moveSpeed = 7;
+        guard_data.income = 50;
         Globals.guardDatas.Add(guard_data);
 
         guard_data = new GuardData();
@@ -568,6 +573,7 @@ public class PlayerInfo
         guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
         guard_data.moveSpeed = 5;
+        guard_data.income = 250;
         Globals.guardDatas.Add(guard_data);
 
 
@@ -685,6 +691,8 @@ public class PlayerInfo
             Globals.socket.serverReplyActions.Add("new_rosebuilding", (reply) => NewRoseBuilding(reply));
 
             Globals.socket.serverReplyActions.Add("been_stolen", (reply) => BeenStolen(reply));
+
+            Globals.socket.serverReplyActions.Add("performing_income", (reply) => PerformingIncome(reply));            
         }
     }
 
@@ -738,7 +746,50 @@ public class PlayerInfo
             }
         }
         return total_weight;
-    }    
+    }
+
+    public int GetTotalIncomePerHour()
+    {
+        int income = 0;
+
+        IniFile ini = new IniFile();
+        ini.loadFromText(summonedGuardsStr);
+        int guard_count = ini.get("GuardCount", 0);
+        System.String[] keys = ini.keys();
+        for (int i = 1; i <= guard_count; ++i)
+        {
+            GuardData data = Globals.GetGuardData(ini.get(keys[i]));
+            income += data.income;
+        }
+                
+        return income;
+    }
+
+    public void PerformingIncome(System.String[] reply)
+    {                
+        cashOnFloor.Add(reply[0]);
+        // 如果在这里生成，下次进来看到的不一致
+//         if(Globals.canvasForMyMaze != null)
+//         {
+//             Globals.canvasForMyMaze.UpdateIncomeIntro();
+//             if (Globals.maze.isGenerateFinished)
+//             {
+//                 PickedItem cash = OneCashOnFloor(reply[0]);
+//                 cash.Falling(60);            
+//             }            
+//         }
+    }
+
+    public int GetCashAmountOnMazeFloor()
+    {
+        int cash_on_floor = 0;
+        foreach(System.String cash in cashOnFloor)
+        {
+            System.String[] cash_data = cash.Split(',');
+            cash_on_floor += System.Convert.ToInt32(cash_data[2]);
+        }
+        return cash_on_floor;
+    }
 
     public void SelfStealingInfo(System.String[] reply)
     {
@@ -746,7 +797,6 @@ public class PlayerInfo
 
         if(this == Globals.self)
         {
-
             if (TutorialLevelIdx != TutorialLevel.Over)
             {
                 Globals.guardPlayer = new PlayerInfo();
@@ -851,17 +901,29 @@ public class PlayerInfo
         }
         
         UnpackDroppedItemStr(reply[19]);
+        UnpackCashOnFloorStr(reply[20]);
     }
 
     public void UnpackDroppedItemStr(System.String item_str)
     {
         droppedItemsFromThief.Clear();
-        System.String[] temp = item_str.Split(',');
+        System.String[] temp = item_str.Split('_');
         for (int i = 1; i < temp.Length; ++i)
         {
             droppedItemsFromThief.Add(temp[i]);
         }
     }
+
+    public void UnpackCashOnFloorStr(System.String cashOnFloor_str)
+    {
+        cashOnFloor.Clear();
+        System.String[] temp = cashOnFloor_str.Split('_');
+        for (int i = 1; i < temp.Length; ++i)
+        {
+            cashOnFloor.Add(temp[i]);
+        }
+    }
+    
 
     void BuildingsOver(System.String[] reply)
     {
@@ -1051,9 +1113,11 @@ public class PlayerInfo
             {
                 if (slot.trickItem.trickData.inventory > 0 && UnityEngine.Random.Range(0.0f, 1.0f) < slot.trickItem.trickData.dropOdds)
                 {
-                    itemsDropingWhenEscape.Add(slot.trickItem.trickData.nameKey);
+                    Cell corridor = Globals.maze.GetRandomCorridorCell();
+                    System.String item_id = UnityEngine.Random.Range(0.0f, 1.0f) + "," + UnityEngine.Random.Range(0.0f, 1.0f) + "," + slot.trickItem.trickData.nameKey;
+                    itemsDropingWhenEscape.Add(item_id);
                     slot.trickItem.trickData.inventory -= 1;
-                    Globals.socket.Send("drop_trickitem" + separator + slot.trickItem.trickData.nameKey);
+                    Globals.socket.Send("drop_trickitem" + separator + item_id);
                     if (slot.trickItem.trickData.inventory == 0)
                     {
                         RemoveUsingTrick(slot.trickItem.trickData);
@@ -1064,24 +1128,64 @@ public class PlayerInfo
         return itemsDropingWhenEscape;
     }
 
-    public void RemoveDroppedItem(System.String itemname)
+    public void RemoveDroppedItem(System.String itemID)
     {
-        droppedItemsFromThief.Remove(itemname);
-        Globals.socket.Send("remove_droppedItem" + separator + itemname);
+        droppedItemsFromThief.Remove(itemID);
+        Globals.socket.Send("RemoveDroppedItem" + separator + itemID);
     }
 
     public void SpreadItemsDroppedFromThiefInMaze()
     {
-        foreach (System.String itemname in droppedItemsFromThief)
+        foreach (System.String item in droppedItemsFromThief)
         {
-            Cell corridor = Globals.maze.GetRandomCorridorCell();
-            UnityEngine.Vector3 item_pos = corridor.GetRandFloorPos();
+            System.String[] item_data = item.Split(',');
             UnityEngine.GameObject DroppedItem_prefab = UnityEngine.Resources.Load("Misc/DroppedItem") as UnityEngine.GameObject;
             UnityEngine.GameObject DroppedItemObject = UnityEngine.GameObject.Instantiate(DroppedItem_prefab) as UnityEngine.GameObject;
-            DroppedItemObject.name = itemname;
-            DroppedItemObject.GetComponent<UnityEngine.SpriteRenderer>().sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("Misc/" + itemname + "_itemImageOnFloor");
-            DroppedItemObject.transform.position = item_pos;
+            DroppedItemObject.name = item_data[2];
+            DroppedItemObject.GetComponent<UnityEngine.SpriteRenderer>().sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("Misc/" + item_data[2] + "_itemImageOnFloor");
+            DroppedItemObject.transform.position = Globals.maze.GetPickedItemBasedOnRandomPos(item_data);
+            DroppedItemObject.GetComponent<PickedItem>().item_id = item;
         }
+    }
+
+    public void RemoveCashOnFloor(System.String cashID)
+    {
+        cashOnFloor.Remove(cashID);
+        Globals.socket.Send("RemoveCashOnFloor" + separator + cashID);
+    }
+
+    public void SpreadCashOnFloor()
+    {
+        foreach (System.String cash_id in cashOnFloor)
+        {
+            OneCashOnFloor(cash_id);
+        }
+    }
+
+    public PickedItem OneCashOnFloor(System.String cash_id)
+    {
+        System.String[] cash_data = cash_id.Split(',');
+        UnityEngine.GameObject cash_on_floor_prefab;
+        if (this == Globals.self)
+        {
+            cash_on_floor_prefab = UnityEngine.Resources.Load("Avatar/CashOnMyMazeFloor") as UnityEngine.GameObject;
+        }
+        else
+        {
+            cash_on_floor_prefab = UnityEngine.Resources.Load("Avatar/CashOnTargetMazeFloor") as UnityEngine.GameObject;
+        }
+
+        UnityEngine.GameObject cash_on_floor = UnityEngine.GameObject.Instantiate(cash_on_floor_prefab) as UnityEngine.GameObject;
+        cash_on_floor.transform.position = Globals.maze.GetPickedItemBasedOnRandomPos(cash_data);
+        int cash_amount = System.Convert.ToInt32(cash_data[2]);
+        if (cash_amount == 0)
+        {
+            cash_amount = 1;
+        }
+        PickedItem pickedCash = cash_on_floor.GetComponent<PickedItem>();
+        pickedCash.SetCash(cash_amount);
+        pickedCash.item_id = cash_id;
+        return pickedCash;
     }
 
     public void UsingTrick(TrickData trick, int slotIdx)
@@ -1093,7 +1197,7 @@ public class PlayerInfo
     public void RemoveUsingTrick(TrickData trick)
     {
         trick.Unuse();
-        Globals.socket.Send("unuse_trick" + separator + trick.nameKey);        
+        Globals.socket.Send("unuse_trick" + separator + trick.nameKey);
     }
 
     public void TrickSlotBought(TrickUsingSlotData data)
@@ -1212,7 +1316,7 @@ public class PlayerInfo
         if(Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.Over)
         {
             PackSummonedGuardsStr();
-            Globals.socket.Send("upload_summoned_guards" + separator + summonedGuardsStr);
+            Globals.socket.Send("upload_summoned_guards" + separator + summonedGuardsStr + separator + GetTotalIncomePerHour());
         }        
     }
 
@@ -1285,19 +1389,21 @@ public class PlayerInfo
         Globals.socket.SetReady(true);
     }
 
-    public void StealingOver(float StealingCash, int PerfectStealingBonus, bool bIsPerfectStealing)
+    public void StealingOver(float Stealing_Cash_In_Safebox, float PickedCash, int PerfectStealingBonus, bool bIsPerfectStealing)
     {
         ReplayData replay = new ReplayData();
         replay.date = System.DateTime.Now;
-        replay.StealingCash = StealingCash;
+        replay.StealingCashInSafebox = Stealing_Cash_In_Safebox;
+        replay.PickedCash = PickedCash;
         replay.ini = Globals.replaySystem.Pack();
         replay.everClicked = false;
 
-        Globals.canvasForMagician.ChangeCash(StealingCash + PerfectStealingBonus);
+        Globals.canvasForMagician.ChangeCash(Stealing_Cash_In_Safebox + PerfectStealingBonus);
         Globals.socket.Send(
             "stealing_over" + separator +
             replay.date + separator +
-            replay.StealingCash.ToString("F0") + separator +
+            replay.StealingCashInSafebox.ToString("F0") + separator +
+            replay.PickedCash.ToString("F0") + separator +
             replay.ini.toString() + separator +
             replay.everClicked.ToString() + separator +
             bIsPerfectStealing.ToString() + separator +
@@ -1317,7 +1423,7 @@ public class PlayerInfo
     {
         ReplayData replay = UnpackOneReplayData(reply);
         defReplays.Add(replay.date.ToString(), replay);
-        //if (!replay.everClicked)
+        if (!replay.everClicked)
         {
             beenStolenReports.Add(replay.date.ToString(), replay);
         }               
@@ -1327,20 +1433,21 @@ public class PlayerInfo
     {
         ReplayData replay = new ReplayData();
         replay.date = System.Convert.ToDateTime(reply[0]);                
-        replay.StealingCash = System.Convert.ToSingle(reply[1]);
-        replay.ini.loadFromText(reply[2]);
-        replay.everClicked = System.Convert.ToBoolean(reply[3]);
-        replay.thief.StealingInfo(reply[4]);
-        replay.guard.StealingInfo(reply[5]);
-        replay.reward_rose_count = System.Convert.ToInt32(reply[6]);
-        replay.rewardAccepted = System.Convert.ToBoolean(reply[7]);
+        replay.StealingCashInSafebox = System.Convert.ToSingle(reply[1]);
+        replay.PickedCash = System.Convert.ToSingle(reply[2]);
+        replay.ini.loadFromText(reply[3]);
+        replay.everClicked = System.Convert.ToBoolean(reply[4]);
+        replay.thief.StealingInfo(reply[5]);
+        replay.guard.StealingInfo(reply[6]);
+        replay.reward_rose_count = System.Convert.ToInt32(reply[7]);
+        replay.rewardAccepted = System.Convert.ToBoolean(reply[8]);
         return replay;
     }
 
     public void BeenStolen(System.String[] reply)
     {
         ReplayData replay = UnpackOneReplayData(reply);
-        Globals.canvasForMagician.ChangeCash(replay.StealingCash);
+        Globals.canvasForMagician.ChangeCash(replay.StealingCashInSafebox);
         beenStolenReports.Add(replay.date.ToString(), replay);
         if(Globals.city != null)
         {
@@ -1386,6 +1493,12 @@ public class PlayerInfo
 
 public class Globals
 {
+    public static UnityEngine.GameObject cell_prefab;
+    public static float cell_side_length;
+    public static float GetCellSideLength()
+    {
+        return cell_side_length;
+    }    
     public static System.String versionString = "0.1";
     public static readonly System.String EAST = "E";
     public static readonly System.String SOUTH = "S";
@@ -1587,6 +1700,7 @@ public class Globals
         Globals.maze.LevelTipText = ini.get("LevelTipText");
         Globals.maze.CASH = ini.get("CASH",0);
         Globals.maze.droppedItemsStr = ini.get("droppedItemsStr");
+        Globals.maze.cashOnFloorStr = ini.get("cashOnFloorStr");
         return ini;
     }
 
@@ -1619,7 +1733,23 @@ public class Globals
         ini.set("LAMPS_COUNT", Globals.maze.LAMPS_COUNT);        
         ini.set("LevelTipText", Globals.maze.LevelTipText);
         ini.set("CASH", Globals.maze.CASH);
-        ini.set("droppedItemsStr", Globals.maze.droppedItemsStr);
+        System.String item_str = "";
+        System.String[] item_names = Globals.maze.droppedItemsStr.Split(',');
+        foreach (System.String item_name in item_names)
+        {
+            System.String item_id = System.Guid.NewGuid().ToString() + "," + item_name;
+            item_str = item_str + "_" + item_id;
+        }
+        ini.set("droppedItemsStr", item_str);
+
+        System.String cash_str = "";
+        System.String[] cashes = Globals.maze.cashOnFloorStr.Split(',');
+        foreach (System.String cash in cashes)
+        {
+            System.String cash_id = System.Guid.NewGuid().ToString() + "," + cash;
+            cash_str = cash_str + "_" + cash_id;
+        }
+        ini.set("cashOnFloorStr", cash_str);
 
         if (mazeIniFileName != "")
         {
@@ -1840,5 +1970,14 @@ public class Globals
     {
         return (value < min) ? min : (value > max) ? max : value;
     }
+
+    public static UnityEngine.Vector3 CalcMazeLeftUpCornerPos(int X_CELLS_COUNT, int Y_CELLS_COUNT)
+    {
+        return new UnityEngine.Vector3(
+            -(X_CELLS_COUNT * Globals.GetCellSideLength()) / 2.0f - Globals.GetCellSideLength() / 2.0f,
+           (Y_CELLS_COUNT * Globals.GetCellSideLength()) / 2.0f - Globals.GetCellSideLength() / 2.0f,
+           0);
+    }
+
 }
 

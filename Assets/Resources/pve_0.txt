@@ -17,4 +17,4 @@ GEMS_COUNT=2
 LAMPS_COUNT=0
 LevelTipText=
 CASH=2400
-droppedItemsStr=,dove,flash_grenade,flash_grenade,flyUp
+droppedItemsStr=dove,flashGrenade,flashGrenade,flyUp

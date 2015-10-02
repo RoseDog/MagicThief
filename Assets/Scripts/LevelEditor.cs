@@ -56,7 +56,7 @@ public class LevelEditor : LevelController
         {
             chest.Visible(true);
         }
-        Globals.maze.PlaceGemsAtBoarder();
+        //Globals.maze.PlaceGemsAtBoarder();
         Globals.cameraFollowMagician.Reset();
     }
 

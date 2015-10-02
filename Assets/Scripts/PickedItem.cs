@@ -1,18 +1,36 @@
 public class PickedItem : Actor 
 {
     FlyToScreenNumber fly;
-    int cash = 300;
+    int cash = 0;
     public UnityEngine.SpriteRenderer holder;
+    public System.String item_id;
+    public Cocos2dAction floatUpAction;
+    public MultiLanguageUIText tip;
+    
     public int GetCash()
     {
         return cash;
+    }
+
+    public void SetCash(int c)
+    {
+        cash = c;
     }
     
 	public override void Awake () 
     {
         base.Awake();
-        fly = GetComponent<FlyToScreenNumber>();        
-        spriteRenderer = GetComponent<UnityEngine.SpriteRenderer>();
+        fly = GetComponent<FlyToScreenNumber>();
+        tip.gameObject.SetActive(false);
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GetComponent<UnityEngine.SpriteRenderer>();
+        }                
+	}
+
+    public override void Start()
+    {
+        base.Start();
         if (fly != null)
         {
             int duration = UnityEngine.Random.Range(30, 50);
@@ -22,7 +40,7 @@ public class PickedItem : Actor
                 new MoveTo(transform, pos_cache, duration / 2)));
         }
         
-	}
+    }
 
     public override void TouchBegin(Actor other)
     {
@@ -33,12 +51,21 @@ public class PickedItem : Actor
     public void Picked()
     {
         int floatDuration = 40;
+        tip.gameObject.SetActive(true);
+        if (cash > 0)
+        {
+            tip.text = "<color=yellow>+" + cash.ToString() + "</color>";
+        }
+        else
+        {
+            Globals.languageTable.SetText(tip, "item_picked", new System.String[] {gameObject.name, "1" });
+        }        
 
         if (fly != null)
         {
             // 宝石，加钱，
-            Globals.Assert(Globals.stealingController.unstolenGems.Contains(transform.parent.gameObject));
-            Globals.stealingController.unstolenGems.Remove(transform.parent.gameObject);
+            //Globals.Assert(Globals.stealingController.unstolenGems.Contains(transform.parent.gameObject));
+            //Globals.stealingController.unstolenGems.Remove(transform.parent.gameObject);
 
             transform.parent = null;
             ClearAllActions();
@@ -48,19 +75,30 @@ public class PickedItem : Actor
             // 飞到屏幕的金钱图标那里去
             SleepThenCallFunction(floatDuration + 5, () => FlyOff());
             GetComponent<UnityEngine.AudioSource>().Play();
+
+            // 落在地上的钱
+            if (holder == null && Globals.stealingController)
+            {
+                Globals.stealingController.pickedCash.Add(item_id);
+            }
         }
         else
         {
             if (Globals.stealingController)
             {
-                Globals.stealingController.pickedItems.Add(gameObject.name);
+                Globals.stealingController.pickedItems.Add(item_id);
             }            
             
             SleepThenCallFunction(floatDuration + 5, () => Destroy());
         }
         cash = 0;
         gameObject.layer = 26;
-        AddAction(new MoveTo(transform, transform.localPosition + new UnityEngine.Vector3(0.0f, 150.0f, 0.0f), floatDuration));     
+        if(shadow)
+        {
+            shadow.enabled = false;
+        }
+        floatUpAction = new MoveTo(transform, transform.localPosition + new UnityEngine.Vector3(0.0f, 150.0f, 0.0f), floatDuration);
+        AddAction(floatUpAction);
     }
 
     void FlyOff()
@@ -77,7 +115,7 @@ public class PickedItem : Actor
     {
         base.FrameFunc();
 
-        if (Globals.LevelController.fogTex != null)
+        if (floatUpAction == null && Globals.LevelController.fogTex != null)
         {
             bool infog = isInFog(transform.position);
             // 如果有holder

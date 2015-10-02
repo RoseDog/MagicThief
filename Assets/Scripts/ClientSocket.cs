@@ -34,8 +34,9 @@ public class ClientSocket : UnityEngine.MonoBehaviour
 //         ws.ConnectAsync();
 
         //ws = new WebSocket4Net.WebSocket("ws://96.126.116.192:42788");
-        ws = new WebSocket4Net.WebSocket("ws://192.168.1.4:42788/");
+        ws = new WebSocket4Net.WebSocket("ws://127.0.0.1:42788");
 
+        ws.Opened += new System.EventHandler(OnOpen);
         ws.Closed += new System.EventHandler(OnClose);
         ws.MessageReceived += new System.EventHandler<WebSocket4Net.MessageReceivedEventArgs>(OnMessage);
         ws.Error += new System.EventHandler<SuperSocket.ClientEngine.ErrorEventArgs>(OnError);
@@ -48,24 +49,14 @@ public class ClientSocket : UnityEngine.MonoBehaviour
         serverReplyActions.Add("login", (reply) => OnLoginReply(reply));
         Globals.self.MsgActions();
 
-        if (!fromLoginScene)
-        {
-            Invoke("Login", 1.5f);
-        }
+        
     }    
 
 	void Start () 
     {
         
 	}
-
-    void Login()
-    {
-        System.String name = "rosedog";
-        Send("login" + Globals.self.separator + name + Globals.self.separator + UnityEngine.SystemInfo.deviceUniqueIdentifier + Globals.self.separator + Globals.versionString);
-        Globals.self.name = name;
-    }    
-
+    
     void OnLoginReply(System.String[] reply)
     {                
         if (reply[0] == "ok")
@@ -167,6 +158,22 @@ public class ClientSocket : UnityEngine.MonoBehaviour
     {
         UnityEngine.Debug.Log(e.Message);
         threadTempActions.Add(() => MessageInvoke(e.Message));
+    }
+
+    void OnOpen(object sender, System.EventArgs e)
+    {
+        if (!fromLoginScene)
+        {
+            threadTempActions.Add(() => Login());            
+        }
+    }
+
+    void Login()
+    {
+        // 这里测试的时候不要使用中文名。代码里的中文名传到服务器会有问题
+        System.String name = "rosedog";
+        Send("login" + Globals.self.separator + name + Globals.self.separator + UnityEngine.SystemInfo.deviceUniqueIdentifier + Globals.self.separator + Globals.versionString);
+        Globals.self.name = name;
     }
 
     void OnError(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)

@@ -41,8 +41,8 @@ public class TrickItem : UnityEngine.MonoBehaviour,
             Globals.canvasForMagician.draggingTrickItem = this;
         }
 
-        if (Globals.LevelController as StealingLevelController != null && 
-            trickData.nameKey == "flash_grenade" && !Globals.canvasForMagician.tricksBg.gameObject.activeSelf)
+        if (Globals.LevelController as StealingLevelController != null &&
+            trickData.nameKey == "flashGrenade" && !Globals.canvasForMagician.tricksBg.gameObject.activeSelf)
         {
             Globals.canvasForMagician.draggingFlashGrenade = true;
             Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();
@@ -94,8 +94,8 @@ public class TrickItem : UnityEngine.MonoBehaviour,
             
             if (cast)
             {
-                
-                if (Globals.stealingController != null && trickData.nameKey == "flash_grenade")
+
+                if (Globals.stealingController != null && trickData.nameKey == "flashGrenade")
                 {
                     if (Globals.stealingController.magician.ChangePower(-trickData.powerCost))
                     {

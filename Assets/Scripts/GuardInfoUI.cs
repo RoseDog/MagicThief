@@ -6,6 +6,7 @@ public class GuardInfoUI : CustomEventTrigger
     public UnityEngine.UI.Text StrengthNumber;
     public UnityEngine.UI.Text VisionNumber;
     public UnityEngine.UI.Text SpeedNumber;
+    public UnityEngine.UI.Text PerformingIncomeNumber;
     public override void Awake()
     {
         base.Awake();
@@ -25,7 +26,8 @@ public class GuardInfoUI : CustomEventTrigger
         {            
             StrengthNumber.text = guard.data.attackValue.ToString();
             VisionNumber.text = guard.eye.fovMaxDistance.ToString();
-            SpeedNumber.text = guard.moving.speed.ToString("F1");
+            SpeedNumber.text = guard.data.moveSpeed.ToString("F1");
+            PerformingIncomeNumber.text = guard.data.income.ToString("") + "/H";
         }
         else
         {

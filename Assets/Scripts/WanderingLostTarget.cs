@@ -47,7 +47,7 @@ public class WanderingLostTarget : GuardAction
         
         if (call == null)
         {
-            call = guard.SleepThenCallFunction(250, () => GoOnPatrol());            
+            call = guard.SleepThenCallFunction(150, () => GoOnPatrol());            
         }
         else
         {

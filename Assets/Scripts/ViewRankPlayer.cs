@@ -7,8 +7,8 @@ public class ViewRankPlayer : CustomEventTrigger
     UnityEngine.GameObject recordPrefab;
 
     UnityEngine.RectTransform ReplayDetail;
-    MultiLanguageUIText cash_back_then;
-    MultiLanguageUIText stealing_cash;
+    public MultiLanguageUIText stealing_cash_info;
+
     UnityEngine.UI.Button replay_btn;
     public City city;
     public UnityEngine.GameObject highLightFrame;
@@ -22,8 +22,6 @@ public class ViewRankPlayer : CustomEventTrigger
         recordPrefab = UnityEngine.Resources.Load("UI/OtherPlayerStealRecord") as UnityEngine.GameObject;
 
         ReplayDetail = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "ReplayDetail");
-        cash_back_then = Globals.getChildGameObject<MultiLanguageUIText>(ReplayDetail.gameObject, "cash_back_then");
-        stealing_cash = Globals.getChildGameObject<MultiLanguageUIText>(ReplayDetail.gameObject, "stealing_cash");
         replay_btn = Globals.getChildGameObject<UnityEngine.UI.Button>(ReplayDetail.gameObject, "replay");
         ReplayDetail.localScale = UnityEngine.Vector3.zero;
 
@@ -80,10 +78,9 @@ public class ViewRankPlayer : CustomEventTrigger
     }
     public void ReplayEventBtnClicked(ReplayData replay, CityEvent ce, UnityEngine.UI.Button eventBtn)
     {
-        Globals.languageTable.SetText(cash_back_then,"cash_back_then",
-            new System.String[] { replay.guard.cashAmount.ToString("F0") });
-        Globals.languageTable.SetText(stealing_cash, "stealing_cash",
-            new System.String[] { replay.StealingCash.ToString("F0") });        
+        Globals.languageTable.SetText(stealing_cash_info, "stealing_cash_info",
+            new System.String[] { replay.guard.cashAmount.ToString("F0"), replay.guard.GetCashAmountOnMazeFloor().ToString("F0"),
+            replay.StealingCashInSafebox.ToString("F0"), replay.PickedCash.ToString("F0")});           
         
         ReplayDetail.localScale = UnityEngine.Vector3.one;        
         replay_btn.onClick.RemoveAllListeners();

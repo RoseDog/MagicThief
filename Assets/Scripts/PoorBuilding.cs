@@ -52,7 +52,7 @@ public class PoorBuilding : Building
         {
             Globals.self.TurnPoorToRose(data);
             yesBtn.interactable = false;
-        }                
+        }
     }
 
     public void NoBtnClicked()

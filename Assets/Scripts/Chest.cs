@@ -114,6 +114,10 @@ public class Chest : Actor, System.IComparable<Chest>
     public override void TouchBegin(Actor other)
     {
         base.TouchBegin(other);
+        if (goldLast < UnityEngine.Mathf.Epsilon)
+        {
+            return;
+        }
         Magician mage = other.GetComponent<Magician>();
         if (mage != null && mage.currentAction == mage.beenPressDown)
         {
@@ -275,28 +279,14 @@ public class Chest : Actor, System.IComparable<Chest>
         {
             UnityEngine.GameObject coin = UnityEngine.GameObject.Instantiate(coinPrefab) as UnityEngine.GameObject;
             coin.transform.position = new UnityEngine.Vector3(
-                transform.position.x + UnityEngine.Random.Range(-Globals.maze.GetCellSideLength() / 3, Globals.maze.GetCellSideLength() / 3),
+                transform.position.x + UnityEngine.Random.Range(-Globals.GetCellSideLength() / 3, Globals.GetCellSideLength() / 3),
                 transform.position.y,
-                transform.position.z + UnityEngine.Random.Range(-Globals.maze.GetCellSideLength() / 3, Globals.maze.GetCellSideLength() / 3));
+                transform.position.z + UnityEngine.Random.Range(-Globals.GetCellSideLength() / 3, Globals.GetCellSideLength() / 3));
 
             FlyToScreenNumber coin_fly = coin.GetComponent<FlyToScreenNumber>();
             coin_fly.numberDelta = gold_every_coin;
             coin_fly.ToCashNumber(true);
         }
-    }    
-
-    public void Falling(int fallingDuration)
-    {
-        UnityEngine.Vector3 to = transform.position;
-        UnityEngine.Vector3 from = transform.position + new UnityEngine.Vector3(0, 2000, 0);
-        transform.position = from;
-        AddAction(new MoveTo(transform, to, fallingDuration));
-        Invoke("FallingOver", fallingDuration + 0.3f);
-    }
-
-    void FallingOver()
-    {
-        ClearAllActions();
     }
 
     bool isShownBtn = false;

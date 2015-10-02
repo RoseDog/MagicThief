@@ -12,7 +12,7 @@ public class FlyToScreenNumber : Actor
     public void ToCashNumber(bool rotate)
     {
         // 在教程中，TutorialThief偷东西的时候，不往界面上飞
-        StealingLevelController controller = Globals.LevelController as StealingLevelController;
+        StealingLevelController controller = Globals.LevelController as StealingLevelController;        
 
         // 金钱增量的位置
         numberFlyTo = controller.StealingCash;

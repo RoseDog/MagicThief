@@ -68,7 +68,7 @@ public class AddSafeBoxUI : CustomEventTrigger
         else if (Globals.self.safeBoxDatas.Count < mazeData.safeBoxCount)
         {            
             AddBtn.gameObject.SetActive(true);
-            AddPrice.text = Globals.buySafeBoxPrice.ToString();
+            Globals.languageTable.SetText(AddPrice, "buy", new System.String[] { Globals.buySafeBoxPrice.ToString() });
             if (Globals.self.cashAmount < Globals.buySafeBoxPrice)
             {
                 AddPrice.color = UnityEngine.Color.red;

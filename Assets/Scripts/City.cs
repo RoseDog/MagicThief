@@ -45,6 +45,7 @@ public class City : LevelController
         go_add_box.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => GoAddBox());
         go_add_box.gameObject.SetActive(false);
         beenStolenReportUI.transform.parent.parent.gameObject.SetActive(false);
+        fogPlane.SetActive(true);
     }
 
     public void GoAddBox()
@@ -166,7 +167,7 @@ public class City : LevelController
             else
             {
                 ce = eventsWindow.AddEvent(replay.everClicked);
-                if (replay.StealingCash > 0)
+                if (replay.StealingCashInSafebox > 0)
                 {
                     ce.uiText.color = UnityEngine.Color.red;
                     Globals.languageTable.SetText(ce.uiText, "stolen_by_others_event_guards_failed", new System.String[] { replay.thief.name, replay.thief.roseCount.ToString()});

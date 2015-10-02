@@ -1,10 +1,11 @@
-﻿GuardCount=6
+﻿GuardCount=7
 (-174.0000, 500.0000, -0.0100)=Spider
 (-174.0000, 1075.0000, -0.0100)=Spider
 (-1424.0000, -1125.0000, 0.0000)=Spider
 (351.0000, -1325.0000, -0.0100)=Police
 (-149.0000, 800.0000, -0.0100)=Spider
 (-1274.0000, -700.0000, -0.0100)=Police
+(76.0000, -75.0000, 0.0000)=lamp
 randSeedCacheWhenEditLevel=-1936562923
 Z_CELLS_COUNT=9
 X_CELLS_COUNT=9
@@ -20,3 +21,4 @@ GEMS_COUNT=5
 LAMPS_COUNT=0
 LevelTipText=
 CASH=7000
+droppedItemsStr=

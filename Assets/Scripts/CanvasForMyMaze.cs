@@ -15,7 +15,8 @@ public class CanvasForMyMaze : Actor
     public LifeNumber MazeRoomNumber;
     public int roomConsumed;
     public UnityEngine.GameObject room_not_full_used;
-    
+
+    public UnityEngine.UI.Text income_intro;
 
     UIMover FogBtn;
     public override void Awake()
@@ -36,7 +37,7 @@ public class CanvasForMyMaze : Actor
         room_not_full_used.gameObject.SetActive(false);        
 
         FogBtn = Globals.getChildGameObject<UIMover>(gameObject, "FogBtn");
-        FogBtn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => SwitchFog());
+        FogBtn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => SwitchFog());        
     }
     
 	// Use this for initialization
@@ -48,8 +49,32 @@ public class CanvasForMyMaze : Actor
         UnityEngine.UI.Button chestDownBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(TipBuyHereAsHome.gameObject, "ChestDown");
         chestDownBtn.onClick.AddListener(() => myMaze.ChestFallingStart());
 
-        gameObject.SetActive(false);
+        gameObject.SetActive(false);        
 	}
+
+    public void CollectAllCashOnMyMazeFloor()
+    {
+        int cash_amount = 0;
+        PickedItem[] items = UnityEngine.GameObject.FindObjectsOfType<PickedItem>();
+        foreach(PickedItem item in items)
+        {
+            if (item.GetCash()>0)
+            {
+                cash_amount += item.GetCash();
+                item.Picked();
+                Globals.self.RemoveCashOnFloor(item.item_id);
+            }            
+        }
+        Globals.canvasForMagician.ChangeCash(cash_amount);
+        
+        //捡起所有金钱;
+        UpdateIncomeIntro();
+    }
+
+    public void UpdateIncomeIntro()
+    {
+        Globals.languageTable.SetText(income_intro, "income_intro", new System.String[] { Globals.self.GetTotalIncomePerHour().ToString(), Globals.self.GetCashAmountOnMazeFloor().ToString() });
+    }
 	
     public void ShowCreateMazeBtn()
     {

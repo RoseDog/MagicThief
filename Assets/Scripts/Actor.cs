@@ -432,7 +432,8 @@ public class Actor : UnityEngine.MonoBehaviour
         else
         {
             transform.localEulerAngles = UnityEngine.Vector3.zero;
-        }
+        }        
+        eye.dirCache = v;
     }
 
     public virtual void SpotByEnemy(Guard guard)
@@ -448,5 +449,19 @@ public class Actor : UnityEngine.MonoBehaviour
     public virtual double GetSpeed()
     {
         return moving.speed;
+    }
+
+    public void Falling(int fallingDuration)
+    {
+        UnityEngine.Vector3 to = transform.position;
+        UnityEngine.Vector3 from = transform.position + new UnityEngine.Vector3(0, 2000, 0);
+        transform.position = from;
+        AddAction(new MoveTo(transform, to, fallingDuration));
+        Invoke("FallingOver", fallingDuration + 0.3f);
+    }
+
+    void FallingOver()
+    {
+        ClearAllActions();
     }
 }

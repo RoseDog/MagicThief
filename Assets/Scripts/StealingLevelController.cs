@@ -29,8 +29,9 @@ public class StealingLevelController : LevelController
     UnityEngine.GameObject HypnosisMouseHoverSpriter_prefab;
     UnityEngine.GameObject ShotGunMouseHoverSpriter_prefab;
     bool bRandomGuards = false;
-
+    
     public System.Collections.Generic.List<System.String> pickedItems = new System.Collections.Generic.List<System.String>();
+    public System.Collections.Generic.List<System.String> pickedCash = new System.Collections.Generic.List<System.String>();
     public System.Collections.Generic.List<System.String> itemsConsumed = new System.Collections.Generic.List<System.String>();
     public System.Collections.Generic.List<System.String> itemsDropingWhenEscape = new System.Collections.Generic.List<System.String>();
     
@@ -85,7 +86,7 @@ public class StealingLevelController : LevelController
     }
 
     public override void BeforeGenerateMaze()
-    {        
+    {
         if (Globals.playingReplay == null)
         {
             ReplaySpeedBtn.gameObject.SetActive(false);
@@ -114,7 +115,7 @@ public class StealingLevelController : LevelController
         Globals.guardPlayer.slotsDatas[1].statu = "0";
         Globals.guardPlayer.slotsDatas[2].statu = "0";
         Globals.guardPlayer.isBot = true;
-        Globals.iniFileName = "Test";        
+        Globals.iniFileName = "pve_0";        
 
         Globals.guardPlayer.currentMazeRandSeedCache = -1;
         Globals.guardPlayer.currentMazeLevel = 5;        
@@ -182,7 +183,7 @@ public class StealingLevelController : LevelController
             UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/" + Globals.thiefPlayer.selectedMagician.name) as UnityEngine.GameObject;
             magician = UnityEngine.GameObject.Instantiate(magician_prefab).GetComponent<Magician>();
             magician.gameObject.SetActive(false);
-            if (Globals.playingReplay != null || Globals.iniFileName == "Test")
+            if (Globals.playingReplay != null || Globals.iniFileName == "pve_0")
             {
                 Globals.canvasForMagician.UpdateTrickInUseSlots(Globals.thiefPlayer, magician);
                 Globals.canvasForMagician.UpdateCharacter(Globals.thiefPlayer);
@@ -240,7 +241,7 @@ public class StealingLevelController : LevelController
                     data.Lv = Globals.safeBoxLvDatas.Length - 1;
                 }
 
-                Globals.maze.PlaceGemsAtBoarder();
+                //Globals.maze.PlaceGemsAtBoarder();
             }
         }
         
@@ -352,7 +353,7 @@ public class StealingLevelController : LevelController
     {
         if (landingMark.activeSelf)
         {
-            TrickData flash = Globals.thiefPlayer.GetTrickByName("flash_grenade");
+            TrickData flash = Globals.thiefPlayer.GetTrickByName("flashGrenade");
             if (flash.IsInUse())
             {
                 Globals.tipDisplay.Msg("cant_bring_flash_to_stealing");
@@ -472,22 +473,35 @@ public class StealingLevelController : LevelController
             // 不在播放录像，而且的确潜入开始了的，上传这次潜入
             else
             {
-                foreach(System.String itemname in pickedItems)
+                foreach(System.String itemid in pickedItems)
                 {
-                    Globals.self.AddTrickItem(Globals.self.GetTrickByName(itemname));
+                    System.String[] item = itemid.Split(',');
+                    Globals.self.AddTrickItem(Globals.self.GetTrickByName(item[2]));
                 }
-                
-                if (!Globals.guardPlayer.isBot)
+
+                int picked_cash = 0;
+                foreach(System.String cash_id in pickedCash)
                 {
-                    foreach (System.String itemname in pickedItems)
+                    System.String[] cash_data = cash_id.Split(',');
+                    picked_cash += System.Convert.ToInt32(cash_data[2]);
+                }
+
+                if (!Globals.guardPlayer.isBot)
+                {                    
+                    Globals.self.StealingOver(StealingCash.numberAmont - picked_cash, picked_cash, perfect_stealing_bonus, true);
+                    foreach (System.String cash_id in pickedCash)
                     {
-                        Globals.guardPlayer.RemoveDroppedItem(itemname);
+                        Globals.guardPlayer.RemoveCashOnFloor(cash_id);
                     }
-                    Globals.self.StealingOver(StealingCash.numberAmont, perfect_stealing_bonus, true);
+                    foreach (System.String itemid in pickedItems)
+                    {
+                        Globals.guardPlayer.RemoveDroppedItem(itemid);
+                    }
+                    Globals.socket.Send("calc_stealing_data_over");                    
                 }
                 else
                 {
-                    Globals.self.StealingOver(StealingCash.numberAmont, 0, true);
+                    Globals.self.StealingOver(StealingCash.numberAmont - picked_cash, picked_cash, 0, true);
                 }
             }            
 
@@ -525,7 +539,7 @@ public class StealingLevelController : LevelController
                 // 失败了，不在教程中，要消耗道具
                 itemsConsumed = Globals.self.ConsumeItem();
                 itemsDropingWhenEscape = Globals.self.DropItems();
-                Globals.self.StealingOver(0, 0, false);
+                Globals.self.StealingOver(0, 0, 0, false);
                 Globals.canvasForMagician.CheckBuyTrickAndSlotTip();
             }        
         }
@@ -639,9 +653,10 @@ public class StealingLevelController : LevelController
             foreach (TrickData data in Globals.self.tricks)
             {
                 int picked_count = 0;
-                foreach (System.String itemname in pickedItems)
+                foreach (System.String itemid in pickedItems)
                 {
-                    if (data.nameKey == itemname)
+                    System.String[] item = itemid.Split(',');
+                    if (data.nameKey == item[0])
                     {
                         ++picked_count;
                     }
@@ -680,9 +695,10 @@ public class StealingLevelController : LevelController
         {
             ending_str += Globals.languageTable.GetText("item_dropped_label");
             ending_str += "\n";
-            foreach (System.String itemname in itemsDropingWhenEscape)
+            foreach (System.String item_id in itemsDropingWhenEscape)
             {
-                ending_str += Globals.languageTable.GetText("item_dropped", new System.String[] { Globals.languageTable.GetText(itemname), "1" });
+                System.String[] item = item_id.Split(',');
+                ending_str += Globals.languageTable.GetText("item_dropped", new System.String[] { Globals.languageTable.GetText(item[1]), "1" });
                 ending_str += "\n";
             }
         }        

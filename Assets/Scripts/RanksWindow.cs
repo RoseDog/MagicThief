@@ -33,7 +33,7 @@ public class RanksWindow : CustomEventTrigger
         float padding = 3;
         for (int idx = records.Count - 1; idx >= 0; --idx)
         {
-            records[idx].rectTransform.localPosition = new UnityEngine.Vector3(10.0f, event_y_pos, 0.0f);
+            records[idx].rectTransform.localPosition = new UnityEngine.Vector3(0.0f, event_y_pos, 0.0f);
             event_y_pos -= records[idx].rectTransform.rect.height;
             event_y_pos -= padding;
         }
