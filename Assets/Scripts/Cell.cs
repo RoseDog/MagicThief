@@ -232,23 +232,6 @@ public class Cell : Actor
             wall.transform.parent = cell.transform;
             wall.transform.localScale = scale_cache;
             wall.transform.localPosition = pos_cache;
-
-            if (dir == Globals.EAST)
-            {
-                cell.E_Sprite = wall.GetComponent<UnityEngine.SpriteRenderer>();
-            }
-            else if (dir == Globals.SOUTH)
-            {
-                cell.S_Sprite = wall.GetComponent<UnityEngine.SpriteRenderer>();
-            }
-            else if (dir == Globals.WEST)
-            {
-                cell.W_Sprite = wall.GetComponent<UnityEngine.SpriteRenderer>();
-            }
-            else if (dir == Globals.NORTH)
-            {
-                cell.N_Sprite = wall.GetComponent<UnityEngine.SpriteRenderer>();
-            }
         }
         
         return wall;
@@ -265,7 +248,6 @@ public class Cell : Actor
             floor.transform.position += transform.position;
             floor.transform.parent = transform;
             floor.transform.localScale = scale_cache;
-            Floor_Sprite = floor.GetComponent<UnityEngine.SpriteRenderer>();
             return floor;
         }
         return null;
@@ -352,13 +334,6 @@ public class Cell : Actor
                 Destroy(renderer.gameObject);
             }
         }
-
-        E_Sprite = null;
-        W_Sprite = null;
-        S_Sprite = null;
-        N_Sprite = null;
-        S_W_Corner_Sprite = null;
-        S_E_Corner_Sprite = null;
     }
     
 

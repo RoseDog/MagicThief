@@ -11,7 +11,7 @@ using System.Diagnostics;
  * It also handles post-processing of paths using modifiers.
  * \see \ref calling-pathfinding
  */
-public class Seeker : Photon.MonoBehaviour {
+public class Seeker : MonoBehaviour {
 
 	//====== SETTINGS ======
 	

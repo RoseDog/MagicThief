@@ -334,7 +334,7 @@ public class Finger
 public delegate bool KeyEvent(string key);
 public delegate bool MouseEvent(UnityEngine.Vector2 pos);
 
-public class InputMgr : Photon.MonoBehaviour
+public class InputMgr : MonoBehaviour
 {
     public ArrayList fingers = new ArrayList();
 
@@ -611,34 +611,5 @@ public class InputMgr : Photon.MonoBehaviour
 			}
 		}        
 	}	
-	
-	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-	{
-		// Send data to server
-        if (stream.isWriting)
-        {
-            Vector3 pos = GetComponent<Rigidbody>().position;
-            Quaternion rot = GetComponent<Rigidbody>().rotation;
-            Vector3 velocity = GetComponent<Rigidbody>().velocity;
-            Vector3 angularVelocity = GetComponent<Rigidbody>().angularVelocity;
-
-            stream.Serialize(ref pos);
-            stream.Serialize(ref velocity);
-            stream.Serialize(ref rot);
-            stream.Serialize(ref angularVelocity);
-        }
-        // Read data from remote client
-        else
-        {
-            Vector3 pos = Vector3.zero;
-            Vector3 velocity = Vector3.zero;
-            Quaternion rot = Quaternion.identity;
-            Vector3 angularVelocity = Vector3.zero;
-            stream.Serialize(ref pos);
-            stream.Serialize(ref velocity);
-            stream.Serialize(ref rot);
-            stream.Serialize(ref angularVelocity);
-        }
-    }
 }
 

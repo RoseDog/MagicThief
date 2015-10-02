@@ -122,7 +122,7 @@ namespace Pathfinding {
 	/** Base class for path modifiers which can be attached to GameObjects.
 	  * \see[AddComponentMenu("CONTEXT/Seeker/Something")] Modifier */
 	[System.Serializable]
-	public abstract class MonoModifier : Photon.MonoBehaviour, IPathModifier {
+	public abstract class MonoModifier : MonoBehaviour, IPathModifier {
 		
 		public void OnEnable () {}
 		public void OnDisable () {}
