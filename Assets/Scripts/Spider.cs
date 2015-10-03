@@ -56,6 +56,7 @@ public class Spider : Machine
         scanner.SetActive(!infog);
         machineActiveArea.GetComponent<UnityEngine.SpriteRenderer>().enabled = !infog;
         spriteRenderer.enabled = !infog;
+        head_on_minimap.SetActive(!infog);
     }
 
     public override void Broken(int fixDuration)
