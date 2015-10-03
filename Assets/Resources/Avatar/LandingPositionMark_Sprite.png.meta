@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 6494491254fae0d47ba64b01c0f60fb6
-timeCreated: 1435472008
+timeCreated: 1443809959
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -61,7 +61,7 @@ TextureImporter:
         width: 90
         height: 90
       alignment: 9
-      pivot: {x: .5, y: .25}
+      pivot: {x: .5, y: .200000003}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: landing_mark_1
       rect:
@@ -71,7 +71,7 @@ TextureImporter:
         width: 90
         height: 90
       alignment: 9
-      pivot: {x: .5, y: .25}
+      pivot: {x: .5, y: .200000003}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: landing_mark_2
       rect:
@@ -81,7 +81,7 @@ TextureImporter:
         width: 90
         height: 90
       alignment: 9
-      pivot: {x: .5, y: .25}
+      pivot: {x: .5, y: .200000003}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: landing_mark_3
       rect:
@@ -91,7 +91,7 @@ TextureImporter:
         width: 90
         height: 90
       alignment: 9
-      pivot: {x: .5, y: .25}
+      pivot: {x: .5, y: .200000003}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

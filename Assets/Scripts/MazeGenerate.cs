@@ -1225,12 +1225,12 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 
                 if (north_cell_E_sprite == null || north_cell_E_sprite.enabled == false)
                 {
-                    N_E_Corner.GetComponent<UnityEngine.BoxCollider>().center = new UnityEngine.Vector3(0, -0.65f, 0);
+                    N_E_Corner.GetComponent<UnityEngine.BoxCollider>().center = new UnityEngine.Vector3(0, -0.87f, 0);
                 }
 
                 if (north_cell_W_sprite == null || north_cell_W_sprite.enabled == false)
                 {
-                    N_W_Corner.GetComponent<UnityEngine.BoxCollider>().center = new UnityEngine.Vector3(0, -0.65f, 0);
+                    N_W_Corner.GetComponent<UnityEngine.BoxCollider>().center = new UnityEngine.Vector3(0, -0.87f, 0);
                 }
             }
             else
@@ -1249,12 +1249,12 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
 
             if (S_E_Corner != null && S_E_Corner.enabled && (E_sprite == null || E_sprite.enabled == false))
             {                
-                S_E_Corner.GetComponent<UnityEngine.BoxCollider>().center = new UnityEngine.Vector3(0, -0.65f, 0);
+                //S_E_Corner.GetComponent<UnityEngine.BoxCollider>().center = new UnityEngine.Vector3(0, 0.7f, 0);
             }
 
             if (S_W_Corner != null && S_W_Corner.enabled && (W_sprite == null || W_sprite.enabled == false))
             {
-                S_W_Corner.GetComponent<UnityEngine.BoxCollider>().center = new UnityEngine.Vector3(0, -0.65f, 0);
+                //S_W_Corner.GetComponent<UnityEngine.BoxCollider>().center = new UnityEngine.Vector3(0, 0.65f, 0);
             }
 
             // 阴影

@@ -1733,23 +1733,8 @@ public class Globals
         ini.set("LAMPS_COUNT", Globals.maze.LAMPS_COUNT);        
         ini.set("LevelTipText", Globals.maze.LevelTipText);
         ini.set("CASH", Globals.maze.CASH);
-        System.String item_str = "";
-        System.String[] item_names = Globals.maze.droppedItemsStr.Split(',');
-        foreach (System.String item_name in item_names)
-        {
-            System.String item_id = System.Guid.NewGuid().ToString() + "," + item_name;
-            item_str = item_str + "_" + item_id;
-        }
-        ini.set("droppedItemsStr", item_str);
-
-        System.String cash_str = "";
-        System.String[] cashes = Globals.maze.cashOnFloorStr.Split(',');
-        foreach (System.String cash in cashes)
-        {
-            System.String cash_id = System.Guid.NewGuid().ToString() + "," + cash;
-            cash_str = cash_str + "_" + cash_id;
-        }
-        ini.set("cashOnFloorStr", cash_str);
+        ini.set("droppedItemsStr", Globals.maze.droppedItemsStr);
+        ini.set("cashOnFloorStr", Globals.maze.cashOnFloorStr);
 
         if (mazeIniFileName != "")
         {

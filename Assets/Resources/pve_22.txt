@@ -1,7 +1,6 @@
-﻿GuardCount=3
-(751.0000, 1200.0000, -0.0100)=lamp
-(176.0000, -400.0000, -0.0100)=lamp
-(751.0000, -325.0000, -0.0100)=Monkey
+﻿GuardCount=2
+(340.8000, -25.0000, -0.0100)=Police
+(265.8000, 25.0000, -0.0100)=Police
 randSeedCacheWhenEditLevel=-16562923
 Z_CELLS_COUNT=9
 X_CELLS_COUNT=9
@@ -17,3 +16,5 @@ GEMS_COUNT=5
 LAMPS_COUNT=0
 LevelTipText=
 CASH=7000
+droppedItemsStr=
+cashOnFloorStr=

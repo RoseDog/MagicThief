@@ -64,13 +64,11 @@ public class StealingLevelController : LevelController
         UnityEngine.Debug.Log("map file:" + Globals.iniFileName);
 
 
-        mark_prefab = UnityEngine.Resources.Load("Misc/LandingPositionMark") as UnityEngine.GameObject;        
+        mark_prefab = UnityEngine.Resources.Load("Avatar/LandingPositionMark") as UnityEngine.GameObject;        
         landingMark = UnityEngine.GameObject.Instantiate(mark_prefab) as UnityEngine.GameObject;
 
         movingmark_prefab = UnityEngine.Resources.Load("Avatar/moving_mark") as UnityEngine.GameObject;
-        
-        
-        
+                        
         landingMark.SetActive(false);
 
         fogTex = new UnityEngine.Texture2D(256, 256, UnityEngine.TextureFormat.ARGB32, false);        
@@ -115,7 +113,7 @@ public class StealingLevelController : LevelController
         Globals.guardPlayer.slotsDatas[1].statu = "0";
         Globals.guardPlayer.slotsDatas[2].statu = "0";
         Globals.guardPlayer.isBot = true;
-        Globals.iniFileName = "pve_0";        
+        Globals.iniFileName = "pve_22";        
 
 
         Globals.guardPlayer.currentMazeRandSeedCache = -1;
@@ -189,7 +187,7 @@ public class StealingLevelController : LevelController
             UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/" + Globals.thiefPlayer.selectedMagician.name) as UnityEngine.GameObject;
             magician = UnityEngine.GameObject.Instantiate(magician_prefab).GetComponent<Magician>();
             magician.gameObject.SetActive(false);
-            if (Globals.playingReplay != null || Globals.iniFileName == "pve_0")
+            if (Globals.playingReplay != null || Globals.iniFileName == "pve_22")
             {
                 Globals.canvasForMagician.UpdateTrickInUseSlots(Globals.thiefPlayer, magician);
                 Globals.canvasForMagician.UpdateCharacter(Globals.thiefPlayer);

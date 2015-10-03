@@ -232,6 +232,24 @@ public class Cell : Actor
             wall.transform.parent = cell.transform;
             wall.transform.localScale = scale_cache;
             wall.transform.localPosition = pos_cache;
+
+
+            if (dir == Globals.EAST)
+            {
+                cell.E_Sprite = wall.GetComponent<UnityEngine.SpriteRenderer>();
+            }
+            else if (dir == Globals.SOUTH)
+            {
+                cell.S_Sprite = wall.GetComponent<UnityEngine.SpriteRenderer>();
+            }
+            else if (dir == Globals.WEST)
+            {
+                cell.W_Sprite = wall.GetComponent<UnityEngine.SpriteRenderer>();
+            }
+            else if (dir == Globals.NORTH)
+            {
+                cell.N_Sprite = wall.GetComponent<UnityEngine.SpriteRenderer>();
+            }
         }
         
         return wall;

@@ -209,6 +209,10 @@ public class Magician : Actor
         if((isSneaking || chasingGuards.Count != 0) && moving.isMoving)
         {
             ChangeLife(-data.GetLifeConsume() * Globals.thiefPlayer.GetTrickTotalWeight(), false);
+            if (LifeCurrent < UnityEngine.Mathf.Epsilon)
+            {
+                lifeOver.Excute();
+            }
         }
     }
 
