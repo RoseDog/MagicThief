@@ -117,6 +117,7 @@ public class MagicianData
     public float agilityGrowth;
     public float wisdomGrowth;
     public int idx;
+    public float stepSoundLimit;
     public MagicianData()
     {
         
@@ -335,21 +336,22 @@ public class PlayerInfo
         MagicianData mage_data = new MagicianData();
         mage_data.name = "Rosa";
         mage_data.desc = "Rosa_desc";
-        mage_data.normalSpeed = 5.6f;
+        mage_data.normalSpeed = 8.7f;
         mage_data.sneakingSpeed = mage_data.normalSpeed * 0.5f;
         mage_data.runningSpeed = mage_data.normalSpeed * 1.5f;
         mage_data.unlockSafeDuration = 120;
         mage_data.LifeConsumePerWeight = 0.02f;
-        mage_data.strengthBase = 40;
+        mage_data.strengthBase = 60;
         mage_data.strengthAllot = 0;
         mage_data.agilityBase = 25;
         mage_data.agilityAllot = 0;
-        mage_data.wisdomBase = 80;
+        mage_data.wisdomBase = 60;
         mage_data.wisdomAllot = 0;
         mage_data.strengthGrowth = 1f;
         mage_data.agilityGrowth = 1f;
         mage_data.wisdomGrowth = 1f;
         mage_data.idx = 0;
+        mage_data.stepSoundLimit = 550;
         magicians.Add(mage_data);
 
         mage_data = new MagicianData();
@@ -370,6 +372,7 @@ public class PlayerInfo
         mage_data.agilityGrowth = 1f;
         mage_data.wisdomGrowth = 1f;
         mage_data.idx = 1;
+        mage_data.stepSoundLimit = 800;
         magicians.Add(mage_data);
 
         selectedMagician = magicians[0];
@@ -396,7 +399,7 @@ public class PlayerInfo
             trick.nameKey = "hypnosis";
             trick.descriptionKey = "hypnosis_desc";
             trick.duration = 350;
-            trick.powerCost = 30;
+            trick.powerCost = 15;
             trick.unlockRoseCount = 0;
             trick.learnPrice = 10;
             trick.dropOdds = 0.9f;
@@ -411,7 +414,7 @@ public class PlayerInfo
             trick.nameKey = "disguise";
             trick.descriptionKey = "disguise_desc";
             trick.duration = 700;
-            trick.powerCost = 40;
+            trick.powerCost = 25;
             trick.unlockRoseCount = 0;
             trick.learnPrice = 300;
             trick.dropOdds = 0.9f;
@@ -425,7 +428,7 @@ public class PlayerInfo
             trick.nameKey = "dove";
             trick.descriptionKey = "dove_desc";
             trick.duration = 500;
-            trick.powerCost = 25;
+            trick.powerCost = 10;
             trick.unlockRoseCount = 10;
             trick.learnPrice = 1000;
             trick.dropOdds = 0.9f;
@@ -451,7 +454,7 @@ public class PlayerInfo
             trick.nameKey = "shotLight";
             trick.descriptionKey = "shotLight_desc";
             trick.duration = 700;// machine fixing duration
-            trick.powerCost = 10;
+            trick.powerCost = 5;
             trick.unlockRoseCount = 80;
             trick.learnPrice = 16000;
             trick.dropOdds = 0.3f;
@@ -465,7 +468,7 @@ public class PlayerInfo
             trick.nameKey = "flyUp";
             trick.descriptionKey = "flyUp_desc";
             trick.duration = 300;
-            trick.powerCost = 35;
+            trick.powerCost = 30;
             trick.unlockRoseCount = 30;
             trick.learnPrice = 31000;
             trick.dropOdds = 0.3f;
@@ -514,7 +517,7 @@ public class PlayerInfo
         guard_data.roomConsume = 2;
         guard_data.magicianOutVisionTime = 100;
         guard_data.atkCd = 100;
-        guard_data.attackValue = 60;
+        guard_data.attackValue = 10;
         guard_data.atkShortestDistance = 120f;
         guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
@@ -527,7 +530,7 @@ public class PlayerInfo
         guard_data.roomConsume = 2;
         guard_data.magicianOutVisionTime = 100;
         guard_data.atkCd = 100;
-        guard_data.attackValue = 60;
+        guard_data.attackValue = 10;
         guard_data.atkShortestDistance = 120f;
         guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
@@ -539,10 +542,10 @@ public class PlayerInfo
         guard_data.price = 3000;
         guard_data.roomConsume = 1;
         guard_data.magicianOutVisionTime = 100;
-        guard_data.attackValue = 40;
+        guard_data.attackValue = 20;
         guard_data.atkShortestDistance = 80f;
         guard_data.doveOutVisionTime = 300;
-        guard_data.moveSpeed = 7;
+        guard_data.moveSpeed = 9;
         Globals.guardDatas.Add(guard_data);
 
         guard_data = new GuardData();
@@ -563,11 +566,11 @@ public class PlayerInfo
         guard_data.roomConsume = 3;
         guard_data.magicianOutVisionTime = 70;
         guard_data.atkCd = 150;
-        guard_data.attackValue = 60;
+        guard_data.attackValue = 15;
         guard_data.atkShortestDistance = 500f;
         guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
-        guard_data.moveSpeed = 5;
+        guard_data.moveSpeed = 6;
         Globals.guardDatas.Add(guard_data);
 
 

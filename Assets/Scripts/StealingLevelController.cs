@@ -114,7 +114,7 @@ public class StealingLevelController : LevelController
         Globals.guardPlayer.slotsDatas[1].statu = "0";
         Globals.guardPlayer.slotsDatas[2].statu = "0";
         Globals.guardPlayer.isBot = true;
-        Globals.iniFileName = "Test";
+        Globals.iniFileName = "pve_9";
 
 
         Globals.guardPlayer.currentMazeRandSeedCache = -1;
@@ -188,7 +188,7 @@ public class StealingLevelController : LevelController
             UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/" + Globals.thiefPlayer.selectedMagician.name) as UnityEngine.GameObject;
             magician = UnityEngine.GameObject.Instantiate(magician_prefab).GetComponent<Magician>();
             magician.gameObject.SetActive(false);
-            if (Globals.playingReplay != null || Globals.iniFileName == "Test")
+            if (Globals.playingReplay != null || Globals.iniFileName == "pve_9")
             {
                 Globals.canvasForMagician.UpdateTrickInUseSlots(Globals.thiefPlayer, magician);
                 Globals.canvasForMagician.UpdateCharacter(Globals.thiefPlayer);

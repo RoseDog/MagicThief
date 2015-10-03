@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public class MazeGenerate : UnityEngine.MonoBehaviour
 {
-    float cell_side_length = 324.0f;
+    //float cell_side_length = 226.8f;
+    float cell_side_length = 259.2f;
     public float GetCellSideLength()
     {
         return cell_side_length;

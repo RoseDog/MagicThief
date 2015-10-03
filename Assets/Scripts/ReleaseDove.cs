@@ -27,10 +27,6 @@ public class ReleaseDove : MagicianTrickAction
         int dove_idx = 0;
         foreach (Guard guard in guards)
         {
-            if (guard.moving == null)
-            {
-                continue;
-            }
             //调用点不对？replay中创建之后是Active的，PvP中创建出来不是;
             //试一下延迟创建
             CreateDove(data, dovePrefab, guard.transform.position);

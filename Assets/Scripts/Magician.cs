@@ -222,7 +222,7 @@ public class Magician : Actor
             UnityEngine.GameObject soundPrefab = UnityEngine.Resources.Load("Misc/GunSound") as UnityEngine.GameObject;
             GuardAlertSound sound = (UnityEngine.GameObject.Instantiate(soundPrefab) as UnityEngine.GameObject).GetComponent<GuardAlertSound>();
             sound.transform.position = (transform.position + GetWorldCenterPos()) * 0.5f;
-            sound.SetRadiusLimit(400);
+            sound.SetRadiusLimit(data.stepSoundLimit);
             sound.SetRadiusStart(250);            
             sound.SetOneWaveDuration(8);
             sound.StartAlert();            
