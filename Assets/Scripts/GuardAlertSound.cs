@@ -1,98 +1,38 @@
 public class GuardAlertSound : Actor 
 {
     public UnityEngine.GameObject wave;
-    Guard owner;
-    double oneWaveDuration = 30;
-    double radiusStart;
-    double radiusLimit = 2000;
-    double radius;
-    bool onlyOneWave = false;
-    UnityEngine.GameObject wave_prefab;
+    Guard owner;   
     Cocos2dAction waving_action = null;
+
+    int oneWaveTimeGap = 30;
     public override void Awake()
     {        
         base.Awake();
-        owner = GetComponentInParent<Guard>();
-        wave_prefab = UnityEngine.Resources.Load("Avatar/DogBark/barkSoundWave") as UnityEngine.GameObject;
-        radiusStart = 1;
-    }
-
-    public void SetRadiusLimit(double radius)
-    {
-        radiusLimit = radius;
-    }
-
-    public void SetRadiusStart(double start)
-    {
-        radiusStart = start;
-    }
-
-    public void SetOneWaveDuration(int duration)
-    {
-        oneWaveDuration = duration;
+        owner = GetComponentInParent<Guard>();        
     }
 
     void CreateOneWave()
     {
-        
-        radius = radiusLimit;
+        BarkSoundWave wave = (UnityEngine.GameObject.Instantiate(Globals.wave_prefab) as UnityEngine.GameObject).GetComponent<BarkSoundWave>();
+        wave.transform.position = owner.transform.position;
+        wave.transform.SetParent(owner.transform);
 
-        wave = UnityEngine.GameObject.Instantiate(wave_prefab) as UnityEngine.GameObject;
-        //wave.GetComponent<BarkSoundWave>().owner = owner;
-        
-        if (owner)
-        {
-            wave.transform.position = owner.transform.position;
-            wave.transform.SetParent(owner.transform);
-            radius /= owner.transform.transform.localScale.x;
-            radiusStart /= owner.transform.transform.localScale.x;
-            onlyOneWave = false;
-        }
-        else
-        {
-            wave.transform.position = transform.position;
-            onlyOneWave = true;
-        }
+        wave.radiusLimit = 600;
+        wave.radiusStart = 300;
 
-        wave.transform.localScale = UnityEngine.Vector3.zero;        
+        wave.radiusLimit /= owner.transform.transform.localScale.x;
+        wave.radiusStart /= owner.transform.transform.localScale.x;
     }
 
-    int start_frame;
-    public void Waving()
-    {
-        float scale = UnityEngine.Mathf.Lerp((float)radiusStart, (float)radius, (Globals.LevelController.frameCount - start_frame) / (float)oneWaveDuration);
-        wave.transform.localScale = new UnityEngine.Vector3(scale, scale, scale);
-
-        if (Globals.DEBUG_REPLAY)
-        {
-            System.String content = "Alert Sound radius";
-            content += scale.ToString("F5");
-            Globals.record("testReplay", content);
-        }
-        
-        if (Globals.LevelController.frameCount - start_frame > oneWaveDuration)
-        {
-            Actor.to_be_remove.Add(wave.GetComponent<Actor>());            
-            wave = null;
-            if (!onlyOneWave)
-            {
-                start_frame = Globals.LevelController.frameCount;
-                CreateOneWave();
-            }
-            else
-            {
-                Actor.to_be_remove.Add(this);
-            }
-        }
-    }
-
-	public void StartAlert()
+	public void StartAlert(bool repeat)
     {
         if (waving_action == null)
         {
-            start_frame = Globals.LevelController.frameCount;
             CreateOneWave();
-            waving_action = RepeatingCallFunction(0,()=>Waving());
+            if (repeat)
+            {
+                waving_action = RepeatingCallFunction(oneWaveTimeGap, () => CreateOneWave());
+            }            
         }        
     }
 
@@ -105,11 +45,9 @@ public class GuardAlertSound : Actor
 
     public void StopAlert()
     {
-        RemoveAction(ref waving_action);
-        if (wave != null)
+        if (waving_action != null)
         {
-            Actor.to_be_remove.Add(wave.GetComponent<Actor>());            
-            wave = null;
+            RemoveAction(ref waving_action);
         }        
     }
 }

@@ -5,6 +5,8 @@ public class WanderingLostTarget : GuardAction
 {
     Cocos2dAction call;
     Cocos2dAction eyeWandering;
+
+    public UnityEngine.AudioClip wandering;
     public override void Excute()
     {
         base.Excute();
@@ -17,7 +19,7 @@ public class WanderingLostTarget : GuardAction
         {
             guard.heardAlert.alertTeammate = null;
         }
-        guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Suspicious);
+        guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Suspicious);        
 
         if (guard.spriteSheet.HasAnimation("suspicious"))
         {
@@ -36,7 +38,8 @@ public class WanderingLostTarget : GuardAction
             float wandering_angle = 60;
             eyeWandering = new Sequence(
                 new RotateEye(guard.eye, new Vector3(0, 0, wandering_angle), 10),
-                new SleepFor(40),
+                new FunctionCall(() => Sound()),
+                new SleepFor(40),                
                 new RepeatForever(                
                 new RotateEye(guard.eye, new Vector3(0, 0, -wandering_angle*2), 25),
                 new SleepFor(40),
@@ -54,6 +57,11 @@ public class WanderingLostTarget : GuardAction
             ((call as Sequence).actions[0] as SleepFor)._start_frame = Globals.LevelController.frameCount;
         }
         Globals.stealingController.magician.EnemyStopChasing(guard);
+    }
+
+    void Sound()
+    {
+        guard.audioSource.PlayOneShot(wandering);
     }
 
     public override void Stop()

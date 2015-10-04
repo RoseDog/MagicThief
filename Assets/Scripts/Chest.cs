@@ -247,14 +247,13 @@ public class Chest : Actor, System.IComparable<Chest>
             AddAction(seq);
         }
 
-        audioSource.Play();                
-        UnityEngine.GameObject soundPrefab = UnityEngine.Resources.Load("Misc/GunSound") as UnityEngine.GameObject;
-        GuardAlertSound sound = (UnityEngine.GameObject.Instantiate(soundPrefab) as UnityEngine.GameObject).GetComponent<GuardAlertSound>();
-        sound.transform.position = (transform.position + GetWorldCenterPos()) * 0.5f;
-        sound.SetRadiusLimit(400);
-        sound.SetRadiusStart(250);
-        sound.SetOneWaveDuration(8);
-        sound.StartAlert();            
+        audioSource.Play();
+
+        BarkSoundWave wave = (UnityEngine.GameObject.Instantiate(Globals.wave_prefab) as UnityEngine.GameObject).GetComponent<BarkSoundWave>();
+        wave.transform.position = (Globals.stealingController.magician.transform.position + Globals.stealingController.magician.GetWorldCenterPos()) * 0.5f;
+        wave.radiusLimit = 400;
+        wave.radiusStart = 250;
+        wave.oneWaveDuration = 8;       
     }
     
     public void ResetGold()

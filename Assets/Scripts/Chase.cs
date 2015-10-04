@@ -2,6 +2,7 @@ public class Chase : GuardAction
 {
     Actor actor;
     Magician mage;
+
     public override void Excute()
     {
         base.Excute();        
@@ -10,7 +11,8 @@ public class Chase : GuardAction
         guard.moving.SearchPath(guard.OnPathComplete);
         if (guard.alertSound)
         {
-            guard.alertSound.ChaseAlert();
+            guard.audioSource.Stop();
+            guard.alertSound.StopAlert();
         }
         guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Alert);
         UnityEngine.Debug.Log("chase");        

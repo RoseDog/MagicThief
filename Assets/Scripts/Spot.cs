@@ -7,6 +7,7 @@ public class Spot : GuardAction
     public Cocos2dAction chaseCountDown;
     public Cocos2dAction outVisionCountDown;
     public Cocos2dAction turnToAtkReadyAct;
+    public UnityEngine.AudioClip alert;
     public override void Awake()
     {
         base.Awake();        
@@ -42,6 +43,7 @@ public class Spot : GuardAction
                 guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Alert);    
                 guard.spriteSheet.Play("spot");
                 newTar.GetComponent<Actor>().SpotByEnemy(guard);
+                guard.audioSource.PlayOneShot(alert);
             }            
 
             target = newTar.transform;
@@ -54,7 +56,10 @@ public class Spot : GuardAction
             {
                 // 狗叫的时候视野会打开迷雾            
                 guard.eye.SetLayer(10);
-                guard.alertSound.StartAlert();
+                guard.alertSound.StartAlert(true);
+                guard.audioSource.clip = alert;
+                guard.audioSource.loop = true;
+                guard.audioSource.Play();
             }
 
             System.String content = gameObject.name;

@@ -10,7 +10,11 @@ public class HeardAlert : GuardAction
         alertTeammate = teammate;
         guard.spriteSheet.Play("idle");
         guard.FaceTarget(alertTeammate.transform);
-
+        if (guard.spot != null)
+        {
+            guard.audioSource.PlayOneShot(guard.spot.alert);
+        }
+        
         guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Suspicious);
                 
         goCoverAction = guard.SleepThenCallFunction(50,() => GoCovering());

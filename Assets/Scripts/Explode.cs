@@ -1,5 +1,6 @@
 public class Explode : GuardAction 
 {
+    public UnityEngine.AudioClip explode;
     public void Start()
     {
         actor.spriteSheet.AddAnimationEvent("Atk", 2, () => Fire());
@@ -10,6 +11,7 @@ public class Explode : GuardAction
     {
         base.Excute();
         actor.spriteSheet.Play("Atk");
+        actor.audioSource.PlayOneShot(explode);
         UnityEngine.Debug.Log("Explode");
     }
 

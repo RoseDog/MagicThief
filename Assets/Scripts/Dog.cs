@@ -1,6 +1,7 @@
 public class Dog : Guard 
 {
     UnityEngine.GameObject appearSpot;
+    public UnityEngine.AudioClip chasing;
     public override void Awake()
     {        
         base.Awake();        
@@ -11,11 +12,23 @@ public class Dog : Guard
         spriteSheet.AddAnim("spot", 8, 1.0f, true);
         spriteSheet.AddAnim("atkReady", 7);
         spriteSheet.AddAnim("running", 3, 1.5f);
+        spriteSheet.AddAnimationEvent("running", 1, () => ChasingSound());
         spriteSheet.AddAnim("wander", 12, 0.5f);        
         spriteSheet.AddAnim("Atk", 6, 1.0f, true);
 
         appearSpot = Globals.getChildGameObject(gameObject, "appearSpot");
         appearSpot.SetActive(false);
+    }
+
+    public void ChasingSound()
+    {
+        BarkSoundWave wave = (UnityEngine.GameObject.Instantiate(Globals.wave_prefab) as UnityEngine.GameObject).GetComponent<BarkSoundWave>();
+        wave.transform.position = transform.position;        
+
+        wave.radiusLimit = 2000;
+        wave.radiusStart = 500;
+
+        audioSource.PlayOneShot(chasing);
     }
 
     public override bool CheckIfChangeTarget(UnityEngine.GameObject newTar)

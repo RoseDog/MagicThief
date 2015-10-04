@@ -7,7 +7,7 @@ public class Joker : Guard
 
         spriteSheet.AddAnim("idle", 4);
         spriteSheet.AddAnim("walking", 6,1.5f);
-        spriteSheet.AddAnim("spot", 7, 1.0f, true);
+        spriteSheet.AddAnim("spot", 7, 2.5f, true);
         spriteSheet.AddAnim("wander", 3, 0.4f);
         spriteSheet.AddAnim("atkReady", 4);
         spriteSheet.AddAnim("running", 4, 1.8f);

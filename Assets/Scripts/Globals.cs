@@ -1494,6 +1494,7 @@ public class PlayerInfo
 public class Globals
 {
     public static UnityEngine.GameObject cell_prefab;
+    public static UnityEngine.GameObject wave_prefab;    
     public static float cell_side_length;
     public static float GetCellSideLength()
     {

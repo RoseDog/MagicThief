@@ -44,11 +44,11 @@ public class GunShot : MagicianTrickAction
     }
 
     public void ShotEmptyEnd()
-    {
-        UnityEngine.GameObject soundPrefab = UnityEngine.Resources.Load("Misc/GunSound") as UnityEngine.GameObject;
-        GuardAlertSound sound = (UnityEngine.GameObject.Instantiate(soundPrefab) as UnityEngine.GameObject).GetComponent<GuardAlertSound>();
-        sound.transform.position = transform.position;
-        sound.StartAlert();
+    {        
+        BarkSoundWave wave = (UnityEngine.GameObject.Instantiate(Globals.wave_prefab) as UnityEngine.GameObject).GetComponent<BarkSoundWave>();
+        wave.transform.position = transform.position;
+        wave.radiusLimit = 500;
+        wave.radiusLimit = 1500;
 
         base.Stop();
     }

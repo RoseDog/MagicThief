@@ -1,6 +1,5 @@
-﻿GuardCount=2
-(340.8000, -25.0000, -0.0100)=Police
-(265.8000, 25.0000, -0.0100)=Police
+﻿GuardCount=1
+(265.8000, 25.0000, -0.0100)=Monkey
 randSeedCacheWhenEditLevel=-16562923
 Z_CELLS_COUNT=9
 X_CELLS_COUNT=9

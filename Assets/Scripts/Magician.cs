@@ -157,6 +157,7 @@ public class Magician : Actor
         moving.move_anim = "sneaking";
         isSneaking = true;
         Globals.replaySystem.RecordKeyDown(key);
+        stepCount = 0;
         return true;
     }
 
@@ -216,20 +217,26 @@ public class Magician : Actor
         }
     }
 
+    int stepCount;
+    
+
     public void StepSound()
     {
         if (!isSneaking)
-        {
+        {            
             UnityEngine.AudioClip clip = stepSounds[UnityEngine.Random.Range(0, stepSounds.Count)];
             audioSource.PlayOneShot(clip);
             audioSource.volume = 0.7f;
-            UnityEngine.GameObject soundPrefab = UnityEngine.Resources.Load("Misc/GunSound") as UnityEngine.GameObject;
-            GuardAlertSound sound = (UnityEngine.GameObject.Instantiate(soundPrefab) as UnityEngine.GameObject).GetComponent<GuardAlertSound>();
-            sound.transform.position = (transform.position + GetWorldCenterPos()) * 0.5f;
-            sound.SetRadiusLimit(400);
-            sound.SetRadiusStart(250);            
-            sound.SetOneWaveDuration(8);
-            sound.StartAlert();            
+
+            if (stepCount%3==0)
+            {
+                BarkSoundWave wave = (UnityEngine.GameObject.Instantiate(Globals.wave_prefab) as UnityEngine.GameObject).GetComponent<BarkSoundWave>();
+                wave.transform.position = (transform.position + GetWorldCenterPos()) * 0.5f;
+                wave.radiusLimit = 400;
+                wave.radiusStart = 250;
+                wave.oneWaveDuration = 8;
+            }
+            ++stepCount;
         }        
     }
 
@@ -237,13 +244,12 @@ public class Magician : Actor
     {        
         audioSource.PlayOneShot(openChestSound);
         audioSource.volume = 0.7f;
-        UnityEngine.GameObject soundPrefab = UnityEngine.Resources.Load("Misc/GunSound") as UnityEngine.GameObject;
-        GuardAlertSound sound = (UnityEngine.GameObject.Instantiate(soundPrefab) as UnityEngine.GameObject).GetComponent<GuardAlertSound>();
-        sound.transform.position = (transform.position + GetWorldCenterPos()) * 0.5f;
-        sound.SetRadiusLimit(400);
-        sound.SetRadiusStart(250);
-        sound.SetOneWaveDuration(8);
-        sound.StartAlert();            
+
+        BarkSoundWave wave = (UnityEngine.GameObject.Instantiate(Globals.wave_prefab) as UnityEngine.GameObject).GetComponent<BarkSoundWave>();
+        wave.transform.position = (transform.position + GetWorldCenterPos()) * 0.5f;
+        wave.radiusLimit = 400;
+        wave.radiusStart = 250;
+        wave.oneWaveDuration = 8;  
     }
 
     public void CastMagic(TrickData data)
@@ -332,6 +338,8 @@ public class Magician : Actor
     public override void OnTargetReached()
     {
         base.OnTargetReached();
+        stepCount = 0;
+        UnityEngine.Debug.Log("OnTargetReached");
     }
 
     System.Collections.Generic.HashSet<Guard> chasingGuards = new System.Collections.Generic.HashSet<Guard>();

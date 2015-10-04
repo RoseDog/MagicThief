@@ -166,6 +166,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
             }
 
             hits.Add(hit_point);
+            //hits.Add(ray.origin + (direction * 10));
             currentAngle += 1f / quality;
         }
         cone.UpdateMesh(hits);

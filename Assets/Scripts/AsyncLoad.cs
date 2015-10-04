@@ -12,6 +12,8 @@ public class AsyncLoad : UnityEngine.MonoBehaviour
         Globals.cell_prefab = UnityEngine.Resources.Load("Props/Maze-Pieces/Cell_2d") as UnityEngine.GameObject;
         // 324是floor_title图片的原始大小        
         Globals.cell_side_length = Globals.getChildGameObject(Globals.cell_prefab,"floor_tile").transform.localScale.x * 3.24f;
+
+        Globals.wave_prefab = UnityEngine.Resources.Load("Avatar/DogBark/barkSoundWave") as UnityEngine.GameObject;
         Globals.asyncLoad = this;
         OnLevelWasLoaded(-1);
     }
