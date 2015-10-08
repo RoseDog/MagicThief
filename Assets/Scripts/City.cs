@@ -1,7 +1,7 @@
 public class City : LevelController
 {
-    UnityEngine.GameObject firstTarget;
-    UnityEngine.GameObject myMazeBuilding;
+    public UnityEngine.GameObject firstTarget;
+    public UnityEngine.GameObject myMazeBuilding;
 
     Finger fingerDownOnMap;
     Building choosenBuilding;
@@ -13,27 +13,15 @@ public class City : LevelController
     public CityEventsWindow eventsWindow;
     public RanksWindow ranksWindow;
     public UnityEngine.UI.Text whoIsYourTarget;
-    UIMover go_add_box;
+    public UIMover go_add_box;
     public BeenStolenReport beenStolenReportUI;
     public override void Awake()
     {
         Globals.city = this;
-        base.Awake();        
-        cityEventsOpenBtn = Globals.getChildGameObject<UIMover>(canvasForCity, "CityEventsOpenBtn");
-        rankOpenBtn = Globals.getChildGameObject<UIMover>(canvasForCity, "RankOpenBtn");
-        whoIsYourTarget = Globals.getChildGameObject<UnityEngine.UI.Text>(canvasForCity, "who_is_your_target");
-        whoIsYourTarget.gameObject.SetActive(false);
-        eventsWindow = Globals.getChildGameObject<CityEventsWindow>(canvasForCity, "CityEventsWindow");
-        eventsWindow.city = this;
-        
-        ranksWindow = Globals.getChildGameObject<RanksWindow>(canvasForCity, "RanksWindow");
-        ranksWindow.viewRankPlayer = Globals.getChildGameObject<ViewRankPlayer>(canvasForCity, "ViewRankPlayer");
-        ranksWindow.viewRankPlayer.city = this;
+        base.Awake();
 
-        // 如果教程结束了，就显示自己的家，否则就显示第一个目标建筑
-        firstTarget = UnityEngine.GameObject.Find("FirstTarget");
-        firstTarget.GetComponent<Building>().city = this;
-        myMazeBuilding = UnityEngine.GameObject.Find("MyMazeBuilding");
+        // 如果教程结束了，就显示自己的家，否则就显示第一个目标建筑        
+        firstTarget.GetComponent<Building>().city = this;        
         myMazeBuilding.GetComponent<MyMazeBuilding>().city = this;
 
         if (Globals.buildingSprites == null)
@@ -41,7 +29,6 @@ public class City : LevelController
             Globals.buildingSprites = UnityEngine.Resources.LoadAll<UnityEngine.Sprite>("Avatar/City Night/city-0");
         }
 
-        go_add_box = Globals.getChildGameObject<UIMover>(canvasForCity, "go_add_box");
         go_add_box.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => GoAddBox());
         go_add_box.gameObject.SetActive(false);
         beenStolenReportUI.transform.parent.parent.gameObject.SetActive(false);

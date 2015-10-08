@@ -9,8 +9,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
 	public int fovAngle = 90;
     public float fovMaxDistance = 15;
     public float aural;
-    public List<UnityEngine.Vector3> hits = new List<UnityEngine.Vector3>();
-
+    List<UnityEngine.Vector3> hits = new List<UnityEngine.Vector3>();
     public FOV2DVisionCone[] visionCones;	
 
     public Guard guard;
@@ -51,8 +50,11 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
                 int static_obj_cullingMask = 1 << 8;
                 int move_obj_culling_mask = 1 << 11 | 1 << 20;
 
-                _castRays(fovAngle, dir, fovMaxDistance, ref enemiesOutEyeTemp, visionCones[0], needMsg, static_obj_cullingMask, move_obj_culling_mask);
-//                 _castRays(360 - fovAngle + 10, dir, aural, ref enemiesOutEyeTemp, visionCones[1], needMsg, static_obj_cullingMask, move_obj_culling_mask);
+                List<UnityEngine.Vector3> beginPoints = new List<UnityEngine.Vector3>();
+                hits.Clear();
+
+                _castRays(fovAngle, dir, fovMaxDistance, ref enemiesOutEyeTemp, visionCones[0], needMsg, static_obj_cullingMask, ref hits, ref beginPoints, move_obj_culling_mask);
+//                 _castRays(360 - fovAngle + 10, dir, aural, ref enemiesOutEyeTemp, visionCones[1], needMsg, static_obj_cullingMask, move_obj_culling_mask);                
 
                 // 14,Chest
                 int cullingMask = 1 << 14;
@@ -75,13 +77,14 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
                 // 8 ,wall
                 // 13,guard
                 // 20,Dove
-
+                List<UnityEngine.Vector3> beginPoints = new List<UnityEngine.Vector3>();
+                hits.Clear();
 
                 int static_obj_cullingMask = 1 << 8;
                 int move_obj_culling_mask = 1 << 13 | 1 << 20;
 
                 dir = UnityEngine.Vector3.left;
-                _castRays(fovAngle, dir, fovMaxDistance, ref enemiesOutEyeTemp, visionCones[0], false, static_obj_cullingMask, move_obj_culling_mask);
+                _castRays(fovAngle, dir, fovMaxDistance, ref enemiesOutEyeTemp, visionCones[0], false, static_obj_cullingMask, ref hits, ref beginPoints, move_obj_culling_mask);
             }
             dirCache = dir.normalized;
         }                              
@@ -92,7 +95,7 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
         foreach(FOV2DVisionCone cone in visionCones)
         {
             cone.status = status;
-            cone.UpdateMeshMaterial();
+            cone.UpdateColor();
         }
     }
 
@@ -100,13 +103,14 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
         ref System.Collections.Generic.List<UnityEngine.GameObject> enemiesOutEye,
         FOV2DVisionCone cone,
         bool needMsg,
-        int static_obj_cullingMask, 
+        int static_obj_cullingMask,
+        ref List<UnityEngine.Vector3> hits,
+        ref List<UnityEngine.Vector3> beginPoints,
         int move_obj_culling_mask)
     {
-        hits.Clear();
         float quality = 0.2f;
         int numRays = (int)(angle * quality);
-        float currentAngle = angle / -2;
+        float currentAngle = angle / -2;        
         for (int i = 0; i < numRays; i++)
         {
             dir = dir.normalized;            
@@ -166,10 +170,11 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
             }
 
             hits.Add(hit_point);
-            //hits.Add(ray.origin + (direction * 10));
+            beginPoints.Add(ray.origin + (direction * 50));
             currentAngle += 1f / quality;
         }
-        cone.UpdateMesh(hits);
+
+        visionCones[0].UpdateMesh(hits, beginPoints);
     }
 
     public bool RayToObjs(UnityEngine.Ray ray, 

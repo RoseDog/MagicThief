@@ -89,7 +89,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("dive_in", new System.String[] { "潜入", "Sneak in" });
         table.Add("enter", new System.String[] { "进入", "Enter" });
         table.Add("spy", new System.String[] { "窥视", "Take a peep" });
-        table.Add("target_tonight", new System.String[] { "你是个小偷，\n这是你今晚的目标", "you are a thief,\nthis is your target tonight" });
+        table.Add("target_tonight", new System.String[] { "你是个小偷，这是你今晚的目标", "you are a thief,\nthis is your target tonight" });
         table.Add("buy", new System.String[] { "购买:${0}", "Buy:${0}" });
         table.Add("learn", new System.String[] { "学习:${0}", "Learn:${0}" });
         table.Add("inventory", new System.String[] { "库存:{0}", "inventory:{0}" });
@@ -291,6 +291,9 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("Performing_income", new System.String[] { "表演收入", "Performing income" });
 
         table.Add("operate_guide_info", new System.String[] { "<color=red>鼠标右键移动角色\n鼠标接近屏幕边缘滚动地图</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
+        table.Add("sneaking_guide_info", new System.String[] { "<color=red>移动时按住<size=30>R</size>键可消除脚步声</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
+        table.Add("hypnosis_guide_info", new System.String[] { "<color=red>悄悄靠近并催眠守卫</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
+        
 
         table.Add("replay_speed", new System.String[] { "快进 x {0}", "Speed x {0}" });
         table.Add("circus", new System.String[] { "来自马戏团的守卫们", "Guards from circus" });

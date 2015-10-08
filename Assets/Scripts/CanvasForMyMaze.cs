@@ -85,6 +85,7 @@ public class CanvasForMyMaze : Actor
     public void MazeZeroToOne()
     {        
         myMaze.StartDropPieces();
+        enhanceDefenseUI.mazeInfo.gameObject.SetActive(false);
         foreach (Cell cell in Globals.maze.EveryCells)
         {
             cell.gameObject.SetActive(true);

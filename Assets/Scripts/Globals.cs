@@ -277,15 +277,16 @@ public class PlayerInfo
     
     public enum TutorialLevel
     {
-        GetGem = 0,
-        GetAroundGuard,
+        GetChest = 0,
+        Sneaking,
         FirstTrick,
-        FirstTarget,
+        NewEnemy,
+        UnlockNewTrick,
         InitMyMaze,
         Over
     }
     public System.String name;
-    public TutorialLevel TutorialLevelIdx = TutorialLevel.GetGem;
+    public TutorialLevel TutorialLevelIdx = TutorialLevel.GetChest;
     public float cashAmount = 80000.0f;
     public int roseCount = 80;
     public int roseLast;
@@ -343,7 +344,7 @@ public class PlayerInfo
         mage_data.runningSpeed = mage_data.normalSpeed * 1.5f;
         mage_data.unlockSafeDuration = 120;
         mage_data.LifeConsumePerWeight = 0.02f;
-        mage_data.strengthBase = 40;
+        mage_data.strengthBase = 70;
         mage_data.strengthAllot = 0;
         mage_data.agilityBase = 25;
         mage_data.agilityAllot = 0;
@@ -806,13 +807,13 @@ public class PlayerInfo
 
             if (Globals.socket.IsFromLogin())
             {                
-                if (TutorialLevelIdx == TutorialLevel.GetGem || 
-                    TutorialLevelIdx == TutorialLevel.GetAroundGuard || 
+                if (TutorialLevelIdx == TutorialLevel.GetChest || 
+                    TutorialLevelIdx == TutorialLevel.Sneaking || 
                     TutorialLevelIdx == TutorialLevel.FirstTrick)
                 {
                     Globals.asyncLoad._ToLoadingScene("StealingLevel");
                 }
-                else if (TutorialLevelIdx == TutorialLevel.FirstTarget || TutorialLevelIdx == TutorialLevel.Over)
+                else if (TutorialLevelIdx == TutorialLevel.NewEnemy || TutorialLevelIdx == TutorialLevel.Over)
                 {
                     Globals.asyncLoad._ToLoadingScene("City");
                 }
@@ -1158,11 +1159,11 @@ public class PlayerInfo
     {
         foreach (System.String cash_id in cashOnFloor)
         {
-            OneCashOnFloor(cash_id);
+            OneCashOnFloor(cash_id,null);
         }
     }
 
-    public PickedItem OneCashOnFloor(System.String cash_id)
+    public PickedItem OneCashOnFloor(System.String cash_id, Cell cell)
     {
         System.String[] cash_data = cash_id.Split(',');
         UnityEngine.GameObject cash_on_floor_prefab;
@@ -1176,7 +1177,18 @@ public class PlayerInfo
         }
 
         UnityEngine.GameObject cash_on_floor = UnityEngine.GameObject.Instantiate(cash_on_floor_prefab) as UnityEngine.GameObject;
-        cash_on_floor.transform.position = Globals.maze.GetPickedItemBasedOnRandomPos(cash_data);
+
+        if (cell != null)
+        {
+            float offset = Globals.GetCellSideLength() / 4.0f;
+            cash_on_floor.transform.position = cell.GetFloorPos() +
+                new UnityEngine.Vector3(UnityEngine.Random.Range(-offset, offset), UnityEngine.Random.Range(-offset, offset), 0);
+        }
+        else
+        {
+            cash_on_floor.transform.position = Globals.maze.GetPickedItemBasedOnRandomPos(cash_data);
+        }
+        
         int cash_amount = System.Convert.ToInt32(cash_data[2]);
         if (cash_amount == 0)
         {

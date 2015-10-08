@@ -107,77 +107,77 @@ public class StealingLevelController : LevelController
             Globals.languageTable.SetText(ReplaySpeedText, "replay_speed", new System.String[] { Globals.replaySystem.playSpeed.ToString() });
         }
 
-        Globals.thiefPlayer = Globals.self;
-        Globals.guardPlayer = new PlayerInfo();
-        Globals.guardPlayer.slotsDatas[0].statu = "0";
-        Globals.guardPlayer.slotsDatas[1].statu = "0";
-        Globals.guardPlayer.slotsDatas[2].statu = "0";
-        Globals.guardPlayer.isBot = true;
-        Globals.iniFileName = "pve_22";        
-
-
-        Globals.guardPlayer.currentMazeRandSeedCache = -1;
-        Globals.guardPlayer.currentMazeLevel = 5;        
-        Globals.ReadMazeIniFile(Globals.iniFileName, Globals.guardPlayer.currentMazeRandSeedCache);
-        for (int idx = 0; idx < Globals.maze.noOfRoomsToPlace; ++idx)
+//         Globals.thiefPlayer = Globals.self;
+//         Globals.guardPlayer = new PlayerInfo();
+//         Globals.guardPlayer.slotsDatas[0].statu = "0";
+//         Globals.guardPlayer.slotsDatas[1].statu = "0";
+//         Globals.guardPlayer.slotsDatas[2].statu = "0";
+//         Globals.guardPlayer.isBot = true;
+//         Globals.iniFileName = "pve_22";        
+// 
+// 
+//         Globals.guardPlayer.currentMazeRandSeedCache = -1;
+//         Globals.guardPlayer.currentMazeLevel = 5;        
+//         Globals.ReadMazeIniFile(Globals.iniFileName, Globals.guardPlayer.currentMazeRandSeedCache);
+//         for (int idx = 0; idx < Globals.maze.noOfRoomsToPlace; ++idx)
+//         {
+//             SafeBoxData data = new SafeBoxData();
+//             Globals.guardPlayer.safeBoxDatas.Add(data);
+//         }
+        bool is_rand_bot = false;
+        int seed = 0;
+        if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
         {
-            SafeBoxData data = new SafeBoxData();
-            Globals.guardPlayer.safeBoxDatas.Add(data);
+            Globals.iniFileName = "Tutorial_Level_" + Globals.self.TutorialLevelIdx.ToString();
+            seed = -1;
         }
-        //         bool is_rand_bot = false;
-        //         int seed = 0;
-        //         if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
-        //         {
-        //             Globals.iniFileName = "Tutorial_Level_" + Globals.self.TutorialLevelIdx.ToString();
-        //             seed = -1;            
-        //         }
-        //         else
-        //         {
-        //             if(!Globals.guardPlayer.isBot)
-        //             {
-        //                 seed = Globals.guardPlayer.currentMazeRandSeedCache;
-        //                 Globals.iniFileName = "MyMaze_" + Globals.guardPlayer.currentMazeLevel.ToString();
-        //             }
-        //             else
-        //             {
-        //                 if(Globals.playingReplay == null)
-        //                 {
-        //                     Globals.replaySystem.RecordPvEFileName(Globals.iniFileName);
-        //                 }
-        //                 else
-        //                 {
-        //                     Globals.iniFileName = Globals.replaySystem.pveFile;
-        //                 }
-        //                 UnityEngine.TextAsset textAssets = UnityEngine.Resources.Load(Globals.iniFileName) as UnityEngine.TextAsset;
-        //                 if (textAssets != null && textAssets.text.Length != 0)
-        //                 {
-        //                     seed = -1;
-        //                 }
-        //                 else
-        //                 {
-        //                     is_rand_bot = true;
-        //                     // 寻找到最近有配置的地图
-        //                     int lv_idx = System.Convert.ToInt32(Globals.iniFileName.Split('_')[1]);
-        //                     while (UnityEngine.Resources.Load(Globals.iniFileName) == null)
-        //                     {
-        //                         Globals.iniFileName = "pve_" + lv_idx.ToString();
-        //                         --lv_idx;
-        //                     }
-        //                     bRandomGuards = true;
-        //                     seed = Globals.guardPlayer.currentMazeRandSeedCache;
-        //                 }
-        //             }
-        //         }
-        // 
-        //         IniFile ini = Globals.ReadMazeIniFile(Globals.iniFileName, seed);
-        //         if (Globals.guardPlayer.isBot)
-        //         {
-        //             Globals.guardPlayer.cashAmount = Globals.maze.CASH;
-        //             if (is_rand_bot)
-        //             {
-        //                 Globals.guardPlayer.cashAmount /= 2;
-        //             }            
-        //         }
+        else
+        {
+            if (!Globals.guardPlayer.isBot)
+            {
+                seed = Globals.guardPlayer.currentMazeRandSeedCache;
+                Globals.iniFileName = "MyMaze_" + Globals.guardPlayer.currentMazeLevel.ToString();
+            }
+            else
+            {
+                if (Globals.playingReplay == null)
+                {
+                    Globals.replaySystem.RecordPvEFileName(Globals.iniFileName);
+                }
+                else
+                {
+                    Globals.iniFileName = Globals.replaySystem.pveFile;
+                }
+                UnityEngine.TextAsset textAssets = UnityEngine.Resources.Load(Globals.iniFileName) as UnityEngine.TextAsset;
+                if (textAssets != null && textAssets.text.Length != 0)
+                {
+                    seed = -1;
+                }
+                else
+                {
+                    is_rand_bot = true;
+                    // 寻找到最近有配置的地图
+                    int lv_idx = System.Convert.ToInt32(Globals.iniFileName.Split('_')[1]);
+                    while (UnityEngine.Resources.Load(Globals.iniFileName) == null)
+                    {
+                        Globals.iniFileName = "pve_" + lv_idx.ToString();
+                        --lv_idx;
+                    }
+                    bRandomGuards = true;
+                    seed = Globals.guardPlayer.currentMazeRandSeedCache;
+                }
+            }
+        }
+
+        IniFile ini = Globals.ReadMazeIniFile(Globals.iniFileName, seed);
+        if (Globals.guardPlayer.isBot)
+        {
+            Globals.guardPlayer.cashAmount = Globals.maze.CASH;
+            if (is_rand_bot)
+            {
+                Globals.guardPlayer.cashAmount /= 2;
+            }
+        }
 
         randSeedCache = UnityEngine.Random.seed;
 
@@ -187,7 +187,7 @@ public class StealingLevelController : LevelController
             UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/" + Globals.thiefPlayer.selectedMagician.name) as UnityEngine.GameObject;
             magician = UnityEngine.GameObject.Instantiate(magician_prefab).GetComponent<Magician>();
             magician.gameObject.SetActive(false);
-            if (Globals.playingReplay != null || Globals.iniFileName == "pve_22")
+            //if (Globals.playingReplay != null || Globals.iniFileName == "pve_22" || Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.FirstTrick)
             {
                 Globals.canvasForMagician.UpdateTrickInUseSlots(Globals.thiefPlayer, magician);
                 Globals.canvasForMagician.UpdateCharacter(Globals.thiefPlayer);
@@ -246,6 +246,7 @@ public class StealingLevelController : LevelController
                 }
 
                 //Globals.maze.PlaceGemsAtBoarder();
+                Globals.maze.PlaceCashesAtBoarder();
             }
         }
         
@@ -271,7 +272,7 @@ public class StealingLevelController : LevelController
             guard.FindGuardedChest();
         }
        
-        magician.transform.position = Globals.maze.entryOfMaze.GetFloorPos();
+        
         Globals.maze.RegistChallengerEvent();
 
         Globals.cameraFollowMagician.Reset();
@@ -285,14 +286,31 @@ public class StealingLevelController : LevelController
         Globals.canvasForMagician.SetLifeVisible(true);
         Globals.canvasForMagician.SetPowerVisible(true);
         RestartText.gameObject.SetActive(true);
-        if (Globals.guardPlayer.isBot)
+
+        if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.GetChest)
         {
-            Globals.languageTable.SetText(RestartText, "click_guard_to_show_info", new System.String[] { Globals.guardPlayer.currentMazeLevel.ToString() });
+            Globals.languageTable.SetText(RestartText, "operate_guide_info");
+        }
+        else if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.Sneaking)
+        {
+            Globals.languageTable.SetText(RestartText, "sneaking_guide_info");
+        }
+        else if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.FirstTrick)
+        {
+            Globals.languageTable.SetText(RestartText, "hypnosis_guide_info");
         }
         else
         {
-            Globals.languageTable.SetText(RestartText, "other_player_maze_name",new System.String[] { Globals.guardPlayer.name, Globals.guardPlayer.currentMazeLevel.ToString() });            
-        }               
+            if (Globals.guardPlayer.isBot)
+            {
+                Globals.languageTable.SetText(RestartText, "click_guard_to_show_info", new System.String[] { Globals.guardPlayer.currentMazeLevel.ToString() });
+            }
+            else
+            {
+                Globals.languageTable.SetText(RestartText, "other_player_maze_name", new System.String[] { Globals.guardPlayer.name, Globals.guardPlayer.currentMazeLevel.ToString() });
+            }
+        }
+        
 
         if (Globals.playingReplay != null)
         {
@@ -312,17 +330,23 @@ public class StealingLevelController : LevelController
 //             }            
         }
 
-        // 有守卫，要点了潜入才能开始
-        if (Globals.maze.guards.Count != 0)
-        {
-            magician.gameObject.SetActive(false);
-        }
-        // 没有守卫，而且是教程中。不需要潜入按钮，直接开始
-        else if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
+        
+        if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.GetChest)
         {
             // 主角降下          
+            magician.transform.position = Globals.maze.GetLeftBottomPos();
             magician.transform.position += new UnityEngine.Vector3(0, 0, -0.6f);
             MagicianFallingDown();
+        }
+        else if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.Sneaking || Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.FirstTrick)
+        {
+            magician.transform.position = Globals.maze.GetRightUpPos();
+            magician.transform.position += new UnityEngine.Vector3(0, 0, -0.6f);
+            MagicianFallingDown();
+        }
+        else
+        {
+            magician.gameObject.SetActive(false);
         }
 
         // 不是教学关卡，可以在潜入开始前离开
@@ -401,16 +425,41 @@ public class StealingLevelController : LevelController
     public override void AfterMagicianFalling()
     {
         Globals.EnableAllInput(true);
-        OperateMagician();
-        canvasForStealing.gameObject.SetActive(true);
-        if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.GetGem)
-        {
-            Globals.languageTable.SetText(RestartText, "operate_guide_info");
-        }
-        else
+        if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.GetChest && 
+            Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Sneaking &&
+            Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.FirstTrick)
         {
             RestartText.gameObject.SetActive(false);
+        }        
+        
+
+        if (Globals.playingReplay == null)
+        {
+            LeaveBtn.gameObject.SetActive(false);
+            Globals.canvasForMagician.RegisterTrickCastingFunc(Globals.thiefPlayer, magician);
         }
+
+        if (Globals.maze.LevelTipText != "")
+        {
+            LevelTip.gameObject.SetActive(true);
+            LevelTip.Show(Globals.maze.LevelTipText);
+        }
+
+        StealingCash.gameObject.SetActive(true);
+
+        //Globals.canvasForMagician.tricksInUseTip.SetActive(false);
+        // 魔术师出场   
+        magician.InStealing();
+
+        foreach (Chest chest in Globals.maze.chests)
+        {
+            chest.spriteRenderer.GetComponent<UnityEngine.BoxCollider>().enabled = false;
+        }
+
+        Globals.cameraFollowMagician.audioSource.clip = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/尋問");
+        Globals.cameraFollowMagician.audioSource.PlayDelayed(1.0f);
+        Globals.cameraFollowMagician.audioSource.volume = 1.0f;       
+        canvasForStealing.gameObject.SetActive(true);        
         
         if (landingMark.activeSelf)
         {            
@@ -419,37 +468,6 @@ public class StealingLevelController : LevelController
         
         base.AfterMagicianFalling();
     }    
-
-    public void OperateMagician()
-    {
-        if(Globals.playingReplay == null)
-        {
-            LeaveBtn.gameObject.SetActive(false);
-        }
-                
-        if (Globals.maze.LevelTipText != "")
-        {
-            LevelTip.gameObject.SetActive(true);
-            LevelTip.Show(Globals.maze.LevelTipText);        
-        }
-        
-        StealingCash.gameObject.SetActive(true);
-        
-        //Globals.canvasForMagician.tricksInUseTip.SetActive(false);
-        // 魔术师出场   
-        magician.InStealing();        
-
-        foreach(Chest chest in Globals.maze.chests)
-        {
-            chest.spriteRenderer.GetComponent<UnityEngine.BoxCollider>().enabled = false;
-        }
-
-        Globals.cameraFollowMagician.audioSource.clip = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/尋問");
-        Globals.cameraFollowMagician.audioSource.PlayDelayed(1.0f);
-        Globals.cameraFollowMagician.audioSource.volume = 1.0f;        
-    }
-
-    
 
     public override void PerfectStealing()
     {
@@ -516,7 +534,7 @@ public class StealingLevelController : LevelController
             {
                 Globals.transition.BlackOut(() => EndingUI());
             }
-            else if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.FirstTarget)
+            else if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.UnlockNewTrick)
             {
                 Globals.asyncLoad.ToLoadSceneAsync("City");
             }
@@ -536,7 +554,7 @@ public class StealingLevelController : LevelController
             StealingCash.gameObject.SetActive(false);
             if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
             {
-                InvokeRepeating("RestartCount", 4.0f, 1.0f);
+                InvokeRepeating("RestartCount", 1.0f, 1.0f);
             }
             else
             {
@@ -545,7 +563,7 @@ public class StealingLevelController : LevelController
                 itemsDropingWhenEscape = Globals.self.DropItems();
                 Globals.self.StealingOver(0, 0, 0, false);
                 Globals.canvasForMagician.CheckBuyTrickAndSlotTip();
-            }        
+            }
         }
         else
         {
@@ -583,7 +601,8 @@ public class StealingLevelController : LevelController
     {
         StealingCash.SetToZero();
         Globals.guardPlayer.safeBoxDatas.Clear();
-        magician.gameObject.SetActive(false);
+        DestroyImmediate(magician.gameObject);
+        magician = null;
         Globals.maze.ClearMaze();
         Start();
         Globals.maze.Start();

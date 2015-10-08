@@ -19,16 +19,21 @@ public class Dog : Guard
         appearSpot = Globals.getChildGameObject(gameObject, "appearSpot");
         appearSpot.SetActive(false);
     }
-
+    int soundCount = 0;
     public void ChasingSound()
     {
-        BarkSoundWave wave = (UnityEngine.GameObject.Instantiate(Globals.wave_prefab) as UnityEngine.GameObject).GetComponent<BarkSoundWave>();
-        wave.transform.position = transform.position;        
+        if (spot.target != null && soundCount % 2 == 0)
+        {
+            BarkSoundWave wave = (UnityEngine.GameObject.Instantiate(Globals.wave_prefab) as UnityEngine.GameObject).GetComponent<BarkSoundWave>();
+            wave.owner = this;
+            wave.transform.position = transform.position;
+            wave.oneWaveDuration = 8;
+            wave.radiusLimit = 2000;
+            wave.radiusStart = 500;
 
-        wave.radiusLimit = 2000;
-        wave.radiusStart = 500;
-
-        audioSource.PlayOneShot(chasing);
+            audioSource.PlayOneShot(chasing);
+        }
+        ++soundCount;        
     }
 
     public override bool CheckIfChangeTarget(UnityEngine.GameObject newTar)

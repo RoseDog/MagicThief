@@ -43,8 +43,11 @@ public class Spot : GuardAction
                 guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Alert);    
                 guard.spriteSheet.Play("spot");
                 newTar.GetComponent<Actor>().SpotByEnemy(guard);
-                guard.audioSource.PlayOneShot(alert);
-            }            
+            }
+            else
+            {
+                target.GetComponent<Actor>().EnemyStopChasing(guard);
+            }
 
             target = newTar.transform;
         
@@ -100,7 +103,9 @@ public class Spot : GuardAction
         if (turnToAtkReadyAct != null)
         {
             guard.RemoveAction(ref turnToAtkReadyAct);
-        }        
+        }
+
+        guard.audioSource.Stop();
     }
 
     public void EnemyOutVision(int outVisionTime)

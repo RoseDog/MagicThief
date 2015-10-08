@@ -93,6 +93,7 @@ public class PickedItem : Actor
         }
         cash = 0;
         gameObject.layer = 26;
+        spriteRenderer.gameObject.layer = 26;
         if(shadow)
         {
             shadow.enabled = false;

@@ -863,32 +863,41 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
     }
 
     System.Collections.Generic.List<UnityEngine.Vector3> propertyPoses = new System.Collections.Generic.List<UnityEngine.Vector3>();
-    int gemsToPlace;
-    void PlaceGem(Cell cell)
+    int cashes_to_place;
+//     int gemsToPlace;
+//     void PlaceGem(Cell cell)
+//     {
+//         UnityEngine.GameObject gem_prefab = UnityEngine.Resources.Load("Props/purple diamond base") as UnityEngine.GameObject;
+//         UnityEngine.GameObject gem = UnityEngine.GameObject.Instantiate(gem_prefab) as UnityEngine.GameObject;
+//         float offset = Globals.GetCellSideLength() / 4.0f;
+//         UnityEngine.Vector3 gem_pos = cell.GetFloorPos() +
+//             new UnityEngine.Vector3(UnityEngine.Random.Range(-offset, offset), UnityEngine.Random.Range(-offset, offset), 0);
+//         gem.transform.position = gem_pos;
+//         gem.gameObject.name = "Gem" + gemHolders.Count.ToString();
+//         gemHolders.Add(gem);
+//         propertyPoses.Add(gem.transform.position);
+//         --gemsToPlace;
+//     }
+
+    void PlaceCash(System.String cash_id, Cell cell)
     {
-        UnityEngine.GameObject gem_prefab = UnityEngine.Resources.Load("Props/purple diamond base") as UnityEngine.GameObject;
-        UnityEngine.GameObject gem = UnityEngine.GameObject.Instantiate(gem_prefab) as UnityEngine.GameObject;
-        float offset = Globals.GetCellSideLength() / 4.0f;
-        UnityEngine.Vector3 gem_pos = cell.GetFloorPos() +
-            new UnityEngine.Vector3(UnityEngine.Random.Range(-offset, offset), UnityEngine.Random.Range(-offset, offset), 0);
-        gem.transform.position = gem_pos;
-        gem.gameObject.name = "Gem" + gemHolders.Count.ToString();
-        gemHolders.Add(gem);
-        propertyPoses.Add(gem.transform.position);
-        --gemsToPlace;
+        PickedItem item = Globals.guardPlayer.OneCashOnFloor(cash_id, cell);
+        --cashes_to_place;
+        propertyPoses.Add(item.transform.position);
     }
 
-    public void PlaceGemsAtBoarder()
-    {        
+
+    public void PlaceCashesAtBoarder()
+    {
         foreach (Chest chest in chests)
         {
             propertyPoses.Add(chest.transform.position);
         }
 
-        gemsToPlace = GEMS_COUNT;
-        while (gemsToPlace > 0)
+        cashes_to_place = Globals.guardPlayer.cashOnFloor.Count-1;
+        while (cashes_to_place > 0)
         {
-            
+
             // 找到离所有箱子和宝石总距离最远的Cell
             Cell farestCell = null;
             Cell shortestCell = null;
@@ -901,7 +910,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
                 foreach (UnityEngine.Vector3 pos in propertyPoses)
                 {
                     float temp = UnityEngine.Vector3.Distance(pos, corrido.GetFloorPos());
-                    logDis +=  UnityEngine.Mathf.Log(temp);
+                    logDis += UnityEngine.Mathf.Log(temp);
                     Dis += UnityEngine.Mathf.Sqrt(temp);
                 }
                 if (logDis > maxDis)
@@ -917,16 +926,66 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             }
 
             // 暂时不往中间放宝石。这个算法还有点问题。
-            if(UnityEngine.Random.Range(0.0f, 1.0f) > 0.0f)
+            if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.0f)
             {
-                PlaceGem(farestCell);
+                PlaceCash(Globals.guardPlayer.cashOnFloor[cashes_to_place], farestCell);
             }
-            else 
+            else
             {
-                PlaceGem(shortestCell);
-            }            
+                PlaceCash(Globals.guardPlayer.cashOnFloor[cashes_to_place], farestCell);
+            }
         }        
     }
+
+//     public void PlaceGemsAtBoarder()
+//     {        
+//         foreach (Chest chest in chests)
+//         {
+//             propertyPoses.Add(chest.transform.position);
+//         }
+// 
+//         gemsToPlace = GEMS_COUNT;
+//         while (gemsToPlace > 0)
+//         {
+//             
+//             // 找到离所有箱子和宝石总距离最远的Cell
+//             Cell farestCell = null;
+//             Cell shortestCell = null;
+//             float maxDis = UnityEngine.Mathf.NegativeInfinity;
+//             float minDis = UnityEngine.Mathf.Infinity;
+//             foreach (Cell corrido in CorridorCellLocations)
+//             {
+//                 float logDis = 0.0f;
+//                 float Dis = 0.0f;
+//                 foreach (UnityEngine.Vector3 pos in propertyPoses)
+//                 {
+//                     float temp = UnityEngine.Vector3.Distance(pos, corrido.GetFloorPos());
+//                     logDis +=  UnityEngine.Mathf.Log(temp);
+//                     Dis += UnityEngine.Mathf.Sqrt(temp);
+//                 }
+//                 if (logDis > maxDis)
+//                 {
+//                     maxDis = logDis;
+//                     farestCell = corrido;
+//                 }
+//                 if (Dis < minDis)
+//                 {
+//                     minDis = Dis;
+//                     shortestCell = corrido;
+//                 }
+//             }
+// 
+//             // 暂时不往中间放宝石。这个算法还有点问题。
+//             if(UnityEngine.Random.Range(0.0f, 1.0f) > 0.0f)
+//             {
+//                 PlaceGem(farestCell);
+//             }
+//             else 
+//             {
+//                 PlaceGem(shortestCell);
+//             }            
+//         }        
+//     }
 
 
     public System.Collections.Generic.List<GuardData> guardsToPlace = new System.Collections.Generic.List<GuardData>();
@@ -1827,7 +1886,11 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             if (guard.spot != null && guard.spot.target == obj.transform)
             {                
                 guard.RemoveAction(ref guard.spot.outVisionCountDown);
-                guard.wandering.Excute();
+                guard.spot.target = null;
+                if (guard.currentAction == guard.chase || (guard.explode != null && guard.currentAction != guard.explode))
+                {
+                    guard.wandering.Excute();
+                }                
             }
             if (guard.eye != null)
             {
@@ -1867,5 +1930,15 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         return Globals.GetPathNodePos(pathFinder.GetNearestWalkableNode(new UnityEngine.Vector3(left_up_corner_pos.x + Globals.GetCellSideLength() * X_CELLS_COUNT * rand_x,
                 left_up_corner_pos.y - Globals.GetCellSideLength() * Y_CELLS_COUNT * rand_y,
                 0)));            
+    }
+
+    public UnityEngine.Vector3 GetRightUpPos()
+    {
+        return Globals.GetPathNodePos(pathFinder.GetNearestWalkableNode(new UnityEngine.Vector3(-left_up_corner_pos.x, left_up_corner_pos.y,0)));
+    }
+
+    public UnityEngine.Vector3 GetLeftBottomPos()
+    {
+        return Globals.GetPathNodePos(pathFinder.GetNearestWalkableNode(new UnityEngine.Vector3(left_up_corner_pos.x, -left_up_corner_pos.y, 0)));
     }
 }

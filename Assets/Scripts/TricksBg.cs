@@ -70,7 +70,7 @@ public class TricksBg : CustomEventTrigger
             trickSlots.Add(itemSlot);
 
             // 如果在教程阶段，还没有购买催眠
-            if (data == Globals.self.tricks[0] && Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.FirstTrick && !data.learned)
+            if (data.nameKey == "dove" && Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.UnlockNewTrick && !data.learned)
             {
                 ClickHypnosisPointer.transform.parent.gameObject.SetActive(true);
                 ClickHypnosisPointer.BlinkForever();

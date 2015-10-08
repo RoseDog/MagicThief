@@ -6,7 +6,7 @@ public class JokerAttack : Attack
         guard.FaceTarget(guard.spot.target);
         if (!checkIfTargetPressDown())
         {
-            if (guard.spriteSheet.HasAnimation("kick") && Globals.stealingController.magician.currentAction == Globals.stealingController.magician.catchByNet)
+            if (guard.spriteSheet.HasAnimation("kick") && Globals.stealingController != null && Globals.stealingController.magician.currentAction == Globals.stealingController.magician.catchByNet)
             {
                 guard.spriteSheet.Play("kick");
             }

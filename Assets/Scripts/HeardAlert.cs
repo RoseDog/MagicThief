@@ -26,12 +26,12 @@ public class HeardAlert : GuardAction
 
     public void HeardSound(UnityEngine.Vector3 soundPos)
     {
+        UnityEngine.Vector3 dir = soundPos - transform.position;
+        guard.FaceDir(dir);
         // 如果不是第一次听到声音，那么只是更新一下声音的位置
         if(guard.currentAction == this)
         {
-            soundPosition = soundPos;
-            UnityEngine.Vector3 dir = soundPosition - transform.position;
-            guard.FaceDir(dir);            
+            soundPosition = soundPos;                        
         }
         else if (guard.currentAction == guard.goCovering)
         {
@@ -42,8 +42,7 @@ public class HeardAlert : GuardAction
                 System.String content = gameObject.name;
                 content += " HeardSound";
                 Globals.record("testReplay", content);
-            }
-            
+            }            
         }
         else
         {

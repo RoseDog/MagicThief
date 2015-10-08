@@ -24,6 +24,8 @@ public class Chest : Actor, System.IComparable<Chest>
 
     public System.String stolenTrickItem;
 
+    public TrickTimer openChestTimer;
+
     public int CompareTo(Chest other)
     {
         if(other == this)
@@ -118,12 +120,18 @@ public class Chest : Actor, System.IComparable<Chest>
         {
             return;
         }
-        Magician mage = other.GetComponent<Magician>();
-        if (mage != null && mage.currentAction == mage.beenPressDown)
+
+        Magician mage = null;
+        if(Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.InitMyMaze)
         {
-            return;
+            mage = other.GetComponent<Magician>();
+            if (mage != null && mage.currentAction == mage.beenPressDown)
+            {
+                return;
+            }
+            mage.isOpenChest = true;
         }
-        mage.isOpenChest = true;
+        
         UnityEngine.Debug.Log("touch chest");
         isMagicianNear = true;
         if (SafeboxNotFinishedTip != null)
@@ -134,7 +142,19 @@ public class Chest : Actor, System.IComparable<Chest>
         if (goldLast > 1)
         {
             unlockProgressSprite.transform.parent.gameObject.SetActive(true);
-            AddAction(new Sequence(new Cocos2dProgress(unlockProgressSprite, mage.GetUnlockSafeDuration()), new FunctionCall(() => ChestOpened())));
+
+            int unlock_duration = 0;
+            if(Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.InitMyMaze)
+            {
+                unlock_duration = mage.GetUnlockSafeDuration();
+            }
+            else
+            {
+                unlock_duration = Globals.self.magicians[0].GetUnlockSafeDuration();
+            }
+
+            openChestTimer.BeginCountDown(gameObject, unlock_duration, new UnityEngine.Vector3(0, 124.1f, 0));
+            SleepThenCallFunction(unlock_duration, () => ChestOpened());
         }        
     }
 
@@ -155,25 +175,26 @@ public class Chest : Actor, System.IComparable<Chest>
         {
             Globals.stealingController.magician.isOpenChest = false;
             Globals.stealingController.magician.isTakingMoneny = false;
-            if (goldLast > 1)
+        }
+        if (goldLast > 1)
+        {
+            ClearAllActions();
+            openChestTimer.StopCount();
+            unlockProgressSprite.transform.parent.gameObject.SetActive(false);
+            if (spriteRenderer.sprite == openSprite)
             {
-                ClearAllActions();
-                unlockProgressSprite.transform.parent.gameObject.SetActive(false);
-                if (spriteRenderer.sprite == openSprite)
-                {
-                    ChestClosed();
-                }
-
-                if (Globals.stealingController.magician.Stealing && SafeboxNotFinishedTip == null)
-                {
-                    SafeboxNotFinishedTip = UnityEngine.GameObject.Instantiate(SafeboxNotFinishedPrefab) as UnityEngine.GameObject;
-                    SafeboxNotFinishedTip.GetComponent<UnityEngine.Canvas>().worldCamera = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>();
-                    SafeboxNotFinishedTip.GetComponentInChildren<UIMover>().Jump();
-                    SafeboxNotFinishedTip.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 170.0f, 0.0f);
-                }
+                ChestClosed();
             }
-            goldPoper.StopPop();
-        }                        
+
+            if (Globals.stealingController && Globals.stealingController.magician.Stealing && SafeboxNotFinishedTip == null)
+            {
+                SafeboxNotFinishedTip = UnityEngine.GameObject.Instantiate(SafeboxNotFinishedPrefab) as UnityEngine.GameObject;
+                SafeboxNotFinishedTip.GetComponent<UnityEngine.Canvas>().worldCamera = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>();
+                SafeboxNotFinishedTip.GetComponentInChildren<UIMover>().Jump();
+                SafeboxNotFinishedTip.transform.position = transform.position + new UnityEngine.Vector3(0.0f, 170.0f, 0.0f);
+            }
+        }
+        goldPoper.StopPop();
     }
 
     public void ChestOpened()
@@ -185,8 +206,12 @@ public class Chest : Actor, System.IComparable<Chest>
         {
             unlockProgressSprite.transform.parent.gameObject.SetActive(false);
             spriteRenderer.sprite = openSprite;
-            Globals.stealingController.magician.isOpenChest = false;
-            Globals.stealingController.magician.isTakingMoneny = true;
+            if (Globals.stealingController != null)
+            {
+                Globals.stealingController.magician.isOpenChest = false;
+                Globals.stealingController.magician.isTakingMoneny = true;
+            }
+            
             goldPoper.Pop();            
         }        
     }
@@ -221,17 +246,18 @@ public class Chest : Actor, System.IComparable<Chest>
                 SafeboxNotFinishedTip = null;
             }
 
-            renderers.Remove(head_on_minimap.GetComponent<UnityEngine.Renderer>());
-            Destroy(head_on_minimap);
-            head_on_minimap = null;            
+            head_on_minimap.SetActive(false);
 
             foreach (UnityEngine.Renderer renderer in goldMeshes)
             {
                 renderer.gameObject.SetActive(false);
             }
             goldPoper.StopPop();
-            Globals.stealingController.magician.isOpenChest = false;
-            Globals.stealingController.magician.isTakingMoneny = false;
+            if (Globals.stealingController)
+            {
+                Globals.stealingController.magician.isOpenChest = false;
+                Globals.stealingController.magician.isTakingMoneny = false;
+            }            
             Globals.LevelController.OneChestGoldAllLost(this);
         }
 
@@ -249,15 +275,20 @@ public class Chest : Actor, System.IComparable<Chest>
 
         audioSource.Play();
 
-        BarkSoundWave wave = (UnityEngine.GameObject.Instantiate(Globals.wave_prefab) as UnityEngine.GameObject).GetComponent<BarkSoundWave>();
-        wave.transform.position = (Globals.stealingController.magician.transform.position + Globals.stealingController.magician.GetWorldCenterPos()) * 0.5f;
-        wave.radiusLimit = 400;
-        wave.radiusStart = 250;
-        wave.oneWaveDuration = 8;       
+        if (Globals.stealingController)
+        {
+            BarkSoundWave wave = (UnityEngine.GameObject.Instantiate(Globals.wave_prefab) as UnityEngine.GameObject).GetComponent<BarkSoundWave>();
+            wave.transform.position = (Globals.stealingController.magician.transform.position + Globals.stealingController.magician.GetWorldCenterPos()) * 0.5f;
+            wave.radiusLimit = 400;
+            wave.radiusStart = 250;
+            wave.oneWaveDuration = 8;
+        }        
     }
     
     public void ResetGold()
     {
+        spriteRenderer.sprite = closedSprite;
+        head_on_minimap.SetActive(true);
         goldLast = data.cashInBox;
         // 总共需要3次偷完整个箱子
         goldLostPersecond = goldLast / 3.0f;

@@ -1,6 +1,6 @@
 ﻿GuardCount=2
 (-46.7000, -212.5000, -0.0100)=Police
-(-696.7000, -112.5000, -0.0100)=Police
+(-771.7000, -12.5000, -0.0100)=Police
 randSeedCacheWhenEditLevel=1295894837
 Z_CELLS_COUNT=5
 X_CELLS_COUNT=5

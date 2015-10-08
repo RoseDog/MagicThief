@@ -25,7 +25,7 @@ public class FlyUp : MagicianTrickAction
     public override void Excute()
     {
         base.Excute();
-
+        actor.spriteRenderer.material = (actor as Magician).flyingMat;
         actor.moving.ClearPath();
         actor.moving.canMove = false;
         actor.spriteRenderer.gameObject.layer = 26;
@@ -40,7 +40,7 @@ public class FlyUp : MagicianTrickAction
     int up_duration = 10;
     public void Up()
     {
-        actor.gameObject.layer = 26;
+        actor.gameObject.layer = 26;        
         Globals.maze.GuardsTargetVanish(gameObject);
 
         actor.AddAction(new MoveTo(actor.transform, actor.transform.position + updis, up_duration));
@@ -171,7 +171,7 @@ public class FlyUp : MagicianTrickAction
         actor.gameObject.layer = 11;
         actor.spriteRenderer.gameObject.layer = 11;
         Globals.canvasForMagician.ShowTricksPanel();
-
+        actor.spriteRenderer.material = (actor as Magician).groundMat;
         base.Stop();
     }
 }

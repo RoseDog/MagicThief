@@ -8,6 +8,7 @@ public class Disguise : MagicianTrickAction
     SpriteSheet sheetCache = null;
     Cocos2dAction stopAction;
     Cocos2dAction trickCastAction;
+    public UnityEngine.AudioClip disguise;
     public override void Awake()
     {
         base.Awake();
@@ -26,9 +27,11 @@ public class Disguise : MagicianTrickAction
         else
         {
             base.Excute();
-            mage.spriteSheet.Play("disguise");
+            mage.spriteSheet.Play("disguise");            
             trickCastAction = actor.SleepThenCallFunction(mage.spriteSheet.GetAnimationLengthWithSpeed("disguise"), () => TrickActionEnd());
         }
+
+        mage.audioSource.PlayOneShot(disguise);
     }
 
     public void TrickActionEnd()
@@ -65,8 +68,8 @@ public class Disguise : MagicianTrickAction
         TrickTimer = UnityEngine.GameObject.Instantiate(TrickTimerPrefab) as UnityEngine.GameObject;
         TrickTimer.GetComponent<TrickTimer>().BeginCountDown(FakeGuard, data.duration, new UnityEngine.Vector3(0, 110f, 0));
 
-        speedCache = actor.moving.speed;
-        actor.moving.speed = speedCache*0.7f;
+        
+        (actor as Magician).speedModifier = 0.5f;
         gameObject.layer = 23;
 
         stopAction = actor.SleepThenCallFunction(data.duration, () => Stop());
@@ -94,7 +97,7 @@ public class Disguise : MagicianTrickAction
             Actor.to_be_remove.Add(TrickTimer.GetComponent<Actor>());
             sheetCache.enabled = true;
             actor.spriteSheet = sheetCache;
-            actor.moving.speed = speedCache;
+            (actor as Magician).speedModifier = 1.0f;
             gameObject.layer = 11;
             sheetCache = null;
         }               

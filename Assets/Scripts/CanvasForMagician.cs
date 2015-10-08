@@ -62,7 +62,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         RoseNumber = RoseNumberBg.GetComponentInChildren<Number>();
         
         TrickBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(gameObject, "TrickBtn");
-        TrickBtn.onClick.AddListener(()=>OpenTricksUI());        
+        TrickBtn.onClick.AddListener(() => OpenTricksUI(TrickBtn));        
         trickUnclickedCount = Globals.getChildGameObject<UnityEngine.UI.Text>(TrickBtn.gameObject, "UnclickedCount");
         TrickBtn.gameObject.SetActive(false);
 
@@ -99,7 +99,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         roseIntroUI.gameObject.SetActive(false);
         cashIntroUI.gameObject.SetActive(false);
 
-        potrait.onClick.AddListener(()=>OpenTricksUI());
+        potrait.onClick.AddListener(() => OpenTricksUI(potrait));
         
 	}
     bool initialized = false;
@@ -141,11 +141,19 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         for (int idx = 0; idx < trickInUseSlots.Length; ++idx)
         {
             TrickSlot slot = trickInUseSlots[idx];
-            slot.UpdateData(player.slotsDatas[idx], player);
+            slot.UpdateData(player.slotsDatas[idx], player);         
+        }    
+    }
+
+    public void RegisterTrickCastingFunc(PlayerInfo player, Magician magician)
+    {
+        for (int idx = 0; idx < trickInUseSlots.Length; ++idx)
+        {
+            TrickSlot slot = trickInUseSlots[idx];            
             if (magician != null && slot.trickItem != null && Globals.playingReplay == null)
             {
                 slot.trickItem.itemButton.onClick.AddListener(() => magician.CastMagic(slot.trickItem.trickData));
-            }            
+            }
         }    
     }
 
@@ -217,7 +225,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         }
     }
 
-    public void OpenTricksUI()
+    public void OpenTricksUI(UnityEngine.UI.Button btn)
     {
         if (!tricksBg.gameObject.activeSelf && !(Globals.stealingController != null && Globals.stealingController.magician.Stealing) 
             && Globals.playingReplay == null)
@@ -229,6 +237,11 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
             tricksBg.gameObject.SetActive(true);
             tricksBg.CreateTrickItemsInPack();
             cast_tip.gameObject.SetActive(false);
+
+            if(btn == potrait)
+            {
+                SetTrickDescriptionVisible(false);
+            }
 
 
             StealingLevelController controller = (Globals.LevelController as StealingLevelController);
@@ -244,12 +257,13 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
 
     public void CheckIfNeedDraggingItemFinger()
     {
-        if (!Globals.self.IsAnyTricksInUse() && Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.FirstTrick)
+        TrickData dove = Globals.self.GetTrickByName("dove");
+        if (!dove.IsInUse() && Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.UnlockNewTrick && Globals.stealingController != null)
         {            
             // 如果催眠已经购买，出现拖动的提示手指
             if (tricksBg.gameObject.activeSelf)
             {
-                if (Globals.self.tricks[0].learned)
+                if (dove.learned)
                 {
                     draggingItemFinger.gameObject.SetActive(true);
                     draggingItemFinger.RecoverPos();
@@ -331,7 +345,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         // 如果装备界面还没打开，首先打开装备界面
         if (!tricksBg.gameObject.activeSelf)
         {
-            OpenTricksUI();
+            OpenTricksUI(null);
         }
         SetTrickDescriptionVisible(true);
         Globals.languageTable.SetText(TrickName, data.nameKey);
@@ -403,8 +417,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
 
     public void ShowTricksPanel()
     {
-        if(Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.GetAroundGuard
-            && Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.GetGem)
+        if(Globals.self.TutorialLevelIdx >= PlayerInfo.TutorialLevel.Sneaking)
         {
             tricksInUsingPanel.SetActive(true);
         }
@@ -432,6 +445,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
                     Globals.languageTable.SetText(Inventory, "inventory", new System.String[] { item.trickData.inventory.ToString() });
                     Globals.languageTable.SetText(trickCashCost, "buy", new System.String[] { item.trickData.buyPrice.ToString()});
                     CheckIfNeedDraggingItemFinger();
+                    buyAndLearnTrickBtn.onClick.AddListener(() => BuyTrickItem(item));
                 }                
             }
         }
@@ -450,7 +464,9 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
             UnityEngine.UI.Text Inventory = Globals.getChildGameObject<UnityEngine.UI.Text>(item.slotInPack.gameObject, "inventory");
             Inventory.gameObject.SetActive(true);
             Globals.languageTable.SetText(Inventory, "inventory", new System.String[] { item.trickData.inventory.ToString() });
-            Globals.languageTable.SetText(inventory_on_description, "inventory", new System.String[] { item.trickData.inventory.ToString() });           
+            Globals.languageTable.SetText(inventory_on_description, "inventory", new System.String[] { item.trickData.inventory.ToString() });
+
+            tricksBg.ClickHypnosisPointer.transform.parent.gameObject.SetActive(false);
         }   
     }
 

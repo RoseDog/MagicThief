@@ -49,7 +49,7 @@ public class BarkSoundWave : Actor
         base.TouchBegin(other);
         Guard guard = other as Guard;
         // 声音碰到的不是自己，有听觉，没有正在追击的目标
-        if (owner != guard && guard.heardAlert != null && /*guard.heardAlert.alertTeammate == null &&*/ guard.spot.target == null)
+        if (guard != null && owner != guard && guard.heardAlert != null && /*guard.heardAlert.alertTeammate == null &&*/ guard.spot.target == null)
         {
             guard.heardAlert.HeardSound(transform.position);
 //             if (owner == null)
@@ -67,7 +67,7 @@ public class BarkSoundWave : Actor
     {
         base.TouchStay(other);        
         Guard guard = other as Guard;
-        if (owner != guard && guard.heardAlert != null && /*guard.heardAlert.alertTeammate == null &&*/ guard.spot.target == null)
+        if (guard != null && owner != guard && guard.heardAlert != null && /*guard.heardAlert.alertTeammate == null &&*/ guard.spot.target == null)
         {
             guard.heardAlert.HeardSound(transform.position);
 

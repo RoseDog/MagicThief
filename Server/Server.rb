@@ -134,7 +134,7 @@ class UserFile
                   MagicianData.new("Mine Fujiko")]
     @selectedMagician = "Rosa"
 
-    @trickDatas=[TrickData.new("hypnosis", false,10),
+    @trickDatas=[TrickData.new("hypnosis", true,10),
                  TrickData.new("disguise", false,0),
                  TrickData.new("dove", false,0),
                  TrickData.new("flashGrenade", false,0),

@@ -401,7 +401,7 @@ public class MyMazeLevelController : LevelController
         // 拖动的guard要在雾上面
         if (Globals.maze.choosenGuard != null)
         {
-            Globals.maze.choosenGuard.spriteRenderer.sortingOrder = 10;
+            Globals.maze.choosenGuard.spriteRenderer.sortingOrder = 10000;
         }
 
         foreach( Guard guard in Globals.maze.guards )

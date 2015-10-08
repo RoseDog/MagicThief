@@ -21,24 +21,28 @@ public class Chase : GuardAction
     public override void FrameFunc()
     {
         base.FrameFunc();
-        actor = guard.spot.target.GetComponent<Actor>();
-        mage = actor as Magician;
+        if (guard.spot.target)
+        {
+            actor = guard.spot.target.GetComponent<Actor>();
+            mage = actor as Magician;
 
-        if (guard.atk != null &&
-            UnityEngine.Vector3.Distance(guard.transform.position, guard.spot.target.position) < guard.data.atkShortestDistance)
-        {
-            guard.atk.Excute();
+            if (guard.atk != null &&
+                UnityEngine.Vector3.Distance(guard.transform.position, guard.spot.target.position) < guard.data.atkShortestDistance)
+            {
+                guard.atk.Excute();
+            }
+            else if (guard.rushAt != null &&
+                UnityEngine.Vector3.Distance(guard.transform.position, guard.spot.target.position) < guard.data.rushAtShortestDistance)
+            {
+                guard.rushAt.Excute();
+            }
+            else if (mage != null && guard.explode != null &&
+                UnityEngine.Vector3.Distance(guard.transform.position, guard.spot.target.position) < guard.data.atkShortestDistance)
+            {
+                guard.explode.Excute();
+            }
         }
-        else if (guard.rushAt != null &&
-            UnityEngine.Vector3.Distance(guard.transform.position, guard.spot.target.position) < guard.data.rushAtShortestDistance)
-        {
-            guard.rushAt.Excute();
-        }
-        else if (mage != null && guard.explode != null &&
-            UnityEngine.Vector3.Distance(guard.transform.position, guard.spot.target.position) < guard.data.atkShortestDistance)
-        {
-            guard.explode.Excute();
-        }
+        
     }
 
     public override void Stop()

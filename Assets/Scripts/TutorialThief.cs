@@ -28,6 +28,7 @@ public class TutorialThief : Actor
         spriteSheet.AddAnim("landing", 1, 0.2f);
         spriteSheet.AddAnim("hitted", 1, 0.2f);
         spriteSheet.AddAnim("lifeOver", 6, 0.8f);
+        moving.move_anim = "moving";
         spriteRenderer.color = UnityEngine.Color.black;
     }
 

@@ -432,8 +432,11 @@ public class Actor : UnityEngine.MonoBehaviour
         else
         {
             transform.localEulerAngles = UnityEngine.Vector3.zero;
+        }
+        if (eye)
+        {
+            eye.dirCache = v;
         }        
-        eye.dirCache = v;
     }
 
     public virtual void SpotByEnemy(Guard guard)

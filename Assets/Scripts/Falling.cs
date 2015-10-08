@@ -11,6 +11,7 @@ public class Falling : Action
     public override void Excute()
     {
         base.Excute();        
+        actor.spriteRenderer.material = (actor as Magician).flyingMat;
         actor.characterController.enabled = false;
         transform.position = from;
         actor.moving.canMove = false;
@@ -40,6 +41,7 @@ public class Falling : Action
         actor.characterController.enabled = true;
         actor.spriteSheet.Play("idle");
         actor.head_on_minimap.SetActive(true);
+        actor.spriteRenderer.material = (actor as Magician).groundMat;
         Stop();
     }
 }

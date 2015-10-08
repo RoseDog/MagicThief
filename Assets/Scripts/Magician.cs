@@ -17,13 +17,18 @@ public class Magician : Actor
     public UnityEngine.GameObject TrickTimerPrefab;    
     
     System.Collections.Generic.List<UnityEngine.AudioClip> stepSounds = new System.Collections.Generic.List<UnityEngine.AudioClip>();
-    UnityEngine.AudioClip openChestSound;
+    public UnityEngine.AudioClip openChestSound;
     public MagicianData data;
 
     float sneakingAnimSpeed;
-    float normalMovingAnimSpeed;
+    [UnityEngine.HideInInspector]
+    public float normalMovingAnimSpeed;
     float runningAnimSpeed;
-    
+    public float speedModifier;
+
+    public UnityEngine.Material flyingMat;
+    public UnityEngine.Material groundMat;
+        
     public override void Awake()
     {
         base.Awake();
@@ -34,12 +39,10 @@ public class Magician : Actor
         stepSounds.Add(UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/StepSounds/footstepSound_A_03"));
         stepSounds.Add(UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/StepSounds/footstepSound_A_04"));
 
-        openChestSound = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/StepSounds/footstepSound_A_04");
-
-
         sneakingAnimSpeed = 2.5f;
-        normalMovingAnimSpeed = 2.4f;
-        runningAnimSpeed = 3.3f;
+        normalMovingAnimSpeed = 1.8f;
+        runningAnimSpeed = 3.0f;
+        speedModifier = 1.0f;
       
         spriteSheet.AddAnim("idle", 4);
         spriteSheet.AddAnim("moving", 6, normalMovingAnimSpeed);
@@ -223,11 +226,11 @@ public class Magician : Actor
     public void StepSound()
     {
         if (!isSneaking)
-        {            
+        {
             UnityEngine.AudioClip clip = stepSounds[UnityEngine.Random.Range(0, stepSounds.Count)];
             audioSource.PlayOneShot(clip);
-            audioSource.volume = 0.7f;
-
+            audioSource.volume = 0.7f;                
+            
             if (stepCount%3==0)
             {
                 BarkSoundWave wave = (UnityEngine.GameObject.Instantiate(Globals.wave_prefab) as UnityEngine.GameObject).GetComponent<BarkSoundWave>();
@@ -254,6 +257,10 @@ public class Magician : Actor
 
     public void CastMagic(TrickData data)
     {
+        if (!Globals.canvasForMagician.tricksInUsingPanel.activeSelf)
+        {
+            return;
+        }
         if (Stealing && data.clickButtonToCast && ChangePower(-data.powerCost))
         {
             Globals.replaySystem.RecordMagicCast(data);            
@@ -356,23 +363,19 @@ public class Magician : Actor
     }
 
     public override double GetSpeed()
-    {
+    {        
         if (isSneaking)
         {
-            sneakingAnimSpeed = 2.5f;
-            normalMovingAnimSpeed = 2.4f;
-            runningAnimSpeed = 3.0f;
-
-            spriteSheet.ModifyAnimSpeed("sneaking", sneakingAnimSpeed * data.GetSneakingSpeed() / data.sneakingSpeed);
-            return data.GetSneakingSpeed();
+            spriteSheet.ModifyAnimSpeed("sneaking", speedModifier * sneakingAnimSpeed * data.GetSneakingSpeed() / data.sneakingSpeed);
+            return speedModifier * data.GetSneakingSpeed();
         }  
         else if(chasingGuards.Count != 0)
         {
-            spriteSheet.ModifyAnimSpeed("moving", runningAnimSpeed * data.GetRunningSpeed() / data.runningSpeed);
-            return data.GetRunningSpeed();
+            spriteSheet.ModifyAnimSpeed("moving", speedModifier * runningAnimSpeed * data.GetRunningSpeed() / data.runningSpeed);
+            return speedModifier * data.GetRunningSpeed();
         }
 
-        spriteSheet.ModifyAnimSpeed("moving", normalMovingAnimSpeed * data.GetNormalSpeed() / data.normalSpeed);
-        return data.GetNormalSpeed();
+        spriteSheet.ModifyAnimSpeed("moving", speedModifier * normalMovingAnimSpeed * data.GetNormalSpeed() / data.normalSpeed);
+        return speedModifier * data.GetNormalSpeed();
     }
 }

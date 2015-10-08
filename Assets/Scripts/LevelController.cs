@@ -106,8 +106,12 @@ public class LevelController : Actor
             }
             Globals.maze.owner_of_maze.UnpackCashOnFloorStr(str);
         }
-        Globals.maze.owner_of_maze.SpreadItemsDroppedFromThiefInMaze();
-        Globals.maze.owner_of_maze.SpreadCashOnFloor();
+
+        if (!Globals.maze.owner_of_maze.isBot)
+        {
+            Globals.maze.owner_of_maze.SpreadItemsDroppedFromThiefInMaze();
+            Globals.maze.owner_of_maze.SpreadCashOnFloor();
+        }        
 	}
 
     protected bool bIsPerfectStealing = false;
@@ -115,10 +119,10 @@ public class LevelController : Actor
     protected int rose_bonus = 5;
     public virtual void MagicianGotCash(float value)
     {        
-//         if (bIsPerfectStealing)
-//         {
-//             return;
-//         }
+        if (bIsPerfectStealing)
+        {
+            return;
+        }
 // 
 //        bIsPerfectStealing = true;
 //        PerfectStealing();
@@ -225,45 +229,55 @@ public class LevelController : Actor
             {
                 Actor b = Globals.actors[idx_b];                
                 if(a.characterController && b.characterController &&
-                   a.characterController.enabled && b.characterController.enabled &&
                     !UnityEngine.Physics.GetIgnoreLayerCollision(a.gameObject.layer, b.gameObject.layer))// 如果是要碰撞的
                 {
-
-                    UnityEngine.Vector3 a_pos = a.GetWorldCenterPos();
-                    UnityEngine.Vector3 b_pos = b.GetWorldCenterPos();
-
-                    float dis = UnityEngine.Vector3.Distance(a_pos, b_pos);
-
-                    if(Globals.DEBUG_REPLAY)
+                    if (a.characterController.enabled && b.characterController.enabled)
                     {
-                        System.String content_test = a.gameObject.name + " " + b.gameObject.name;
-                    content_test += " dis:" + dis.ToString("F5") + " a_radius:" + a.GetWorldRadius().ToString("F5") + " b_radius:" + b.GetWorldRadius().ToString("F5");
-                    Globals.record("testReplay", content_test);
-                    }
+                        UnityEngine.Vector3 a_pos = a.GetWorldCenterPos();
+                        UnityEngine.Vector3 b_pos = b.GetWorldCenterPos();
 
-                    
+                        float dis = UnityEngine.Vector3.Distance(a_pos, b_pos);
 
-                    if (dis < a.GetWorldRadius() + b.GetWorldRadius())
-                    {
-                        if (!a.IsTouching(b))
+                        if (Globals.DEBUG_REPLAY)
                         {
-                            a.TouchBegin(b);
-                            b.TouchBegin(a);
+                            System.String content_test = a.gameObject.name + " " + b.gameObject.name;
+                            content_test += " dis:" + dis.ToString("F5") + " a_radius:" + a.GetWorldRadius().ToString("F5") + " b_radius:" + b.GetWorldRadius().ToString("F5");
+                            Globals.record("testReplay", content_test);
                         }
+
+                        if (dis < a.GetWorldRadius() + b.GetWorldRadius())
+                        {
+                            if (!a.IsTouching(b))
+                            {
+                                a.TouchBegin(b);
+                                b.TouchBegin(a);
+                            }
+                            else
+                            {
+                                a.TouchStay(b);
+                                b.TouchStay(a);
+                            }
+                        }
+                            
                         else
                         {
-                            a.TouchStay(b);
-                            b.TouchStay(a);
-                        }                        
+                            //本来相交的两个， 现在不想交了
+                            if (a.IsTouching(b))
+                            {
+                                a.TouchOut(b);
+                                b.TouchOut(a);
+                            }
+                        }
                     }
                     else
                     {
+                        //本来相交的两个， 突然有一个enable=false了
                         if (a.IsTouching(b))
                         {
                             a.TouchOut(b);
                             b.TouchOut(a);
                         }
-                    }
+                    }                                        
                 }
             }
         }
@@ -304,25 +318,25 @@ public class LevelController : Actor
             // floor
             if (sprite.gameObject.layer != 9)
             {
-                // 魔术师下落的过程中，看得到魔术师。但是不开拓出任何视野
-                if (sprite.gameObject.layer == 11 && 
-                    (magician.currentAction == magician.falling || magician.currentAction == magician.escape))
+                // 魔术师下落的过程中，看得到魔术师。但是不开拓出任何视野                
+                if (sprite.gameObject.layer == 11 &&
+                    (magician != null && (magician.currentAction == magician.falling || magician.currentAction == magician.escape)))
                 {
-                    sprite.sortingOrder = 10;
+                    sprite.sortingOrder = 10000;
                 }
-                    // shadow
-                else if (sprite.gameObject.layer == 18)
+                    // shadow,guard fov,dog fov, bark
+                else if (sprite.gameObject.layer == 18 || sprite.gameObject.layer == 10 || sprite.gameObject.layer == 27 || sprite.gameObject.layer == 19)
                 {
                 }
                     // Wall, E, W
-                else if (sprite.gameObject.layer == 8 && sprite.sortingOrder == -1)
+                else if (sprite.gameObject.layer == 8 && sprite.sortingOrder == 5000)
                 {
 
                 }
                 // LightSource,FlyUp
                 else if (sprite.gameObject.layer == 21 || sprite.gameObject.layer == 26)
                 {
-                    sprite.sortingOrder = -1;
+                    sprite.sortingOrder = 10000-1;
                 }
                 // HeadOnMiniMap
                 else if (sprite.gameObject.layer == 28)
@@ -335,7 +349,9 @@ public class LevelController : Actor
                 }
                 else
                 {
-                    sprite.sortingOrder = UnityEngine.Mathf.RoundToInt((2000 + sprite.transform.position.y)) * -1;
+                    //sprite.sortingOrder = UnityEngine.Mathf.RoundToInt((2000 + sprite.transform.position.y)) * -1;
+
+                    sprite.sortingOrder = UnityEngine.Mathf.RoundToInt((2000 - sprite.transform.position.y));
                 }
             }
             else

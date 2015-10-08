@@ -2,6 +2,7 @@ public class TrickTimer : Actor
 {
     public UnityEngine.GameObject actor;
     UnityEngine.UI.Image unlockProgressSprite;
+    public UnityEngine.UI.Image unlockProgressBG;
     UnityEngine.UI.Text timerText;
 
     int duration;
@@ -18,7 +19,7 @@ public class TrickTimer : Actor
             unlockProgressSprite.fillMethod = UnityEngine.UI.Image.FillMethod.Horizontal;
             unlockProgressSprite.fillOrigin = (int)UnityEngine.UI.Image.OriginHorizontal.Left;
         }
-        
+        StopCount();
     }
 
     public void BeginCountDown(UnityEngine.GameObject a, int durationTime, UnityEngine.Vector3 timerOffset)
@@ -28,6 +29,15 @@ public class TrickTimer : Actor
         lastFrames = durationTime;
         posOffset = timerOffset;
         transform.position = actor.transform.position + posOffset;
+        unlockProgressBG.gameObject.SetActive(true);
+        timerText.enabled = true;
+    }
+
+    public void StopCount()
+    {
+        actor = null;
+        unlockProgressBG.gameObject.SetActive(false);
+        timerText.enabled = false;
     }
 
     public void AddFrameTime(int frames)
@@ -56,6 +66,7 @@ public class TrickTimer : Actor
             if (lastFrames <= 0.0f)
             {
                 lastFrames = 0;
+                StopCount();
             }            
         }
     }

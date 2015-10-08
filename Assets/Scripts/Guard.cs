@@ -64,7 +64,7 @@ public class Guard : Actor, System.IComparable<Guard>
         if (eye != null)
         {
             eye.guard = this;
-        }
+        }        
     }
 
     public override void OnDestroy()

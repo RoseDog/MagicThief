@@ -11,10 +11,10 @@ Shader "Custom/Sprites"
 	{
 		Tags
 		{ 
-			"Queue"="Transparent" 
+			"Queue"="Transparent-500" 
 			"IgnoreProjector"="True" 
 			"RenderType"="Transparent" 
-			"PreviewType"="Plane"
+			//"PreviewType"="Plane"
 			"CanUseSpriteAtlas"="True"
 		}
 

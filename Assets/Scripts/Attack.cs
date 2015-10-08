@@ -145,7 +145,7 @@ public class Attack : GuardAction
 
     public virtual bool checkTargetStillAlive()
     {
-        if (guard.spot.target.GetComponent<Actor>().IsLifeOver())
+        if (guard.spot.target == null || guard.spot.target.GetComponent<Actor>().IsLifeOver())
         {
             guard.wandering.Excute();
             return false;
@@ -155,10 +155,14 @@ public class Attack : GuardAction
 
     public virtual bool checkTargetStillClose()
     {
+        if (guard.spot.target == null)
+        {
+            return false;
+        }
         System.Diagnostics.Debug.Assert(guard.spot.target != null);
 
         float atkShortestDistance = guard.data.atkShortestDistance;
-        if (guard.spriteSheet.HasAnimation("kick") && Globals.stealingController.magician.currentAction == Globals.stealingController.magician.catchByNet)
+        if (guard.spriteSheet.HasAnimation("kick") && Globals.stealingController != null && Globals.stealingController.magician.currentAction == Globals.stealingController.magician.catchByNet)
         {
             atkShortestDistance = 50f;
         }

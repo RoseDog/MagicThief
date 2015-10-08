@@ -74,7 +74,7 @@ public class TrickSlot : CustomEventTrigger
             // 否则打开装备界面
             else if (!Globals.canvasForMagician.tricksBg.gameObject.activeSelf)
             {
-                Globals.canvasForMagician.OpenTricksUI();
+                Globals.canvasForMagician.OpenTricksUI(Globals.canvasForMagician.potrait);
                 Globals.canvasForMagician.SetTrickDescriptionVisible(false);
             }            
         }        

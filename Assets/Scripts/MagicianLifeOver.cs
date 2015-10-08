@@ -31,7 +31,7 @@ public class MagicianLifeOver : LifeOver
     void Escape()
     {
         Globals.cameraFollowMagician.target = null;
-        actor.SleepThenCallFunction((actor as Magician).escape.GetDuration(),
+        actor.SleepThenCallFunction( (int)((actor as Magician).escape.GetDuration()*0.5f),
             () => (Globals.LevelController as StealingLevelController).AfterMagicianLifeOverEscaped());
         (actor as Magician).escape.Go("lifeOverEscape");
     }

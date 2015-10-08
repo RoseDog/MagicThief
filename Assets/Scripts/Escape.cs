@@ -22,12 +22,14 @@ public class Escape : Action
         }
 
         actor.head_on_minimap.SetActive(false);
+        actor.spriteRenderer.material = (actor as Magician).flyingMat;
     }
 
     void EscapeOver()
     {        
         Stop();
         actor.head_on_minimap.SetActive(true);
+        actor.spriteRenderer.material = (actor as Magician).groundMat;
         actor.shadow.enabled = true;
         Globals.stealingController.magician.gameObject.SetActive(false);        
     }

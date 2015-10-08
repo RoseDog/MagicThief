@@ -56,7 +56,10 @@ public class WanderingLostTarget : GuardAction
         {
             ((call as Sequence).actions[0] as SleepFor)._start_frame = Globals.LevelController.frameCount;
         }
-        Globals.stealingController.magician.EnemyStopChasing(guard);
+        if (Globals.stealingController != null)
+        {
+            Globals.stealingController.magician.EnemyStopChasing(guard);
+        }        
     }
 
     void Sound()
