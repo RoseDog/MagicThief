@@ -39,7 +39,7 @@ public class Spot : GuardAction
             
             if(target == null)
             {
-                guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Alert);
+                guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Alert);    
                 guard.spriteSheet.Play("spot");
                 newTar.GetComponent<Actor>().SpotByEnemy(guard);
             }            

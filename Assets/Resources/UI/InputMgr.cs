@@ -360,7 +360,7 @@ public class InputMgr : MonoBehaviour
     float cameraPinchZoomingSpeed = 0.002f;
 
     void Awake()
-    {
+    {        
         DontDestroyOnLoad(this);
         Globals.input = this;
         UnityEngine.Application.targetFrameRate = 30;

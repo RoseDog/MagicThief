@@ -1,0 +1,17 @@
+﻿GuardCount=0
+randSeedCacheWhenEditLevel=1509728343
+Z_CELLS_COUNT=7
+X_CELLS_COUNT=12
+CHANGE_DIRECTION_MODIFIER=80
+sparsenessModifier=10
+deadEndRemovalModifier=100
+noOfRoomsToPlace=5
+minRoomXCellsCount=3
+maxRoomXCellsCount=4
+minRoomZCellsCount=2
+maxRoomZCellsCount=3
+GEMS_COUNT=5
+LAMPS_COUNT=0
+LevelTipText=
+CASH=15000
+droppedItemsStr=,dove,flyUp,hypnosis

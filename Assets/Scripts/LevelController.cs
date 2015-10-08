@@ -2,7 +2,7 @@ public class LevelController : Actor
 {
     public int randSeedCache;
     public UnityEngine.Canvas mainCanvas;
-    UnityEngine.Camera MiniMapCamera;
+    public UnityEngine.Camera MiniMapCamera;
     public UnityEngine.GameObject fogPlane;
     public UnityEngine.Camera fogCam;
     public UnityEngine.Camera fogCam_2;
@@ -18,25 +18,8 @@ public class LevelController : Actor
         {
             UnityEngine.GameObject mgrs_prefab = UnityEngine.Resources.Load("GlobalMgrs") as UnityEngine.GameObject;
             UnityEngine.GameObject.Instantiate(mgrs_prefab);
-        }        
+        }                       
         
-        UnityEngine.GameObject minimapCamObj = UnityEngine.GameObject.Find("MiniMapCamera");
-        if (minimapCamObj != null)
-        {
-            MiniMapCamera = minimapCamObj.GetComponent<UnityEngine.Camera>();
-        }
-
-        if (UnityEngine.GameObject.Find("FogCamera") != null)
-        {
-            fogCam = UnityEngine.GameObject.Find("FogCamera").GetComponent<UnityEngine.Camera>();
-            fogPlane = UnityEngine.GameObject.Find("FogPlane");
-
-            UnityEngine.GameObject cam2 = UnityEngine.GameObject.Find("FogCamera_2");
-            if(cam2 != null)
-            {
-                fogCam_2 = cam2.GetComponent<UnityEngine.Camera>();
-            }                                 
-        }
         frameCount = 0;
     }
 
@@ -73,12 +56,7 @@ public class LevelController : Actor
 
     public virtual void MazeFinished()
     {        
-        // 创建相机，不允许跟随
-        if (Globals.cameraFollowMagician == null)
-        {
-            UnityEngine.GameObject camera_follow_prefab = UnityEngine.Resources.Load("CameraFollowMagician") as UnityEngine.GameObject;
-            UnityEngine.GameObject.Instantiate(camera_follow_prefab);
-        }
+        // 创建相机，不允许跟随        
         Globals.maze.SetRestrictToCamera(Globals.cameraFollowMagician);
 
         UnityEngine.Debug.Log(Globals.iniFileName);
@@ -106,13 +84,30 @@ public class LevelController : Actor
             MiniMapCamera.transform.position.z);
         MiniMapCamera.orthographicSize = 
             (Globals.maze.X_CELLS_COUNT > Globals.maze.Y_CELLS_COUNT ? Globals.maze.X_CELLS_COUNT : Globals.maze.Y_CELLS_COUNT) 
-            * Globals.maze.GetCellSideLength() * 0.5f;
+            * Globals.GetCellSideLength() * 0.5f;
         Globals.cameraFollowMagician.OpenMinimap();
         if (Globals.maze.droppedItemsStr != "")
         {
-            Globals.maze.owner_of_maze.UnpackDroppedItemStr(Globals.maze.droppedItemsStr);            
+            System.String str = "";
+            System.String[] item_names = Globals.maze.droppedItemsStr.Split(',');            
+            foreach(System.String name in item_names)
+            {
+                str += "_" + UnityEngine.Random.Range(0.0f, 1.0f) + "," + UnityEngine.Random.Range(0.0f, 1.0f) + "," +name;
+            }
+            Globals.maze.owner_of_maze.UnpackDroppedItemStr(str);            
+        }
+        if (Globals.maze.cashOnFloorStr != "")
+        {
+            System.String str = "";
+            System.String[] cashes = Globals.maze.cashOnFloorStr.Split(',');
+            foreach (System.String cash in cashes)
+            {
+                str += "_" + UnityEngine.Random.Range(0.0f, 1.0f) + "," + UnityEngine.Random.Range(0.0f, 1.0f) + "," + cash;
+            }
+            Globals.maze.owner_of_maze.UnpackCashOnFloorStr(str);
         }
         Globals.maze.owner_of_maze.SpreadItemsDroppedFromThiefInMaze();
+        Globals.maze.owner_of_maze.SpreadCashOnFloor();
 	}
 
     protected bool bIsPerfectStealing = false;
@@ -120,24 +115,14 @@ public class LevelController : Actor
     protected int rose_bonus = 5;
     public virtual void MagicianGotCash(float value)
     {        
-        if (bIsPerfectStealing)
-        {
-            return;
-        }
-
+//         if (bIsPerfectStealing)
+//         {
+//             return;
+//         }
+// 
 //        bIsPerfectStealing = true;
 //        PerfectStealing();
-//        return;
-
-        // 检查宝石
-        PickedItem[] items = UnityEngine.GameObject.FindObjectsOfType<PickedItem>();
-        foreach(PickedItem item in items)
-        {
-            if (item.holder && item.GetCash() != 0)
-            {
-                return;
-            }
-        }
+//        return;       
         // 检查箱子
         foreach (Chest chest in Globals.maze.chests)
         {

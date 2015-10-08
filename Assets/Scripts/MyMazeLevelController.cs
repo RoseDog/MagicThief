@@ -89,7 +89,8 @@ public class MyMazeLevelController : LevelController
         }
         Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>().enabled = true;
         Globals.cameraFollowMagician.Reset();
-        Globals.canvasForMyMaze.CheckRoomFullUses();        
+        Globals.canvasForMyMaze.CheckRoomFullUses();
+        Globals.canvasForMyMaze.UpdateIncomeIntro();
         
         Globals.EnableAllInput(true);
         Globals.canvasForMagician.RoseNumberBg.SetActive(true);
@@ -265,8 +266,7 @@ public class MyMazeLevelController : LevelController
     public override void GuardCreated(Guard guard)
     {
         base.GuardCreated(guard);
-        guard.InitArrangeUI();
-        Globals.canvasForMyMaze.CheckRoomFullUses();
+        guard.InitArrangeUI();        
     }
 
     public override void GuardDestroyed(Guard guard)
@@ -277,6 +277,7 @@ public class MyMazeLevelController : LevelController
         Globals.canvasForMyMaze.CheckRoomFullUses();
         Globals.maze.guards.Remove(guard);
         Globals.self.UploadGuards();
+        Globals.canvasForMyMaze.UpdateIncomeIntro();
     }
 
     public override void GuardChoosen(Guard guard)
@@ -299,6 +300,8 @@ public class MyMazeLevelController : LevelController
         else
         {
             Globals.canvasForMyMaze.enhanceDefenseUI.gameObject.SetActive(true);
+            Globals.canvasForMyMaze.CheckRoomFullUses();
+            Globals.canvasForMyMaze.UpdateIncomeIntro();
         }
         base.GuardDropped(guard);
     }

@@ -53,7 +53,7 @@ public class BeenStolenReport : CustomEventTrigger
             Globals.languageTable.SetText(time_stamp, "few_minutes_ago");
         }
 
-        if (replay.StealingCash > 0)
+        if (replay.StealingCashInSafebox > 0)
         {
             stolen_by_others_event.color = UnityEngine.Color.red;
             Globals.languageTable.SetText(stolen_by_others_event, "stolen_by_others_event_guards_failed", new System.String[] { replay.thief.name, replay.thief.roseCount.ToString() });
@@ -65,7 +65,7 @@ public class BeenStolenReport : CustomEventTrigger
         }          
         
         Globals.languageTable.SetText(stealing_cash, "stealing_cash",
-            new System.String[] { replay.StealingCash.ToString("F0") });
+            new System.String[] { (replay.StealingCashInSafebox + replay.PickedCash).ToString("F0") });
     }
 
     public void CloseBtnClicked()

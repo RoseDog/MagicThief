@@ -21,9 +21,9 @@ public class PathFinder : UnityEngine.MonoBehaviour
     {
         graph = path.astarData.graphs[0] as Pathfinding.GridGraph;
         graph.nodes = null;
-        graph.width = UnityEngine.Mathf.RoundToInt(Globals.maze.X_CELLS_COUNT * Globals.maze.GetCellSideLength() * (1 / grideNodeSize));
-        graph.depth = UnityEngine.Mathf.RoundToInt(Globals.maze.Y_CELLS_COUNT * Globals.maze.GetCellSideLength() * (1 / grideNodeSize));
-        graph.center = new UnityEngine.Vector3(-Globals.maze.GetCellSideLength(), 0, 0);
+        graph.width = UnityEngine.Mathf.RoundToInt(Globals.maze.X_CELLS_COUNT * Globals.GetCellSideLength() * (1 / grideNodeSize));
+        graph.depth = UnityEngine.Mathf.RoundToInt(Globals.maze.Y_CELLS_COUNT * Globals.GetCellSideLength() * (1 / grideNodeSize));
+        graph.center = new UnityEngine.Vector3(-Globals.GetCellSideLength(), 0, 0);
         //graph.nodeSize = map.cell_side_length / 2.0f;
         graph.nodeSize = grideNodeSize;
         graph.collision.diameter = 0.1f;

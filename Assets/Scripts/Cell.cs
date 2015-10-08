@@ -224,7 +224,7 @@ public class Cell : Actor
         UnityEngine.GameObject wall = Globals.getChildGameObject(cell.gameObject, dir);
         if (wall == null)
         {            
-            UnityEngine.GameObject wall_prefab = Globals.getChildGameObject(Globals.maze.cell_prefab, dir);
+            UnityEngine.GameObject wall_prefab = Globals.getChildGameObject(Globals.cell_prefab, dir);
             wall = UnityEngine.GameObject.Instantiate(wall_prefab) as UnityEngine.GameObject;
             wall.name = dir;            
             UnityEngine.Vector3 pos_cache = wall.transform.localPosition;
@@ -232,6 +232,7 @@ public class Cell : Actor
             wall.transform.parent = cell.transform;
             wall.transform.localScale = scale_cache;
             wall.transform.localPosition = pos_cache;
+
 
             if (dir == Globals.EAST)
             {
@@ -258,7 +259,7 @@ public class Cell : Actor
     {
         if (GetFloor() == null)
         {
-            UnityEngine.GameObject floor_prefab = Globals.getChildGameObject(Globals.maze.cell_prefab, "floor_tile");
+            UnityEngine.GameObject floor_prefab = Globals.getChildGameObject(Globals.cell_prefab, "floor_tile");
             UnityEngine.GameObject floor = UnityEngine.GameObject.Instantiate(floor_prefab) as UnityEngine.GameObject;
             floor.name = "floor_tile";
             UnityEngine.Vector3 scale_cache = floor.transform.localScale;
@@ -297,7 +298,7 @@ public class Cell : Actor
     public UnityEngine.Vector3 GetRandFloorPos()
     {
         UnityEngine.GameObject floor = GetFloor();
-        float offset_limit = Globals.maze.GetCellSideLength() * 0.3f;
+        float offset_limit = Globals.GetCellSideLength() * 0.3f;
         return floor.transform.position + new UnityEngine.Vector3(UnityEngine.Random.Range(-offset_limit, offset_limit), UnityEngine.Random.Range(-offset_limit, offset_limit), 0.0f);
     }
 

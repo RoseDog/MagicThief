@@ -2,6 +2,7 @@
 require 'eventmachine'
 require 'websocket-eventmachine-server'
 require 'yaml'
+require 'securerandom'
 PORT = 42788
 $onlinePlayers = []
 class Numeric
@@ -72,6 +73,9 @@ class UserFile
   attr_accessor :Clouds
   attr_accessor :trickDatas
   attr_accessor :droppedItemsFromThief
+  attr_accessor :performingIncomePerHour
+  attr_accessor :cashOnFloor
+  attr_accessor :calcDataDuringOffLineTimeStamp
   def initialize(roseBuildingDuration, bornNewTargetDuration)
     @name = ""
     @deviceID = "-1"
@@ -133,10 +137,13 @@ class UserFile
     @trickDatas=[TrickData.new("hypnosis", false,10),
                  TrickData.new("disguise", false,0),
                  TrickData.new("dove", false,0),
-                 TrickData.new("flash_grenade", false,0),
+                 TrickData.new("flashGrenade", false,0),
                  TrickData.new("shotLight", false,0),
                  TrickData.new("flyUp", false,0)]
     @droppedItemsFromThief=[]
+    @performingIncomePerHour=0
+    @cashOnFloor=[]
+    @calcDataDuringOffLineTimeStamp=Time.now
   end
 end
 
@@ -182,7 +189,8 @@ end
 
 class ReplayData
   attr_accessor :date
-  attr_accessor :StealingCash
+  attr_accessor :StealingCashInSafebox
+  attr_accessor :PickedCash
   attr_accessor :ini
   attr_accessor :everClicked
   attr_accessor :rewardAccepted
@@ -215,6 +223,7 @@ class Player
     @bornNewTargetDuration = 60*15
     @userFile = UserFile.new(@roseBuildingDuration,@bornNewTargetDuration)
     @punishRoseCount = 3
+    @performingIncomeCycle = 60 * 10
   end
 
   def send(msg)
@@ -241,6 +250,7 @@ class Player
         @userFile = ReadPlayerFile(userID+".yaml")
         if(deviceID == @userFile.deviceID)
           send(protocal_no + @seperator + "ok")
+          CalcDataDuringOffLine(true)
         else
           send(protocal_no + @seperator + "duplicated")
         end
@@ -249,6 +259,7 @@ class Player
         @userFile.name = userID
         @userFile.deviceID = deviceID
         SaveToFile(userID+".yaml", @userFile)
+        CalcDataDuringOffLine(true)
       end
     else
       send(protocal_no + @seperator + "version_error")
@@ -297,7 +308,9 @@ class Player
       reply += mage_data.wisdomAllot.to_s + ","
     }
     reply += "&"
-    playerFile.droppedItemsFromThief.each{ |item| reply += "," + "#{item}"}
+    playerFile.droppedItemsFromThief.each{ |item| reply += "_" + "#{item}"}
+    reply += "&"
+    playerFile.cashOnFloor.each{ |cash| reply += "_" + "#{cash}"}
     reply
   end
 
@@ -344,11 +357,10 @@ class Player
     end
   end
 
-  def RemoveDroppedItem(protocal_no,contents,player)
+  def RemoveDroppedItem(protocal_no,contents)
     trickname = contents[0]
-    player.userFile.droppedItemsFromThief.delete(trickname)
+    userFile.droppedItemsFromThief.delete(trickname)
   end
-
 
   def SlotBought(protocal_no,contents)
     slotIdx = contents[0].to_i
@@ -415,6 +427,7 @@ class Player
 
   def UploadSummonedGuards(protocal_no,contents)
     @userFile.guardsSummoned = contents[0]
+    @userFile.performingIncomePerHour = contents[1].to_f
   end
 
   def ClickTarget(protocal_no,contents)
@@ -697,7 +710,8 @@ class Player
 
   def PackReplay(replay)
     returnStr = replay.date +
-        @seperator + replay.StealingCash+
+        @seperator + replay.StealingCashInSafebox+
+        @seperator + replay.PickedCash+
         @seperator + replay.ini+
         @seperator + replay.everClicked+
         @seperator + replay.thief+
@@ -710,35 +724,34 @@ class Player
   def StealingOver(protocal_no,contents, enemy)
     replay = ReplayData.new()
     replay.date = contents[0]
-    replay.StealingCash = contents[1]
-    replay.ini = contents[2]
-    replay.everClicked = contents[3]
+    replay.StealingCashInSafebox = contents[1]
+    replay.PickedCash = contents[2]
+    replay.ini = contents[3]
+    replay.everClicked = contents[4]
     replay.thief = StealingInfo(@userFile)
     replay.reward_rose_count = 0
     replay.rewardAccepted = false
-    bIsPerfectStealing = contents[4].to_bool
+    bIsPerfectStealing = contents[5].to_bool
     enemyCashBeforeSteal = 1.0
     # 如果是pvp，要扣除对方金钱
     if !enemy.userFile.isBot
       replay.guard = StealingInfo(enemy.userFile)
       enemy.userFile.beenStealingTimeStamp = Time.now
-      if replay.StealingCash.to_f < 1
+      if replay.StealingCashInSafebox.to_f < 1
         replay.reward_rose_count = 2
       end
       if $onlinePlayers.include?enemy
         enemy.send("been_stolen" + @seperator + PackReplay(replay) + @seperator + "True")
       else
         enemyCashBeforeSteal = enemy.userFile.cashAmount.to_f
-        enemy.userFile.cashAmount = (enemyCashBeforeSteal - replay.StealingCash.to_f).to_s
+        enemy.userFile.cashAmount = (enemyCashBeforeSteal - replay.StealingCashInSafebox.to_f).to_s
         enemy.userFile.defReplays << replay
         enemy.userFile.defReplays.shift if enemy.userFile.defReplays.length > 5
-        SaveToFile(enemy.userFile.name + ".yaml", enemy.userFile)
       end
-
     else
       # bot的金钱是客户端上传的
-      enemy.userFile.cashAmount = contents[5].to_f
-      enemyCashBeforeSteal = contents[5].to_f
+      enemy.userFile.cashAmount = contents[6].to_f
+      enemyCashBeforeSteal = contents[6].to_f
       replay.guard = StealingInfo(enemy.userFile)
     end
 
@@ -746,8 +759,8 @@ class Player
     @userFile.atkReplays.shift if @userFile.atkReplays.length > 5
 
     send("atk_replay" + seperator + PackReplay(replay))
-    stolen_cash_ratio =  (replay.StealingCash.to_f / enemyCashBeforeSteal).clamp(0.0, 1.0)
-    buildingPosID = contents[6]
+    stolen_cash_ratio =  (replay.StealingCashInSafebox.to_f / enemyCashBeforeSteal).clamp(0.0, 1.0)
+    buildingPosID = contents[7]
     building = GetBuilding(buildingPosID)
     building.roseGrowTotalDuration = @roseBuildingDuration * stolen_cash_ratio
     # 如果是玩家，偷窃0.2以上，刷新成收玫瑰，否则更换目标
@@ -822,6 +835,43 @@ class Player
     SendNewTarget(GetBuilding(contents[0]))
   end
 
+  def CalcDataDuringOffLine(isLogin)
+    timeDuration = Time.now - @userFile.calcDataDuringOffLineTimeStamp
+    @userFile.calcDataDuringOffLineTimeStamp = Time.now
+    cash_on_floor_count = timeDuration / @performingIncomeCycle
+
+    for i in 0..cash_on_floor_count
+      addCashOnFloor()
+    end
+
+    if isLogin
+      @PerformingIncomeTimer = EM.add_periodic_timer(@performingIncomeCycle) do
+        PerformingIncome()
+      end
+    end
+  end
+
+  def addCashOnFloor
+    cash_income = (@performingIncomeCycle * @userFile.performingIncomePerHour / (60.0*60.0)).to_i
+    if cash_income > 0
+      cash_id = Random.rand(0.0..1.0).to_s + "," + Random.rand(0.0..1.0).to_s + "," + cash_income.to_s
+      @userFile.cashOnFloor << cash_id
+      return cash_id
+    end
+    return 0
+  end
+
+  def PerformingIncome()
+    cash_id = addCashOnFloor()
+    if cash_id != 0
+      send("performing_income" + @seperator + cash_id)
+    end
+  end
+
+  def RemoveCashOnFloor(protocal_no,contents)
+    @userFile.cashOnFloor.delete(contents[0])
+  end
+
   def Close
     if(@userFile != nil)
       @userFile.Buildings.each{ |building|
@@ -839,7 +889,10 @@ class Player
           building.bornNewTargetLastDuration = @bornNewTargetDuration - (Time.now - building.newTargetTimeStamp)
         end
       }
+      EM.cancel_timer(@PerformingIncomeTimer)
+      @PerformingIncomeTimer = nil
       @userFile.logOutTimeStamp = Time.now
+      @userFile.calcDataDuringOffLineTimeStamp = Time.now
       SaveToFile(@userFile.name + ".yaml", @userFile)
     end
   end
@@ -919,9 +972,7 @@ EM::run do
                 if enemy == nil
                   enemy = Player.new(ws)
                   enemy.userFile = enemy.ReadPlayerFile((targetName + ".yaml").force_encoding('utf-8'))
-                end
-                if enemy.userFile.cashAmount.to_f < 1000
-                  enemy.userFile.cashAmount = "5000"
+                  enemy.CalcDataDuringOffLine(false)
                 end
               else
                 enemy = Player.new(ws)
@@ -935,10 +986,12 @@ EM::run do
               player.websocket.send("download_target" + player.seperator + enemy.StealingInfo(enemy.userFile))
 
             when "stealing_over"
-              if enemy != nil
-                player.StealingOver(protocal_no,contents, enemy)
-                enemy = nil
+              player.StealingOver(protocal_no,contents, enemy)
+            when "calc_stealing_data_over"
+              if enemy.userFile.isBot == false and !$onlinePlayers.include?enemy
+                enemy.SaveToFile(enemy.userFile.name + ".yaml", enemy.userFile)
               end
+              enemy = nil
             when "cash"
               player.Cash(protocal_no,contents)
             when "pick_rose"
@@ -975,6 +1028,18 @@ EM::run do
               player.UploadMagician(protocal_no,contents)
             when "select_magician"
               player.SelectMagician(protocal_no,contents)
+            when "RemoveCashOnFloor"
+              if enemy != nil
+                enemy.RemoveCashOnFloor(protocal_no,contents)
+              else
+                player.RemoveCashOnFloor(protocal_no,contents)
+              end
+            when "RemoveDroppedItem"
+              if enemy != nil
+                enemy.RemoveDroppedItem(protocal_no,contents)
+              else
+                player.RemoveDroppedItem(protocal_no,contents)
+              end
           end
           rescue Exception => e
             file = File.new('ErrorLogs.txt',"a+:UTF-8")

@@ -148,8 +148,8 @@ public class TrickSlot : CustomEventTrigger
             MultiLanguageUIText tip = Globals.canvasForMagician.cast_tip.GetComponentInChildren<MultiLanguageUIText>();
             TrickData trick = Globals.self.GetTrickBySlotIdx(data.idx);
             if (trick != null)
-            {                
-                if (trick.nameKey == "flash_grenade")
+            {
+                if (trick.nameKey == "flashGrenade")
                 {
                     Globals.languageTable.SetText(tip, "drag_to_cast");
                 }

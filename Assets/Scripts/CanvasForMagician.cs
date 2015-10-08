@@ -273,7 +273,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
             draggingItemFinger.gameObject.SetActive(false);
         }
 
-        TrickData trick = Globals.self.GetTrickByName("flash_grenade");
+        TrickData trick = Globals.self.GetTrickByName("flashGrenade");
         if (!draggingFlashGrenade && !tricksBg.gameObject.activeSelf && trick.IsInUse() && Globals.stealingController != null && !Globals.stealingController.magician.Stealing)
         {
             dropFlashFinger.gameObject.SetActive(true);
@@ -430,9 +430,8 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
                     UnityEngine.UI.Text Inventory = Globals.getChildGameObject<UnityEngine.UI.Text>(item.slotInPack.gameObject, "inventory");
                     Inventory.gameObject.SetActive(true);
                     Globals.languageTable.SetText(Inventory, "inventory", new System.String[] { item.trickData.inventory.ToString() });
-
                     Globals.languageTable.SetText(trickCashCost, "buy", new System.String[] { item.trickData.buyPrice.ToString()});
-                                        CheckIfNeedDraggingItemFinger();
+                    CheckIfNeedDraggingItemFinger();
                 }                
             }
         }

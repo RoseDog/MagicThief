@@ -55,3 +55,4 @@ ExportedObj/
 *.user
 *.unityproj
 *.booproj
+/Assets/Photon Unity Networking

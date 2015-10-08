@@ -6,8 +6,8 @@ public class CityEventsWindow : CustomEventTrigger
     public UnityEngine.UI.Text unclickedCount;
     UnityEngine.RectTransform ReplayDetail;
     MultiLanguageUIText time_stamp;
-    MultiLanguageUIText cash_back_then;
-    MultiLanguageUIText stealing_cash;
+    public MultiLanguageUIText stealing_cash_info;
+
     UnityEngine.UI.Button replay_btn;
     UnityEngine.UI.Button defense_reward_btn;
     MultiLanguageUIText defense_reward_number;
@@ -21,8 +21,7 @@ public class CityEventsWindow : CustomEventTrigger
 
         ReplayDetail = Globals.getChildGameObject<UnityEngine.RectTransform>(gameObject, "ReplayDetail");
         time_stamp = Globals.getChildGameObject<MultiLanguageUIText>(ReplayDetail.gameObject, "time_stamp");
-        cash_back_then = Globals.getChildGameObject<MultiLanguageUIText>(ReplayDetail.gameObject, "cash_back_then");
-        stealing_cash = Globals.getChildGameObject<MultiLanguageUIText>(ReplayDetail.gameObject, "stealing_cash");        
+          
         replay_btn = Globals.getChildGameObject<UnityEngine.UI.Button>(ReplayDetail.gameObject, "replay");
         defense_reward_btn = Globals.getChildGameObject<UnityEngine.UI.Button>(ReplayDetail.gameObject, "defense_reward");
         defense_reward_number = Globals.getChildGameObject<MultiLanguageUIText>(defense_reward_btn.gameObject, "Text");
@@ -56,14 +55,13 @@ public class CityEventsWindow : CustomEventTrigger
             Globals.languageTable.SetText(time_stamp, "few_minutes_ago");
         }
 
-        Globals.languageTable.SetText(cash_back_then,"cash_back_then",
-            new System.String[] { replay.guard.cashAmount.ToString("F0") });
-        Globals.languageTable.SetText(stealing_cash, "stealing_cash",
-            new System.String[] { replay.StealingCash.ToString("F0") });
+        Globals.languageTable.SetText(stealing_cash_info, "stealing_cash_info",
+            new System.String[] { replay.guard.cashAmount.ToString("F0"), replay.guard.GetCashAmountOnMazeFloor().ToString("F0"),
+            replay.StealingCashInSafebox.ToString("F0"), replay.PickedCash.ToString("F0")});        
 
         defense_reward_btn.onClick.RemoveAllListeners();
 
-        if (replay.StealingCash < 1 && replay.guard.name == Globals.self.name)
+        if (replay.StealingCashInSafebox < 1 && replay.guard.name == Globals.self.name)
         {
             defense_reward_btn.gameObject.SetActive(true);
             if (replay.rewardAccepted)
@@ -130,13 +128,13 @@ public class CityEventsWindow : CustomEventTrigger
         ceTransform.SetParent(transform);
         ceTransform.localScale = new UnityEngine.Vector3(1, 1, 1);        
         ce.newText.enabled = !everClicked;
-        cityEvents.Add(ce);        
+        cityEvents.Add(ce);
 
-        float event_y_pos = 136;
+        float event_y_pos = 134.4f;
         float padding = 3;
         for (int idx = cityEvents.Count - 1; idx >= 0; --idx)
         {
-            cityEvents[idx].rectTransform.localPosition = new UnityEngine.Vector3(17.5f, event_y_pos, 0.0f);
+            cityEvents[idx].rectTransform.localPosition = new UnityEngine.Vector3(0, event_y_pos, 0.0f);
             event_y_pos -= cityEvents[idx].rectTransform.rect.height;
             event_y_pos -= padding;
         }
@@ -152,7 +150,7 @@ public class CityEventsWindow : CustomEventTrigger
         System.String clickedBuilding = ce.name;
 
         // 相机移动
-        Globals.cameraFollowMagician.MoveToPoint(city.GetTargetPosition(ce.name)+new UnityEngine.Vector3(0,2,0), Globals.cameraMoveDuration);
+        Globals.cameraFollowMagician.MoveToPoint(city.GetTargetPosition(ce.name)+new UnityEngine.Vector3(-3.0f,2.5f,0), Globals.cameraMoveDuration);
         // 选中建筑
         Building building = city.GetTargetBuilding(ce.name);
         city.ChooseBuilding(building);
