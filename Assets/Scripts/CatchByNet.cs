@@ -1,7 +1,7 @@
 public class CatchByNet : Action
 {
     TrickTimer timer;
-    int duration = 200;
+    int duration = 300;
     Cocos2dAction breakNetAction;
     Cocos2dAction clearNetReduceAction;
     float netReduce = 1;

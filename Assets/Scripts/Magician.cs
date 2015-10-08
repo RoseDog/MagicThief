@@ -235,7 +235,7 @@ public class Magician : Actor
             {
                 BarkSoundWave wave = (UnityEngine.GameObject.Instantiate(Globals.wave_prefab) as UnityEngine.GameObject).GetComponent<BarkSoundWave>();
                 wave.transform.position = (transform.position + GetWorldCenterPos()) * 0.5f;
-                wave.radiusLimit = 400;
+                wave.radiusLimit = data.stepSoundLimit;
                 wave.radiusStart = 250;
                 wave.oneWaveDuration = 8;
             }

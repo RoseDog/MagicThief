@@ -104,7 +104,10 @@ public class ClientSocket : UnityEngine.MonoBehaviour
         {
             Globals.maze.Start();
         }
-        Globals.canvasForMagician.Start();
+        if(Globals.canvasForMagician)
+        {
+            Globals.canvasForMagician.Start();
+        }
     }
 
     void OnDestroy()
