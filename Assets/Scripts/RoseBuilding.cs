@@ -32,7 +32,7 @@ public class RoseBuilding : Building
         {
             RoseGrow();
         }
-        int roses = (int)(data.roseGrowTotalDuration / Globals.self.roseGrowCycle) + 1;
+        int roses = (int)(data.roseGrowTotalDuration / data.roseGrowCycle) + 1;
         Globals.languageTable.SetText(rose_total, "rose_total", new System.String[] { roses.ToString() });
     }
 

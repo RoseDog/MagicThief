@@ -1,11 +1,11 @@
 ﻿GuardCount=0
 randSeedCacheWhenEditLevel=-1750717342
-Z_CELLS_COUNT=8
-X_CELLS_COUNT=8
+Z_CELLS_COUNT=5
+X_CELLS_COUNT=5
 CHANGE_DIRECTION_MODIFIER=20
 sparsenessModifier=90
 deadEndRemovalModifier=100
-noOfRoomsToPlace=3
+noOfRoomsToPlace=2
 minRoomXCellsCount=2
 maxRoomXCellsCount=3
 minRoomZCellsCount=2

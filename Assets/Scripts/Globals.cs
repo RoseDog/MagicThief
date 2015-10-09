@@ -119,6 +119,7 @@ public class MagicianData
     public float wisdomGrowth;
     public int idx;
     public float stepSoundLimit;
+    public PlayerInfo owner;
     public MagicianData()
     {
         
@@ -136,7 +137,7 @@ public class MagicianData
 
     public float GetLifeDelta()
     {
-        return strengthAllot* strengthGrowth;
+        return strengthAllot * strengthGrowth * owner.GetDataBasedOnRoseCount().LifeDelta;
     }
 
     public float GetStrengthDelta()
@@ -156,22 +157,22 @@ public class MagicianData
 
     public float GetPowerDelta()
     {
-        return wisdomAllot * wisdomGrowth;
+        return wisdomAllot * wisdomGrowth * owner.GetDataBasedOnRoseCount().PowerDelta;
     }
 
     public float GetSneakingSpeed()
     {
-        return (float)sneakingSpeed + (agilityBase + agilityAllot * agilityGrowth) * 0.05f;
+        return (float)sneakingSpeed + GetSpeedDelta();
     }
 
     public float GetRunningSpeed()
     {
-        return (float)runningSpeed + (agilityBase + agilityAllot * agilityGrowth) * 0.05f;
+        return (float)runningSpeed + GetSpeedDelta();
     }
 
     public float GetNormalSpeed()
     {
-        return (float)normalSpeed + GetNormalSpeedDelta();
+        return (float)normalSpeed + GetSpeedDelta();
     }
 
     public float GetUnlockSafeTime()
@@ -179,9 +180,9 @@ public class MagicianData
         return UnityEngine.Time.fixedDeltaTime * GetUnlockSafeDuration();
     }
 
-    public float GetNormalSpeedDelta()
+    public float GetSpeedDelta()
     {
-        return (agilityBase + agilityAllot) * 0.05f;
+        return agilityAllot * agilityGrowth * owner.GetDataBasedOnRoseCount().SpeedDelta;
     }
 
     public int GetUnlockSafeDuration()
@@ -248,6 +249,7 @@ public class BuildingData
     public int PvELevelIdx;
     public float roseGrowLastDuration;
     public float roseGrowTotalDuration;
+    public float roseGrowCycle;
     public float bornNewTargetLastDuration;
     public int maze_lv;
 }
@@ -270,6 +272,15 @@ public class CloudData
     public int idx;
     public bool locked;
     public float price;
+}
+
+public class DataBasedOnRoseCount
+{
+    public int levelIdxMin;
+    public int levelIdxMax;
+    public float LifeDelta;
+    public float SpeedDelta;
+    public float PowerDelta;
 }
 
 public class PlayerInfo
@@ -298,8 +309,6 @@ public class PlayerInfo
     public int currentMazeLevel = 0;
 
     public int pveProgress;
-
-    public float roseGrowCycle;
 
     public System.Collections.Generic.List<SafeBoxData> safeBoxDatas = new System.Collections.Generic.List<SafeBoxData>();
     public System.Collections.Generic.List<TrickData> tricks = new System.Collections.Generic.List<TrickData>();
@@ -338,9 +347,10 @@ public class PlayerInfo
     public PlayerInfo()
     {
         MagicianData mage_data = new MagicianData();
+        mage_data.owner = this;
         mage_data.name = "Rosa";
         mage_data.desc = "Rosa_desc";
-        mage_data.normalSpeed = 8.7f;
+        mage_data.normalSpeed = 5.5f;
         mage_data.sneakingSpeed = mage_data.normalSpeed * 0.5f;
         mage_data.runningSpeed = mage_data.normalSpeed * 1.5f;
         mage_data.unlockSafeDuration = 120;
@@ -359,8 +369,9 @@ public class PlayerInfo
         magicians.Add(mage_data);
 
         mage_data = new MagicianData();
-        mage_data.name = "Mine Fujiko";
-        mage_data.desc = "Mine Fujiko_desc";
+        mage_data.owner = this;
+        mage_data.name = "Walter";
+        mage_data.desc = "Walter_desc";
         mage_data.normalSpeed = 4.5f;
         mage_data.sneakingSpeed = mage_data.normalSpeed * 0.5f;
         mage_data.runningSpeed = mage_data.normalSpeed * 1.5f;
@@ -481,6 +492,109 @@ public class PlayerInfo
             trick.clickButtonToCast = true;
             tricks.Add(trick);
         }        
+    }
+
+    public DataBasedOnRoseCount GetDataBasedOnRoseCount()
+    {
+        DataBasedOnRoseCount data = new DataBasedOnRoseCount();
+        if (roseCount >= 0 && roseCount < 10)
+        {
+            data.levelIdxMin = 0;
+            data.levelIdxMax = 4;
+            data.LifeDelta = 1;
+            data.SpeedDelta = 0.1f;
+            data.PowerDelta = 1;
+        }
+
+        else if (roseCount >= 11 && roseCount < 30)
+        {
+            data.levelIdxMin = 5;
+            data.levelIdxMax = 9;
+            data.LifeDelta = 1/2.0f;
+            data.SpeedDelta = 0.1f/2.0f;
+            data.PowerDelta = 1/2.0f;
+        }
+
+        else if (roseCount >= 31 && roseCount < 60)
+        {
+            data.levelIdxMin = 10;
+            data.levelIdxMax = 14;
+            data.LifeDelta = 1 / 3.0f;
+            data.SpeedDelta = 0.1f / 3.0f;
+            data.PowerDelta = 1 / 3.0f;
+        }
+
+        else if (roseCount >= 61 && roseCount < 100)
+        {
+            data.levelIdxMin = 15;
+            data.levelIdxMax = 19;
+            data.LifeDelta = 1 / 4.0f;
+            data.SpeedDelta = 0.1f / 4.0f;
+            data.PowerDelta = 1 / 4.0f;
+        }
+
+        else if (roseCount >= 101 && roseCount < 150)
+        {
+            data.levelIdxMin = 20;
+            data.levelIdxMax = 24;
+            data.LifeDelta = 1 / 5.0f;
+            data.SpeedDelta = 0.1f / 5.0f;
+            data.PowerDelta = 1 / 5.0f;
+        }
+
+        else if (roseCount >= 151 && roseCount < 210)
+        {
+            data.levelIdxMin = 25;
+            data.levelIdxMax = 29;
+            data.LifeDelta = 1 / 6.0f;
+            data.SpeedDelta = 0.1f / 6.0f;
+            data.PowerDelta = 1 / 6.0f;            
+        }
+
+        else if (roseCount >= 211 && roseCount < 280)
+        {
+            data.levelIdxMin = 30;
+            data.levelIdxMax = 34;
+            data.LifeDelta = 1 / 7.0f;
+            data.SpeedDelta = 0.1f / 7.0f;
+            data.PowerDelta = 1 / 7.0f;
+        }
+
+        else if (roseCount >= 281 && roseCount < 360)
+        {
+            data.levelIdxMin = 35;
+            data.levelIdxMax = 39;
+            data.LifeDelta = 1 / 8.0f;
+            data.SpeedDelta = 0.1f / 8.0f;
+            data.PowerDelta = 1 / 8.0f;
+        }
+
+        else if (roseCount >= 361 && roseCount < 450)
+        {
+            data.levelIdxMin = 40;
+            data.levelIdxMax = 44;
+            data.LifeDelta = 1 / 9.0f;
+            data.SpeedDelta = 0.1f / 9.0f;
+            data.PowerDelta = 1 / 9.0f;
+        }
+
+        else if (roseCount >= 451 && roseCount < 550)
+        {
+            data.levelIdxMin = 45;
+            data.levelIdxMax = 49;
+            data.LifeDelta = 1 / 10.0f;
+            data.SpeedDelta = 0.1f / 10.0f;
+            data.PowerDelta = 1 / 10.0f;
+        }
+        else
+        {
+            data.levelIdxMin = 45;
+            data.levelIdxMax = 49;
+            data.LifeDelta = 1 / 10.0f;
+            data.SpeedDelta = 0.1f / 10.0f;
+            data.PowerDelta = 1 / 10.0f;
+        }
+        return data;
     }
 
     public MagicianData GetMageDataByName(System.String name)
@@ -812,11 +926,12 @@ public class PlayerInfo
             {                
                 if (TutorialLevelIdx == TutorialLevel.GetChest || 
                     TutorialLevelIdx == TutorialLevel.Sneaking || 
-                    TutorialLevelIdx == TutorialLevel.FirstTrick)
+                    TutorialLevelIdx == TutorialLevel.FirstTrick ||
+                    TutorialLevelIdx == TutorialLevel.NewEnemy)
                 {
                     Globals.asyncLoad._ToLoadingScene("StealingLevel");
                 }
-                else if (TutorialLevelIdx == TutorialLevel.NewEnemy || TutorialLevelIdx == TutorialLevel.Over)
+                else if (TutorialLevelIdx == TutorialLevel.UnlockNewTrick || TutorialLevelIdx == TutorialLevel.Over)
                 {
                     Globals.asyncLoad._ToLoadingScene("City");
                 }
@@ -888,13 +1003,11 @@ public class PlayerInfo
 
         pveProgress = System.Convert.ToInt32(reply[14]);
 
-        roseGrowCycle = System.Convert.ToSingle(reply[15]);
+        roseAddPowerRate = System.Convert.ToSingle(reply[15]);
 
-        roseAddPowerRate = System.Convert.ToSingle(reply[16]);
+        punishRoseCount = System.Convert.ToInt32(reply[16]);
 
-        punishRoseCount = System.Convert.ToInt32(reply[17]);
-
-        temp = reply[18].Split(',');
+        temp = reply[17].Split(',');
         for (int i = 0; i < temp.Length-1;)
         {
             System.String mage_name = temp[i++];
@@ -904,8 +1017,8 @@ public class PlayerInfo
             mage_data.wisdomAllot = System.Convert.ToInt32(temp[i++]);
         }
         
-        UnpackDroppedItemStr(reply[19]);
-        UnpackCashOnFloorStr(reply[20]);
+        UnpackDroppedItemStr(reply[18]);
+        UnpackCashOnFloorStr(reply[19]);
     }
 
     public void UnpackDroppedItemStr(System.String item_str)
@@ -1000,8 +1113,9 @@ public class PlayerInfo
         building.PvELevelIdx = System.Convert.ToInt32(reply[7]);  
         building.roseGrowLastDuration = System.Convert.ToSingle(reply[8]);
         building.roseGrowTotalDuration = System.Convert.ToSingle(reply[9]);
-        building.bornNewTargetLastDuration = System.Convert.ToSingle(reply[10]);
-        building.maze_lv = System.Convert.ToInt32(reply[11]);
+        building.roseGrowCycle = System.Convert.ToSingle(reply[10]);
+        building.bornNewTargetLastDuration = System.Convert.ToSingle(reply[11]);
+        building.maze_lv = System.Convert.ToInt32(reply[12]);
     }
 
     public void RoseGrow(System.String[] reply)
@@ -1058,7 +1172,8 @@ public class PlayerInfo
         BuildingData data = GetBuildingDataByID(reply[0]);
         data.unpickedRose = System.Convert.ToInt32(reply[1]);
         data.roseGrowLastDuration = System.Convert.ToSingle(reply[2]);
-        data.roseGrowTotalDuration = System.Convert.ToSingle(reply[3]);        
+        data.roseGrowTotalDuration = System.Convert.ToSingle(reply[3]);
+        data.roseGrowCycle = System.Convert.ToSingle(reply[4]);
         data.type = "Rose";
         
         if (Globals.city != null && Globals.city.buildings.Count != 0)
@@ -1540,6 +1655,7 @@ public class Globals
     public static Transition transition;
     public static LevelController LevelController;
     public static City city;
+    public static MyMazeLevelController myMazeController;
     public static StealingLevelController stealingController;
     public static LoadingSceneLevelController loadingLevelController;    
     public static ClientSocket socket;

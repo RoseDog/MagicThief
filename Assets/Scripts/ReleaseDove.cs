@@ -8,8 +8,7 @@ public class ReleaseDove : MagicianTrickAction
     }
 
     public void Start()
-    {
-        mage.spriteSheet.AddAnimationEvent("dove_trick", 7, () => DoveFlyOut());
+    {        
         mage.spriteSheet.AddAnimationEvent("dove_trick", -1, () => Stop());
     }
 

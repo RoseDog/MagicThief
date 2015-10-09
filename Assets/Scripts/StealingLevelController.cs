@@ -37,8 +37,8 @@ public class StealingLevelController : LevelController
     
     public override void Awake()
     {
-        base.Awake();
         Globals.stealingController = this;
+        base.Awake();        
         countDownSeconds = restartInSeconds;
 
         canvasForStealing = UnityEngine.GameObject.Find("CanvasForStealing") as UnityEngine.GameObject;
@@ -113,7 +113,7 @@ public class StealingLevelController : LevelController
 //         Globals.guardPlayer.slotsDatas[1].statu = "0";
 //         Globals.guardPlayer.slotsDatas[2].statu = "0";
 //         Globals.guardPlayer.isBot = true;
-//         Globals.iniFileName = "pve_22";        
+//         Globals.iniFileName = "pve_0";        
 // 
 // 
 //         Globals.guardPlayer.currentMazeRandSeedCache = -1;
@@ -180,6 +180,11 @@ public class StealingLevelController : LevelController
         }
 
         randSeedCache = UnityEngine.Random.seed;
+
+        if(Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.FirstTrick)
+        {
+            Globals.self.UsingTrick(Globals.self.GetTrickByName("hypnosis"), 0);
+        }        
 
         if (magician == null)
         {
@@ -298,6 +303,10 @@ public class StealingLevelController : LevelController
         else if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.FirstTrick)
         {
             Globals.languageTable.SetText(RestartText, "hypnosis_guide_info");
+        }
+        else if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.UnlockNewTrick)
+        {
+            RestartText.text = "";
         }
         else
         {

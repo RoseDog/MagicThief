@@ -64,6 +64,10 @@ public class Spot : GuardAction
                 guard.audioSource.loop = true;
                 guard.audioSource.Play();
             }
+            else
+            {
+                guard.audioSource.PlayOneShot(alert);
+            }
 
             System.String content = gameObject.name;
             content += " spot";
@@ -84,7 +88,7 @@ public class Spot : GuardAction
     public override void FrameFunc()
     {
         base.FrameFunc();
-        if(guard.currentAction == this)
+        if (guard.currentAction == this && target != null)
         {
             // 更新守卫的视野体，但是并不发送消息，不触发任何事件
             guard.eye.CastRays(target.position - guard.transform.position, false);

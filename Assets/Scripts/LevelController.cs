@@ -18,8 +18,12 @@ public class LevelController : Actor
         {
             UnityEngine.GameObject mgrs_prefab = UnityEngine.Resources.Load("GlobalMgrs") as UnityEngine.GameObject;
             UnityEngine.GameObject.Instantiate(mgrs_prefab);
-        }                       
-        
+        }
+        if (Globals.canvasForMagician == null && (Globals.stealingController != null || Globals.city != null || Globals.myMazeController != null))
+        {
+            UnityEngine.GameObject canvas_prefab = UnityEngine.Resources.Load("CanvasForMagician") as UnityEngine.GameObject;
+            UnityEngine.GameObject.Instantiate(canvas_prefab);
+        }
         frameCount = 0;
     }
 
@@ -34,12 +38,7 @@ public class LevelController : Actor
 
     public override void Start()
     {
-        base.Start();
-        if (Globals.canvasForMagician == null && (this as LevelEditor) == null && (this as LoadingSceneLevelController) == null)
-        {
-            UnityEngine.GameObject canvas_prefab = UnityEngine.Resources.Load("CanvasForMagician") as UnityEngine.GameObject;
-            UnityEngine.GameObject.Instantiate(canvas_prefab);
-        }
+        base.Start();        
         // 这个是防止LevelPassed重复调用的，
         bIsPerfectStealing = false;   
     }

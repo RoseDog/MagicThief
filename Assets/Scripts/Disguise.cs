@@ -9,11 +9,13 @@ public class Disguise : MagicianTrickAction
     Cocos2dAction stopAction;
     Cocos2dAction trickCastAction;
     public UnityEngine.AudioClip disguise;
+    UnityEngine.Vector3 shadowPosCache;
     public override void Awake()
     {
         base.Awake();
         FakeGuard_prefab = UnityEngine.Resources.Load("Avatar/FakeGuard") as UnityEngine.GameObject;
         TrickTimerPrefab = UnityEngine.Resources.Load("UI/FakeGuardTimer") as UnityEngine.GameObject;
+        shadowPosCache = actor.shadow.transform.localPosition;        
     }
 
     public override void Excute()
@@ -62,13 +64,14 @@ public class Disguise : MagicianTrickAction
             actor.spriteSheet.AddAnim("moving", 6, 1.8f);
             actor.spriteSheet.AddAnim("open_chest", 4);
             actor.spriteSheet.AddAnim("take_money", 16);
-        }        
-
+        }
+        
+        actor.shadow.transform.localPosition = new UnityEngine.Vector3(0.041f,0.01f,0);
+        (actor as Magician).OnKeyUpR("");
 
         TrickTimer = UnityEngine.GameObject.Instantiate(TrickTimerPrefab) as UnityEngine.GameObject;
         TrickTimer.GetComponent<TrickTimer>().BeginCountDown(FakeGuard, data.duration, new UnityEngine.Vector3(0, 110f, 0));
 
-        
         (actor as Magician).speedModifier = 0.5f;
         gameObject.layer = 23;
 
@@ -90,7 +93,8 @@ public class Disguise : MagicianTrickAction
         base.Stop();
         actor.RemoveAction(ref stopAction);
         actor.RemoveAction(ref trickCastAction);
-                
+        actor.shadow.transform.localPosition = shadowPosCache;
+        
         if (sheetCache != null)
         {                        
             DestroyObject(FakeGuard);

@@ -19,7 +19,7 @@ public class TutorialThief : Actor
         HideTip();
         base.Awake();
 
-        LifeAmount = 100;
+        LifeAmount = 20;
         LifeCurrent = LifeAmount;
                
         spriteSheet.AddAnim("idle", 4);

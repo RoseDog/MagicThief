@@ -16,7 +16,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
     public UnityEngine.GameObject RoseNumberBg;    
     public UnityEngine.UI.Button TrickBtn;
     public UnityEngine.UI.Text trickUnclickedCount;
-    public UnityEngine.UI.Button potrait;    
+    public UnityEngine.UI.Button portrait;    
     public MultiLanguageUIText Speed;
     public MultiLanguageUIText UnlockingDuration;
     public MultiLanguageUIText TotalWeight;
@@ -27,7 +27,6 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
     public TrickItem draggingTrickItem;
     public bool draggingFlashGrenade = false;
     public TrickSlot draggingDownSlot;
-    public UnityEngine.UI.Text TrickName;
     public UnityEngine.UI.Text TrickDesc;
     public UnityEngine.UI.Text powerLabel;
     public UnityEngine.UI.Text dropOddsLabel;
@@ -69,9 +68,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         tricksBg = Globals.getChildGameObject<TricksBg>(gameObject, "TricksBg");
 
 
-        TrickName = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "Name");
-        TrickDesc = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "Desc");        
-        
+        TrickDesc = Globals.getChildGameObject<UnityEngine.UI.Text>(gameObject, "Desc");                
 
         tricksInUsingPanel = Globals.getChildGameObject(gameObject, "TricksInUsingPanel");
         TryMoreTricksTipHand = Globals.getChildGameObject<UIMover>(tricksInUsingPanel, "TryMoreTricksTipHand");
@@ -99,7 +96,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         roseIntroUI.gameObject.SetActive(false);
         cashIntroUI.gameObject.SetActive(false);
 
-        potrait.onClick.AddListener(() => OpenTricksUI(potrait));
+        portrait.onClick.AddListener(() => OpenTricksUI(portrait));
         
 	}
     bool initialized = false;
@@ -238,7 +235,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
             tricksBg.CreateTrickItemsInPack();
             cast_tip.gameObject.SetActive(false);
 
-            if(btn == potrait)
+            if(btn == portrait)
             {
                 SetTrickDescriptionVisible(false);
             }
@@ -284,6 +281,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         }
         else
         {
+            clickTrickBtnPointer.gameObject.SetActive(false);
             draggingItemFinger.gameObject.SetActive(false);
         }
 
@@ -309,7 +307,6 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
 
     public void SetTrickDescriptionVisible(bool visible)
     {
-        TrickName.gameObject.SetActive(visible);
         TrickDesc.gameObject.SetActive(visible);
         powerLabel.gameObject.SetActive(visible);
         inventory_on_description.gameObject.SetActive(visible);
@@ -322,6 +319,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
     public void UpdateCharacter(PlayerInfo player)
     {
         Char_Name.text = player.selectedMagician.name;
+        portrait.image.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("Misc/" + player.selectedMagician.name + "_portrait");
         lifeNumber.UpdateText(player.selectedMagician.GetLifeAmount().ToString("F1"), player.selectedMagician.GetLifeAmount());
         PowerNumber.UpdateText(player.selectedMagician.GetPowerAmount().ToString("F1"), player.selectedMagician.GetPowerAmount());
         Globals.languageTable.SetText(Speed, "Speed", new System.String[] { player.selectedMagician.GetNormalSpeed().ToString("F1") });
@@ -348,8 +346,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
             OpenTricksUI(null);
         }
         SetTrickDescriptionVisible(true);
-        Globals.languageTable.SetText(TrickName, data.nameKey);
-        Globals.languageTable.SetText(TrickDesc, data.descriptionKey);
+        TrickDesc.text = Globals.languageTable.GetText(data.nameKey) + ":\n" + Globals.languageTable.GetText(data.descriptionKey);                
         Globals.languageTable.SetText(dropOddsLabel, "drop_odds", new System.String[] { (data.dropOdds * 100).ToString("F0") });
         Globals.languageTable.SetText(weightLabel, "weight", new System.String[] { data.weight.ToString() });        
         Globals.languageTable.SetText(powerLabel, "power_cost", new System.String[]{data.powerCost.ToString()});
@@ -365,15 +362,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
 
         buyAndLearnTrickBtn.onClick.RemoveAllListeners();
         UnityEngine.UI.ColorBlock btnColors = buyAndLearnTrickBtn.colors;
-        if (data.learned)
-        {
-            buyAndLearnTrickBtn.onClick.AddListener(() => BuyTrickItem(item));
-            Globals.languageTable.SetText(trickCashCost, "buy", new System.String[] { data.buyPrice.ToString() });
-
-            btnColors.normalColor = UnityEngine.Color.white;
-            trickCashCost.color = UnityEngine.Color.yellow;
-        }
-        else
+        if (!data.learned && data.learnPrice > 0)
         {
             buyAndLearnTrickBtn.onClick.AddListener(() => LearnTrickItem(item));
             Globals.languageTable.SetText(trickCashCost, "learn", new System.String[] { data.learnPrice.ToString() });
@@ -388,8 +377,16 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
                 btnColors.normalColor = new UnityEngine.Color(0.2f, 0.2f, 0.2f, 1);
                 trickCashCost.color = UnityEngine.Color.red;
             }
-            
+
             buyAndLearnTrickBtn.colors = btnColors;
+        }
+        else
+        {
+            buyAndLearnTrickBtn.onClick.AddListener(() => BuyTrickItem(item));
+            Globals.languageTable.SetText(trickCashCost, "buy", new System.String[] { data.buyPrice.ToString() });
+
+            btnColors.normalColor = UnityEngine.Color.white;
+            trickCashCost.color = UnityEngine.Color.yellow;            
         }
 
         itemHighLightFrame.SetActive(true);
@@ -451,7 +448,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         }
         else
         {
-            Globals.tipDisplay.Msg(Globals.languageTable.GetText("unlock_need_rose", new System.String[] { item.trickData.ToString() }));
+            Globals.tipDisplay.Msg(Globals.languageTable.GetText("unlock_need_rose", new System.String[] { item.trickData.unlockRoseCount.ToString() }));
         }        
     }
 

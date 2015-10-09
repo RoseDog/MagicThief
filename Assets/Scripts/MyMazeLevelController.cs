@@ -12,7 +12,8 @@ public class MyMazeLevelController : LevelController
     UnityEngine.GameObject GuardFullFillHisDutyTip;
     
     public override void Awake()
-    {        
+    {
+        Globals.myMazeController = this;
         base.Awake();        
         UnityEngine.GameObject CanvasForMyMaze = UnityEngine.GameObject.Find("CanvasForMyMaze");
         mainCanvas = CanvasForMyMaze.GetComponent<UnityEngine.Canvas>();

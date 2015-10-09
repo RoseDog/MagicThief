@@ -52,7 +52,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("drop_odds", new System.String[] { "遗落几率:{0}%", "drop_odds:{0}%" });
         table.Add("weight", new System.String[] { "重量:{0}", "weight:{0}" });        
         table.Add("duration", new System.String[] { "持续时间:{0}", "Duration:{0}" });
-        table.Add("unlock_need_rose", new System.String[] { "玫瑰{0}", "Roses {0}" });
+        table.Add("unlock_need_rose", new System.String[] { "玫瑰达到 {0} 即可解锁", "Roses {0}" });
         table.Add("restart_tutorial_level_tip", new System.String[] { 
             "潜入失败！<b><color=red><size=30>{0}</size></color></b> 秒后重新开始\n\n 教程关卡你都能输，能专心点儿么 =.= ", 
             "Failed！Restart After <b><color=red><size=30>{0}</size></color></b> seconds" });
@@ -249,7 +249,9 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("stealing_event", new System.String[] { "{0}潜入了{1}的迷宫", "{0} dived in {1}'s Maze" });
         table.Add("other_player_maze_name", new System.String[] { "{0}的迷宫，{1}级", "{0}'s Maze, Lv.{1}" });
         table.Add("rose_pick_tip", new System.String[] { "玫瑰 + {0}", "Rose + {0}" });
-        table.Add("nothing_over_charm", new System.String[] { "作为一个魔术师，还有什么能比你的魅力更重要呢：）玫瑰可以分配到各项属性上，对魔术师进行强化。", "As an magician,nothing is more valuable than your charm." });
+        table.Add("rose_intro", new System.String[] { "玫瑰可以分配到各项属性上，对魔术师进行强化。", "As an magician,nothing is more valuable than your charm." });
+        table.Add("rose_to_be_allot", new System.String[] { "待分配的玫瑰", "rose_to_be_allot" });
+        table.Add("base", new System.String[] { "基础值", "basic" });        
 
 
         table.Add("personal_storage", new System.String[] { "你买下这栋楼的房间，存放“你的”私人财产", "you purchase this room to keep “your” private assets." });
