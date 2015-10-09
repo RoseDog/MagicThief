@@ -118,6 +118,7 @@ public class CanvasForMyMaze : Actor
         Globals.canvasForMagician.gameObject.SetActive(true);
         Globals.canvasForMyMaze.gameObject.SetActive(true);
         Globals.canvasForMyMaze.enhanceDefenseUI.Open();
+        Globals.canvasForMyMaze.enhanceDefenseUI.SummonGuardTip.SetActive(false);
         ExitMazeBtn.BeginMove(Globals.uiMoveAndScaleDuration);
         FogBtn.BeginMove(Globals.uiMoveAndScaleDuration);
         //进入MyMaze，HomeExit上面的红点根据new targets来更新        
