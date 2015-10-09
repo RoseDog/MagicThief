@@ -340,16 +340,16 @@ public class PlayerInfo
         MagicianData mage_data = new MagicianData();
         mage_data.name = "Rosa";
         mage_data.desc = "Rosa_desc";
-        mage_data.normalSpeed = 8.7f;
+        mage_data.normalSpeed = 4.2f;
         mage_data.sneakingSpeed = mage_data.normalSpeed * 0.5f;
         mage_data.runningSpeed = mage_data.normalSpeed * 1.5f;
         mage_data.unlockSafeDuration = 120;
         mage_data.LifeConsumePerWeight = 0.02f;
-        mage_data.strengthBase = 100;
+        mage_data.strengthBase = 55;
         mage_data.strengthAllot = 0;
         mage_data.agilityBase = 25;
         mage_data.agilityAllot = 0;
-        mage_data.wisdomBase = 100;
+        mage_data.wisdomBase = 55;
         mage_data.wisdomAllot = 0;
         mage_data.strengthGrowth = 1f;
         mage_data.agilityGrowth = 1f;
@@ -408,7 +408,7 @@ public class PlayerInfo
             trick.learnPrice = 10;
             trick.dropOdds = 0.9f;
             trick.weight = 1.2f;
-            trick.buyPrice = 500;
+            trick.buyPrice = 100;
             trick.clickOnGuardToCast = true;
             trick.clickButtonToCast = false;
             trick.castRange = new UnityEngine.Vector2(200, 500);
@@ -420,10 +420,10 @@ public class PlayerInfo
             trick.duration = 700;
             trick.powerCost = 25;
             trick.unlockRoseCount = 0;
-            trick.learnPrice = 300;
+            trick.learnPrice = 500;
             trick.dropOdds = 0.9f;
             trick.weight = 0.3f;
-            trick.buyPrice = 1500;
+            trick.buyPrice = 300;
             trick.clickOnGuardToCast = false;
             trick.clickButtonToCast = true;
             tricks.Add(trick);
@@ -434,9 +434,9 @@ public class PlayerInfo
             trick.duration = 500;
             trick.powerCost = 10;
             trick.unlockRoseCount = 10;
-            trick.learnPrice = 1000;
+            trick.learnPrice = 0;
             trick.dropOdds = 0.9f;
-            trick.buyPrice = 800;
+            trick.buyPrice = 100;
             trick.clickOnGuardToCast = false;
             trick.clickButtonToCast = true;
             tricks.Add(trick);
@@ -447,7 +447,7 @@ public class PlayerInfo
             trick.duration = 0;
             trick.powerCost = 2;
             trick.unlockRoseCount = 25;
-            trick.learnPrice = 5000;
+            trick.learnPrice = 1500;
             trick.dropOdds = 0.9f;
             trick.buyPrice = 200;
             trick.clickOnGuardToCast = false;
@@ -460,9 +460,9 @@ public class PlayerInfo
             trick.duration = 700;// machine fixing duration
             trick.powerCost = 5;
             trick.unlockRoseCount = 80;
-            trick.learnPrice = 16000;
+            trick.learnPrice = 3000;
             trick.dropOdds = 0.3f;
-            trick.buyPrice = 200;
+            trick.buyPrice = 100;
             trick.clickOnGuardToCast = true;
             trick.clickButtonToCast = true;
             trick.castRange = new UnityEngine.Vector2(300, 1600);
@@ -472,9 +472,9 @@ public class PlayerInfo
             trick.nameKey = "flyUp";
             trick.descriptionKey = "flyUp_desc";
             trick.duration = 300;
-            trick.powerCost = 30;
+            trick.powerCost = 15;
             trick.unlockRoseCount = 30;
-            trick.learnPrice = 31000;
+            trick.learnPrice = 5000;
             trick.dropOdds = 0.3f;
             trick.buyPrice = 1800;
             trick.clickOnGuardToCast = false;
@@ -517,11 +517,11 @@ public class PlayerInfo
 
         GuardData guard_data = new GuardData();
         guard_data.name = "Police";
-        guard_data.price = 10;
+        guard_data.price = 100;
         guard_data.roomConsume = 2;
         guard_data.magicianOutVisionTime = 100;
         guard_data.atkCd = 100;
-        guard_data.attackValue = 10;
+        guard_data.attackValue = 20;
         guard_data.atkShortestDistance = 120f;
         guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
@@ -530,11 +530,11 @@ public class PlayerInfo
 
         guard_data = new GuardData();
         guard_data.name = "joker";
-        guard_data.price = 10;
+        guard_data.price = 100;
         guard_data.roomConsume = 2;
         guard_data.magicianOutVisionTime = 100;
         guard_data.atkCd = 100;
-        guard_data.attackValue = 10;
+        guard_data.attackValue = 20;
         guard_data.atkShortestDistance = 120f;
         guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
@@ -544,10 +544,10 @@ public class PlayerInfo
 
         guard_data = new GuardData();
         guard_data.name = "dog";
-        guard_data.price = 3000;
+        guard_data.price = 200;
         guard_data.roomConsume = 1;
         guard_data.magicianOutVisionTime = 100;
-        guard_data.attackValue = 20;
+        guard_data.attackValue = 30;
         guard_data.atkShortestDistance = 80f;
         guard_data.doveOutVisionTime = 300;
         guard_data.moveSpeed = 9;
@@ -556,7 +556,7 @@ public class PlayerInfo
 
         guard_data = new GuardData();
         guard_data.name = "Spider";
-        guard_data.price = 8000;
+        guard_data.price = 500;
         guard_data.roomConsume = 2;
         guard_data.magicianOutVisionTime = 450;
         guard_data.atkCd = 260;
@@ -568,11 +568,11 @@ public class PlayerInfo
 
         guard_data = new GuardData();
         guard_data.name = "Monkey";
-        guard_data.price = 12000;
+        guard_data.price = 1000;
         guard_data.roomConsume = 3;
         guard_data.magicianOutVisionTime = 70;
         guard_data.atkCd = 150;
-        guard_data.attackValue = 15;
+        guard_data.attackValue = 30;
         guard_data.atkShortestDistance = 500f;
         guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
@@ -583,7 +583,7 @@ public class PlayerInfo
 
         guard_data = new GuardData();
         guard_data.name = "lamp";
-        guard_data.price = 17000;
+        guard_data.price = 2000;
         guard_data.roomConsume = 1;
         Globals.guardDatas.Add(guard_data);
 
@@ -595,65 +595,96 @@ public class PlayerInfo
 
         maze_data = new MazeLvData();
         maze_data.roseRequire = 0;
-        maze_data.price = 1500;
+        maze_data.price = 1000;
+        maze_data.roomSupport = 5;
+        maze_data.lockGuardsName = new System.String[] { "joker", "dog" };
+        maze_data.safeBoxCount = 2;
+        Globals.mazeLvDatas.Add(maze_data);
+
+        maze_data = new MazeLvData();
+        maze_data.roseRequire = 11;
+        maze_data.price = 1000;
+        maze_data.roomSupport = 6;
+        maze_data.lockGuardsName = new System.String[] { };
+        maze_data.safeBoxCount = 2;
+        Globals.mazeLvDatas.Add(maze_data);
+
+        maze_data = new MazeLvData();
+        maze_data.roseRequire = 31;
+        maze_data.price = 4000;
+        maze_data.roomSupport = 7;
+        maze_data.lockGuardsName = new System.String[] { "Monkey" };
+        maze_data.safeBoxCount = 3;
+        Globals.mazeLvDatas.Add(maze_data);
+
+        maze_data = new MazeLvData();
+        maze_data.roseRequire = 61;
+        maze_data.price = 7000;
         maze_data.roomSupport = 8;
-        maze_data.lockGuardsName = new System.String[] { "joker" };
-        maze_data.safeBoxCount = 3;
-        Globals.mazeLvDatas.Add(maze_data);
-
-        maze_data = new MazeLvData();
-        maze_data.roseRequire = 0;
-        maze_data.price = 2500;
-        maze_data.roomSupport = 9;
-        maze_data.lockGuardsName = new System.String[] { "dog" };
-        maze_data.safeBoxCount = 3;
-        Globals.mazeLvDatas.Add(maze_data);
-
-        maze_data = new MazeLvData();
-        maze_data.roseRequire = 10;
-        maze_data.price = 8000;
-        maze_data.roomSupport = 10;
         maze_data.lockGuardsName = new System.String[] { };
         maze_data.safeBoxCount = 3;
         Globals.mazeLvDatas.Add(maze_data);
 
         maze_data = new MazeLvData();
-        maze_data.roseRequire = 30;
+        maze_data.roseRequire = 101;
         maze_data.price = 10000;
+        maze_data.roomSupport = 9;
+        maze_data.lockGuardsName = new System.String[] {"Spider"};
+        maze_data.safeBoxCount = 3;
+        Globals.mazeLvDatas.Add(maze_data);
+
+        maze_data = new MazeLvData();
+        maze_data.roseRequire = 151;
+        maze_data.price = 13000;
         maze_data.roomSupport = 11;
         maze_data.lockGuardsName = new System.String[] { };
-        maze_data.safeBoxCount = 3;
-        Globals.mazeLvDatas.Add(maze_data);
-
-        maze_data = new MazeLvData();
-        maze_data.roseRequire = 60;
-        maze_data.price = 17000;
-        maze_data.roomSupport = 12;
-        maze_data.lockGuardsName = new System.String[] { "Spider" };
         maze_data.safeBoxCount = 4;
         Globals.mazeLvDatas.Add(maze_data);
 
         maze_data = new MazeLvData();
-        maze_data.roseRequire = 60;
-        maze_data.price = 20000;
-        maze_data.roomSupport = 16;
-        maze_data.lockGuardsName = new System.String[] { "Monkey" };
+        maze_data.roseRequire = 211;
+        maze_data.price = 16000;
+        maze_data.roomSupport = 13;
+        maze_data.lockGuardsName = new System.String[] { };
         maze_data.safeBoxCount = 4;
         Globals.mazeLvDatas.Add(maze_data);
 
         maze_data = new MazeLvData();
-        maze_data.roseRequire = 50;
-        maze_data.price = 25000;
-        maze_data.roomSupport = 23;
+        maze_data.roseRequire = 281;
+        maze_data.price = 19000;
+        maze_data.roomSupport = 15;
         maze_data.lockGuardsName = new System.String[] { "lamp" };
+        maze_data.safeBoxCount = 4;
+        Globals.mazeLvDatas.Add(maze_data);
+
+        maze_data = new MazeLvData();
+        maze_data.roseRequire = 361;
+        maze_data.price = 22000;
+        maze_data.roomSupport = 17;
+        maze_data.lockGuardsName = new System.String[] { };
         maze_data.safeBoxCount = 5;
         Globals.mazeLvDatas.Add(maze_data);
 
-        Globals.buySafeBoxPrice = 5000;
+        maze_data = new MazeLvData();
+        maze_data.roseRequire = 451;
+        maze_data.price = 25000;
+        maze_data.roomSupport = 19;
+        maze_data.lockGuardsName = new System.String[] { };
+        maze_data.safeBoxCount = 5;
+        Globals.mazeLvDatas.Add(maze_data);
+
+        Globals.buySafeBoxPrice = 3000;
         Globals.safeBoxLvDatas = new SafeBoxLvData[] { 
-        new SafeBoxLvData(2000, 6000), 
-        new SafeBoxLvData(5000, 10000), 
-        new SafeBoxLvData(10000, 15000) };
+        new SafeBoxLvData(500, 3000), 
+        new SafeBoxLvData(1000, 4000), 
+        new SafeBoxLvData(1500, 5000),
+        new SafeBoxLvData(2000, 6000),
+        new SafeBoxLvData(2500, 7000),
+        new SafeBoxLvData(3000, 8000),
+        new SafeBoxLvData(3500, 9000),
+        new SafeBoxLvData(4000, 10000),
+        new SafeBoxLvData(4500, 11000),
+        new SafeBoxLvData(5000, 12000)};
 
         Globals.socket.SetReady(false);
         

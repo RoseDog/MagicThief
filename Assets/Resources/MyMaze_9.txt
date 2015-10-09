@@ -1,0 +1,15 @@
+GuardCount=0
+randSeedCacheWhenEditLevel=598144776
+Z_CELLS_COUNT=13
+X_CELLS_COUNT=13
+CHANGE_DIRECTION_MODIFIER=90
+sparsenessModifier=90
+deadEndRemovalModifier=100
+noOfRoomsToPlace=5
+minRoomXCellsCount=4
+maxRoomXCellsCount=4
+minRoomZCellsCount=4
+maxRoomZCellsCount=4
+GEMS_COUNT=7
+LAMPS_COUNT=0
+LevelTipText=
