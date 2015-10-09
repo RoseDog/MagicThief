@@ -131,7 +131,7 @@ class UserFile
     @PvEProgress=0
     @logOutTimeStamp=Time.now
     @Magicians = [MagicianData.new("Rosa"),
-                  MagicianData.new("Mine Fujiko")]
+                  MagicianData.new("Walter")]
     @selectedMagician = "Rosa"
 
     @trickDatas=[TrickData.new("hypnosis", true,10),
