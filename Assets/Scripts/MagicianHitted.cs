@@ -22,7 +22,6 @@ public class MagicianHitted : Hitted
     
     public override void hitteAnimEnd()
     {
-        UnityEngine.Debug.Log("hitteAnimEnd");
         (actor as Magician).RegistEvent();        
         base.hitteAnimEnd();        
     }

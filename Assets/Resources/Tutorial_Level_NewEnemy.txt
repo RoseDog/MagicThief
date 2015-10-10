@@ -17,4 +17,4 @@ LAMPS_COUNT=2
 LevelTipText=
 CASH=600
 droppedItemsStr=dove,dove
-cashOnFloorStr=50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50
+cashOnFloorStr=50,50,50

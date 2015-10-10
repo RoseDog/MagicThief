@@ -181,7 +181,7 @@ public class Magician : Actor
     {
         base.FrameFunc();        
 
-        if((isSneaking || chasingGuards.Count != 0) && moving.isMoving)
+        if((isSneaking || chasingGuards.Count != 0) && moving.isMoving && !IsLifeOver())
         {
             ChangeLife(-data.GetLifeConsume() * Globals.thiefPlayer.GetTrickTotalWeight(), false);
             if (LifeCurrent < UnityEngine.Mathf.Epsilon)
