@@ -227,7 +227,7 @@ class Player
     @roseAddPowerRate = 2.0
     @bornNewTargetDuration = 60*10
     @userFile = UserFile.new(@roseBuildingDuration,@bornNewTargetDuration)
-    @punishRoseCount = 3
+    @punishRoseCount = 2
     @performingIncomeCycle = 60 * 10
   end
 
@@ -501,34 +501,34 @@ class Player
   def GetDataBasedOnRoseCount(mazeLv)
     data = DataBasedOnRoseCount.new()
     case @userFile.roseCount
-      when 0..10
+      when 0..4
         data.levelIdxMin = 0
         data.levelIdxMax = 4
-      when 11..20
+      when 5..14
         data.levelIdxMin = 5
         data.levelIdxMax = 9
-      when 21..30
+      when 15..29
         data.levelIdxMin = 10
         data.levelIdxMax = 14
-      when 31..40
+      when 30..39
         data.levelIdxMin = 15
         data.levelIdxMax = 19
-      when 41..50
+      when 40..49
         data.levelIdxMin = 20
         data.levelIdxMax = 24
-      when 51..60
+      when 50..59
         data.levelIdxMin = 25
         data.levelIdxMax = 29
-      when 61..70
+      when 60..69
         data.levelIdxMin = 30
         data.levelIdxMax = 34
-      when 71..80
+      when 70..79
         data.levelIdxMin = 35
         data.levelIdxMax = 39
-      when 81..90
+      when 80..89
         data.levelIdxMin = 40
         data.levelIdxMax = 44
-      when 91..100
+      when 90..100
         data.levelIdxMin = 45
         data.levelIdxMax = 49
       else
@@ -758,15 +758,15 @@ class Player
   end
 
   def DownloadClouds(protocal_no,contents)
-    cloudprice = [5000,
-                  5000,
-                  5000,
-                  12000,
-                  5000,
-                  7000,
-                  7000,
+    cloudprice = [2000,
+                  4000,
+                  3000,
                   9000,
-                  12000]
+                  1000,
+                  5000,
+                  6000,
+                  7000,
+                  8000]
     for i in 0..8
       cloud = @userFile.Clouds[i]
       price = cloudprice[i]

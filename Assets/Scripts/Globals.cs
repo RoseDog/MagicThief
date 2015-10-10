@@ -8,8 +8,6 @@ public class TrickData
     public int unlockRoseCount;
     public int slotIdxInUsingPanel = -1;
     public int buyPrice;
-    public int learnPrice;
-    public bool learned = true;
     public bool clickOnGuardToCast = false;
     public bool clickButtonToCast = false;
     public int inventory;
@@ -375,7 +373,7 @@ public class PlayerInfo
         slotsDatas.Add(data);
 
         data = new TrickUsingSlotData();
-        data.price = 32000;
+        data.price = 1500;
         data.idx = 2;
         slotsDatas.Add(data);
 
@@ -387,7 +385,6 @@ public class PlayerInfo
             trick.duration = 350;
             trick.powerCost = 15;
             trick.unlockRoseCount = 0;
-            trick.learnPrice = 10;
             trick.dropOdds = 0.9f;
             trick.weight = 1.2f;
             trick.buyPrice = 100;
@@ -402,7 +399,6 @@ public class PlayerInfo
             trick.duration = 500;
             trick.powerCost = 10;
             trick.unlockRoseCount = 0;
-            trick.learnPrice = 0;
             trick.dropOdds = 0.9f;
             trick.buyPrice = 100;
             trick.clickOnGuardToCast = false;
@@ -415,7 +411,6 @@ public class PlayerInfo
             trick.duration = 700;
             trick.powerCost = 25;
             trick.unlockRoseCount = 10;
-            trick.learnPrice = 500;
             trick.dropOdds = 0.9f;
             trick.weight = 0.3f;
             trick.buyPrice = 300;
@@ -429,7 +424,6 @@ public class PlayerInfo
             trick.duration = 0;
             trick.powerCost = 2;
             trick.unlockRoseCount = 20;
-            trick.learnPrice = 1500;
             trick.dropOdds = 0.9f;
             trick.buyPrice = 200;
             trick.clickOnGuardToCast = false;
@@ -442,7 +436,6 @@ public class PlayerInfo
             trick.duration = 700;// machine fixing duration
             trick.powerCost = 5;
             trick.unlockRoseCount = 40;
-            trick.learnPrice = 3000;
             trick.dropOdds = 0.3f;
             trick.buyPrice = 100;
             trick.clickOnGuardToCast = true;
@@ -456,7 +449,6 @@ public class PlayerInfo
             trick.duration = 300;
             trick.powerCost = 15;
             trick.unlockRoseCount = 60;
-            trick.learnPrice = 5000;
             trick.dropOdds = 0.3f;
             trick.buyPrice = 1800;
             trick.clickOnGuardToCast = false;
@@ -595,7 +587,7 @@ public class PlayerInfo
         Globals.mazeLvDatas.Add(maze_data);
 
         maze_data = new MazeLvData();
-        maze_data.roseRequire = 11;
+        maze_data.roseRequire = 5;
         maze_data.price = 1000;
         maze_data.roomSupport = 6;
         maze_data.lockGuardsName = new System.String[] { };
@@ -603,7 +595,7 @@ public class PlayerInfo
         Globals.mazeLvDatas.Add(maze_data);
 
         maze_data = new MazeLvData();
-        maze_data.roseRequire = 31;
+        maze_data.roseRequire = 15;
         maze_data.price = 4000;
         maze_data.roomSupport = 7;
         maze_data.lockGuardsName = new System.String[] { "Monkey" };
@@ -611,7 +603,7 @@ public class PlayerInfo
         Globals.mazeLvDatas.Add(maze_data);
 
         maze_data = new MazeLvData();
-        maze_data.roseRequire = 61;
+        maze_data.roseRequire = 30;
         maze_data.price = 7000;
         maze_data.roomSupport = 8;
         maze_data.lockGuardsName = new System.String[] { };
@@ -619,7 +611,7 @@ public class PlayerInfo
         Globals.mazeLvDatas.Add(maze_data);
 
         maze_data = new MazeLvData();
-        maze_data.roseRequire = 101;
+        maze_data.roseRequire = 40;
         maze_data.price = 10000;
         maze_data.roomSupport = 9;
         maze_data.lockGuardsName = new System.String[] {"Spider"};
@@ -627,7 +619,7 @@ public class PlayerInfo
         Globals.mazeLvDatas.Add(maze_data);
 
         maze_data = new MazeLvData();
-        maze_data.roseRequire = 151;
+        maze_data.roseRequire = 50;
         maze_data.price = 13000;
         maze_data.roomSupport = 11;
         maze_data.lockGuardsName = new System.String[] { };
@@ -635,7 +627,7 @@ public class PlayerInfo
         Globals.mazeLvDatas.Add(maze_data);
 
         maze_data = new MazeLvData();
-        maze_data.roseRequire = 211;
+        maze_data.roseRequire = 60;
         maze_data.price = 16000;
         maze_data.roomSupport = 13;
         maze_data.lockGuardsName = new System.String[] { };
@@ -643,7 +635,7 @@ public class PlayerInfo
         Globals.mazeLvDatas.Add(maze_data);
 
         maze_data = new MazeLvData();
-        maze_data.roseRequire = 281;
+        maze_data.roseRequire = 70;
         maze_data.price = 19000;
         maze_data.roomSupport = 15;
         maze_data.lockGuardsName = new System.String[] { "lamp" };
@@ -651,7 +643,7 @@ public class PlayerInfo
         Globals.mazeLvDatas.Add(maze_data);
 
         maze_data = new MazeLvData();
-        maze_data.roseRequire = 361;
+        maze_data.roseRequire = 80;
         maze_data.price = 22000;
         maze_data.roomSupport = 17;
         maze_data.lockGuardsName = new System.String[] { };
@@ -659,7 +651,7 @@ public class PlayerInfo
         Globals.mazeLvDatas.Add(maze_data);
 
         maze_data = new MazeLvData();
-        maze_data.roseRequire = 451;
+        maze_data.roseRequire = 90;
         maze_data.price = 25000;
         maze_data.roomSupport = 19;
         maze_data.lockGuardsName = new System.String[] { };
@@ -902,7 +894,7 @@ public class PlayerInfo
         {
             System.String trick_name = temp[i++];
             TrickData trick_data = GetTrickByName(trick_name);
-            trick_data.learned = System.Convert.ToBoolean(temp[i++]);
+            System.Convert.ToBoolean(temp[i++]);
             trick_data.inventory = System.Convert.ToInt32(temp[i++]);
             trick_data.Use(System.Convert.ToInt32(temp[i++]));
         }
@@ -1100,12 +1092,6 @@ public class PlayerInfo
     public void UpgradeMaze()
     {
         Globals.socket.Send("upgrade_maze" + separator + currentMazeLevel.ToString() + separator + currentMazeRandSeedCache.ToString());
-    }
-
-    public void LearnTrick(TrickData trickdata)
-    {        
-        trickdata.learned = true;
-        Globals.socket.Send("learn_trick" + separator + trickdata.nameKey);
     }
 
     public void AddTrickItem(TrickData trickdata)

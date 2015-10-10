@@ -39,7 +39,7 @@ public class TrickSlot : CustomEventTrigger
                 trickItem = (UnityEngine.GameObject.Instantiate(itemPrefab) as UnityEngine.GameObject).GetComponent<TrickItem>();
                 trickItem.trickData = trickData;                
                 trickItem.name = trickData.nameKey;
-                trickItem.Learn();
+                trickItem.GetComponent<UnityEngine.UI.Image>().sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/" + trickData.nameKey + "_icon");
                 trickItem.PutItemInUse(this);
                 trickItem.CheckIfUnlock();
             }

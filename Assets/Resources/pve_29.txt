@@ -17,6 +17,6 @@ maxRoomZCellsCount=4
 GEMS_COUNT=0
 LAMPS_COUNT=3
 LevelTipText=
-CASH=3500
+CASH=6000
 droppedItemsStr=
 cashOnFloorStr=200,400,30,20

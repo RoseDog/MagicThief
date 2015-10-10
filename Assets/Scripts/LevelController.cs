@@ -115,7 +115,7 @@ public class LevelController : Actor
 
     protected bool bIsPerfectStealing = false;
     protected int perfect_stealing_bonus = 3000;
-    protected int rose_bonus = 5;
+    protected int rose_bonus = 2;
     public virtual void MagicianGotCash(float value)
     {        
         if (bIsPerfectStealing)

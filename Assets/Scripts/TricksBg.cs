@@ -46,11 +46,11 @@ public class TricksBg : CustomEventTrigger
                 trickItem.slotInPack = itemSlot;
                 trickItemsInPack.Add(trickItem);
 
-                if (data.learned)
+                if (!data.IsLocked())
                 {
-                    trickItem.Learn();
                     Inventory.gameObject.SetActive(true);
                     Globals.languageTable.SetText(Inventory, "inventory", new System.String[] { data.inventory.ToString() });
+                    trickItem.GetComponent<UnityEngine.UI.Image>().sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/" + data.nameKey + "_icon");
                 }
                 else
                 {
@@ -69,12 +69,12 @@ public class TricksBg : CustomEventTrigger
             }            
             trickSlots.Add(itemSlot);
 
-            // 如果在教程阶段，还没有购买催眠
-            if (data.nameKey == "dove" && Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.UnlockNewTrick && !data.learned)
-            {
-                ClickHypnosisPointer.transform.parent.gameObject.SetActive(true);
-                ClickHypnosisPointer.BlinkForever();
-            }            
+//             // 如果在教程阶段，还没有购买催眠
+//             if (data.nameKey == "dove" && Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.UnlockNewTrick)
+//             {
+//                 ClickHypnosisPointer.transform.parent.gameObject.SetActive(true);
+//                 ClickHypnosisPointer.BlinkForever();
+//             }            
         }
     }
 

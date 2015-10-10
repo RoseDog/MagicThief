@@ -28,7 +28,7 @@ public class TrickItem : UnityEngine.MonoBehaviour,
             return;
         }
 
-        if(!trickData.IsLocked() && trickData.learned && Globals.canvasForMagician.tricksBg.gameObject.activeSelf)
+        if(!trickData.IsLocked() && Globals.canvasForMagician.tricksBg.gameObject.activeSelf)
         {
             UnityEngine.UI.Text Inventory = Globals.getChildGameObject<UnityEngine.UI.Text>(transform.parent.gameObject, "inventory");
             if (Inventory)
@@ -178,14 +178,5 @@ public class TrickItem : UnityEngine.MonoBehaviour,
             DestroyObject(LockImage);
             LockImage = null;
         }                        
-    }
-
-    public void Learn()
-    {        
-//         UnityEngine.UI.ColorBlock colors = itemButton.colors;
-//         colors.normalColor = UnityEngine.Color.white;
-//         itemButton.colors = colors;
-
-        GetComponent<UnityEngine.UI.Image>().sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("UI/" + trickData.nameKey + "_icon");
     }
 }

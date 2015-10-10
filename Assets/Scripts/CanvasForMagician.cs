@@ -356,32 +356,20 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
 
         buyAndLearnTrickBtn.onClick.RemoveAllListeners();
         UnityEngine.UI.ColorBlock btnColors = buyAndLearnTrickBtn.colors;
-        if (!data.learned && data.learnPrice > 0)
+        if (data.IsLocked())
         {
-            buyAndLearnTrickBtn.onClick.AddListener(() => LearnTrickItem(item));
-            Globals.languageTable.SetText(trickCashCost, "learn", new System.String[] { data.learnPrice.ToString() });
-
-            if (data.learnPrice <= Globals.self.cashAmount)
-            {
-                btnColors.normalColor = UnityEngine.Color.white;
-                trickCashCost.color = UnityEngine.Color.yellow;
-            }
-            else
-            {
-                btnColors.normalColor = new UnityEngine.Color(0.2f, 0.2f, 0.2f, 1);
-                trickCashCost.color = UnityEngine.Color.red;
-            }
-
-            buyAndLearnTrickBtn.colors = btnColors;
+            btnColors.normalColor = new UnityEngine.Color(0.2f, 0.2f, 0.2f, 1);
+            trickCashCost.color = UnityEngine.Color.red;
         }
         else
         {
-            buyAndLearnTrickBtn.onClick.AddListener(() => BuyTrickItem(item));
-            Globals.languageTable.SetText(trickCashCost, "buy", new System.String[] { data.buyPrice.ToString() });
-
             btnColors.normalColor = UnityEngine.Color.white;
             trickCashCost.color = UnityEngine.Color.yellow;            
         }
+        buyAndLearnTrickBtn.colors = btnColors;
+        buyAndLearnTrickBtn.onClick.AddListener(() => BuyTrickItem(item));
+        Globals.languageTable.SetText(trickCashCost, "buy", new System.String[] { data.buyPrice.ToString() });
+
 
         itemHighLightFrame.SetActive(true);
         itemHighLightFrame.transform.parent = item.rt.parent.transform;
@@ -416,34 +404,6 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         {
             Globals.canvasForMagician.HideTricksPanel();
         }
-    }
-
-    public void LearnTrickItem(TrickItem item)
-    {
-        if(!item.trickData.IsLocked())
-        {
-            if (!item.trickData.learned)
-            {
-                if (ChangeCash(-item.trickData.learnPrice))
-                {
-                    Globals.self.LearnTrick(item.trickData);
-                    item.Learn();
-                    UnityEngine.UI.Text Not_Learned = Globals.getChildGameObject<UnityEngine.UI.Text>(item.slotInPack.gameObject, "Not_Learned");
-                    Not_Learned.gameObject.SetActive(false);
-
-                    UnityEngine.UI.Text Inventory = Globals.getChildGameObject<UnityEngine.UI.Text>(item.slotInPack.gameObject, "inventory");
-                    Inventory.gameObject.SetActive(true);
-                    Globals.languageTable.SetText(Inventory, "inventory", new System.String[] { item.trickData.inventory.ToString() });
-                    Globals.languageTable.SetText(trickCashCost, "buy", new System.String[] { item.trickData.buyPrice.ToString()});
-                    CheckIfNeedDraggingItemFinger();
-                    buyAndLearnTrickBtn.onClick.AddListener(() => BuyTrickItem(item));
-                }                
-            }
-        }
-        else
-        {
-            Globals.tipDisplay.Msg(Globals.languageTable.GetText("unlock_need_rose", new System.String[] { item.trickData.unlockRoseCount.ToString() }));
-        }        
     }
 
     public void BuyTrickItem(TrickItem item)
