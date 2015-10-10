@@ -152,6 +152,7 @@ class UserFile
 end
 
 class Building
+
   attr_accessor :posID
   attr_accessor :type
   attr_accessor :unpickedRose
@@ -189,7 +190,7 @@ class Building
     @targetName = "poker_face"
     @isPvP = false
     @botLevelRandSeed = -1
-    @PvELevelIdx = -1
+    @PvELevelIdx = 0
   end
 end
 
