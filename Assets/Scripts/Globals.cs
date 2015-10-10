@@ -1278,6 +1278,7 @@ public class PlayerInfo
         roseCount += rose_delta;
         if (roseCount < 0)
         {
+            rose_delta = -roseCount;
             roseCount = 0;
         }
         Globals.socket.Send("change_rose" + separator + rose_delta.ToString());
