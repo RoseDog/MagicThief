@@ -19,7 +19,7 @@ public class Explode : GuardAction
     {
         Actor tar = guard.spot.target.GetComponent<Actor>();
         tar.EnemyStopChasing(guard);
-        if (tar.currentAction != tar.lifeOver)
+        if (!tar.IsLifeOver())
         {
             tar.ChangeLife(-guard.data.attackValue);
             tar.hitted.Excute();
