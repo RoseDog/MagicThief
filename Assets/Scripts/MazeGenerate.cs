@@ -1619,18 +1619,25 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             PickedItem picked = Globals.FingerRayToObj<PickedItem>(Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>(), mask, fingerDownOnMap.nowPosition);
             if (picked != null)
             {
-                if (picked.GetCash() > 0)
+                if (!Globals.self.IsMoneyFull())
                 {
-                    Globals.canvasForMagician.ChangeCash(picked.GetCash());
-                    Globals.self.RemoveCashOnFloor(picked.item_id);
-                    Globals.canvasForMyMaze.UpdateIncomeIntro();
+                    if (picked.GetCash() > 0)
+                    {
+                        Globals.canvasForMagician.ChangeCash(picked.GetCash());
+                        Globals.self.RemoveCashOnFloor(picked.item_id);
+                        Globals.canvasForMyMaze.UpdateIncomeIntro();
+                    }
+                    else
+                    {
+                        Globals.self.AddTrickItem(Globals.self.GetTrickByName(picked.gameObject.name));
+                        Globals.self.RemoveDroppedItem(picked.item_id);
+                    }
+                    picked.Picked();
                 }
                 else
                 {
-                    Globals.self.AddTrickItem(Globals.self.GetTrickByName(picked.gameObject.name));
-                    Globals.self.RemoveDroppedItem(picked.item_id);
-                }
-                picked.Picked();                
+                    Globals.tipDisplay.Msg("money_full");
+                }                           
             }
             else
             {

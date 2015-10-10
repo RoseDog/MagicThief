@@ -54,21 +54,28 @@ public class CanvasForMyMaze : Actor
 
     public void CollectAllCashOnMyMazeFloor()
     {
-        int cash_amount = 0;
-        PickedItem[] items = UnityEngine.GameObject.FindObjectsOfType<PickedItem>();
-        foreach(PickedItem item in items)
+        if(!Globals.self.IsMoneyFull())
         {
-            if (item.GetCash()>0)
+            int cash_amount = 0;
+            PickedItem[] items = UnityEngine.GameObject.FindObjectsOfType<PickedItem>();
+            foreach (PickedItem item in items)
             {
-                cash_amount += item.GetCash();
-                item.Picked();
-                Globals.self.RemoveCashOnFloor(item.item_id);
-            }            
+                if (item.GetCash() > 0)
+                {
+                    cash_amount += item.GetCash();
+                    item.Picked();
+                    Globals.self.RemoveCashOnFloor(item.item_id);
+                }
+            }
+            Globals.canvasForMagician.ChangeCash(cash_amount);
+
+            //捡起所有金钱;
+            UpdateIncomeIntro();
         }
-        Globals.canvasForMagician.ChangeCash(cash_amount);
-        
-        //捡起所有金钱;
-        UpdateIncomeIntro();
+        else
+        {
+            Globals.tipDisplay.Msg("money_full");
+        }        
     }
 
     public void UpdateIncomeIntro()
@@ -118,6 +125,7 @@ public class CanvasForMyMaze : Actor
         Globals.canvasForMagician.gameObject.SetActive(true);
         Globals.canvasForMyMaze.gameObject.SetActive(true);
         Globals.canvasForMyMaze.enhanceDefenseUI.Open();
+        Globals.canvasForMyMaze.enhanceDefenseUI.SummonGuardTip.SetActive(false);
         ExitMazeBtn.BeginMove(Globals.uiMoveAndScaleDuration);
         FogBtn.BeginMove(Globals.uiMoveAndScaleDuration);
         //进入MyMaze，HomeExit上面的红点根据new targets来更新        

@@ -125,37 +125,12 @@ public class MagicianData
 
     public float GetLifeAmount()
     {
-        return strengthBase + GetLifeDelta();
+        return (strengthBase + strengthAllot * strengthGrowth) * owner.GetDataBasedOnRoseCount().LifeDelta;
     }
 
     public float GetPowerAmount()
     {
-        return wisdomBase + GetPowerDelta();
-    }
-
-    public float GetLifeDelta()
-    {
-        return strengthAllot * strengthGrowth * owner.GetDataBasedOnRoseCount().LifeDelta;
-    }
-
-    public float GetStrengthDelta()
-    {
-        return strengthAllot * strengthGrowth;
-    }
-
-    public float GetWisdomDelta()
-    {
-        return wisdomAllot * wisdomGrowth;
-    }
-
-    public float GetAgilityDelta()
-    {
-        return agilityAllot * agilityGrowth;
-    }
-
-    public float GetPowerDelta()
-    {
-        return wisdomAllot * wisdomGrowth * owner.GetDataBasedOnRoseCount().PowerDelta;
+        return (wisdomBase + wisdomAllot * wisdomGrowth) * owner.GetDataBasedOnRoseCount().PowerDelta;;
     }
 
     public float GetSneakingSpeed()
@@ -493,103 +468,11 @@ public class PlayerInfo
     public DataBasedOnRoseCount GetDataBasedOnRoseCount()
     {
         DataBasedOnRoseCount data = new DataBasedOnRoseCount();
-        if (roseCount >= 0 && roseCount < 10)
-        {
-            data.levelIdxMin = 0;
-            data.levelIdxMax = 4;
-            data.LifeDelta = 1;
-            data.SpeedDelta = 0.1f;
-            data.PowerDelta = 1;
-        }
-
-        else if (roseCount >= 11 && roseCount < 30)
-        {
-            data.levelIdxMin = 5;
-            data.levelIdxMax = 9;
-            data.LifeDelta = 1/2.0f;
-            data.SpeedDelta = 0.1f/2.0f;
-            data.PowerDelta = 1/2.0f;
-        }
-
-        else if (roseCount >= 31 && roseCount < 60)
-        {
-            data.levelIdxMin = 10;
-            data.levelIdxMax = 14;
-            data.LifeDelta = 1 / 3.0f;
-            data.SpeedDelta = 0.1f / 3.0f;
-            data.PowerDelta = 1 / 3.0f;
-        }
-
-        else if (roseCount >= 61 && roseCount < 100)
-        {
-            data.levelIdxMin = 15;
-            data.levelIdxMax = 19;
-            data.LifeDelta = 1 / 4.0f;
-            data.SpeedDelta = 0.1f / 4.0f;
-            data.PowerDelta = 1 / 4.0f;
-        }
-
-        else if (roseCount >= 101 && roseCount < 150)
-        {
-            data.levelIdxMin = 20;
-            data.levelIdxMax = 24;
-            data.LifeDelta = 1 / 5.0f;
-            data.SpeedDelta = 0.1f / 5.0f;
-            data.PowerDelta = 1 / 5.0f;
-        }
-
-        else if (roseCount >= 151 && roseCount < 210)
-        {
-            data.levelIdxMin = 25;
-            data.levelIdxMax = 29;
-            data.LifeDelta = 1 / 6.0f;
-            data.SpeedDelta = 0.1f / 6.0f;
-            data.PowerDelta = 1 / 6.0f;            
-        }
-
-        else if (roseCount >= 211 && roseCount < 280)
-        {
-            data.levelIdxMin = 30;
-            data.levelIdxMax = 34;
-            data.LifeDelta = 1 / 7.0f;
-            data.SpeedDelta = 0.1f / 7.0f;
-            data.PowerDelta = 1 / 7.0f;
-        }
-
-        else if (roseCount >= 281 && roseCount < 360)
-        {
-            data.levelIdxMin = 35;
-            data.levelIdxMax = 39;
-            data.LifeDelta = 1 / 8.0f;
-            data.SpeedDelta = 0.1f / 8.0f;
-            data.PowerDelta = 1 / 8.0f;
-        }
-
-        else if (roseCount >= 361 && roseCount < 450)
-        {
-            data.levelIdxMin = 40;
-            data.levelIdxMax = 44;
-            data.LifeDelta = 1 / 9.0f;
-            data.SpeedDelta = 0.1f / 9.0f;
-            data.PowerDelta = 1 / 9.0f;
-        }
-
-        else if (roseCount >= 451 && roseCount < 550)
-        {
-            data.levelIdxMin = 45;
-            data.levelIdxMax = 49;
-            data.LifeDelta = 1 / 10.0f;
-            data.SpeedDelta = 0.1f / 10.0f;
-            data.PowerDelta = 1 / 10.0f;
-        }
-        else
-        {
-            data.levelIdxMin = 45;
-            data.levelIdxMax = 49;
-            data.LifeDelta = 1 / 10.0f;
-            data.SpeedDelta = 0.1f / 10.0f;
-            data.PowerDelta = 1 / 10.0f;
-        }
+        data.levelIdxMin = 0;
+        data.levelIdxMax = 0;
+        data.LifeDelta = 1;
+        data.SpeedDelta = 0.1f;
+        data.PowerDelta = 1;
         return data;
     }
 
@@ -1384,6 +1267,11 @@ public class PlayerInfo
         }        
     }
 
+    public bool IsMoneyFull()
+    {
+        return Globals.AccumulateSafeboxCapacity(this) >= cashAmount;
+    }
+
     public void PickRose(int rose_delta, BuildingData building)
     {
         roseCount += rose_delta;
@@ -1396,6 +1284,7 @@ public class PlayerInfo
         {
             Globals.socket.Send("pick_rose" + separator + rose_delta.ToString() + separator + "-1");
         }
+        UploadMagicianProperties();
     }
 
     public void ChangeRose(int rose_delta)
@@ -1406,6 +1295,29 @@ public class PlayerInfo
             roseCount = 0;
         }
         Globals.socket.Send("change_rose" + separator + rose_delta.ToString());
+        roseLast += rose_delta;
+        if(rose_delta < 0)
+        {            
+            if (roseLast < 0)
+            {
+                selectedMagician.strengthAllot += roseLast;
+                if (selectedMagician.strengthAllot < 0)
+                {
+                    selectedMagician.agilityAllot += selectedMagician.strengthAllot;
+                    if (selectedMagician.agilityAllot < 0)
+                    {
+                        selectedMagician.wisdomAllot += selectedMagician.agilityAllot;
+                        Globals.Assert(selectedMagician.wisdomAllot >= 0);
+                        selectedMagician.agilityAllot = 0;
+                    }
+
+                    selectedMagician.strengthAllot = 0;
+                }
+
+                roseLast = 0;
+            }                        
+        }
+        UploadMagicianProperties();
     }
 
     public SafeBoxData AddSafeBox()

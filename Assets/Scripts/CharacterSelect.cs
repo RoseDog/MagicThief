@@ -48,11 +48,9 @@ public class CharacterSelect : UnityEngine.MonoBehaviour
 
     public void UpdateData()
     {
-        Globals.languageTable.SetText(StrengthBase, "strength", new System.String[] { Globals.self.selectedMagician.strengthBase.ToString("F0"), Globals.self.selectedMagician.GetStrengthDelta().ToString("F1") });
-        Globals.languageTable.SetText(AgilityBase, "agility", new System.String[] { Globals.self.selectedMagician.agilityBase.ToString("F0"),
-        Globals.self.selectedMagician.GetAgilityDelta().ToString("F1")});
-        Globals.languageTable.SetText(WisdomBase, "wisdom", new System.String[] { Globals.self.selectedMagician.wisdomBase.ToString("F0"),
-        Globals.self.selectedMagician.GetWisdomDelta().ToString("F1")});        
+        Globals.languageTable.SetText(StrengthBase, "strength", new System.String[] { Globals.self.selectedMagician.strengthBase.ToString("F0")});
+        Globals.languageTable.SetText(AgilityBase, "agility", new System.String[] { Globals.self.selectedMagician.agilityBase.ToString("F0")});
+        Globals.languageTable.SetText(WisdomBase, "wisdom", new System.String[] { Globals.self.selectedMagician.wisdomBase.ToString("F0")});        
 
         StrengthInputField.text = "+" + Globals.self.selectedMagician.strengthAllot.ToString();
         AgilityInputField.text = "+" + Globals.self.selectedMagician.agilityAllot.ToString();
@@ -70,8 +68,8 @@ public class CharacterSelect : UnityEngine.MonoBehaviour
 
     public void UpdateCharacterData()
     {
-        TotalHpGrow.text = "HP + " + Globals.self.selectedMagician.GetLifeDelta();
-        TotalPowerGrow.text = "MP + " + Globals.self.selectedMagician.GetPowerDelta();
+        TotalHpGrow.text = "HP:" + Globals.self.selectedMagician.GetLifeAmount();
+        TotalPowerGrow.text = "MP:" + Globals.self.selectedMagician.GetPowerAmount();
         Globals.languageTable.SetText(TotalSpeedGrow, "speed_total_grow", new System.String[] { Globals.self.selectedMagician.GetSpeedDelta().ToString("F1"), Globals.self.selectedMagician.GetUnlockSafeTimeDelta().ToString("F1") });
         Globals.canvasForMagician.UpdateCharacter(Globals.self);
     }
@@ -112,11 +110,9 @@ public class CharacterSelect : UnityEngine.MonoBehaviour
             UpdateCharacterData();
             Globals.self.UploadMagicianProperties();
 
-            Globals.languageTable.SetText(StrengthBase, "strength", new System.String[] { Globals.self.selectedMagician.strengthBase.ToString("F0"), Globals.self.selectedMagician.GetStrengthDelta().ToString("F1") });
-            Globals.languageTable.SetText(AgilityBase, "agility", new System.String[] { Globals.self.selectedMagician.agilityBase.ToString("F0"),
-        Globals.self.selectedMagician.GetAgilityDelta().ToString("F1")});
-            Globals.languageTable.SetText(WisdomBase, "wisdom", new System.String[] { Globals.self.selectedMagician.wisdomBase.ToString("F0"),
-        Globals.self.selectedMagician.GetWisdomDelta().ToString("F1")});        
+            Globals.languageTable.SetText(StrengthBase, "strength", new System.String[] { Globals.self.selectedMagician.strengthBase.ToString("F0") });
+            Globals.languageTable.SetText(AgilityBase, "agility", new System.String[] { Globals.self.selectedMagician.agilityBase.ToString("F0")});
+            Globals.languageTable.SetText(WisdomBase, "wisdom", new System.String[] { Globals.self.selectedMagician.wisdomBase.ToString("F0")});        
         }
 
         inputField.text = "+" + allot.ToString();

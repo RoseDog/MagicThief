@@ -44,11 +44,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
     {
         DontDestroyOnLoad(this);
         Globals.canvasForMagician = this;        
-        CashNumerBg = Globals.getChildGameObject(gameObject, "CashNumerBg");
-        CashNumerBg.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(()=>OpenCashIntroUI());
-        cashNumber = CashNumerBg.GetComponentInChildren<LifeNumber>();
-        money_full = Globals.getChildGameObject(CashNumerBg, "money_full");
-
+     
 
         //LifeNumerBg = Globals.getChildGameObject(gameObject, "LifeNumerBg");
         lifeNumber = Globals.getChildGameObject<LifeNumber>(gameObject, "LifeNumber");
@@ -56,9 +52,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         //PowerNumerBg = Globals.getChildGameObject(gameObject, "PowerNumerBg");
         PowerNumber = Globals.getChildGameObject<LifeNumber>(gameObject, "PowerNumber"); 
 
-        RoseNumberBg = Globals.getChildGameObject(gameObject, "RoseNumberBg"); //UnityEngine.GameObject.Find("RoseNumberBg");
-        RoseNumberBg.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => OpenRoseIntroUI());
-        RoseNumber = RoseNumberBg.GetComponentInChildren<Number>();
+
         
         TrickBtn = Globals.getChildGameObject<UnityEngine.UI.Button>(gameObject, "TrickBtn");
         TrickBtn.onClick.AddListener(() => OpenTricksUI(TrickBtn));        
@@ -208,7 +202,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
 
     public void OpenCashIntroUI()
     {
-        if (Globals.stealingController != null && !Globals.stealingController.magician.Stealing)
+        if (Globals.stealingController == null)
         {
             cashIntroUI.Open();
         }
@@ -216,7 +210,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
 
     public void OpenRoseIntroUI()
     {
-        if (Globals.stealingController != null && !Globals.stealingController.magician.Stealing)
+        if (Globals.stealingController == null)
         {
             roseIntroUI.Open();
         }
@@ -510,7 +504,8 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
             }
             return true;
         }
-    }
+    }    
+
     public UnityEngine.GameObject itemHighLightFrame;
     public void TrickUsingHighlightOn(TrickData data)
     {        
