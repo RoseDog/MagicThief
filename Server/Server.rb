@@ -758,15 +758,15 @@ class Player
   end
 
   def DownloadClouds(protocal_no,contents)
-    cloudprice = [5000,
+    cloudprice = [2000,
+                  2000,
+                  2000,
+                  10000,
+                  2000,
                   5000,
-                  5000,
-                  12000,
                   5000,
                   7000,
-                  7000,
-                  9000,
-                  12000]
+                  10000]
     for i in 0..8
       cloud = @userFile.Clouds[i]
       price = cloudprice[i]
