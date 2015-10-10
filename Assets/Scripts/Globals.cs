@@ -1471,7 +1471,10 @@ public class PlayerInfo
     public void OneAtkReplay(System.String[] reply)
     {
         ReplayData replay = UnpackOneReplayData(reply);
-        atkReplays.Add(replay.date.ToString(), replay);
+        if (!atkReplays.Contains(replay.date.ToString()))
+        {
+            atkReplays.Add(replay.date.ToString(), replay);
+        }       
     }        
 
     public void OneDefReplay(System.String[] reply)

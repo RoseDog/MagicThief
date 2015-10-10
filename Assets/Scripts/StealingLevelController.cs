@@ -672,13 +672,16 @@ public class StealingLevelController : LevelController
 
         // consumed
         ending_str = "";
-        ending_str += Globals.languageTable.GetText("item_consumed_label");
-        ending_str += "\n";
-        foreach (System.String item in itemsConsumed)
+        if (itemsConsumed.Count != 0)
         {
-            ending_str += Globals.languageTable.GetText("item_consumed", new System.String[] { Globals.languageTable.GetText(item), "1" });
+            ending_str += Globals.languageTable.GetText("item_consumed_label");
             ending_str += "\n";
-        }
+            foreach (System.String item in itemsConsumed)
+            {
+                ending_str += Globals.languageTable.GetText("item_consumed", new System.String[] { Globals.languageTable.GetText(item), "1" });
+                ending_str += "\n";
+            }
+        }        
     }
 
     System.String ending_str;
@@ -742,34 +745,12 @@ public class StealingLevelController : LevelController
                 ending_str += Globals.languageTable.GetText("item_dropped", new System.String[] { Globals.languageTable.GetText(item[2]), "1" }) + "</color>";
                 ending_str += "\n";
             }
-        }        
+        }               
 
-        int lose_rose = 0;
-        if(Globals.guardPlayer.isBot)
-        {
-            int lv_idx = System.Convert.ToInt32(Globals.iniFileName.Split('_')[1]);
-            if (lv_idx >= 0 && lv_idx<=6)
-            {
-                lose_rose = 1;
-            }
-            else if (lv_idx >= 7 && lv_idx <= 12)
-            {
-                lose_rose = 3;
-            }
-            else
-            {
-                lose_rose = 5;
-            }
-        }
-        else
-        {
-            lose_rose = Globals.guardPlayer.currentMazeLevel;
-        }
+        ending_str += Globals.languageTable.GetText("lose_rose", new System.String[] { Globals.self.punishRoseCount.ToString("F0") });
 
-        ending_str += Globals.languageTable.GetText("lose_rose", new System.String[] { lose_rose.ToString("F0") });
-
-        Globals.self.ChangeRose(-lose_rose);
-        Globals.canvasForMagician.RoseNumber.Add(-lose_rose);
+        Globals.self.ChangeRose(-Globals.self.punishRoseCount);
+        Globals.canvasForMagician.RoseNumber.Add(-Globals.self.punishRoseCount);
 
         strs = ending_str.Split('\n');
         sentence_idx = 0;
