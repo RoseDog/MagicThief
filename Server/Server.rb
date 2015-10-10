@@ -225,7 +225,7 @@ class Player
     #偷满是5朵玫瑰
     @roseBuildingDuration = 60 * 20 + 2
     @roseAddPowerRate = 2.0
-    @bornNewTargetDuration = 60*15
+    @bornNewTargetDuration = 60*10
     @userFile = UserFile.new(@roseBuildingDuration,@bornNewTargetDuration)
     @punishRoseCount = 3
     @performingIncomeCycle = 60 * 10
