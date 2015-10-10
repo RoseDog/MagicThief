@@ -453,7 +453,7 @@ public class PlayerInfo
             trick.descriptionKey = "flashGrenade_desc";
             trick.duration = 0;
             trick.powerCost = 2;
-            trick.unlockRoseCount = 30;
+            trick.unlockRoseCount = 20;
             trick.learnPrice = 1500;
             trick.dropOdds = 0.9f;
             trick.buyPrice = 200;
@@ -466,7 +466,7 @@ public class PlayerInfo
             trick.descriptionKey = "shotLight_desc";
             trick.duration = 700;// machine fixing duration
             trick.powerCost = 5;
-            trick.unlockRoseCount = 100;
+            trick.unlockRoseCount = 40;
             trick.learnPrice = 3000;
             trick.dropOdds = 0.3f;
             trick.buyPrice = 100;
@@ -480,7 +480,7 @@ public class PlayerInfo
             trick.descriptionKey = "flyUp_desc";
             trick.duration = 300;
             trick.powerCost = 15;
-            trick.unlockRoseCount = 210;
+            trick.unlockRoseCount = 60;
             trick.learnPrice = 5000;
             trick.dropOdds = 0.3f;
             trick.buyPrice = 1800;
