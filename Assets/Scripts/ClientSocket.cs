@@ -12,7 +12,7 @@ public class ClientSocket : UnityEngine.MonoBehaviour
     bool ready = false;
     public bool IsReady() { return ready; }
     public void SetReady(bool value) { ready = value; }
-    bool fromLoginScene = false;
+    bool fromLoginScene = true;
     public bool IsFromLogin() { return fromLoginScene; }
 	// Use this for initialization
     public void Awake()

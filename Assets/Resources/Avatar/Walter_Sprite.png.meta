@@ -1,0 +1,1518 @@
+fileFormatVersion: 2
+guid: 1dda6f2fb1e056c4caecb82d964bbb39
+timeCreated: 1444312662
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Walter_Sprite_0
+    21300002: Walter_Sprite_1
+    21300004: Walter_Sprite_2
+    21300006: Walter_Sprite_3
+    21300008: Walter_Sprite_4
+    21300010: Walter_Sprite_5
+    21300012: Walter_Sprite_6
+    21300014: Walter_Sprite_7
+    21300016: Walter_Sprite_8
+    21300018: Walter_Sprite_9
+    21300020: Walter_Sprite_10
+    21300022: Walter_Sprite_11
+    21300024: Walter_Sprite_12
+    21300026: Walter_Sprite_13
+    21300028: Walter_Sprite_14
+    21300030: Walter_Sprite_15
+    21300032: Walter_Sprite_16
+    21300034: Walter_Sprite_17
+    21300036: Walter_Sprite_18
+    21300038: Walter_Sprite_19
+    21300040: Walter_Sprite_20
+    21300042: Walter_Sprite_21
+    21300044: Walter_Sprite_22
+    21300046: Walter_Sprite_23
+    21300048: Walter_Sprite_24
+    21300050: Walter_Sprite_25
+    21300052: Walter_Sprite_26
+    21300054: Walter_Sprite_27
+    21300056: Walter_Sprite_28
+    21300058: Walter_Sprite_29
+    21300060: Walter_Sprite_30
+    21300062: Walter_Sprite_31
+    21300064: Walter_Sprite_32
+    21300066: Walter_Sprite_33
+    21300068: Walter_Sprite_34
+    21300070: Walter_Sprite_35
+    21300072: Walter_Sprite_36
+    21300074: Walter_Sprite_37
+    21300076: Walter_Sprite_38
+    21300078: Walter_Sprite_39
+    21300080: Walter_Sprite_40
+    21300082: Walter_Sprite_41
+    21300084: Walter_Sprite_42
+    21300086: Walter_Sprite_43
+    21300088: Walter_Sprite_44
+    21300090: Walter_Sprite_45
+    21300092: Walter_Sprite_46
+    21300094: Walter_Sprite_47
+    21300096: Walter_Sprite_48
+    21300098: Walter_Sprite_49
+    21300100: Walter_Sprite_50
+    21300102: Walter_Sprite_51
+    21300104: Walter_Sprite_52
+    21300106: Walter_Sprite_53
+    21300108: Walter_Sprite_54
+    21300110: Walter_Sprite_55
+    21300112: Walter_Sprite_56
+    21300114: Walter_Sprite_57
+    21300116: Walter_Sprite_58
+    21300118: Walter_Sprite_59
+    21300120: Walter_Sprite_60
+    21300122: Walter_Sprite_61
+    21300124: Walter_Sprite_62
+    21300126: Walter_Sprite_63
+    21300128: Walter_Sprite_64
+    21300130: Walter_Sprite_65
+    21300132: Walter_Sprite_66
+    21300134: Walter_Sprite_67
+    21300136: Walter_Sprite_68
+    21300138: Walter_Sprite_69
+    21300140: Walter_Sprite_70
+    21300142: Walter_Sprite_71
+    21300144: Walter_Sprite_72
+    21300146: Walter_Sprite_73
+    21300148: Walter_Sprite_74
+    21300150: Walter_Sprite_75
+    21300152: Walter_Sprite_76
+    21300154: Walter_Sprite_77
+    21300156: Walter_Sprite_78
+    21300158: Walter_Sprite_79
+    21300160: Walter_Sprite_80
+    21300162: Walter_Sprite_81
+    21300164: Walter_Sprite_82
+    21300166: Walter_Sprite_83
+    21300168: Walter_Sprite_84
+    21300170: Walter_Sprite_85
+    21300172: Walter_Sprite_86
+    21300174: Walter_Sprite_87
+    21300176: Walter_Sprite_88
+    21300178: Walter_Sprite_89
+    21300180: Walter_Sprite_90
+    21300182: Walter_Sprite_91
+    21300184: Walter_Sprite_92
+    21300186: Walter_Sprite_93
+    21300188: Walter_Sprite_94
+    21300190: Walter_Sprite_95
+    21300192: Walter_Sprite_96
+    21300194: Walter_Sprite_97
+    21300196: Walter_Sprite_98
+    21300198: Walter_Sprite_99
+    21300200: Walter_Sprite_100
+    21300202: Walter_Sprite_101
+    21300204: Walter_Sprite_102
+    21300206: Walter_Sprite_103
+    21300208: Walter_Sprite_104
+    21300210: Walter_Sprite_105
+    21300212: Walter_Sprite_106
+    21300214: Walter_Sprite_107
+    21300216: Walter_Sprite_108
+    21300218: Walter_Sprite_109
+    21300220: Walter_Sprite_110
+    21300222: Walter_Sprite_111
+    21300224: Walter_Sprite_112
+    21300226: Walter_Sprite_113
+    21300228: Walter_Sprite_114
+    21300230: Walter_Sprite_115
+    21300232: Walter_Sprite_116
+    21300234: Walter_Sprite_117
+    21300236: Walter_Sprite_118
+    21300238: Walter_Sprite_119
+    21300240: Walter_Sprite_120
+    21300242: Walter_Sprite_121
+    21300244: Walter_Sprite_122
+    21300246: Walter_Sprite_123
+    21300248: Walter_Sprite_124
+    21300250: Walter_Sprite_125
+    21300252: Walter_Sprite_126
+    21300254: Walter_Sprite_127
+    21300256: Walter_Sprite_128
+    21300258: Walter_Sprite_129
+    21300260: Walter_Sprite_130
+    21300262: Walter_Sprite_131
+    21300264: Walter_Sprite_132
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Walter_Sprite_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1080
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_1
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 1080
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_2
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 1080
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_3
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 1080
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_4
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 1080
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_5
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 1080
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_6
+      rect:
+        serializedVersion: 2
+        x: 570
+        y: 1080
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_7
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 1080
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_8
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 1080
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_9
+      rect:
+        serializedVersion: 2
+        x: 855
+        y: 1080
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_10
+      rect:
+        serializedVersion: 2
+        x: 950
+        y: 1080
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_11
+      rect:
+        serializedVersion: 2
+        x: 1045
+        y: 1080
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_12
+      rect:
+        serializedVersion: 2
+        x: 1140
+        y: 1080
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_13
+      rect:
+        serializedVersion: 2
+        x: 1235
+        y: 1080
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_14
+      rect:
+        serializedVersion: 2
+        x: 1330
+        y: 1080
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 960
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_16
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 960
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_17
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 960
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_18
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 960
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_19
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 960
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_20
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 960
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_21
+      rect:
+        serializedVersion: 2
+        x: 570
+        y: 960
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_22
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 960
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_23
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 960
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_24
+      rect:
+        serializedVersion: 2
+        x: 855
+        y: 960
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_25
+      rect:
+        serializedVersion: 2
+        x: 950
+        y: 960
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_26
+      rect:
+        serializedVersion: 2
+        x: 1045
+        y: 960
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_27
+      rect:
+        serializedVersion: 2
+        x: 1140
+        y: 960
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_28
+      rect:
+        serializedVersion: 2
+        x: 1235
+        y: 960
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_29
+      rect:
+        serializedVersion: 2
+        x: 1330
+        y: 960
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 840
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_31
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 840
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_32
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 840
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_33
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 840
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_34
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 840
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_35
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 840
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_36
+      rect:
+        serializedVersion: 2
+        x: 570
+        y: 840
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_37
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 840
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_38
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 840
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_39
+      rect:
+        serializedVersion: 2
+        x: 855
+        y: 840
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_40
+      rect:
+        serializedVersion: 2
+        x: 950
+        y: 840
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_41
+      rect:
+        serializedVersion: 2
+        x: 1045
+        y: 840
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_42
+      rect:
+        serializedVersion: 2
+        x: 1140
+        y: 840
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_43
+      rect:
+        serializedVersion: 2
+        x: 1235
+        y: 840
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_44
+      rect:
+        serializedVersion: 2
+        x: 1330
+        y: 840
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_45
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 720
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_46
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 720
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_47
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 720
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_48
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 720
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_49
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 720
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_50
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 720
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_51
+      rect:
+        serializedVersion: 2
+        x: 570
+        y: 720
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_52
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 720
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_53
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 720
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_54
+      rect:
+        serializedVersion: 2
+        x: 855
+        y: 720
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_55
+      rect:
+        serializedVersion: 2
+        x: 950
+        y: 720
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_56
+      rect:
+        serializedVersion: 2
+        x: 1045
+        y: 720
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_57
+      rect:
+        serializedVersion: 2
+        x: 1140
+        y: 720
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_58
+      rect:
+        serializedVersion: 2
+        x: 1235
+        y: 720
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_59
+      rect:
+        serializedVersion: 2
+        x: 1330
+        y: 720
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_60
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 600
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_61
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 600
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_62
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 600
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_63
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 600
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_64
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 600
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_65
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 600
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_66
+      rect:
+        serializedVersion: 2
+        x: 570
+        y: 600
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_67
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 600
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_68
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 600
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_69
+      rect:
+        serializedVersion: 2
+        x: 855
+        y: 600
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_70
+      rect:
+        serializedVersion: 2
+        x: 950
+        y: 600
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_71
+      rect:
+        serializedVersion: 2
+        x: 1045
+        y: 600
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_72
+      rect:
+        serializedVersion: 2
+        x: 1140
+        y: 600
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_73
+      rect:
+        serializedVersion: 2
+        x: 1235
+        y: 600
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_74
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 480
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_75
+      rect:
+        serializedVersion: 2
+        x: 570
+        y: 480
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_76
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 480
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_77
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 480
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_78
+      rect:
+        serializedVersion: 2
+        x: 855
+        y: 480
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_79
+      rect:
+        serializedVersion: 2
+        x: 950
+        y: 480
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_80
+      rect:
+        serializedVersion: 2
+        x: 1045
+        y: 480
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_81
+      rect:
+        serializedVersion: 2
+        x: 1140
+        y: 480
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_82
+      rect:
+        serializedVersion: 2
+        x: 1235
+        y: 480
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_83
+      rect:
+        serializedVersion: 2
+        x: 1330
+        y: 480
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_84
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 360
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_85
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 360
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_86
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 360
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_87
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 360
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_88
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 360
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_89
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 360
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_90
+      rect:
+        serializedVersion: 2
+        x: 570
+        y: 360
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_91
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 360
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_92
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 360
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_93
+      rect:
+        serializedVersion: 2
+        x: 855
+        y: 360
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_94
+      rect:
+        serializedVersion: 2
+        x: 950
+        y: 360
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_95
+      rect:
+        serializedVersion: 2
+        x: 1045
+        y: 360
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_96
+      rect:
+        serializedVersion: 2
+        x: 1140
+        y: 360
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_97
+      rect:
+        serializedVersion: 2
+        x: 1235
+        y: 360
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_98
+      rect:
+        serializedVersion: 2
+        x: 1330
+        y: 360
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_99
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 240
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_100
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 240
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_101
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 240
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_102
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 240
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_103
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 240
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_104
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 240
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_105
+      rect:
+        serializedVersion: 2
+        x: 570
+        y: 240
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_106
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 240
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_107
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 240
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_108
+      rect:
+        serializedVersion: 2
+        x: 855
+        y: 240
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_109
+      rect:
+        serializedVersion: 2
+        x: 950
+        y: 240
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_110
+      rect:
+        serializedVersion: 2
+        x: 1045
+        y: 240
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_111
+      rect:
+        serializedVersion: 2
+        x: 1140
+        y: 240
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_112
+      rect:
+        serializedVersion: 2
+        x: 1235
+        y: 240
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_113
+      rect:
+        serializedVersion: 2
+        x: 1330
+        y: 240
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_114
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 120
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_115
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 120
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_116
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 120
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_117
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 120
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_118
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 120
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_119
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 120
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_120
+      rect:
+        serializedVersion: 2
+        x: 570
+        y: 120
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_121
+      rect:
+        serializedVersion: 2
+        x: 665
+        y: 120
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_122
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 120
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_123
+      rect:
+        serializedVersion: 2
+        x: 855
+        y: 120
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_124
+      rect:
+        serializedVersion: 2
+        x: 950
+        y: 120
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_125
+      rect:
+        serializedVersion: 2
+        x: 1045
+        y: 120
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_126
+      rect:
+        serializedVersion: 2
+        x: 1140
+        y: 120
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_127
+      rect:
+        serializedVersion: 2
+        x: 1235
+        y: 120
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_128
+      rect:
+        serializedVersion: 2
+        x: 1330
+        y: 120
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_129
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_130
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 0
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_131
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 0
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Walter_Sprite_132
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 0
+        width: 95
+        height: 120
+      alignment: 7
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

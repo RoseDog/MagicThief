@@ -19,6 +19,12 @@ class String
   end
 end
 
+class DataBasedOnRoseCount
+  attr_accessor :levelIdxMin
+  attr_accessor :levelIdxMax
+  attr_accessor :roseGrowDuration
+end
+
 class MagicianData
   attr_accessor :name
   attr_accessor :strengthAllot
@@ -31,7 +37,6 @@ class MagicianData
     @wisdomAllot = 0
   end
 end
-
 
 class TrickData
   attr_accessor :name
@@ -50,7 +55,6 @@ class UserFile
   attr_accessor :name
   attr_accessor :deviceID
   attr_accessor :TutorialLevelIdx
-  attr_accessor :GetGem
   attr_accessor :cashAmount
   attr_accessor :roseCount
   attr_accessor :roseLast
@@ -79,7 +83,7 @@ class UserFile
   def initialize(roseBuildingDuration, bornNewTargetDuration)
     @name = ""
     @deviceID = "-1"
-    @TutorialLevelIdx="GetGem"
+    @TutorialLevelIdx="GetChest"
     @cashAmount = 0.0
     @roseCount=0
     @roseLast = @roseCount
@@ -131,15 +135,15 @@ class UserFile
     @PvEProgress=0
     @logOutTimeStamp=Time.now
     @Magicians = [MagicianData.new("Rosa"),
-                  MagicianData.new("Mine Fujiko")]
+                  MagicianData.new("Walter")]
     @selectedMagician = "Rosa"
 
     @trickDatas=[TrickData.new("hypnosis", true,10),
-                 TrickData.new("disguise", false,0),
-                 TrickData.new("dove", false,0),
-                 TrickData.new("flashGrenade", false,0),
-                 TrickData.new("shotLight", false,0),
-                 TrickData.new("flyUp", false,0)]
+                 TrickData.new("disguise", true,3),
+                 TrickData.new("dove", true,0),
+                 TrickData.new("flashGrenade", true,0),
+                 TrickData.new("shotLight", true,0),
+                 TrickData.new("flyUp", true,0)]
     @droppedItemsFromThief=[]
     @performingIncomePerHour=0
     @cashOnFloor=[]
@@ -156,6 +160,7 @@ class Building
   attr_accessor :newTargetTimeStamp
   attr_accessor :roseGrowBeginTimeStamp
   attr_accessor :roseGrowTotalDuration
+  attr_accessor :roseGrowCycle
   attr_accessor :roseGrowLastDuration
   attr_accessor :roseGrowTimer
   attr_accessor :roseGrowStopTimer
@@ -179,6 +184,7 @@ class Building
     @everClickedTarget = false
     @roseGrowLastDuration = roseDuration
     @roseGrowTotalDuration = roseDuration
+    @roseGrowCycle = 0.0
     @bornNewTargetLastDuration = newTargetDuration
     @targetName = "poker_face"
     @isPvP = false
@@ -218,7 +224,6 @@ class Player
     @seperator = '|'
     #偷满是5朵玫瑰
     @roseBuildingDuration = 60 * 20 + 2
-    @roseGrowCycle = 60*20 / 9.0
     @roseAddPowerRate = 2.0
     @bornNewTargetDuration = 60*15
     @userFile = UserFile.new(@roseBuildingDuration,@bornNewTargetDuration)
@@ -297,7 +302,6 @@ class Player
     reply += "&" + playerFile.isBot.to_s
     reply += "&" + playerFile.name
     reply += "&" + playerFile.PvEProgress.to_s
-    reply += "&" + @roseGrowCycle.to_s
     reply += "&" + @roseAddPowerRate.to_s
     reply += "&" + @punishRoseCount.to_s
     reply += "&"
@@ -381,7 +385,7 @@ class Player
       building.unpickedRose = 0
       #剩余时间
       growLastDuration = building.roseGrowTotalDuration - (Time.now - building.roseGrowBeginTimeStamp)
-      if growLastDuration < @roseGrowCycle
+      if growLastDuration < building.roseGrowCycle
         SendNone(building, @bornNewTargetDuration)
       end
     end
@@ -482,20 +486,7 @@ class Player
     }
   end
 
-  def GetPvEMazeLv(pvELevelIdx)
-    mazeLv = case pvELevelIdx
-      when 0..4
-        1
-      when 5..8
-        2
-      when 9..11
-        3
-      when 12..15
-        5
-      else
-        6
-    end
-  end
+
 
   def RewardAccepted(protocal_no,contents)
     date = contents[0]
@@ -505,6 +496,96 @@ class Player
         return
       end
     }
+  end
+
+  def GetDataBasedOnRoseCount(mazeLv)
+    data = DataBasedOnRoseCount.new()
+    case @userFile.roseCount
+      when 0..10
+        data.levelIdxMin = 0
+        data.levelIdxMax = 4
+      when 11..30
+        data.levelIdxMin = 5
+        data.levelIdxMax = 9
+      when 31..60
+        data.levelIdxMin = 10
+        data.levelIdxMax = 14
+      when 61..100
+        data.levelIdxMin = 15
+        data.levelIdxMax = 19
+      when 101..150
+        data.levelIdxMin = 20
+        data.levelIdxMax = 24
+      when 151..210
+        data.levelIdxMin = 25
+        data.levelIdxMax = 29
+      when 211..280
+        data.levelIdxMin = 30
+        data.levelIdxMax = 34
+      when 281..360
+        data.levelIdxMin = 35
+        data.levelIdxMax = 39
+      when 361..450
+        data.levelIdxMin = 40
+        data.levelIdxMax = 44
+      when 451..550
+        data.levelIdxMin = 45
+        data.levelIdxMax = 49
+      else
+        data.levelIdxMin = 45
+        data.levelIdxMax = 49
+    end
+
+    case mazeLv
+      when 1
+        data.roseGrowDuration = 10 * 60
+      when 2
+        data.roseGrowDuration = 10 * 60
+      when 3
+        data.roseGrowDuration = 15 * 60
+      when 4
+        data.roseGrowDuration = 15 * 60
+      when 5
+        data.roseGrowDuration = 20 * 60
+      when 6
+        data.roseGrowDuration = 20 * 60
+      when 7
+        data.roseGrowDuration = 25 * 60
+      when 8
+        data.roseGrowDuration = 25 * 60
+      when 9
+        data.roseGrowDuration = 30 * 60
+      when 10
+        data.roseGrowDuration = 30 * 60
+    end
+    data
+  end
+
+  def GetPvEMazeLv(pvELevelIdx)
+    mazeLv = case pvELevelIdx
+               when 0..4
+                 1
+               when 5..9
+                 2
+               when 10..14
+                 3
+               when 15..19
+                 4
+               when 20..24
+                 5
+               when 25..29
+                 6
+               when 30..34
+                 7
+               when 35..39
+                 8
+               when 40..44
+                 9
+               when 45..49
+                 10
+               else
+                 10
+             end
   end
 
   def SendNewTarget(building)
@@ -549,8 +630,10 @@ class Player
           "COC","boom_beach","spy_mouse","VR","mark_of_the_ninja","stealth_inc"]
       building.targetName = targetNames[Random.rand(0..(targetNames.length-1))]
       building.isPvP = false
+
       building.botLevelRandSeed = Random.new_seed%10000000
-      building.PvELevelIdx = @userFile.PvEProgress
+      data = GetDataBasedOnRoseCount(0)
+      building.PvELevelIdx = Random.rand(data.levelIdxMin..data.levelIdxMax)
       mazeLv = GetPvEMazeLv(building.PvELevelIdx)
       @userFile.PvEProgress = @userFile.PvEProgress + 1
     end
@@ -587,7 +670,7 @@ class Player
   def RoseGrowBegin(building,timeElapsed)
     growing_period = Time.now - building.roseGrowBeginTimeStamp
     growing_period = building.roseGrowTotalDuration if growing_period > building.roseGrowTotalDuration
-    rose_growed_count_till_now_should_be = growing_period / @roseGrowCycle
+    rose_growed_count_till_now_should_be = growing_period / building.roseGrowCycle
 
     building.unpickedRose += rose_growed_count_till_now_should_be.to_i - building.roseGrowedCount
     building.roseGrowedCount = rose_growed_count_till_now_should_be.to_i
@@ -597,7 +680,7 @@ class Player
 
     #如果rosebuilding还能继续生产玫瑰，
     if building.roseGrowLastDuration > 0
-      building.roseGrowTimer = EM.add_timer(@roseGrowCycle - growing_period%@roseGrowCycle) do
+      building.roseGrowTimer = EM.add_timer(building.roseGrowCycle - growing_period%building.roseGrowCycle) do
         RoseGrow(building)
       end
       building.roseGrowStopTimer = EM.add_timer(building.roseGrowLastDuration) do
@@ -612,7 +695,7 @@ class Player
     building.unpickedRose += 1
     building.roseGrowedCount += 1
     send("rose_grow" + seperator + building.posID)
-    building.roseGrowTimer = EM.add_timer(@roseGrowCycle) do
+    building.roseGrowTimer = EM.add_timer(building.roseGrowCycle) do
       RoseGrow(building)
     end
   end
@@ -666,6 +749,7 @@ class Player
                @seperator + building.PvELevelIdx.to_s +
                @seperator + building.roseGrowLastDuration.to_s +
                @seperator + building.roseGrowTotalDuration.to_s +
+               @seperator + building.roseGrowCycle.to_s +
                @seperator + building.bornNewTargetLastDuration.to_s +
       @seperator + mazeLv.to_s
                )
@@ -732,53 +816,48 @@ class Player
     replay.reward_rose_count = 0
     replay.rewardAccepted = false
     bIsPerfectStealing = contents[5].to_bool
-    enemyCashBeforeSteal = 1.0
-    # 如果是pvp，要扣除对方金钱
+
+    # 如果是pvp
     if !enemy.userFile.isBot
       replay.guard = StealingInfo(enemy.userFile)
       enemy.userFile.beenStealingTimeStamp = Time.now
-      if replay.StealingCashInSafebox.to_f < 1
+      # 失败，对方得到奖励
+      if !bIsPerfectStealing
         replay.reward_rose_count = 2
       end
+      # 如果对方在线，发送消息
       if $onlinePlayers.include?enemy
         enemy.send("been_stolen" + @seperator + PackReplay(replay) + @seperator + "True")
       else
-        enemyCashBeforeSteal = enemy.userFile.cashAmount.to_f
-        enemy.userFile.cashAmount = (enemyCashBeforeSteal - replay.StealingCashInSafebox.to_f).to_s
+        #否则直接扣除金钱，保存防守录像
+        enemy.userFile.cashAmount = (enemy.userFile.cashAmount.to_f - replay.StealingCashInSafebox.to_f).to_s
         enemy.userFile.defReplays << replay
         enemy.userFile.defReplays.shift if enemy.userFile.defReplays.length > 5
       end
     else
       # bot的金钱是客户端上传的
       enemy.userFile.cashAmount = contents[6].to_f
-      enemyCashBeforeSteal = contents[6].to_f
       replay.guard = StealingInfo(enemy.userFile)
     end
 
+    #保存自己的进攻录像
     @userFile.atkReplays << replay
     @userFile.atkReplays.shift if @userFile.atkReplays.length > 5
-
     send("atk_replay" + seperator + PackReplay(replay))
-    stolen_cash_ratio =  (replay.StealingCashInSafebox.to_f / enemyCashBeforeSteal).clamp(0.0, 1.0)
+
+    #生成新的建筑
     buildingPosID = contents[7]
     building = GetBuilding(buildingPosID)
-    building.roseGrowTotalDuration = @roseBuildingDuration * stolen_cash_ratio
-    # 如果是玩家，偷窃0.2以上，刷新成收玫瑰，否则更换目标
-    if !enemy.userFile.isBot
-      if stolen_cash_ratio > 0.4
-        building.type = "Poor"
-        send("new_poor" + seperator + buildingPosID)
-      else
-        SendNone(building, @bornNewTargetDuration * 2)
-      end
-
-    else #如果是Bot，必须完全偷完才刷新成玫瑰
-      if bIsPerfectStealing
-        building.type = "Poor"
-        send("new_poor" + seperator + buildingPosID)
-      end
+    data = GetDataBasedOnRoseCount(GetPvEMazeLv(building.PvELevelIdx))
+    building.roseGrowTotalDuration = data.roseGrowDuration + 2
+    building.roseGrowCycle = data.roseGrowDuration / 5.0
+    # 如果胜利，刷新成poor，否则刷新成None
+    if bIsPerfectStealing
+      building.type = "Poor"
+      send("new_poor" + seperator + buildingPosID)
+    else
+      SendNone(building, @bornNewTargetDuration * 2)
     end
-
   end
 
   def TurnToRoseBuilding(protocal_no,contents)
@@ -792,7 +871,8 @@ class Player
     send("new_rosebuilding" + @seperator + buildingPosID +
              @seperator + building.unpickedRose.to_s +
              @seperator + building.roseGrowLastDuration.to_s +
-             @seperator + building.roseGrowTotalDuration.to_s)
+             @seperator + building.roseGrowTotalDuration.to_s +
+             @seperator + building.roseGrowCycle.to_s)
   end
 
   def AdvanceTutorial(protocal_no,contents)

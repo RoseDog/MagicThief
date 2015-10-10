@@ -3,7 +3,7 @@ public class TryEscape : Action
     int Duration = 100;
     public void Start()
     {
-        actor.spriteSheet.AddAnimationEvent("TryEscape", -1, () => Escaped());
+        //actor.spriteSheet.AddAnimationEvent("TryEscape", -1, () => Escaped());
     }
     
     public override void Excute()

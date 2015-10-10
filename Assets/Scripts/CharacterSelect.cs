@@ -13,7 +13,7 @@ public class CharacterSelect : UnityEngine.MonoBehaviour
     public MultiLanguageUIText TotalHpGrow;
     public MultiLanguageUIText TotalSpeedGrow;
     public MultiLanguageUIText TotalPowerGrow;
-    public LifeNumber RoseNumber;
+    public LifeNumber RoseToBeAllot;
     public UnityEngine.UI.Button prev;
     public UnityEngine.UI.Button next;
 	public void Awake()
@@ -65,14 +65,14 @@ public class CharacterSelect : UnityEngine.MonoBehaviour
         UpdateCharacterData();
 
         Globals.languageTable.SetText(Desc, Globals.self.selectedMagician.desc);
-        RoseNumber.UpdateCurrentLife(Globals.self.roseLast.ToString(), Globals.self.roseCount, false);               
+        RoseToBeAllot.UpdateCurrentLife(Globals.self.roseLast.ToString(), Globals.self.roseCount, false);               
     }
 
     public void UpdateCharacterData()
     {
         TotalHpGrow.text = "HP + " + Globals.self.selectedMagician.GetLifeDelta();
         TotalPowerGrow.text = "MP + " + Globals.self.selectedMagician.GetPowerDelta();
-        Globals.languageTable.SetText(TotalSpeedGrow, "speed_total_grow", new System.String[] { Globals.self.selectedMagician.GetNormalSpeedDelta().ToString("F1"), Globals.self.selectedMagician.GetUnlockSafeTimeDelta().ToString("F1") });
+        Globals.languageTable.SetText(TotalSpeedGrow, "speed_total_grow", new System.String[] { Globals.self.selectedMagician.GetSpeedDelta().ToString("F1"), Globals.self.selectedMagician.GetUnlockSafeTimeDelta().ToString("F1") });
         Globals.canvasForMagician.UpdateCharacter(Globals.self);
     }
 
@@ -108,7 +108,7 @@ public class CharacterSelect : UnityEngine.MonoBehaviour
             Globals.self.roseLast -= allot;
             Globals.self.roseLast += property;
             property = allot;            
-            RoseNumber.UpdateCurrentLife(Globals.self.roseLast.ToString(), Globals.self.roseCount);
+            RoseToBeAllot.UpdateCurrentLife(Globals.self.roseLast.ToString(), Globals.self.roseCount, false);
             UpdateCharacterData();
             Globals.self.UploadMagicianProperties();
 

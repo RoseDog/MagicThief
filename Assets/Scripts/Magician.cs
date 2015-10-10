@@ -20,10 +20,10 @@ public class Magician : Actor
     public UnityEngine.AudioClip openChestSound;
     public MagicianData data;
 
-    float sneakingAnimSpeed;
+    protected float sneakingAnimSpeed = 2.5f;
     [UnityEngine.HideInInspector]
-    public float normalMovingAnimSpeed;
-    float runningAnimSpeed;
+    public float normalMovingAnimSpeed = 1.8f;
+    protected float runningAnimSpeed = 3.0f;
     public float speedModifier;
 
     public UnityEngine.Material flyingMat;
@@ -31,6 +31,7 @@ public class Magician : Actor
         
     public override void Awake()
     {
+        speedModifier = 1.0f;
         base.Awake();
         
         stepSounds.Add(UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/StepSounds/footstepSound_A_00"));
@@ -38,44 +39,6 @@ public class Magician : Actor
         stepSounds.Add(UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/StepSounds/footstepSound_A_02"));
         stepSounds.Add(UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/StepSounds/footstepSound_A_03"));
         stepSounds.Add(UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/StepSounds/footstepSound_A_04"));
-
-        sneakingAnimSpeed = 2.5f;
-        normalMovingAnimSpeed = 1.8f;
-        runningAnimSpeed = 3.0f;
-        speedModifier = 1.0f;
-      
-        spriteSheet.AddAnim("idle", 4);
-        spriteSheet.AddAnim("moving", 6, normalMovingAnimSpeed);
-        spriteSheet.AddAnimationEvent("moving", 0, () => StepSound());
-        spriteSheet.AddAnimationEvent("moving", 3, () => StepSound());
-        spriteSheet.AddAnim("victoryEscape", 1);
-        spriteSheet.AddAnim("catch_by_net", 4);
-        spriteSheet.AddAnim("hitted_in_net", 1, 0.2f);
-        spriteSheet.AddAnim("break_net", 8, 2.0f);
-        spriteSheet.AddAnim("disguise", 8, 1.7f);
-        spriteSheet.AddAnim("falling_failed", 7, 1.0f, true);
-        spriteSheet.AddAnim("falling_success", 5, 1.0f, true);
-        spriteSheet.AddAnim("falling", 1, 0.3f);
-        spriteSheet.AddAnim("flying", 8);
-        spriteSheet.AddAnim("hitted", 1, 0.3f);
-        spriteSheet.AddAnim("Hypnosis", 4,1.5f);
-        spriteSheet.AddAnim("landing", 1, 0.3f);
-        spriteSheet.AddAnim("lifeOver", 5, 1.5f, true);
-        spriteSheet.AddAnim("lifeOverEscape", 1, 1.0f, true);
-        spriteSheet.AddAnim("take_out_gun", 6, 2.8f);
-        spriteSheet.AddAnim("shot_machine", 3,1.0f);
-        spriteSheet.AddAnim("shot_empty", 2,1.0f);
-        spriteSheet.AddAnim("TryEscape", 6, 1.0f);
-        spriteSheet.AddAnim("falling_failed_loop", 12, 1.3f);
-        spriteSheet.AddAnim("flyup_0",7, 2.0f);
-        spriteSheet.AddAnim("flyup_1", 1, 1.7f);
-        spriteSheet.AddAnim("flyup_2", 6, 1.9f);
-        spriteSheet.AddAnim("open_chest", 4);
-        spriteSheet.AddAnimationEvent("open_chest", 0, () => OpenChestSound());
-        spriteSheet.AddAnim("take_money", 16);        
-        spriteSheet.AddAnim("dove_trick", 12, 3.0f, true);
-        spriteSheet.AddAnim("sneaking", 6, sneakingAnimSpeed);
-        
         
         tryEscape = GetComponent<TryEscape>();        
         escape = GetComponent<Escape>();        
@@ -157,10 +120,14 @@ public class Magician : Actor
     
     public bool OnKeyDownR(string key)
     {
-        moving.move_anim = "sneaking";
-        isSneaking = true;
-        Globals.replaySystem.RecordKeyDown(key);
-        stepCount = 0;
+        if(currentAction != disguise)
+        {
+            moving.move_anim = "sneaking";
+            isSneaking = true;
+            Globals.replaySystem.RecordKeyDown(key);
+            stepCount = 0;
+        }
+        
         return true;
     }
 
@@ -363,19 +330,20 @@ public class Magician : Actor
     }
 
     public override double GetSpeed()
-    {        
+    {
         if (isSneaking)
         {
-            spriteSheet.ModifyAnimSpeed("sneaking", speedModifier * sneakingAnimSpeed * data.GetSneakingSpeed() / data.sneakingSpeed);
+            spriteSheet.ModifyAnimSpeed("sneaking", speedModifier * sneakingAnimSpeed * data.GetSneakingSpeed() / (data.agilityBase * 0.1f * data.sneakingFactor));
             return speedModifier * data.GetSneakingSpeed();
-        }  
-        else if(chasingGuards.Count != 0)
+        }
+        else if (chasingGuards.Count != 0)
         {
-            spriteSheet.ModifyAnimSpeed("moving", speedModifier * runningAnimSpeed * data.GetRunningSpeed() / data.runningSpeed);
+            spriteSheet.ModifyAnimSpeed("moving", speedModifier * runningAnimSpeed * data.GetRunningSpeed() / (data.agilityBase * 0.1f * data.runningFactor));
             return speedModifier * data.GetRunningSpeed();
         }
 
-        spriteSheet.ModifyAnimSpeed("moving", speedModifier * normalMovingAnimSpeed * data.GetNormalSpeed() / data.normalSpeed);
+        spriteSheet.ModifyAnimSpeed("moving", speedModifier * normalMovingAnimSpeed * data.GetNormalSpeed() / (data.agilityBase * 0.1f));
+
         return speedModifier * data.GetNormalSpeed();
     }
 }
