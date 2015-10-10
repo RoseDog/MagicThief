@@ -504,31 +504,31 @@ class Player
       when 0..10
         data.levelIdxMin = 0
         data.levelIdxMax = 4
-      when 11..30
+      when 11..20
         data.levelIdxMin = 5
         data.levelIdxMax = 9
-      when 31..60
+      when 21..30
         data.levelIdxMin = 10
         data.levelIdxMax = 14
-      when 61..100
+      when 31..40
         data.levelIdxMin = 15
         data.levelIdxMax = 19
-      when 101..150
+      when 41..50
         data.levelIdxMin = 20
         data.levelIdxMax = 24
-      when 151..210
+      when 51..60
         data.levelIdxMin = 25
         data.levelIdxMax = 29
-      when 211..280
+      when 61..70
         data.levelIdxMin = 30
         data.levelIdxMax = 34
-      when 281..360
+      when 71..80
         data.levelIdxMin = 35
         data.levelIdxMax = 39
-      when 361..450
+      when 81..90
         data.levelIdxMin = 40
         data.levelIdxMax = 44
-      when 451..550
+      when 91..100
         data.levelIdxMin = 45
         data.levelIdxMax = 49
       else
@@ -850,7 +850,7 @@ class Player
     building = GetBuilding(buildingPosID)
     data = GetDataBasedOnRoseCount(GetPvEMazeLv(building.PvELevelIdx))
     building.roseGrowTotalDuration = data.roseGrowDuration + 2
-    building.roseGrowCycle = data.roseGrowDuration / 5.0
+    building.roseGrowCycle = data.roseGrowDuration / 3.0
     # 如果胜利，刷新成poor，否则刷新成None
     if bIsPerfectStealing
       building.type = "Poor"

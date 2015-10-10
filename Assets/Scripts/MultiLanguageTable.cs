@@ -303,9 +303,9 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("no", new System.String[] { "不给", "No" });
 
 
-        table.Add("strength", new System.String[] { "力量：{0}+{1}", "Strength:{0}+{1}" });
-        table.Add("agility", new System.String[] { "敏捷：{0}+{1}", "Agility:{0}+{1}" });
-        table.Add("wisdom", new System.String[] { "智力：{0}+{1}", "Wisdom:{0}+{1}" });
+        table.Add("strength", new System.String[] { "力量：{0}", "Strength:{0}" });
+        table.Add("agility", new System.String[] { "敏捷：{0}", "Agility:{0}" });
+        table.Add("wisdom", new System.String[] { "智力：{0}", "Wisdom:{0}" });
         table.Add("Speed", new System.String[] { "移动速度：{0}", "Moving Speed:{0}" });
         table.Add("Unlocking Duration", new System.String[] { "开锁速度：{0}", "Unlocking Speed:{0}" });
         table.Add("TricksTotalWeight", new System.String[] { "携带的道具总重：{0}", "Tricks total weights:{0}" });        
