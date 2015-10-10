@@ -24,7 +24,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         {
             current = Languages.Eng;
         }
-        
+
         chn_simple_font = UnityEngine.Resources.Load("UI/simhei") as UnityEngine.Font;
         chn_traditional_font = UnityEngine.Resources.Load("UI/FZCuYuan-M03T") as UnityEngine.Font;
                 
@@ -316,11 +316,11 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("growth", new System.String[] { "增长", "growth" });
 
         table.Add("item_consumed_label", new System.String[] { "这些道具被消耗了：", "growth" });
-        table.Add("item_consumed", new System.String[] { "{0} -{1}", "{0} -{1}" });
+        table.Add("item_consumed", new System.String[] { "<color=red>{0} -{1}</color>", "{0} -{1}" });
         table.Add("item_picked_label", new System.String[] { "你在迷宫里获得了一些道具：", "growth" });
         table.Add("item_picked", new System.String[] { "{0} +{1}", "{0} +{1}" });
         table.Add("item_dropped_label", new System.String[] { "狼狈的逃离，你遗落了一些道具：", "growth" });
-        table.Add("item_dropped", new System.String[] { "{0} -{1}", "{0} -{1}" });
+        table.Add("item_dropped", new System.String[] { "<color=red>{0} -{1}</color>", "<color=red>{0} -{1}</color>" });
         
    }    
 

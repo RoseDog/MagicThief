@@ -1602,7 +1602,7 @@ public class Globals
     public static float FLOOR_HEIGHT = 0.1f;
     public static Replay replaySystem;
     public static ReplayData playingReplay;
-    public static bool DEBUG_REPLAY = true;
+    public static bool DEBUG_REPLAY = false;
     public static UnityEngine.Sprite[] buildingSprites = null;
     
         

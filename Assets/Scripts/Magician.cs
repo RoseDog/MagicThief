@@ -85,7 +85,11 @@ public class Magician : Actor
 
     public void UnRegistEvent()
     {
-        ;
+        Globals.input.Evt_KeyQ -= OnItemKeyPressed;
+        Globals.input.Evt_KeyW -= OnItemKeyPressed;
+        Globals.input.Evt_KeyE -= OnItemKeyPressed;
+        Globals.input.Evt_KeyDownR -= OnKeyDownR;
+        Globals.input.Evt_KeyUpR -= OnKeyUpR;
     }
 
     public bool OnItemKeyPressed(string key)

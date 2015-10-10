@@ -353,11 +353,11 @@ class Player
   end
 
   def DropTrickItem(protocal_no,contents,enemy)
-    trickname = contents[0]
-    data = GetTrickData(trickname.force_encoding('utf-8'))
+    trickdataStrs = contents[0].split(',')
+    data = GetTrickData(trickdataStrs[2].force_encoding('utf-8'))
     data.inventory -= 1
     if enemy != nil && !enemy.userFile.isBot
-      enemy.userFile.droppedItemsFromThief << data.name
+      enemy.userFile.droppedItemsFromThief << contents[0]
     end
   end
 
@@ -786,9 +786,9 @@ class Player
     @userFile.defReplays.each{ |replay|
       send("replay" + @seperator + PackReplay(replay))
     }
-    @userFile.atkReplays.each{ |replay|
-      send("replay" + @seperator + PackReplay(replay))
-    }
+    #@userFile.atkReplays.each{ |replay|
+    #  send("replay" + @seperator + PackReplay(replay))
+    #}
     send("replays_ready")
   end
 

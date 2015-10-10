@@ -1863,6 +1863,11 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             DestroyObject(holder);
         }
         gemHolders.Clear();
+        PickedItem[] items = UnityEngine.GameObject.FindObjectsOfType<PickedItem>();
+        foreach (PickedItem item in items)
+        {
+            DestroyObject(item.gameObject);
+        }
         ClearGuards();
         DestroyObject(maze);
         DestroyObject(rayCastPlane);        
