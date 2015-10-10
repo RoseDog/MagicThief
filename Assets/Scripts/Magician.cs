@@ -31,6 +31,7 @@ public class Magician : Actor
         
     public override void Awake()
     {
+        speedModifier = 1.0f;
         base.Awake();
         
         stepSounds.Add(UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/StepSounds/footstepSound_A_00"));
@@ -332,16 +333,16 @@ public class Magician : Actor
     {
         if (isSneaking)
         {
-            spriteSheet.ModifyAnimSpeed("sneaking", speedModifier * sneakingAnimSpeed * data.GetSneakingSpeed() / data.sneakingSpeed);
+            spriteSheet.ModifyAnimSpeed("sneaking", speedModifier * sneakingAnimSpeed * data.GetSneakingSpeed() / (data.agilityBase * 0.1f * data.sneakingFactor));
             return speedModifier * data.GetSneakingSpeed();
         }
         else if (chasingGuards.Count != 0)
         {
-            spriteSheet.ModifyAnimSpeed("moving", speedModifier * runningAnimSpeed * data.GetRunningSpeed() / data.runningSpeed);
+            spriteSheet.ModifyAnimSpeed("moving", speedModifier * runningAnimSpeed * data.GetRunningSpeed() / (data.agilityBase * 0.1f * data.runningFactor));
             return speedModifier * data.GetRunningSpeed();
         }
 
-        spriteSheet.ModifyAnimSpeed("moving", speedModifier * normalMovingAnimSpeed * data.GetNormalSpeed() / data.normalSpeed);
+        spriteSheet.ModifyAnimSpeed("moving", speedModifier * normalMovingAnimSpeed * data.GetNormalSpeed() / (data.agilityBase * 0.1f));
 
         return speedModifier * data.GetNormalSpeed();
     }

@@ -2,10 +2,10 @@
 randSeedCacheWhenEditLevel=1352703819
 Z_CELLS_COUNT=9
 X_CELLS_COUNT=9
-CHANGE_DIRECTION_MODIFIER=20
-sparsenessModifier=90
+CHANGE_DIRECTION_MODIFIER=62
+sparsenessModifier=62
 deadEndRemovalModifier=100
-noOfRoomsToPlace=4
+noOfRoomsToPlace=3
 minRoomXCellsCount=3
 maxRoomXCellsCount=3
 minRoomZCellsCount=3

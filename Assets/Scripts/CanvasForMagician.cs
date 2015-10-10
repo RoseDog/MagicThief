@@ -260,7 +260,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
             // 如果催眠已经购买，出现拖动的提示手指
             if (tricksBg.gameObject.activeSelf)
             {
-                if (dove.learned)
+                if (!dove.IsLocked())
                 {
                     draggingItemFinger.gameObject.SetActive(true);
                     draggingItemFinger.RecoverPos();
@@ -454,17 +454,25 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
 
     public void BuyTrickItem(TrickItem item)
     {
-        if (ChangeCash(-item.trickData.buyPrice))
+        if(!item.trickData.IsLocked())
         {
-            Globals.self.AddTrickItem(item.trickData);
+            if (ChangeCash(-item.trickData.buyPrice))
+            {
+                Globals.self.AddTrickItem(item.trickData);
 
-            UnityEngine.UI.Text Inventory = Globals.getChildGameObject<UnityEngine.UI.Text>(item.slotInPack.gameObject, "inventory");
-            Inventory.gameObject.SetActive(true);
-            Globals.languageTable.SetText(Inventory, "inventory", new System.String[] { item.trickData.inventory.ToString() });
-            Globals.languageTable.SetText(inventory_on_description, "inventory", new System.String[] { item.trickData.inventory.ToString() });
+                UnityEngine.UI.Text Inventory = Globals.getChildGameObject<UnityEngine.UI.Text>(item.slotInPack.gameObject, "inventory");
+                Inventory.gameObject.SetActive(true);
+                Globals.languageTable.SetText(Inventory, "inventory", new System.String[] { item.trickData.inventory.ToString() });
+                Globals.languageTable.SetText(inventory_on_description, "inventory", new System.String[] { item.trickData.inventory.ToString() });
 
-            tricksBg.ClickHypnosisPointer.transform.parent.gameObject.SetActive(false);
-        }   
+                tricksBg.ClickHypnosisPointer.transform.parent.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            Globals.tipDisplay.Msg(Globals.languageTable.GetText("unlock_need_rose", new System.String[] { item.trickData.unlockRoseCount.ToString() }));
+        }
+
     }
 
     public bool ChangeCash(float delta)
@@ -535,7 +543,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         if (Globals.playingReplay == null && Globals.guardPlayer.isBot && Globals.self.pveProgress <= 6)
         {
             // 易容，鸽子没购买，第一个槽没解锁
-            if (!Globals.self.tricks[1].learned || !Globals.self.tricks[2].learned || Globals.self.slotsDatas[1].statu == "-1")
+            if (Globals.self.tricks[1].IsLocked() || Globals.self.tricks[2].IsLocked() || Globals.self.slotsDatas[1].statu == "-1")
             {
                 TryMoreTricksTipHand.ClearAllActions();
                 TryMoreTricksTipHand.transform.parent.gameObject.SetActive(true);

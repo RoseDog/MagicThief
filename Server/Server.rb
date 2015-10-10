@@ -139,11 +139,11 @@ class UserFile
     @selectedMagician = "Rosa"
 
     @trickDatas=[TrickData.new("hypnosis", true,10),
-                 TrickData.new("disguise", false,0),
-                 TrickData.new("dove", false,0),
-                 TrickData.new("flashGrenade", false,0),
-                 TrickData.new("shotLight", false,0),
-                 TrickData.new("flyUp", false,0)]
+                 TrickData.new("disguise", true,3),
+                 TrickData.new("dove", true,0),
+                 TrickData.new("flashGrenade", true,0),
+                 TrickData.new("shotLight", true,0),
+                 TrickData.new("flyUp", true,0)]
     @droppedItemsFromThief=[]
     @performingIncomePerHour=0
     @cashOnFloor=[]

@@ -895,7 +895,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
         }
 
         cashes_to_place = Globals.guardPlayer.cashOnFloor.Count-1;
-        while (cashes_to_place > 0)
+        while (cashes_to_place >= 0)
         {
 
             // 找到离所有箱子和宝石总距离最远的Cell

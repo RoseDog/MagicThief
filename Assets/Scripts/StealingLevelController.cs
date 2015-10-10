@@ -107,77 +107,86 @@ public class StealingLevelController : LevelController
             Globals.languageTable.SetText(ReplaySpeedText, "replay_speed", new System.String[] { Globals.replaySystem.playSpeed.ToString() });
         }
 
-//         Globals.thiefPlayer = Globals.self;
-//         Globals.guardPlayer = new PlayerInfo();
-//         Globals.guardPlayer.slotsDatas[0].statu = "0";
-//         Globals.guardPlayer.slotsDatas[1].statu = "0";
-//         Globals.guardPlayer.slotsDatas[2].statu = "0";
-//         Globals.guardPlayer.isBot = true;
-//         Globals.iniFileName = "pve_0";        
-// 
-// 
-//         Globals.guardPlayer.currentMazeRandSeedCache = -1;
-//         Globals.guardPlayer.currentMazeLevel = 5;        
-//         Globals.ReadMazeIniFile(Globals.iniFileName, Globals.guardPlayer.currentMazeRandSeedCache);
-//         for (int idx = 0; idx < Globals.maze.noOfRoomsToPlace; ++idx)
-//         {
-//             SafeBoxData data = new SafeBoxData();
-//             Globals.guardPlayer.safeBoxDatas.Add(data);
-//         }
-        bool is_rand_bot = false;
-        int seed = 0;
-        if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
+        bool level_debug = false;
+        if(level_debug)
         {
-            Globals.iniFileName = "Tutorial_Level_" + Globals.self.TutorialLevelIdx.ToString();
-            seed = -1;
+            Globals.thiefPlayer = Globals.self;
+            Globals.guardPlayer = new PlayerInfo();
+            Globals.guardPlayer.slotsDatas[0].statu = "0";
+            Globals.guardPlayer.slotsDatas[1].statu = "0";
+            Globals.guardPlayer.slotsDatas[2].statu = "0";
+            Globals.guardPlayer.isBot = true;
+            Globals.iniFileName = "pve_0";
+
+
+            Globals.guardPlayer.currentMazeRandSeedCache = -1;
+            Globals.guardPlayer.currentMazeLevel = 5;
+            Globals.ReadMazeIniFile(Globals.iniFileName, Globals.guardPlayer.currentMazeRandSeedCache);
+            for (int idx = 0; idx < Globals.maze.noOfRoomsToPlace; ++idx)
+            {
+                SafeBoxData data = new SafeBoxData();
+                Globals.guardPlayer.safeBoxDatas.Add(data);
+            }
         }
         else
         {
-            if (!Globals.guardPlayer.isBot)
+            bool is_rand_bot = false;
+            int seed = 0;
+            if (Globals.self.TutorialLevelIdx != PlayerInfo.TutorialLevel.Over)
             {
-                seed = Globals.guardPlayer.currentMazeRandSeedCache;
-                Globals.iniFileName = "MyMaze_" + Globals.guardPlayer.currentMazeLevel.ToString();
+                Globals.iniFileName = "Tutorial_Level_" + Globals.self.TutorialLevelIdx.ToString();
+                seed = -1;
             }
             else
             {
-                if (Globals.playingReplay == null)
+                if (!Globals.guardPlayer.isBot)
                 {
-                    Globals.replaySystem.RecordPvEFileName(Globals.iniFileName);
-                }
-                else
-                {
-                    Globals.iniFileName = Globals.replaySystem.pveFile;
-                }
-                UnityEngine.TextAsset textAssets = UnityEngine.Resources.Load(Globals.iniFileName) as UnityEngine.TextAsset;
-                if (textAssets != null && textAssets.text.Length != 0)
-                {
-                    seed = -1;
-                }
-                else
-                {
-                    is_rand_bot = true;
-                    // 寻找到最近有配置的地图
-                    int lv_idx = System.Convert.ToInt32(Globals.iniFileName.Split('_')[1]);
-                    while (UnityEngine.Resources.Load(Globals.iniFileName) == null)
-                    {
-                        Globals.iniFileName = "pve_" + lv_idx.ToString();
-                        --lv_idx;
-                    }
-                    bRandomGuards = true;
                     seed = Globals.guardPlayer.currentMazeRandSeedCache;
+                    Globals.iniFileName = "MyMaze_" + Globals.guardPlayer.currentMazeLevel.ToString();
+                }
+                else
+                {
+                    if (Globals.playingReplay == null)
+                    {
+                        Globals.replaySystem.RecordPvEFileName(Globals.iniFileName);
+                    }
+                    else
+                    {
+                        Globals.iniFileName = Globals.replaySystem.pveFile;
+                    }
+                    UnityEngine.TextAsset textAssets = UnityEngine.Resources.Load(Globals.iniFileName) as UnityEngine.TextAsset;
+                    if (textAssets != null && textAssets.text.Length != 0)
+                    {
+                        seed = -1;
+                    }
+                    else
+                    {
+                        is_rand_bot = true;
+                        // 寻找到最近有配置的地图
+                        int lv_idx = System.Convert.ToInt32(Globals.iniFileName.Split('_')[1]);
+                        while (UnityEngine.Resources.Load(Globals.iniFileName) == null)
+                        {
+                            Globals.iniFileName = "pve_" + lv_idx.ToString();
+                            --lv_idx;
+                        }
+                        bRandomGuards = true;
+                        seed = Globals.guardPlayer.currentMazeRandSeedCache;
+                    }
+                }
+            }
+
+            IniFile ini = Globals.ReadMazeIniFile(Globals.iniFileName, seed);
+            if (Globals.guardPlayer.isBot)
+            {
+                Globals.guardPlayer.cashAmount = Globals.maze.CASH;
+                if (is_rand_bot)
+                {
+                    Globals.guardPlayer.cashAmount /= 2;
                 }
             }
         }
 
-        IniFile ini = Globals.ReadMazeIniFile(Globals.iniFileName, seed);
-        if (Globals.guardPlayer.isBot)
-        {
-            Globals.guardPlayer.cashAmount = Globals.maze.CASH;
-            if (is_rand_bot)
-            {
-                Globals.guardPlayer.cashAmount /= 2;
-            }
-        }
+
 
         randSeedCache = UnityEngine.Random.seed;
 

@@ -16,5 +16,6 @@ maxRoomZCellsCount=4
 GEMS_COUNT=1
 LAMPS_COUNT=2
 LevelTipText=“使用鸽子”
-CASH=7000
+CASH=1000
 droppedItemsStr=
+cashOnFloorStr=30,40
