@@ -742,15 +742,15 @@ public class StealingLevelController : LevelController
             foreach (System.String item_id in itemsDropingWhenEscape)
             {
                 System.String[] item = item_id.Split(',');
-                ending_str += Globals.languageTable.GetText("item_dropped", new System.String[] { Globals.languageTable.GetText(item[2]), "1" }) + "</color>";
+                ending_str += Globals.languageTable.GetText("item_dropped", new System.String[] { Globals.languageTable.GetText(item[2]), "1" });
                 ending_str += "\n";
             }
         }               
 
         ending_str += Globals.languageTable.GetText("lose_rose", new System.String[] { Globals.self.punishRoseCount.ToString("F0") });
 
-        Globals.self.ChangeRose(-Globals.self.punishRoseCount);
-        Globals.canvasForMagician.RoseNumber.Add(-Globals.self.punishRoseCount);
+        int rose_actual_delta = Globals.self.ChangeRose(-Globals.self.punishRoseCount);
+        Globals.canvasForMagician.RoseNumber.Add(rose_actual_delta);
 
         strs = ending_str.Split('\n');
         sentence_idx = 0;

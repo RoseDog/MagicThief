@@ -1273,13 +1273,18 @@ public class PlayerInfo
         UploadMagicianProperties();
     }
 
-    public void ChangeRose(int rose_delta)
+    public int ChangeRose(int rose_delta)
     {
-        roseCount += rose_delta;
-        if (roseCount < 0)
+        int temp = roseCount;
+        temp += rose_delta;
+        if (temp < 0)
         {
             rose_delta = -roseCount;
             roseCount = 0;
+        }
+        else
+        {
+            roseCount = temp;
         }
         Globals.socket.Send("change_rose" + separator + rose_delta.ToString());
         roseLast += rose_delta;
@@ -1305,6 +1310,8 @@ public class PlayerInfo
             }                        
         }
         UploadMagicianProperties();
+        // 返回实际减少的玫瑰花数量
+        return rose_delta;
     }
 
     public SafeBoxData AddSafeBox()
