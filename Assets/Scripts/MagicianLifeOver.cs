@@ -12,8 +12,7 @@ public class MagicianLifeOver : LifeOver
 
         actor.AddAction(
             new Sequence(new SleepFor(actor.spriteSheet.GetAnimationLength("lifeOver")*2)
-                , new FunctionCall(() => Escape())));
-        Globals.maze.GuardsTargetVanish(actor.gameObject);
+                , new FunctionCall(() => Escape())));        
     }
 
 //     void DownOnFloor()

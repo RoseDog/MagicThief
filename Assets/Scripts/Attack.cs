@@ -86,11 +86,8 @@ public class Attack : GuardAction
         if (guard.currentAction == this)
         {
             checkTargetStillAlive();
-        }
-        if (guard.currentAction == this)
-        {
             checkTargetStillClose();
-        }
+        }        
     }
 
     void AtkCDOver()
@@ -155,7 +152,7 @@ public class Attack : GuardAction
 
     public virtual bool checkTargetStillClose()
     {
-        if (guard.spot.target == null)
+        if (guard.spot.target == null || guard.spot.target.GetComponent<Actor>().IsLifeOver())
         {
             return false;
         }

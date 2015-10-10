@@ -460,11 +460,11 @@ public class Actor : UnityEngine.MonoBehaviour
         UnityEngine.Vector3 from = transform.position + new UnityEngine.Vector3(0, 2000, 0);
         transform.position = from;
         AddAction(new MoveTo(transform, to, fallingDuration));
-        Invoke("FallingOver", fallingDuration + 0.3f);
+        SleepThenCallFunction(fallingDuration + 3, ()=>FallingOver());
     }
 
-    void FallingOver()
+    public virtual void FallingOver()
     {
-        ClearAllActions();
+
     }
 }

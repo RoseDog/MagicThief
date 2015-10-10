@@ -715,7 +715,7 @@ public class StealingLevelController : LevelController
 
         if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.Over && !Globals.guardPlayer.isBot && bIsPerfectStealing)
         {
-            ending_str += Globals.languageTable.GetText("perfect_stealing", new System.String[] { perfect_stealing_bonus.ToString(), rose_bonus.ToString() });            
+            ending_str += Globals.languageTable.GetText("perfect_stealing", new System.String[] { (StealingCash.numberAmont*0.5f).ToString(), rose_bonus.ToString() });            
             Globals.self.PickRose(rose_bonus, null);
             Globals.canvasForMagician.RoseNumber.Add(rose_bonus);
         }
@@ -739,7 +739,7 @@ public class StealingLevelController : LevelController
             foreach (System.String item_id in itemsDropingWhenEscape)
             {
                 System.String[] item = item_id.Split(',');
-                ending_str += Globals.languageTable.GetText("item_dropped", new System.String[] { Globals.languageTable.GetText(item[1]), "1" });
+                ending_str += Globals.languageTable.GetText("item_dropped", new System.String[] { Globals.languageTable.GetText(item[2]), "1" }) + "</color>";
                 ending_str += "\n";
             }
         }        

@@ -26,6 +26,8 @@ public class Chest : Actor, System.IComparable<Chest>
 
     public TrickTimer openChestTimer;
 
+    public UnityEngine.AudioClip safeBoxDownOnFloor;
+
     public int CompareTo(Chest other)
     {
         if(other == this)
@@ -360,5 +362,11 @@ public class Chest : Actor, System.IComparable<Chest>
             Destroy(canvasForSafeboxBtns.gameObject);
             canvasForSafeboxBtns = null;
         }
+    }
+
+    public override void FallingOver()
+    {
+        base.FallingOver();
+        audioSource.PlayOneShot(safeBoxDownOnFloor);
     }
 }

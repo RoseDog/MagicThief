@@ -23,5 +23,7 @@ public class LifeOver : Action
                 chest.TouchOut(actor);
             }
         }
+
+        Globals.maze.GuardsTargetVanish(actor.gameObject);
     }
 }
