@@ -502,7 +502,8 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
             }
             return true;
         }
-    }
+    }    
+
     public UnityEngine.GameObject itemHighLightFrame;
     public void TrickUsingHighlightOn(TrickData data)
     {        

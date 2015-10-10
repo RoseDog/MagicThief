@@ -1357,6 +1357,11 @@ public class PlayerInfo
         }        
     }
 
+    public bool IsMoneyFull()
+    {
+        return Globals.AccumulateSafeboxCapacity(this) >= cashAmount;
+    }
+
     public void PickRose(int rose_delta, BuildingData building)
     {
         roseCount += rose_delta;
@@ -1369,6 +1374,7 @@ public class PlayerInfo
         {
             Globals.socket.Send("pick_rose" + separator + rose_delta.ToString() + separator + "-1");
         }
+        UploadMagicianProperties();
     }
 
     public void ChangeRose(int rose_delta)
@@ -1379,6 +1385,29 @@ public class PlayerInfo
             roseCount = 0;
         }
         Globals.socket.Send("change_rose" + separator + rose_delta.ToString());
+        roseLast += rose_delta;
+        if(rose_delta < 0)
+        {            
+            if (roseLast < 0)
+            {
+                selectedMagician.strengthAllot += roseLast;
+                if (selectedMagician.strengthAllot < 0)
+                {
+                    selectedMagician.agilityAllot += selectedMagician.strengthAllot;
+                    if (selectedMagician.agilityAllot < 0)
+                    {
+                        selectedMagician.wisdomAllot += selectedMagician.agilityAllot;
+                        Globals.Assert(selectedMagician.wisdomAllot >= 0);
+                        selectedMagician.agilityAllot = 0;
+                    }
+
+                    selectedMagician.strengthAllot = 0;
+                }
+
+                roseLast = 0;
+            }                        
+        }
+        UploadMagicianProperties();
     }
 
     public SafeBoxData AddSafeBox()
