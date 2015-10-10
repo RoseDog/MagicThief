@@ -1255,7 +1255,7 @@ public class PlayerInfo
 
     public bool IsMoneyFull()
     {
-        return Globals.AccumulateSafeboxCapacity(this) >= cashAmount;
+        return UnityEngine.Mathf.Abs(cashAmount - Globals.AccumulateSafeboxCapacity(this)) <= UnityEngine.Mathf.Epsilon;
     }
 
     public void PickRose(int rose_delta, BuildingData building)
