@@ -4,7 +4,7 @@ public class PoorBuilding : Building
     
     UnityEngine.UI.Button yesBtn;
     UnityEngine.UI.Text costText;
-    float cost = 500;
+    float cost = 1000;
     UnityEngine.UI.Button noBtn;
     UnityEngine.Vector3 tipScaleCache;
     

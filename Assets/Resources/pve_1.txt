@@ -18,5 +18,5 @@ GEMS_COUNT=0
 LAMPS_COUNT=2
 LevelTipText=
 CASH=2000
-droppedItemsStr=30,50,60
-cashOnFloorStr=
+droppedItemsStr=
+cashOnFloorStr=30,50,60
