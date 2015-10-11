@@ -310,7 +310,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("Speed", new System.String[] { "移动速度：{0}", "Moving Speed:{0}" });
         table.Add("Unlocking Duration", new System.String[] { "开锁时间：{0}", "Unlocking Duration:{0}" });
         table.Add("TricksTotalWeight", new System.String[] { "携带的道具总重：{0}", "Tricks total weights:{0}" });
-        table.Add("magician_speed", new System.String[] { "移动速度{0},开锁时间{1}", "Speed {0}, Unlocking {1}" });
+        table.Add("magician_speed", new System.String[] { "移动速度{0},开锁时间减少{1}", "Speed {0}, Unlocking {1}" });
 
         table.Add("need_rose", new System.String[] { "玫瑰：{0}", "Rose:{0}" });
         table.Add("allot", new System.String[] { "分配", "allot" });
