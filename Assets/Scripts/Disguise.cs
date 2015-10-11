@@ -33,6 +33,7 @@ public class Disguise : MagicianTrickAction
             trickCastAction = actor.SleepThenCallFunction(mage.spriteSheet.GetAnimationLengthWithSpeed("disguise"), () => TrickActionEnd());
         }
 
+        mage.audioSource.Stop();
         mage.audioSource.PlayOneShot(disguise);
     }
 

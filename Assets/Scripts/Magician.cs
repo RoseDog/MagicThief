@@ -20,10 +20,10 @@ public class Magician : Actor
     public UnityEngine.AudioClip openChestSound;
     public MagicianData data;
 
-    protected float sneakingAnimSpeed = 2.5f;
+    protected float sneakingAnimSpeed;
     [UnityEngine.HideInInspector]
-    public float normalMovingAnimSpeed = 1.8f;
-    protected float runningAnimSpeed = 3.0f;
+    public float normalMovingAnimSpeed;
+    protected float runningAnimSpeed;
     public float speedModifier;
 
     public UnityEngine.Material flyingMat;
@@ -148,8 +148,6 @@ public class Magician : Actor
         base.InStealing();        
         RegistEvent();
         eye.gameObject.SetActive(true);
-        characterController.enabled = true;
-        isSneaking = false;
         //moving.canMove = true;
         Globals.EnableAllInput(true);
         Globals.cameraFollowMagician.SetDragSpeed(2f);
@@ -161,7 +159,6 @@ public class Magician : Actor
     {
         base.OutStealing();
         UnRegistEvent();
-        characterController.enabled = false;
         moving.canMove = false;  
 //         Globals.cameraFollowMagician.MoveToPoint(
 //             transform.position + new UnityEngine.Vector3(0.0f, 0.5f, 0.0f),
@@ -221,8 +218,8 @@ public class Magician : Actor
 
         BarkSoundWave wave = (UnityEngine.GameObject.Instantiate(Globals.wave_prefab) as UnityEngine.GameObject).GetComponent<BarkSoundWave>();
         wave.transform.position = (transform.position + GetWorldCenterPos()) * 0.5f;
-        wave.radiusLimit = 400;
-        wave.radiusStart = 250;
+        wave.radiusLimit = 600;
+        wave.radiusStart = 500;
         wave.oneWaveDuration = 8;  
     }
 

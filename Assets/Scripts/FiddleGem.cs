@@ -9,7 +9,7 @@ public class FiddleGem : Actor
         spriteSheet._actor = this;
         spriteSheet._sprites = sprites.ToArray();
         spriteSheet.initialized = true;
-        spriteSheet.AddAnim("juggle_gem", 4,0.7f);
+        spriteSheet.AddAnim("juggle_gem", 4, 1.0f);
         spriteSheet.AddAnim("fiddle_gem", 4, 0.5f);
 
         spriteSheet.AddAnimationEvent("juggle_gem", -1, () => SwitchToFiddle());
@@ -19,7 +19,7 @@ public class FiddleGem : Actor
 
     public void SwitchToFiddle()
     {
-        if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.8f)
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.6f)
         {
             spriteSheet.Play("fiddle_gem");
         }
@@ -31,7 +31,7 @@ public class FiddleGem : Actor
 
     public void SwitchToJuggle()
     {
-        if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.2f)
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.4f)
         {
             spriteSheet.Play("juggle_gem");
         }

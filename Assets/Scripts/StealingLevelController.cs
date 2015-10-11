@@ -193,20 +193,10 @@ public class StealingLevelController : LevelController
         if(Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.FirstTrick)
         {
             Globals.self.UsingTrick(Globals.self.GetTrickByName("hypnosis"), 0);
-        }        
-
-        if (magician == null)
-        {
-            // 魔术师出场
-            UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/" + Globals.thiefPlayer.selectedMagician.name) as UnityEngine.GameObject;
-            magician = UnityEngine.GameObject.Instantiate(magician_prefab).GetComponent<Magician>();
-            magician.gameObject.SetActive(false);
-            //if (Globals.playingReplay != null || Globals.iniFileName == "pve_22" || Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.FirstTrick)
-            {
-                Globals.canvasForMagician.UpdateTrickInUseSlots(Globals.thiefPlayer, magician);
-                Globals.canvasForMagician.UpdateCharacter(Globals.thiefPlayer);
-            }
         }
+
+        Globals.canvasForMagician.UpdateTrickInUseSlots(Globals.thiefPlayer, magician);
+        Globals.canvasForMagician.UpdateCharacter(Globals.thiefPlayer);
 
         base.BeforeGenerateMaze();
     }
@@ -349,22 +339,9 @@ public class StealingLevelController : LevelController
         }
 
         
-        if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.GetChest)
+        if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.GetChest || Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.Sneaking || Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.FirstTrick)
         {
-            // 主角降下          
-            magician.transform.position = Globals.maze.GetLeftBottomPos();
-            magician.transform.position += new UnityEngine.Vector3(0, 0, -0.6f);
             MagicianFallingDown();
-        }
-        else if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.Sneaking || Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.FirstTrick)
-        {
-            magician.transform.position = Globals.maze.GetRightUpPos();
-            magician.transform.position += new UnityEngine.Vector3(0, 0, -0.6f);
-            MagicianFallingDown();
-        }
-        else
-        {
-            magician.gameObject.SetActive(false);
         }
 
         // 不是教学关卡，可以在潜入开始前离开
@@ -416,11 +393,28 @@ public class StealingLevelController : LevelController
     }
 
     public void MagicianFallingDown()
-    {                        
+    {
+        if (magician == null)
+        {
+            UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/" + Globals.thiefPlayer.selectedMagician.name) as UnityEngine.GameObject;
+            magician = UnityEngine.GameObject.Instantiate(magician_prefab).GetComponent<Magician>();
+        }        
+
+        if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.GetChest)
+        {
+            // 主角降下          
+            magician.transform.position = Globals.maze.GetLeftBottomPos();
+            magician.transform.position += new UnityEngine.Vector3(0, 0, -0.6f);
+        }
+        else if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.Sneaking || Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.FirstTrick)
+        {
+            magician.transform.position = Globals.maze.GetRightUpPos();
+            magician.transform.position += new UnityEngine.Vector3(0, 0, -0.6f);         
+        }
+
         Globals.replaySystem.RecordMageFallingDown();
         canvasForStealing.gameObject.SetActive(false);
-        DiveInBtn.gameObject.SetActive(false);
-        magician.gameObject.SetActive(true);        
+        DiveInBtn.gameObject.SetActive(false);  
 
         Globals.EnableAllInput(false);
 
@@ -807,21 +801,7 @@ public class StealingLevelController : LevelController
     public void LeaveBtnClicked()
     {
         // 尚未潜入的时候离开
-        if (Globals.replaySystem.mage_falling_down_frame_no == -1)
-        {
-            //Globals.canvasForMagician.tricksInUseTip.SetActive(false);
-            magician.OutStealing();
-            Globals.asyncLoad.ToLoadSceneAsync("City");            
-        }
-        else
-        {
-            Globals.replaySystem.RecordMagicianTryEscape();
-
-            if (!magician.IsLifeOver())
-            {
-                magician.tryEscape.Excute();
-            }
-        }
+        Globals.asyncLoad.ToLoadSceneAsync("City");            
     }    
 
     public void StopReplay()
@@ -950,10 +930,13 @@ public class StealingLevelController : LevelController
     {
         base.ClickOnMap(finger_pos);
         
-        if (magician.Stealing && hoveredGuard != null)
+        if (magician != null)
         {
-            Globals.replaySystem.RecordClickOnGuard(hoveredGuard.idx);
-            ClickOnHoveredGuard(hoveredGuard);
+            if (hoveredGuard != null)
+            {
+                Globals.replaySystem.RecordClickOnGuard(hoveredGuard.idx);
+                ClickOnHoveredGuard(hoveredGuard);
+            }            
         }
         else
         {
@@ -1011,12 +994,12 @@ public class StealingLevelController : LevelController
             Pathfinding.Node node = Globals.maze.pathFinder.GetNearestWalkableNode(hitInfo.point);
             UnityEngine.Vector3 pos = Globals.GetPathNodePos(node);
 
-            if (!magician.gameObject.activeSelf && !IsInvoking("RestartCount"))
+            if (magician == null && !IsInvoking("RestartCount"))
             {                
                 landingMark.SetActive(true);
                 landingMark.transform.position = new UnityEngine.Vector3(pos.x, pos.y, fogPlane.transform.position.z - 0.1f);
             }
-            else if (magician.Stealing)
+            else if (magician != null && magician.Stealing)
             {
                 UnityEngine.GameObject moving_mark = UnityEngine.GameObject.Instantiate(movingmark_prefab) as UnityEngine.GameObject;
                 moving_mark.transform.position = hitInfo.point;

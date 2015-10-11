@@ -2,6 +2,10 @@
 {
     public override void Awake()
     {
+        sneakingAnimSpeed = 2.5f;    
+        normalMovingAnimSpeed = 1.8f;
+        runningAnimSpeed = 3.0f;
+
         spriteSheet = GetComponentInChildren<SpriteSheet>();
         spriteSheet.AddAnim("idle", 4);
         spriteSheet.AddAnim("moving", 6, normalMovingAnimSpeed);

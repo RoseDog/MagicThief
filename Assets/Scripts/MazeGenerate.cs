@@ -1899,7 +1899,7 @@ public class MazeGenerate : UnityEngine.MonoBehaviour
             {                
                 guard.RemoveAction(ref guard.spot.outVisionCountDown);
                 guard.spot.target = null;
-                if (guard.currentAction == guard.chase || (guard.explode != null && guard.currentAction != guard.explode))
+                if (guard.currentAction != guard.atk || guard.currentAction != guard.explode)
                 {
                     guard.wandering.Excute();
                 }                

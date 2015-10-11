@@ -232,8 +232,8 @@ public class FOV2DEyes : UnityEngine.MonoBehaviour
         }
         else
         {
-            // ����ͬʱ����ǽ���ˣ�ѡ������һ��
-            if(UnityEngine.Vector3.Distance(hitted_wall_point, ray.origin) < UnityEngine.Vector3.Distance(hitted_actor_point, ray.origin) )
+            // 
+            if(UnityEngine.Vector3.Distance(hitted_wall_point, ray.origin) < UnityEngine.Vector3.Distance(hitted_actor_point, ray.origin) - 10 )
             {
                 collide_obj = hitted_wall;
                 hit_point = hitted_wall_point;                

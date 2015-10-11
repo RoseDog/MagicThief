@@ -10,19 +10,20 @@ public class Explode : GuardAction
     public override void Excute()
     {
         base.Excute();
+        guard.EnableEyes(false);
         actor.spriteSheet.Play("Atk");
         actor.audioSource.PlayOneShot(explode);
         UnityEngine.Debug.Log("Explode");
     }
 
     public void Fire()
-    {
+    {        
         Actor tar = guard.spot.target.GetComponent<Actor>();
         tar.EnemyStopChasing(guard);
         if (!tar.IsLifeOver())
         {
-            tar.ChangeLife(-guard.data.attackValue);
             tar.hitted.Excute();
+            tar.ChangeLife(-guard.data.attackValue);            
         }               
     }
 

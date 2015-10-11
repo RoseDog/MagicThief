@@ -10,7 +10,6 @@ public class LifeOver : Action
 
         base.Excute();
         actor.OutStealing();
-        actor.characterController.enabled = false;
         //actor.moving.GetSeeker().GetCurrentPath().Reset();        
         actor.moving.canMove = false;
         actor.moving.ClearPath();
@@ -22,8 +21,6 @@ public class LifeOver : Action
             {
                 chest.TouchOut(actor);
             }
-        }
-
-        Globals.maze.GuardsTargetVanish(actor.gameObject);
+        }        
     }
 }

@@ -2,8 +2,8 @@
 {
     public override void Awake()
     {
-        sneakingAnimSpeed = 1.0f;
-        normalMovingAnimSpeed = 1.8f;
+        sneakingAnimSpeed = 1.8f;
+        normalMovingAnimSpeed = 2.0f;
         runningAnimSpeed = 3.0f;
 
         spriteSheet = GetComponentInChildren<SpriteSheet>();

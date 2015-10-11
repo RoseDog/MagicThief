@@ -15,8 +15,9 @@ public class ChickenBullet : Projectle
         base.HitTarget();
         Actor.to_be_remove.Add(this);
 
-        targetActor.ChangeLife(-monkey.data.attackValue);
         targetActor.hitted.Excute();
+        targetActor.ChangeLife(-monkey.data.attackValue);
+        
 
         System.String content = gameObject.name;
         content += "chicken bullet hit mage";

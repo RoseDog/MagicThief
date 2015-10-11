@@ -9,6 +9,8 @@ public class Escape : Action
     {
         UnityEngine.Debug.Log("magician Escape");        
         base.Excute();
+        Globals.maze.GuardsTargetVanish(actor.gameObject);
+        actor.characterController.enabled = false;
         actor.shadow.enabled = false;
         actor.moving.canMove = false;
         actor.spriteSheet.Play(anim);

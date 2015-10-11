@@ -1,11 +1,10 @@
 public class Hypnosis : MagicianTrickAction 
 {
     Guard target;
-    UnityEngine.AudioClip fingerSnap;
+    public UnityEngine.AudioClip fingerSnap;
     public override void Awake()
     {
         base.Awake();
-        fingerSnap = UnityEngine.Resources.Load<UnityEngine.AudioClip>("Audio/fingerSnap_fx_03");
     }
 
     public void Start()
@@ -20,6 +19,7 @@ public class Hypnosis : MagicianTrickAction
         {
             target = guard;
             Excute();
+            mage.audioSource.Stop();
             mage.audioSource.PlayOneShot(fingerSnap);
             mage.spriteSheet.Play("Hypnosis");
             mage.FaceTarget(target.transform);
@@ -35,7 +35,6 @@ public class Hypnosis : MagicianTrickAction
 
     public void TrickActionEnd()
     {
-        
         target = null;
         base.Stop();
     }

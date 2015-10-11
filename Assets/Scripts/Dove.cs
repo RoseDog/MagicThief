@@ -10,6 +10,8 @@ public class Dove : Actor
         spriteSheet.CreateAnimationByName(animalName + "_moving_left",4.0f);
         spriteSheet.CreateAnimationByName(animalName + "_moving_down", 4.0f);
         spriteSheet.CreateAnimationByName(animalName + "_moving_up", 4.0f);
+        LifeAmount = 1;
+        LifeCurrent = 1;
 
         moving.needAnimation = false;        
     }

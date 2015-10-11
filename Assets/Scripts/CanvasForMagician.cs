@@ -218,7 +218,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
 
     public void OpenTricksUI(UnityEngine.UI.Button btn)
     {
-        if (!tricksBg.gameObject.activeSelf && !(Globals.stealingController != null && Globals.stealingController.magician.Stealing) 
+        if (!tricksBg.gameObject.activeSelf && (Globals.stealingController == null || Globals.stealingController.magician == null) 
             && Globals.playingReplay == null)
         {
             itemHighLightFrame.SetActive(false);
@@ -330,7 +330,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
   
         TrickData data = item.trickData;
         // 如果魔术师已经降下，不打开界面        
-        if (Globals.stealingController != null && Globals.stealingController.magician.gameObject.activeSelf)
+        if (Globals.stealingController != null && Globals.stealingController.magician != null)
         {
             return;
         }
@@ -414,9 +414,13 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
             {
                 Globals.self.AddTrickItem(item.trickData);
 
-                UnityEngine.UI.Text Inventory = Globals.getChildGameObject<UnityEngine.UI.Text>(item.slotInPack.gameObject, "inventory");
-                Inventory.gameObject.SetActive(true);
-                Globals.languageTable.SetText(Inventory, "inventory", new System.String[] { item.trickData.inventory.ToString() });
+                if (item.slotInPack)
+                {
+                    UnityEngine.UI.Text Inventory = Globals.getChildGameObject<UnityEngine.UI.Text>(item.slotInPack.gameObject, "inventory");
+                    Inventory.gameObject.SetActive(true);
+                    Globals.languageTable.SetText(Inventory, "inventory", new System.String[] { item.trickData.inventory.ToString() });
+                }
+                
                 Globals.languageTable.SetText(inventory_on_description, "inventory", new System.String[] { item.trickData.inventory.ToString() });
 
                 tricksBg.ClickHypnosisPointer.transform.parent.gameObject.SetActive(false);

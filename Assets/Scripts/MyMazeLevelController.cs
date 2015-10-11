@@ -410,7 +410,7 @@ public class MyMazeLevelController : LevelController
             // 狗和蜘蛛放在迷雾上面
             if ((guard.eye != null && guard.eye.gameObject.layer == 27) || guard.eye == null)
             {
-                guard.spriteRenderer.sortingOrder = 10;
+                guard.spriteRenderer.sortingOrder = 10000;
                 UnityEngine.Vector3 pos = guard.transform.position;
                 if (fogPlane.activeSelf)
                 {

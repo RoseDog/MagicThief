@@ -131,8 +131,8 @@ public class Attack : GuardAction
                     double angle = UnityEngine.Vector3.Angle(magicianDir, faceDir);
                     if (angle < 100 && angle > -100)
                     {
-                        targetActor.ChangeLife(-guard.data.attackValue);
                         targetActor.hitted.Excute();
+                        targetActor.ChangeLife(-guard.data.attackValue);                        
                         targetActor.FaceDir(magicianDir);
                     }
                 }

@@ -47,6 +47,6 @@ guard.spriteSheet.GetAnimationLengthWithSpeed("Atk") + 15), new FunctionCall(() 
     {
         base.AtkEnd();
         atkJumpAction = null;
-        guard.gameObject.layer = 13;
+        guard.spriteRenderer.gameObject.layer = 13;
     }
 }

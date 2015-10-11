@@ -173,7 +173,7 @@ public class Chest : Actor, System.IComparable<Chest>
         base.TouchOut(other);
         UnityEngine.Debug.Log("leave chest");
         isMagicianNear = false;
-        if (Globals.stealingController != null)
+        if (Globals.stealingController != null && Globals.stealingController.magician != null)
         {
             Globals.stealingController.magician.isOpenChest = false;
             Globals.stealingController.magician.isTakingMoneny = false;
@@ -188,7 +188,7 @@ public class Chest : Actor, System.IComparable<Chest>
                 ChestClosed();
             }
 
-            if (Globals.stealingController && Globals.stealingController.magician.Stealing && SafeboxNotFinishedTip == null)
+            if (Globals.stealingController && Globals.stealingController.magician != null && Globals.stealingController.magician.Stealing && SafeboxNotFinishedTip == null)
             {
                 SafeboxNotFinishedTip = UnityEngine.GameObject.Instantiate(SafeboxNotFinishedPrefab) as UnityEngine.GameObject;
                 SafeboxNotFinishedTip.GetComponent<UnityEngine.Canvas>().worldCamera = Globals.cameraFollowMagician.GetComponent<UnityEngine.Camera>();
@@ -281,8 +281,8 @@ public class Chest : Actor, System.IComparable<Chest>
         {
             BarkSoundWave wave = (UnityEngine.GameObject.Instantiate(Globals.wave_prefab) as UnityEngine.GameObject).GetComponent<BarkSoundWave>();
             wave.transform.position = (Globals.stealingController.magician.transform.position + Globals.stealingController.magician.GetWorldCenterPos()) * 0.5f;
-            wave.radiusLimit = 400;
-            wave.radiusStart = 250;
+            wave.radiusLimit = 600;
+            wave.radiusStart = 450;
             wave.oneWaveDuration = 8;
         }        
     }

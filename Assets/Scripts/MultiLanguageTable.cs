@@ -49,7 +49,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("flashGrenade_desc", new System.String[] { "拖拽照明弹进行投掷，可驱散迷雾。只能在潜入之前使用。", "Drag the flare and drop it to clear the mist, you can only use this before you sneak in." });                       
         table.Add("level_loading_progress", new System.String[] { "场景加载{0}%", "Level Loading:{0}%" });
         table.Add("power_cost", new System.String[] { "魔力消耗:{0}", "Power Cost:{0}" });
-        table.Add("drop_odds", new System.String[] { "遗落几率:{0}%", "drop_odds:{0}%" });
+        table.Add("drop_odds", new System.String[] { "潜入失败时有几率遗落:{0}%", "drop_odds:{0}%" });
         table.Add("weight", new System.String[] { "重量:{0}", "weight:{0}" });        
         table.Add("duration", new System.String[] { "持续时间:{0}", "Duration:{0}" });
         table.Add("unlock_need_rose", new System.String[] { "玫瑰达到 {0} 即可解锁", "Roses {0}" });
@@ -307,7 +307,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("agility", new System.String[] { "敏捷：{0}", "Agility:{0}" });
         table.Add("wisdom", new System.String[] { "智力：{0}", "Wisdom:{0}" });
         table.Add("Speed", new System.String[] { "移动速度：{0}", "Moving Speed:{0}" });
-        table.Add("Unlocking Duration", new System.String[] { "开锁速度：{0}", "Unlocking Speed:{0}" });
+        table.Add("Unlocking Duration", new System.String[] { "开锁时间：{0}", "Unlocking Duration:{0}" });
         table.Add("TricksTotalWeight", new System.String[] { "携带的道具总重：{0}", "Tricks total weights:{0}" });        
         table.Add("speed_total_grow", new System.String[] { "移动速度+{0},开锁时间-{1}", "Speed + {0}, Unlocking - {1}" });
 
@@ -315,7 +315,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("allot", new System.String[] { "分配", "allot" });
         table.Add("growth", new System.String[] { "增长", "growth" });
 
-        table.Add("item_consumed_label", new System.String[] { "这些道具被消耗了：", "growth" });
+        table.Add("item_consumed_label", new System.String[] { "道具被消耗了：", "growth" });
         table.Add("item_consumed", new System.String[] { "<color=red>{0} -{1}</color>", "<color=red>{0} -{1}</color>" });
         table.Add("item_picked_label", new System.String[] { "你在迷宫里获得了一些道具：", "growth" });
         table.Add("item_picked", new System.String[] { "<color=yellow>{0} +{1}</color>", "<color=yellow>{0} +{1}</color>" });

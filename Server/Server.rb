@@ -80,7 +80,7 @@ class UserFile
   attr_accessor :performingIncomePerHour
   attr_accessor :cashOnFloor
   attr_accessor :calcDataDuringOffLineTimeStamp
-  def initialize(roseBuildingDuration, bornNewTargetDuration)
+  def initialize(bornNewTargetDuration)
     @name = ""
     @deviceID = "-1"
     @TutorialLevelIdx="GetChest"
@@ -94,31 +94,31 @@ class UserFile
     @guardsSummoned=""
     @slotStatus=["0","-1","-1"]
     @isBot= false
-    @Buildings=[Building.new("0","None", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("1","None", roseBuildingDuration, bornNewTargetDuration),
-                  Building.new("2","None", roseBuildingDuration, bornNewTargetDuration),
-                  Building.new("3","locked", roseBuildingDuration, bornNewTargetDuration),
-                  Building.new("4","locked", roseBuildingDuration, bornNewTargetDuration),
-                  Building.new("5","locked", roseBuildingDuration, bornNewTargetDuration),
-                  Building.new("6","locked", roseBuildingDuration, bornNewTargetDuration),
-                  Building.new("7","locked", roseBuildingDuration, bornNewTargetDuration),
-                  Building.new("8","locked", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("9","locked", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("10","locked", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("11","locked", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("12","locked", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("13","locked", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("14","locked", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("15","locked", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("16","locked", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("17","locked", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("18","locked", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("19","locked", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("20","locked", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("21","locked", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("22","locked", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("23","locked", roseBuildingDuration, bornNewTargetDuration),
-                Building.new("24","locked", roseBuildingDuration, bornNewTargetDuration)]
+    @Buildings=[Building.new("0","None", bornNewTargetDuration),
+                Building.new("1","None", bornNewTargetDuration),
+                  Building.new("2","None",bornNewTargetDuration),
+                  Building.new("3","locked",bornNewTargetDuration),
+                  Building.new("4","locked", bornNewTargetDuration),
+                  Building.new("5","locked", bornNewTargetDuration),
+                  Building.new("6","locked", bornNewTargetDuration),
+                  Building.new("7","locked", bornNewTargetDuration),
+                  Building.new("8","locked", bornNewTargetDuration),
+                Building.new("9","locked", bornNewTargetDuration),
+                Building.new("10","locked", bornNewTargetDuration),
+                Building.new("11","locked", bornNewTargetDuration),
+                Building.new("12","locked", bornNewTargetDuration),
+                Building.new("13","locked", bornNewTargetDuration),
+                Building.new("14","locked", bornNewTargetDuration),
+                Building.new("15","locked", bornNewTargetDuration),
+                Building.new("16","locked", bornNewTargetDuration),
+                Building.new("17","locked", bornNewTargetDuration),
+                Building.new("18","locked", bornNewTargetDuration),
+                Building.new("19","locked", bornNewTargetDuration),
+                Building.new("20","locked", bornNewTargetDuration),
+                Building.new("21","locked", bornNewTargetDuration),
+                Building.new("22","locked", bornNewTargetDuration),
+                Building.new("23","locked", bornNewTargetDuration),
+                Building.new("24","locked", bornNewTargetDuration)]
     @Clouds=[CloudData.new(0, true),
              CloudData.new(1, true),
              CloudData.new(2, true),
@@ -139,8 +139,8 @@ class UserFile
     @selectedMagician = "Rosa"
 
     @trickDatas=[TrickData.new("hypnosis", true,10),
-                 TrickData.new("disguise", true,3),
-                 TrickData.new("dove", true,0),
+                 TrickData.new("disguise", true,0),
+                 TrickData.new("dove", true,3),
                  TrickData.new("flashGrenade", true,0),
                  TrickData.new("shotLight", true,0),
                  TrickData.new("flyUp", true,0)]
@@ -172,7 +172,7 @@ class Building
   attr_accessor :botLevelRandSeed
   attr_accessor :PvELevelIdx
 
-  def initialize(id, t, roseDuration, newTargetDuration)
+  def initialize(id, t, newTargetDuration)
     @posID = id
     @type = t
     @unpickedRose = 1
@@ -183,8 +183,8 @@ class Building
     @roseGrowStopTimer = nil
     @sendNewTargetTimer = nil
     @everClickedTarget = false
-    @roseGrowLastDuration = roseDuration
-    @roseGrowTotalDuration = roseDuration
+    @roseGrowLastDuration = 0
+    @roseGrowTotalDuration = 0
     @roseGrowCycle = 0.0
     @bornNewTargetLastDuration = newTargetDuration
     @targetName = "poker_face"
@@ -223,11 +223,9 @@ class Player
   def initialize(ws)
     @websocket = ws
     @seperator = '|'
-    #偷满是5朵玫瑰
-    @roseBuildingDuration = 60 * 20 + 2
-    @roseAddPowerRate = 2.0
+
     @bornNewTargetDuration = 60*10
-    @userFile = UserFile.new(@roseBuildingDuration,@bornNewTargetDuration)
+    @userFile = UserFile.new(@bornNewTargetDuration)
     @punishRoseCount = 2
     @performingIncomeCycle = 60 * 10
   end
@@ -303,7 +301,6 @@ class Player
     reply += "&" + playerFile.isBot.to_s
     reply += "&" + playerFile.name
     reply += "&" + playerFile.PvEProgress.to_s
-    reply += "&" + @roseAddPowerRate.to_s
     reply += "&" + @punishRoseCount.to_s
     reply += "&"
     playerFile.Magicians.each{ |mage_data|

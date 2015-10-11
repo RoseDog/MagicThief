@@ -288,7 +288,7 @@ public class Actor : UnityEngine.MonoBehaviour
 
     public bool IsLifeOver()
     {
-        return lifeOver != null && (currentAction == lifeOver || LifeCurrent < UnityEngine.Mathf.Epsilon);
+        return LifeCurrent < UnityEngine.Mathf.Epsilon;
     }
 
     public virtual void InStealing()

@@ -273,7 +273,6 @@ public class PlayerInfo
     public float cashAmount = 80000.0f;
     public int roseCount = 80;
     public int roseLast;
-    public float roseAddPowerRate = 2;
     public int punishRoseCount;
     
     public int currentMazeRandSeedCache;    
@@ -344,7 +343,7 @@ public class PlayerInfo
         mage_data.desc = "Walter_desc";
         mage_data.sneakingFactor = 0.6f;
         mage_data.runningFactor = 1.2f;
-        mage_data.unlockSafeDuration = 140;
+        mage_data.unlockSafeDuration = 120;
         mage_data.LifeConsumePerWeight = 0.02f;
         mage_data.strengthBase = 50;
         mage_data.strengthAllot = 0;
@@ -905,11 +904,9 @@ public class PlayerInfo
 
         pveProgress = System.Convert.ToInt32(reply[14]);
 
-        roseAddPowerRate = System.Convert.ToSingle(reply[15]);
+        punishRoseCount = System.Convert.ToInt32(reply[15]);
 
-        punishRoseCount = System.Convert.ToInt32(reply[16]);
-
-        temp = reply[17].Split(',');
+        temp = reply[16].Split(',');
         for (int i = 0; i < temp.Length-1;)
         {
             System.String mage_name = temp[i++];
@@ -919,8 +916,8 @@ public class PlayerInfo
             mage_data.wisdomAllot = System.Convert.ToInt32(temp[i++]);
         }
         
-        UnpackDroppedItemStr(reply[18]);
-        UnpackCashOnFloorStr(reply[19]);
+        UnpackDroppedItemStr(reply[17]);
+        UnpackCashOnFloorStr(reply[18]);
     }
 
     public void UnpackDroppedItemStr(System.String item_str)
