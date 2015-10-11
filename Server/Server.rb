@@ -384,7 +384,7 @@ class Player
       #剩余时间
       growLastDuration = building.roseGrowTotalDuration - (Time.now - building.roseGrowBeginTimeStamp)
       if growLastDuration < building.roseGrowCycle
-        SendNone(building, @bornNewTargetDuration)
+        SendNone(building)
       end
     end
   end
@@ -652,13 +652,13 @@ class Player
              seperator + mazeLv.to_s)
   end
 
-  def SendNone(building, newTargetDuration)
+  def SendNone(building)
     building.type = "None"
     building.roseGrowBeginTimeStamp = -1
     building.roseGrowLastDuration = 0
-    building.bornNewTargetLastDuration = newTargetDuration
+    building.bornNewTargetLastDuration = @bornNewTargetDuration
     building.targetName = ""
-    send("roseBuildingEnd" + @seperator + building.posID + @seperator + newTargetDuration.to_s)
+    send("roseBuildingEnd" + @seperator + building.posID + @seperator + @bornNewTargetDuration.to_s)
     building.newTargetTimeStamp = Time.now
     building.sendNewTargetTimer = EM.add_timer(@bornNewTargetDuration) do
       SendNewTarget(building)
@@ -756,15 +756,15 @@ class Player
   end
 
   def DownloadClouds(protocal_no,contents)
-    cloudprice = [2000,
-                  4000,
+    cloudprice = [3000,
+                  6000,
                   3000,
                   9000,
-                  1000,
-                  5000,
+                  3000,
                   6000,
-                  7000,
-                  8000]
+                  6000,
+                  9000,
+                  9000]
     for i in 0..8
       cloud = @userFile.Clouds[i]
       price = cloudprice[i]
@@ -815,8 +815,13 @@ class Player
     replay.rewardAccepted = false
     bIsPerfectStealing = contents[5].to_bool
 
+    #生成新的建筑
+    buildingPosID = contents[7]
+    building = GetBuilding(buildingPosID)
+
     # 如果是pvp
     if !enemy.userFile.isBot
+      data = GetDataBasedOnRoseCount(enemy.userFile.currentMazeLevel)
       replay.guard = StealingInfo(enemy.userFile)
       enemy.userFile.beenStealingTimeStamp = Time.now
       # 失败，对方得到奖励
@@ -834,6 +839,7 @@ class Player
       end
     else
       # bot的金钱是客户端上传的
+      data = GetDataBasedOnRoseCount(GetPvEMazeLv(building.PvELevelIdx))
       enemy.userFile.cashAmount = contents[6].to_f
       replay.guard = StealingInfo(enemy.userFile)
     end
@@ -843,10 +849,6 @@ class Player
     @userFile.atkReplays.shift if @userFile.atkReplays.length > 5
     send("atk_replay" + seperator + PackReplay(replay))
 
-    #生成新的建筑
-    buildingPosID = contents[7]
-    building = GetBuilding(buildingPosID)
-    data = GetDataBasedOnRoseCount(GetPvEMazeLv(building.PvELevelIdx))
     building.roseGrowTotalDuration = data.roseGrowDuration + 2
     building.roseGrowCycle = data.roseGrowDuration / 3.0
     # 如果胜利，刷新成poor，否则刷新成None
@@ -854,7 +856,7 @@ class Player
       building.type = "Poor"
       send("new_poor" + seperator + buildingPosID)
     else
-      SendNone(building, @bornNewTargetDuration * 2)
+      SendNone(building)
     end
   end
 

@@ -62,7 +62,7 @@ public class TrickSlot : CustomEventTrigger
 
     public void TrickSlotClicked()
     {
-        if ((Globals.stealingController == null || Globals.stealingController.magician == null) 
+        if ((Globals.stealingController == null || !Globals.stealingController.IsMagicianInStealingAction()) 
             && Globals.playingReplay == null)
         {
             // 如果是锁住的，询问是否购买

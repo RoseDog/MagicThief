@@ -449,7 +449,10 @@ public class Replay : UnityEngine.MonoBehaviour
 
         if (mage_falling_down_frame_no == Globals.LevelController.frameCount)
         {
-            (Globals.LevelController as StealingLevelController).MagicianFallingDown();
+            Globals.stealingController.MagicianFallingDown(new UnityEngine.Vector3(
+                        Globals.stealingController.landingMark.transform.position.x,
+                        Globals.stealingController.landingMark.transform.position.y,
+                        Globals.stealingController.landingMark.transform.position.z - 0.01f));
         }
 
         if (mageTryEscapeFrameNos.Count != 0)

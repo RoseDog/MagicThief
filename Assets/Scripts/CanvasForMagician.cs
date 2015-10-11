@@ -218,7 +218,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
 
     public void OpenTricksUI(UnityEngine.UI.Button btn)
     {
-        if (!tricksBg.gameObject.activeSelf && (Globals.stealingController == null || Globals.stealingController.magician == null) 
+        if (!tricksBg.gameObject.activeSelf && (Globals.stealingController == null || !Globals.stealingController.IsMagicianInStealingAction()) 
             && Globals.playingReplay == null)
         {
             itemHighLightFrame.SetActive(false);
@@ -280,7 +280,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
         }
 
         TrickData trick = Globals.self.GetTrickByName("flashGrenade");
-        if (!draggingFlashGrenade && !tricksBg.gameObject.activeSelf && trick.IsInUse() && Globals.stealingController != null && !Globals.stealingController.magician.Stealing)
+        if (!draggingFlashGrenade && !tricksBg.gameObject.activeSelf && trick.IsInUse() && Globals.stealingController != null && !Globals.stealingController.IsMagicianInStealingAction())
         {
             dropFlashFinger.gameObject.SetActive(true);
             dropFlashFinger.transform.parent = trickInUseSlots[trick.slotIdxInUsingPanel].rectTransform;
@@ -330,7 +330,7 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
   
         TrickData data = item.trickData;
         // 如果魔术师已经降下，不打开界面        
-        if (Globals.stealingController != null && Globals.stealingController.magician != null)
+        if (Globals.stealingController != null && Globals.stealingController.IsMagicianInStealingAction())
         {
             return;
         }

@@ -372,7 +372,7 @@ public class PlayerInfo
         slotsDatas.Add(data);
 
         data = new TrickUsingSlotData();
-        data.price = 1500;
+        data.price = 5000;
         data.idx = 2;
         slotsDatas.Add(data);
 
@@ -405,29 +405,29 @@ public class PlayerInfo
             tricks.Add(trick);
 
             trick = new TrickData();
-            trick.nameKey = "disguise";
-            trick.descriptionKey = "disguise_desc";
-            trick.duration = 700;
-            trick.powerCost = 25;
-            trick.unlockRoseCount = 10;
-            trick.dropOdds = 0.9f;
-            trick.weight = 0.3f;
-            trick.buyPrice = 300;
-            trick.clickOnGuardToCast = false;
-            trick.clickButtonToCast = true;
-            tricks.Add(trick);
-
-            trick = new TrickData();
             trick.nameKey = "flashGrenade";
             trick.descriptionKey = "flashGrenade_desc";
             trick.duration = 0;
             trick.powerCost = 2;
-            trick.unlockRoseCount = 20;
+            trick.unlockRoseCount = 10;
             trick.dropOdds = 0.9f;
             trick.buyPrice = 200;
             trick.clickOnGuardToCast = false;
             trick.clickButtonToCast = false;
             tricks.Add(trick);
+
+            trick = new TrickData();
+            trick.nameKey = "disguise";
+            trick.descriptionKey = "disguise_desc";
+            trick.duration = 700;
+            trick.powerCost = 25;
+            trick.unlockRoseCount = 30;
+            trick.dropOdds = 0.9f;
+            trick.weight = 0.3f;
+            trick.buyPrice = 300;
+            trick.clickOnGuardToCast = false;
+            trick.clickButtonToCast = true;
+            tricks.Add(trick);       
 
             trick = new TrickData();
             trick.nameKey = "shotLight";
