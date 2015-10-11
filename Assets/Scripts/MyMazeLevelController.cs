@@ -404,25 +404,25 @@ public class MyMazeLevelController : LevelController
         {
             Globals.maze.choosenGuard.spriteRenderer.sortingOrder = 10000;
         }
-
-        foreach( Guard guard in Globals.maze.guards )
-        {
-            // 狗和蜘蛛放在迷雾上面
-            if ((guard.eye != null && guard.eye.gameObject.layer == 27) || guard.eye == null)
-            {
-                guard.spriteRenderer.sortingOrder = 10000;
-                UnityEngine.Vector3 pos = guard.transform.position;
-                if (fogPlane.activeSelf)
-                {
-                    guard.heightOriginCache = -0.6f;
-                }
-                else
-                {
-                    guard.heightOriginCache = 0.0f;
-                }
-
-                guard.transform.position = new UnityEngine.Vector3(pos.x, pos.y, (float)guard.heightOriginCache);
-            }
-        }
+// 
+//         foreach( Guard guard in Globals.maze.guards )
+//         {
+//             // 狗和蜘蛛放在迷雾上面
+//             if ((guard.eye != null && guard.eye.gameObject.layer == 27) || guard.eye == null)
+//             {
+//                 guard.spriteRenderer.sortingOrder = 4999;
+//                 UnityEngine.Vector3 pos = guard.transform.position;
+//                 if (fogPlane.activeSelf)
+//                 {
+//                     guard.heightOriginCache = -0.6f;
+//                 }
+//                 else
+//                 {
+//                     guard.heightOriginCache = 0.0f;
+//                 }
+// 
+//                 guard.transform.position = new UnityEngine.Vector3(pos.x, pos.y, (float)guard.heightOriginCache);
+//             }
+//         }
     }
 }

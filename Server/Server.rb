@@ -849,12 +849,20 @@ class Player
     data = GetDataBasedOnRoseCount(GetPvEMazeLv(building.PvELevelIdx))
     building.roseGrowTotalDuration = data.roseGrowDuration + 2
     building.roseGrowCycle = data.roseGrowDuration / 3.0
-    # 如果胜利，刷新成poor，否则刷新成None
-    if bIsPerfectStealing
-      building.type = "Poor"
-      send("new_poor" + seperator + buildingPosID)
+
+    if !enemy.userFile.isBot
+      # 如果pvp胜利，刷新成poor，否则刷新成None
+      if bIsPerfectStealing
+        building.type = "Poor"
+        send("new_poor" + seperator + buildingPosID)
+      else
+        SendNone(building, @bornNewTargetDuration * 2)
+      end
     else
-      SendNone(building, @bornNewTargetDuration * 2)
+      if bIsPerfectStealing
+        building.type = "Poor"
+        send("new_poor" + seperator + buildingPosID)
+      end
     end
   end
 

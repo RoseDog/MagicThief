@@ -70,8 +70,7 @@ public class StealingLevelController : LevelController
         movingmark_prefab = UnityEngine.Resources.Load("Avatar/moving_mark") as UnityEngine.GameObject;
                         
         landingMark.SetActive(false);
-
-        fogTex = new UnityEngine.Texture2D(256, 256, UnityEngine.TextureFormat.ARGB32, false);        
+             
         Globals.Assert(fogPlane != null, "no FogPlane");
 
         HypnosisMouseHoverSpriter_prefab = UnityEngine.Resources.Load("Avatar/HypnosisMouseHoverSpriter") as UnityEngine.GameObject;
@@ -382,8 +381,15 @@ public class StealingLevelController : LevelController
                 Globals.tipDisplay.Msg("cant_bring_flash_to_stealing");
             }
             else
-            {                
-                MagicianFallingDown();
+            {
+                if(!Globals.thiefPlayer.selectedMagician.IsLocked())
+                {
+                    MagicianFallingDown();
+                }
+                else
+                {
+                    Globals.tipDisplay.Msg("cant_use_locked_magician");
+                }
             }            
         }
         else
@@ -853,8 +859,7 @@ public class StealingLevelController : LevelController
     public override void FrameFunc()
     {
         Globals.replaySystem.FrameFunc();
-        base.FrameFunc();        
-        AstarPath.CalculatePaths(AstarPath.threadInfos[0]);        
+        base.FrameFunc();
 
         if (magician !=null && magician.Stealing && Globals.playingReplay == null)            
         {
@@ -900,28 +905,6 @@ public class StealingLevelController : LevelController
                     hoveringSpriter = null;
                 }                
                 hoveredGuard = null;
-            }
-        }
-
-        UnityEngine.RenderTexture.active = fogCam_2.targetTexture;
-        UnityEngine.Rect rectReadPicture = new UnityEngine.Rect(0,0,256,256);
-        // Read pixels
-        fogTex.ReadPixels(rectReadPicture, 0, 0);
-        UnityEngine.RenderTexture.active = null; // added to avoid errors 
-
-        foreach(Guard guard in Globals.maze.guards)
-        {            
-            UnityEngine.Vector3 view_pos = fogCam.WorldToViewportPoint(guard.transform.position);
-            int x = (int)((view_pos.x) * 256.0f);
-            int y = (int)((view_pos.y) * 256.0f);
-            UnityEngine.Color32 color = fogTex.GetPixel(x, y);
-            if (color.a > 50)
-            {                
-                guard.SetInFog(false);
-            }
-            else
-            {                   
-                guard.SetInFog(true);
             }
         }
     }

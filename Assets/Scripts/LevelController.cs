@@ -24,6 +24,10 @@ public class LevelController : Actor
             UnityEngine.GameObject canvas_prefab = UnityEngine.Resources.Load("CanvasForMagician") as UnityEngine.GameObject;
             UnityEngine.GameObject.Instantiate(canvas_prefab);
         }
+        if(fogCam_2)
+        {
+            fogTex = new UnityEngine.Texture2D(256, 256, UnityEngine.TextureFormat.ARGB32, false);   
+        }
         frameCount = 0;
     }
 
@@ -359,7 +363,46 @@ public class LevelController : Actor
             }
         }        
 
-        ++frameCount;        
+        ++frameCount;
+
+        if (Globals.maze != null)
+        {
+            AstarPath.CalculatePaths(AstarPath.threadInfos[0]);
+
+            if (fogCam_2)
+            {
+                UnityEngine.RenderTexture.active = fogCam_2.targetTexture;
+                UnityEngine.Rect rectReadPicture = new UnityEngine.Rect(0, 0, 256, 256);
+                // Read pixels
+                fogTex.ReadPixels(rectReadPicture, 0, 0);
+                UnityEngine.RenderTexture.active = null; // added to avoid errors 
+
+                foreach (Guard guard in Globals.maze.guards)
+                {
+                    guard.SetInFog(IsPointInFog(guard.transform.position));
+                }
+            }            
+        }       
+    }
+
+    public bool IsPointInFog(UnityEngine.Vector3 position)
+    {
+        if(!fogPlane.activeSelf)
+        {
+            return false;
+        }
+        UnityEngine.Vector3 view_pos = fogCam.WorldToViewportPoint(position);
+        int x = (int)((view_pos.x) * 256.0f);
+        int y = (int)((view_pos.y) * 256.0f);
+        UnityEngine.Color32 color = fogTex.GetPixel(x, y);
+        if (color.a > 50)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     public void SyncWithChestData(PlayerInfo player)

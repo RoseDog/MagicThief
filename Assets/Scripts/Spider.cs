@@ -54,6 +54,7 @@ public class Spider : Machine
     {
         inFog = infog;
         scanner.SetActive(!infog);
+
         machineActiveArea.GetComponent<UnityEngine.SpriteRenderer>().enabled = !infog;
         spriteRenderer.enabled = !infog;
         head_on_minimap.SetActive(!infog);

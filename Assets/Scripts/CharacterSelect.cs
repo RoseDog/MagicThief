@@ -11,7 +11,7 @@ public class CharacterSelect : UnityEngine.MonoBehaviour
     public MultiLanguageUIText AgilityGrowth;
     public MultiLanguageUIText WisdomGrowth;
     public MultiLanguageUIText TotalHpGrow;
-    public MultiLanguageUIText TotalSpeedGrow;
+    public MultiLanguageUIText TotalSpeed;
     public MultiLanguageUIText TotalPowerGrow;
     public LifeNumber RoseToBeAllot;
     public UnityEngine.UI.Button prev;
@@ -70,7 +70,7 @@ public class CharacterSelect : UnityEngine.MonoBehaviour
     {
         TotalHpGrow.text = "HP:" + Globals.self.selectedMagician.GetLifeAmount();
         TotalPowerGrow.text = "MP:" + Globals.self.selectedMagician.GetPowerAmount();
-        Globals.languageTable.SetText(TotalSpeedGrow, "speed_total_grow", new System.String[] { Globals.self.selectedMagician.GetSpeedDelta().ToString("F1"), Globals.self.selectedMagician.GetUnlockSafeTimeDelta().ToString("F1") });
+        Globals.languageTable.SetText(TotalSpeed, "magician_speed", new System.String[] { Globals.self.selectedMagician.GetSpeed().ToString("F1"), Globals.self.selectedMagician.GetUnlockSafeTimeDelta().ToString("F1") });
         Globals.canvasForMagician.UpdateCharacter(Globals.self);
     }
 

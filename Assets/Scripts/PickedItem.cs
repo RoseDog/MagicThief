@@ -117,13 +117,13 @@ public class PickedItem : Actor
         base.FrameFunc();
 
         if (floatUpAction == null && Globals.LevelController.fogTex != null)
-        {
-            bool infog = isInFog(transform.position);
+        {           
+            bool infog = Globals.LevelController.IsPointInFog(transform.position);
             // 如果有holder
             if (holder)
             {
                 // 那么两个都在雾里的时候，才是在雾里的
-                if (infog && isInFog(holder.transform.position))
+                if (infog && Globals.LevelController.IsPointInFog(holder.transform.position))
                 {
                     infog = true;
                 }
@@ -139,24 +139,5 @@ public class PickedItem : Actor
                 holder.enabled = !infog;
             }
         }        
-    }
-
-
-    bool isInFog(UnityEngine.Vector3 pos)
-    {
-        UnityEngine.Vector3 view_pos = Globals.LevelController.fogCam.WorldToViewportPoint(pos);
-        int x = (int)((view_pos.x) * 256.0f);
-        int y = (int)((view_pos.y) * 256.0f);
-        UnityEngine.Color32 color = Globals.LevelController.fogTex.GetPixel(x, y);
-        bool infog = true;
-        if (color.a > 50)
-        {
-            infog = false;
-        }
-        else
-        {
-            infog = true;
-        }
-        return infog;
     }
 }

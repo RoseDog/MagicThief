@@ -45,12 +45,13 @@ public class Dog : Guard
     public override void SetInFog(bool infog)
     {
         base.SetInFog(infog);
+
         shadow.enabled = !infog;
         spriteRenderer.enabled = !infog;
 
-        if(currentAction == spot)
+        if (currentAction == spot)
         {
             eye.SetVisonConesVisible(true);
-        }        
+        }
     }
 }

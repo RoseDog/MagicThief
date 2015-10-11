@@ -264,8 +264,9 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("what_do_i_do", new System.String[] { "我该怎么办？", "What should I do?" });
         table.Add("box_not_finished", new System.String[] { "还有钱可以拿", "Not finished" });
         table.Add("click_to_summon_guard", new System.String[] { "点击召唤守卫", "Calling guard" });
-        table.Add("pve_intro", new System.String[] { "{0}级迷宫\n\"这里的主人是个臭名昭著的恶人，你决定拿走他的每一分钱。\"", "Lv.{0} Maze\nThe master here is a notorious man, you decide to take every peny of him.\n\n<color=red>Only complete this object successfully for another object</color>" });
-        table.Add("pvp_intro", new System.String[] { "{0}级迷宫\n\"这里属于另一个玩家。\"\n<color=red>有额外奖励</color>", "Lv.{0} Maze\nThis place belongs to another player, you got only one chance to sneak in.\n\n<color=red>There will be extra bonus if you successd.</color>" });
+        table.Add("pve_intro", new System.String[] { "{0}级迷宫\n\"这里的主人是个臭名昭著的恶人，你决定拿走他的每一分钱。\"\n<color=red>直到成功才会更换目标</color>", "Lv.{0} Maze\nThe master here is a notorious man, you decide to take every peny of him.\n\n<color=red>Only complete this object successfully for another object</color>" });
+
+        table.Add("pvp_intro", new System.String[] { "{0}级迷宫\n\"这里属于另一个玩家。\"\n<color=red>有额外奖励\n只有一次潜入机会</color>", "Lv.{0} Maze\nThis place belongs to another player, you got only one chance to sneak in.\n\n<color=red>There will be extra bonus if you successd.</color>" });
         table.Add("money_full", new System.String[] { "金钱已满", "Cash is full" });
 
         table.Add("try_other_trick", new System.String[] { "潜入失败，试试其他魔术道具？或购买更多的槽？", "Stealing failed!try another item? or buy more slots?" });
@@ -308,8 +309,8 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("wisdom", new System.String[] { "智力：{0}", "Wisdom:{0}" });
         table.Add("Speed", new System.String[] { "移动速度：{0}", "Moving Speed:{0}" });
         table.Add("Unlocking Duration", new System.String[] { "开锁时间：{0}", "Unlocking Duration:{0}" });
-        table.Add("TricksTotalWeight", new System.String[] { "携带的道具总重：{0}", "Tricks total weights:{0}" });        
-        table.Add("speed_total_grow", new System.String[] { "移动速度+{0},开锁时间-{1}", "Speed + {0}, Unlocking - {1}" });
+        table.Add("TricksTotalWeight", new System.String[] { "携带的道具总重：{0}", "Tricks total weights:{0}" });
+        table.Add("magician_speed", new System.String[] { "移动速度{0},开锁时间{1}", "Speed {0}, Unlocking {1}" });
 
         table.Add("need_rose", new System.String[] { "玫瑰：{0}", "Rose:{0}" });
         table.Add("allot", new System.String[] { "分配", "allot" });
@@ -321,7 +322,15 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("item_picked", new System.String[] { "<color=yellow>{0} +{1}</color>", "<color=yellow>{0} +{1}</color>" });
         table.Add("item_dropped_label", new System.String[] { "狼狈的逃离，你遗落了一些道具：", "growth" });
         table.Add("item_dropped", new System.String[] { "<color=red>{0} -{1}</color>", "<color=red>{0} -{1}</color>" });
-        
+
+        table.Add("character_require_rose", new System.String[] { "???:达到{0}朵玫瑰可使用该角色", "" });
+        table.Add("cant_use_locked_magician", new System.String[] { "该角色还不能使用", "" });
+
+        table.Add("Rosa", new System.String[] { "罗萨", "Rosa" });
+        table.Add("Rosa_desc", new System.String[] { "德雷斯罗萨", "Rosa_desc" });
+
+        table.Add("Walter", new System.String[] { "沃尔特", "Walter" });
+        table.Add("Walter_desc", new System.String[] { "沃尔特", "Rosa_desc" });
    }    
 
     public void SetText(UnityEngine.UI.Text uiText, System.String key, System.String[] strings = null)

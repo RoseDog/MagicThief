@@ -18,8 +18,6 @@ public class VisitOtherPlayerLevelController : LevelController
         NameOfOtherPlayerBg = Globals.getChildGameObject<UnityEngine.UI.RawImage>(canvasForVisit, "NameOfOtherPlayer");
         NameOfOtherPlayer = Globals.getChildGameObject<UnityEngine.UI.Text>(NameOfOtherPlayerBg.gameObject, "Text");
         NameOfOtherPlayerBg.gameObject.SetActive(false);
-
-        fogTex = new UnityEngine.Texture2D(256, 256, UnityEngine.TextureFormat.ARGB32, false);
     }
 
     
@@ -58,30 +56,7 @@ public class VisitOtherPlayerLevelController : LevelController
 
     public override void FrameFunc()
     {
-        base.FrameFunc();
-        AstarPath.CalculatePaths(AstarPath.threadInfos[0]);
-
-        UnityEngine.RenderTexture.active = fogCam_2.targetTexture;
-        UnityEngine.Rect rectReadPicture = new UnityEngine.Rect(0, 0, 256, 256);
-        // Read pixels
-        fogTex.ReadPixels(rectReadPicture, 0, 0);
-        UnityEngine.RenderTexture.active = null; // added to avoid errors 
-
-        foreach (Guard guard in Globals.maze.guards)
-        {
-            UnityEngine.Vector3 view_pos = fogCam.WorldToViewportPoint(guard.transform.position);
-            int x = (int)((view_pos.x) * 256.0f);
-            int y = (int)((view_pos.y) * 256.0f);
-            UnityEngine.Color32 color = fogTex.GetPixel(x, y);
-            if (color.a > 50)
-            {
-                guard.SetInFog(false);
-            }
-            else
-            {
-                guard.SetInFog(true);
-            }
-        }
+        base.FrameFunc();        
     }
 
     public override void ClickOnMap(UnityEngine.Vector2 finger_pos)

@@ -116,6 +116,7 @@ public class MagicianData
     public int idx;
     public float stepSoundLimit;
     public PlayerInfo owner;
+    public int roseRequire;
     public MagicianData()
     {
         
@@ -133,17 +134,17 @@ public class MagicianData
 
     public float GetSneakingSpeed()
     {
-        return GetSpeedDelta() * sneakingFactor;
+        return GetSpeed() * sneakingFactor;
     }
 
     public float GetRunningSpeed()
     {
-        return GetSpeedDelta() * runningFactor;
+        return GetSpeed() * runningFactor;
     }
 
     public float GetNormalSpeed()
     {
-        return GetSpeedDelta();
+        return GetSpeed();
     }
 
     public float GetUnlockSafeTime()
@@ -151,7 +152,7 @@ public class MagicianData
         return UnityEngine.Time.fixedDeltaTime * GetUnlockSafeDuration();
     }
 
-    public float GetSpeedDelta()
+    public float GetSpeed()
     {
         return (agilityBase + agilityAllot * agilityGrowth) * owner.GetDataBasedOnRoseCount().SpeedDelta;
     }
@@ -176,6 +177,11 @@ public class MagicianData
     {
         return LifeConsumePerWeight;        
     }
+
+    public bool IsLocked()
+    {
+        return roseRequire > owner.roseCount;
+    }    
 }
 
 public class MazeLvData
@@ -335,6 +341,7 @@ public class PlayerInfo
         mage_data.wisdomGrowth = 1f;
         mage_data.idx = 0;
         mage_data.stepSoundLimit = 800;
+        mage_data.roseRequire = 0;
         magicians.Add(mage_data);
 
         mage_data = new MagicianData();
@@ -356,6 +363,7 @@ public class PlayerInfo
         mage_data.wisdomGrowth = 1f;
         mage_data.idx = 1;
         mage_data.stepSoundLimit = 600;
+        mage_data.roseRequire = 20;
         magicians.Add(mage_data);
 
         selectedMagician = magicians[0];

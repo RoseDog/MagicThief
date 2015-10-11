@@ -311,9 +311,18 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
     }
 
     public void UpdateCharacter(PlayerInfo player)
-    {
-        Char_Name.text = player.selectedMagician.name;
-        portrait.image.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("Misc/" + player.selectedMagician.name + "_portrait");
+    {        
+        if (!player.selectedMagician.IsLocked())
+        {
+            portrait.image.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("Misc/" + player.selectedMagician.name + "_portrait");
+            Globals.languageTable.SetText(Char_Name, player.selectedMagician.name);
+        }
+        else
+        {
+            Globals.languageTable.SetText(Char_Name, "character_require_rose",new System.String[] { player.selectedMagician.roseRequire.ToString() });            
+            portrait.image.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("Misc/" + player.selectedMagician.name + "_locked_portrait");
+        }
+        
         lifeNumber.UpdateText(player.selectedMagician.GetLifeAmount().ToString("F1"), player.selectedMagician.GetLifeAmount());
         PowerNumber.UpdateText(player.selectedMagician.GetPowerAmount().ToString("F1"), player.selectedMagician.GetPowerAmount());
         Globals.languageTable.SetText(Speed, "Speed", new System.String[] { player.selectedMagician.GetNormalSpeed().ToString("F1") });
