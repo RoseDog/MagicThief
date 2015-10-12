@@ -26,8 +26,8 @@
         spriteSheet.AddAnim("lifeOver", 5, 1.5f, true);
         spriteSheet.AddAnim("lifeOverEscape", 1, 1.0f, true);
         spriteSheet.AddAnim("take_out_gun", 6, 2.8f);
-        spriteSheet.AddAnim("shot_machine", 3, 1.0f);
-        spriteSheet.AddAnim("shot_empty", 2, 1.0f);
+        spriteSheet.AddAnim("shot_machine", 3, 1.5f);
+        spriteSheet.AddAnim("shot_empty", 2, 1.5f);
         spriteSheet.AddAnim("TryEscape", 6, 1.0f);
         spriteSheet.AddAnim("falling_failed_loop", 12, 1.3f);
         spriteSheet.AddAnim("flyup_0", 7, 2.0f);

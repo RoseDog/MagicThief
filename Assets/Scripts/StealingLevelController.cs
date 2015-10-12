@@ -465,6 +465,14 @@ public class StealingLevelController : LevelController
         {            
             landingMark.SetActive(false);
         }
+
+        if (Globals.playingReplay == null)
+        {
+            if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.R))
+            {
+                magician.OnKeyDownR("R");
+            }
+        }
         
         base.AfterMagicianFalling();
     }    

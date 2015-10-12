@@ -97,15 +97,22 @@ public class TrickItem : UnityEngine.MonoBehaviour,
 
                 if (Globals.stealingController != null && trickData.nameKey == "flashGrenade")
                 {
-                    Globals.stealingController.InitMagician();
-                    if (Globals.stealingController.magician.ChangePower(-trickData.powerCost))
+                    if(!Globals.thiefPlayer.selectedMagician.IsLocked())
                     {
-                        UnityEngine.Vector3 finger_pos = UnityEngine.Camera.main.ScreenToWorldPoint(data.position);
-                        finger_pos.z = Globals.stealingController.landingMark.transform.position.z;
-                        Globals.replaySystem.RecordFlash(finger_pos);
-                        Globals.stealingController.magician.CastFlash(finger_pos);
-                        Globals.stealingController.LeaveBtn.gameObject.SetActive(false);
+                        Globals.stealingController.InitMagician();
+                        if (Globals.stealingController.magician.ChangePower(-trickData.powerCost))
+                        {
+                            UnityEngine.Vector3 finger_pos = UnityEngine.Camera.main.ScreenToWorldPoint(data.position);
+                            finger_pos.z = Globals.stealingController.landingMark.transform.position.z;
+                            Globals.replaySystem.RecordFlash(finger_pos);
+                            Globals.stealingController.magician.CastFlash(finger_pos);
+                            Globals.stealingController.LeaveBtn.gameObject.SetActive(false);
+                        }
                     }
+                    else
+                    {
+                        Globals.tipDisplay.Msg("cant_use_locked_magician");
+                    }                    
                 }
             }
 
