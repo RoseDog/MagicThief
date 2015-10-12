@@ -36,7 +36,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("tricks", new System.String[] { "魔术", "Tricks" });
         table.Add("outfits", new System.String[] { "服装", "Outfits" });
         table.Add("hypnosis", new System.String[] { "催眠", "Hypnosis" });
-        table.Add("hypnosis_desc", new System.String[] { "对指定守卫施行催眠。", "Hypnotize the pointed security guard" });
+        table.Add("hypnosis_desc", new System.String[] { "对指定守卫施行催眠。如果对方已经发现你，催眠效果会很糟糕。", "Hypnotize the pointed security guard" });
         table.Add("shotLight", new System.String[] { "魔术牌手枪", "Poker Pistol" });
         table.Add("shotLight_desc", new System.String[] { "可以破坏蜘蛛。\n可以原地开枪吸引守卫注意力。", "Can be used to break spiders, you can also use the sound to draw security guards' attention." });
         table.Add("disguise", new System.String[] { "易容", "Disguise" });
@@ -295,7 +295,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
 
         table.Add("operate_guide_info", new System.String[] { "<color=red>鼠标右键移动角色\n鼠标接近屏幕边缘滚动地图</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
         table.Add("sneaking_guide_info", new System.String[] { "<color=red>移动时按住<size=30>R</size>键可消除脚步声</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
-        table.Add("hypnosis_guide_info", new System.String[] { "<color=red>悄悄靠近并催眠守卫</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
+        table.Add("hypnosis_guide_info", new System.String[] { "<color=red>悄悄从背后靠近守卫然后催眠他</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
         
 
         table.Add("replay_speed", new System.String[] { "快进 x {0}", "Speed x {0}" });

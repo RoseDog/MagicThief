@@ -34,58 +34,56 @@ public class Spot : GuardAction
             guard.RemoveAction(ref outVisionCountDown);
         }
 
-        if (!newTar.GetComponent<Actor>().IsLifeOver())
+
+        if (guard.CheckIfChangeTarget(newTar))
         {
-            if (guard.CheckIfChangeTarget(newTar))
+            base.Excute();
+
+            if (target == null)
             {
-                base.Excute();
-
-                if (target == null)
-                {
-                    guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Alert);
-                    guard.spriteSheet.Play("spot");
-                    newTar.GetComponent<Actor>().SpotByEnemy(guard);
-                }
-                else
-                {
-                    target.GetComponent<Actor>().EnemyStopChasing(guard);
-                }
-
-                target = newTar.transform;
-
-                guard.FaceTarget(target);
-                guard.moving.ClearPath();
-                guard.moving.canMove = false;
-                Debug.Log("spot");
-                if (guard.alertSound)
-                {
-                    // 狗叫的时候视野会打开迷雾            
-                    guard.eye.SetLayer(10);
-                    guard.alertSound.StartAlert(true);
-                    guard.audioSource.clip = alert;
-                    guard.audioSource.loop = true;
-                    guard.audioSource.Play();
-                }
-                else
-                {
-                    guard.audioSource.PlayOneShot(alert);
-                }
-
-                System.String content = gameObject.name;
-                content += " spot";
-                Globals.record("testReplay", content);
-                if (goChasing)
-                {
-                    chaseCountDown = guard.SleepThenCallFunction(spotDuration, () => BeginChase());
-                }
+                guard.eye.SetVisionStatus(FOV2DVisionCone.Status.Alert);
+                guard.spriteSheet.Play("spot");
+                newTar.GetComponent<Actor>().SpotByEnemy(guard);
+            }
+            else
+            {
+                target.GetComponent<Actor>().EnemyStopChasing(guard);
             }
 
+            target = newTar.transform;
 
-            if (goChasing && guard.currentAction == guard.wandering)
+            guard.FaceTarget(target);
+            guard.moving.ClearPath();
+            guard.moving.canMove = false;
+            Debug.Log("spot");
+            if (guard.alertSound)
             {
-                BeginChase();
-            }        
+                // 狗叫的时候视野会打开迷雾            
+                guard.eye.SetLayer(10);
+                guard.alertSound.StartAlert(true);
+                guard.audioSource.clip = alert;
+                guard.audioSource.loop = true;
+                guard.audioSource.Play();
+            }
+            else
+            {
+                guard.audioSource.PlayOneShot(alert);
+            }
+
+            System.String content = gameObject.name;
+            content += " spot";
+            Globals.record("testReplay", content);
+            if (goChasing)
+            {
+                chaseCountDown = guard.SleepThenCallFunction(spotDuration, () => BeginChase());
+            }
         }
+
+
+        if (goChasing && guard.currentAction == guard.wandering)
+        {
+            BeginChase();
+        }   
     }   
 
     public override void FrameFunc()

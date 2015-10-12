@@ -29,7 +29,14 @@ public class Hypnosis : MagicianTrickAction
     void Fire()
     {
         float distance = UnityEngine.Vector3.Distance(target.transform.position, mage.transform.position);
-        target.beenHypnosised.GoToSleep(data.CalcTrickDurationBasedOnDistance(distance));
+        if (mage.chasingGuards.Contains(target))
+        {
+            target.beenHypnosised.GoToSleep(data.CalcTrickDurationBasedOnDistance(distance,true));
+        }
+        else
+        {
+            target.beenHypnosised.GoToSleep(data.CalcTrickDurationBasedOnDistance(distance, false));
+        }        
         mage.EnemyStopChasing(target);
     }
 

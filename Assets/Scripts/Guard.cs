@@ -264,6 +264,10 @@ public class Guard : Actor, System.IComparable<Guard>
     public void EnableEyes(bool enable)
     {
         eye.gameObject.SetActive(enable);
+        if(!enable)
+        {
+            eye.enemiesInEye.Clear();
+        }
     }
 
     public void BeginPatrol()

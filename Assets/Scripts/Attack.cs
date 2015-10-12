@@ -118,7 +118,7 @@ public class Attack : GuardAction
         if (targetActor != null)
         {
             UnityEngine.Vector3 magicianDir = targetActor.GetWorldCenterPos() - guard.transform.position;
-            if (!checkIfTargetPressDown() && !targetActor.IsLifeOver())
+            if (!checkIfTargetPressDown())
             {
                 if (magicianDir.magnitude < guard.data.atkShortestDistance + 50f)
                 {

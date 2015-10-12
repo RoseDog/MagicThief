@@ -495,6 +495,8 @@ public class Replay : UnityEngine.MonoBehaviour
             FlashGrenadeRecord record = flashRecords[0];
             while (record.frame_no == Globals.LevelController.frameCount)
             {
+                Globals.stealingController.InitMagician();
+                Globals.stealingController.magician.ChangePower(-Globals.self.GetTrickByName("flashGrenade").powerCost);
                 Globals.stealingController.magician.CastFlash(record.pos);
                 flashRecords.RemoveAt(0);
                 if (flashRecords.Count == 0)

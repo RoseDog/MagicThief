@@ -322,9 +322,18 @@ public class CanvasForMagician : UnityEngine.MonoBehaviour
             Globals.languageTable.SetText(Char_Name, "character_require_rose",new System.String[] { player.selectedMagician.roseRequire.ToString() });            
             portrait.image.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("Misc/" + player.selectedMagician.name + "_locked_portrait");
         }
+        if (Globals.stealingController != null && Globals.stealingController.magician != null)
+        {
+            lifeNumber.UpdateText(player.selectedMagician.GetLifeAmount().ToString("F1"), player.selectedMagician.GetLifeAmount());
+            PowerNumber.UpdateText(Globals.stealingController.magician.PowerCurrent.ToString("F1"), player.selectedMagician.GetPowerAmount());
+        }
+        else
+        {
+            lifeNumber.UpdateText(player.selectedMagician.GetLifeAmount().ToString("F1"), player.selectedMagician.GetLifeAmount());
+            PowerNumber.UpdateText(player.selectedMagician.GetPowerAmount().ToString("F1"), player.selectedMagician.GetPowerAmount());
+        }
         
-        lifeNumber.UpdateText(player.selectedMagician.GetLifeAmount().ToString("F1"), player.selectedMagician.GetLifeAmount());
-        PowerNumber.UpdateText(player.selectedMagician.GetPowerAmount().ToString("F1"), player.selectedMagician.GetPowerAmount());
+        
         Globals.languageTable.SetText(Speed, "Speed", new System.String[] { player.selectedMagician.GetNormalSpeed().ToString("F1") });
         Globals.languageTable.SetText(UnlockingDuration, "Unlocking Duration", new System.String[] { player.selectedMagician.GetUnlockSafeTime().ToString("F1") });
         Globals.languageTable.SetText(TotalWeight, "TricksTotalWeight", new System.String[] { player.GetTrickTotalWeight().ToString("F1") });        

@@ -317,7 +317,7 @@ public class Magician : Actor
         UnityEngine.Debug.Log("OnTargetReached");
     }
 
-    System.Collections.Generic.HashSet<Guard> chasingGuards = new System.Collections.Generic.HashSet<Guard>();
+    public System.Collections.Generic.HashSet<Guard> chasingGuards = new System.Collections.Generic.HashSet<Guard>();
     public override void SpotByEnemy(Guard guard)
     {
         base.SpotByEnemy(guard);

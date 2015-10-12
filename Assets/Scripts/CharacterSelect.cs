@@ -52,9 +52,9 @@ public class CharacterSelect : UnityEngine.MonoBehaviour
         Globals.languageTable.SetText(AgilityBase, "agility", new System.String[] { Globals.self.selectedMagician.agilityBase.ToString("F0")});
         Globals.languageTable.SetText(WisdomBase, "wisdom", new System.String[] { Globals.self.selectedMagician.wisdomBase.ToString("F0")});        
 
-        StrengthInputField.text = "+" + Globals.self.selectedMagician.strengthAllot.ToString();
-        AgilityInputField.text = "+" + Globals.self.selectedMagician.agilityAllot.ToString();
-        WisdomInputField.text = "+" + Globals.self.selectedMagician.wisdomAllot.ToString();
+        StrengthInputField.text = "+" + Globals.self.strengthAllot.ToString();
+        AgilityInputField.text = "+" + Globals.self.agilityAllot.ToString();
+        WisdomInputField.text = "+" + Globals.self.wisdomAllot.ToString();
 
         StrengthGrowth.text = Globals.self.selectedMagician.strengthGrowth.ToString("F1");
         AgilityGrowth.text = Globals.self.selectedMagician.agilityGrowth.ToString("F1");
@@ -85,15 +85,15 @@ public class CharacterSelect : UnityEngine.MonoBehaviour
 
     void onStrengthEndEdit(System.String str)
     {        
-        AllotRose(str, ref Globals.self.selectedMagician.strengthAllot,StrengthInputField);
+        AllotRose(str, ref Globals.self.strengthAllot,StrengthInputField);
     }
     void onAgilityEndEdit(System.String str)
     {
-        AllotRose(str, ref Globals.self.selectedMagician.agilityAllot, AgilityInputField);
+        AllotRose(str, ref Globals.self.agilityAllot, AgilityInputField);
     }
     void onWisdomEndEdit(System.String str)
     {
-        AllotRose(str, ref Globals.self.selectedMagician.wisdomAllot, WisdomInputField);
+        AllotRose(str, ref Globals.self.wisdomAllot, WisdomInputField);
     }
 
     void AllotRose(System.String str, ref int property, UnityEngine.UI.InputField inputField)
@@ -108,7 +108,7 @@ public class CharacterSelect : UnityEngine.MonoBehaviour
             property = allot;            
             RoseToBeAllot.UpdateCurrentLife(Globals.self.roseLast.ToString(), Globals.self.roseCount, false);
             UpdateCharacterData();
-            Globals.self.UploadMagicianProperties();
+            Globals.self.UploadRoseAllot();
 
             Globals.languageTable.SetText(StrengthBase, "strength", new System.String[] { Globals.self.selectedMagician.strengthBase.ToString("F0") });
             Globals.languageTable.SetText(AgilityBase, "agility", new System.String[] { Globals.self.selectedMagician.agilityBase.ToString("F0")});
