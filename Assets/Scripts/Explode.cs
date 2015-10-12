@@ -3,7 +3,7 @@ public class Explode : GuardAction
     public UnityEngine.AudioClip explode;
     public void Start()
     {
-        actor.spriteSheet.AddAnimationEvent("Atk", 2, () => Fire());
+        actor.spriteSheet.AddAnimationEvent("Atk", 1, () => Fire());
         actor.spriteSheet.AddAnimationEvent("Atk", -1, () => ExplodeEnd());
     }
 

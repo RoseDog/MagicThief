@@ -1,27 +1,21 @@
-public class GuardAlertSound : Actor 
+public class GuardAlertSound : GuardAction
 {
     public UnityEngine.GameObject wave;
-    Guard owner;   
     Cocos2dAction waving_action = null;
 
     int oneWaveTimeGap = 30;
-    public override void Awake()
-    {        
-        base.Awake();
-        owner = GetComponentInParent<Guard>();        
-    }
 
     void CreateOneWave()
     {
         BarkSoundWave wave = (UnityEngine.GameObject.Instantiate(Globals.wave_prefab) as UnityEngine.GameObject).GetComponent<BarkSoundWave>();
-        wave.transform.position = owner.transform.position;
-        wave.transform.SetParent(owner.transform);
+        wave.transform.position = guard.transform.position;
+        wave.transform.SetParent(guard.transform);
 
         wave.radiusLimit = 600;
         wave.radiusStart = 300;
 
-        wave.radiusLimit /= owner.transform.transform.localScale.x;
-        wave.radiusStart /= owner.transform.transform.localScale.x;
+        wave.radiusLimit /= guard.transform.transform.localScale.x;
+        wave.radiusStart /= guard.transform.transform.localScale.x;
     }
 
 	public void StartAlert(bool repeat)
@@ -31,7 +25,7 @@ public class GuardAlertSound : Actor
             CreateOneWave();
             if (repeat)
             {
-                waving_action = RepeatingCallFunction(oneWaveTimeGap, () => CreateOneWave());
+                waving_action = guard.RepeatingCallFunction(oneWaveTimeGap, () => CreateOneWave());
             }            
         }        
     }
@@ -47,7 +41,7 @@ public class GuardAlertSound : Actor
     {
         if (waving_action != null)
         {
-            RemoveAction(ref waving_action);
+            guard.RemoveAction(ref waving_action);
         }        
     }
 }

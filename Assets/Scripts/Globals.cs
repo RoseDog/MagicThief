@@ -52,12 +52,17 @@ public class TrickData
         data.clickButtonToCast = clickButtonToCast;
     }
 
-    public int CalcTrickDurationBasedOnDistance(float distance)
+    public int CalcTrickDurationBasedOnDistance(float distance, bool bad_trick)
     {
         int retVal = (int)(duration * UnityEngine.Mathf.Clamp01(1 - (distance - castRange.x) / (castRange.y - castRange.x)));
+        
         if (retVal < 30)
         {
             retVal = 30;
+        }
+        else if(bad_trick)
+        {
+            retVal = 60;
         }
         return retVal;
     }
@@ -107,9 +112,7 @@ public class MagicianData
     public float strengthBase;
     public float agilityBase;
     public float wisdomBase;
-    public int strengthAllot;
-    public int agilityAllot;
-    public int wisdomAllot;
+    
     public float strengthGrowth;
     public float agilityGrowth;
     public float wisdomGrowth;
@@ -124,12 +127,12 @@ public class MagicianData
 
     public float GetLifeAmount()
     {
-        return (strengthBase + strengthAllot * strengthGrowth) * owner.GetDataBasedOnRoseCount().LifeDelta;
+        return (strengthBase + owner.strengthAllot * strengthGrowth) * owner.GetDataBasedOnRoseCount().LifeDelta;
     }
 
     public float GetPowerAmount()
     {
-        return (wisdomBase + wisdomAllot * wisdomGrowth) * owner.GetDataBasedOnRoseCount().PowerDelta;;
+        return (wisdomBase + owner.wisdomAllot * wisdomGrowth) * owner.GetDataBasedOnRoseCount().PowerDelta; ;
     }
 
     public float GetSneakingSpeed()
@@ -154,7 +157,7 @@ public class MagicianData
 
     public float GetSpeed()
     {
-        return (agilityBase + agilityAllot * agilityGrowth) * owner.GetDataBasedOnRoseCount().SpeedDelta;
+        return (agilityBase + owner.agilityAllot * agilityGrowth) * owner.GetDataBasedOnRoseCount().SpeedDelta;
     }
 
     public int GetUnlockSafeDuration()
@@ -165,7 +168,7 @@ public class MagicianData
 
     public float GetUnlockSafeDurationDelta()
     {
-        return unlockSafeDuration * UnityEngine.Mathf.Clamp01(((agilityBase + agilityAllot) / 300.0f));
+        return unlockSafeDuration * UnityEngine.Mathf.Clamp01(((agilityBase + owner.agilityAllot) / 300.0f));
     }
 
     public float GetUnlockSafeTimeDelta()
@@ -299,7 +302,11 @@ public class PlayerInfo
     public System.Collections.Generic.List<MagicianData> magicians = new System.Collections.Generic.List<MagicianData>();
     public MagicianData selectedMagician;
     public System.Collections.Generic.List<System.String> droppedItemsFromThief = new System.Collections.Generic.List<System.String>();
-    public System.Collections.Generic.List<System.String> cashOnFloor = new System.Collections.Generic.List<System.String>();    
+    public System.Collections.Generic.List<System.String> cashOnFloor = new System.Collections.Generic.List<System.String>();
+
+    public int strengthAllot;
+    public int agilityAllot;
+    public int wisdomAllot;
 
     public BuildingData GetBuildingDataByID(System.String idString)
     {
@@ -331,11 +338,8 @@ public class PlayerInfo
         mage_data.unlockSafeDuration = 120;
         mage_data.LifeConsumePerWeight = 0.02f;
         mage_data.strengthBase = 55;
-        mage_data.strengthAllot = 0;
         mage_data.agilityBase = 55;
-        mage_data.agilityAllot = 0;
         mage_data.wisdomBase = 55;
-        mage_data.wisdomAllot = 0;
         mage_data.strengthGrowth = 1f;
         mage_data.agilityGrowth = 1f;
         mage_data.wisdomGrowth = 1f;
@@ -353,11 +357,8 @@ public class PlayerInfo
         mage_data.unlockSafeDuration = 120;
         mage_data.LifeConsumePerWeight = 0.02f;
         mage_data.strengthBase = 50;
-        mage_data.strengthAllot = 0;
         mage_data.agilityBase = 65;
-        mage_data.agilityAllot = 0;
         mage_data.wisdomBase = 50;
-        mage_data.wisdomAllot = 0;
         mage_data.strengthGrowth = 1f;
         mage_data.agilityGrowth = 1f;
         mage_data.wisdomGrowth = 1f;
@@ -540,9 +541,9 @@ public class PlayerInfo
         guard_data.roomConsume = 1;
         guard_data.magicianOutVisionTime = 100;
         guard_data.attackValue = 30;
-        guard_data.atkShortestDistance = 80f;
+        guard_data.atkShortestDistance = 100f;
         guard_data.doveOutVisionTime = 300;
-        guard_data.moveSpeed = 9;
+        guard_data.moveSpeed = 8;
         guard_data.income = 50;
         Globals.guardDatas.Add(guard_data);
 
@@ -914,18 +915,12 @@ public class PlayerInfo
 
         punishRoseCount = System.Convert.ToInt32(reply[15]);
 
-        temp = reply[16].Split(',');
-        for (int i = 0; i < temp.Length-1;)
-        {
-            System.String mage_name = temp[i++];
-            MagicianData mage_data = GetMageDataByName(mage_name);
-            mage_data.strengthAllot = System.Convert.ToInt32(temp[i++]);
-            mage_data.agilityAllot = System.Convert.ToInt32(temp[i++]);
-            mage_data.wisdomAllot = System.Convert.ToInt32(temp[i++]);
-        }
+        strengthAllot = System.Convert.ToInt32(reply[16]);
+        agilityAllot = System.Convert.ToInt32(reply[17]);
+        wisdomAllot = System.Convert.ToInt32(reply[18]);
         
-        UnpackDroppedItemStr(reply[17]);
-        UnpackCashOnFloorStr(reply[18]);
+        UnpackDroppedItemStr(reply[19]);
+        UnpackCashOnFloorStr(reply[20]);
     }
 
     public void UnpackDroppedItemStr(System.String item_str)
@@ -1275,7 +1270,7 @@ public class PlayerInfo
         {
             Globals.socket.Send("pick_rose" + separator + rose_delta.ToString() + separator + "-1");
         }
-        UploadMagicianProperties();
+        UploadRoseAllot();
     }
 
     public int ChangeRose(int rose_delta)
@@ -1297,24 +1292,24 @@ public class PlayerInfo
         {            
             if (roseLast < 0)
             {
-                selectedMagician.strengthAllot += roseLast;
-                if (selectedMagician.strengthAllot < 0)
+                strengthAllot += roseLast;
+                if (strengthAllot < 0)
                 {
-                    selectedMagician.agilityAllot += selectedMagician.strengthAllot;
-                    if (selectedMagician.agilityAllot < 0)
+                    agilityAllot += strengthAllot;
+                    if (agilityAllot < 0)
                     {
-                        selectedMagician.wisdomAllot += selectedMagician.agilityAllot;
-                        Globals.Assert(selectedMagician.wisdomAllot >= 0);
-                        selectedMagician.agilityAllot = 0;
+                        wisdomAllot += agilityAllot;
+                        Globals.Assert(wisdomAllot >= 0);
+                        agilityAllot = 0;
                     }
 
-                    selectedMagician.strengthAllot = 0;
+                    strengthAllot = 0;
                 }
 
                 roseLast = 0;
             }                        
         }
-        UploadMagicianProperties();
+        UploadRoseAllot();
         // 返回实际减少的玫瑰花数量
         return rose_delta;
     }
@@ -1388,13 +1383,12 @@ public class PlayerInfo
         }        
     }
 
-    public void UploadMagicianProperties()
+    public void UploadRoseAllot()
     {
-        Globals.socket.Send("upload_magician" + separator + roseLast + 
-            separator + selectedMagician.name +            
-            separator + selectedMagician.strengthAllot +
-            separator + selectedMagician.agilityAllot +
-            separator + selectedMagician.wisdomAllot);
+        Globals.socket.Send("UploadRoseAllot" + separator + roseLast +  
+            separator + strengthAllot +
+            separator + agilityAllot +
+            separator + wisdomAllot);
     }
 
     public void PackSummonedGuardsStr()

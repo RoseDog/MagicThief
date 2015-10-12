@@ -7,6 +7,13 @@ public class MagicianHitted : Hitted
 
     public override void Excute()
     {
+        foreach (Chest chest in Globals.maze.chests)
+        {
+            if (chest.isMagicianNear)
+            {
+                chest.TouchOut(actor);
+            }
+        }
         // 被网住的状态
         if (actor.currentAction == actor.catchByNet && actor.catchByNet.jumpSequence == null)
         {

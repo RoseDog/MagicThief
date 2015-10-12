@@ -14,13 +14,6 @@ public class LifeOver : Action
         actor.moving.canMove = false;
         actor.moving.ClearPath();
         actor.spriteSheet.Play("lifeOver");
-        Globals.LevelController.MagicianLifeOver();
-        foreach (Chest chest in Globals.maze.chests)
-        {
-            if (chest.isMagicianNear)
-            {
-                chest.TouchOut(actor);
-            }
-        }        
+        Globals.LevelController.MagicianLifeOver();    
     }
 }

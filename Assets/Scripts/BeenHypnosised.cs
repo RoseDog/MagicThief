@@ -18,6 +18,7 @@ public class BeenHypnosised : GuardAction
         guard.spot.target = null;
         guard.RemoveAction(ref guard.spot.outVisionCountDown);
         guard.EnableEyes(false);
+        guard.moving.ClearPath();
         guard.gameObject.layer = 0;
 
         

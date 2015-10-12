@@ -407,11 +407,7 @@ public class StealingLevelController : LevelController
 
     public void MagicianFallingDown(UnityEngine.Vector3 landingPos)
     {
-        if (magician == null)
-        {
-            UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/" + Globals.thiefPlayer.selectedMagician.name) as UnityEngine.GameObject;
-            magician = UnityEngine.GameObject.Instantiate(magician_prefab).GetComponent<Magician>();
-        }        
+        InitMagician();
         
         Globals.replaySystem.RecordMageFallingDown();
         canvasForStealing.gameObject.SetActive(false);
@@ -1014,5 +1010,26 @@ public class StealingLevelController : LevelController
     public bool IsMagicianInStealingAction()
     {
         return magician != null && magician.Stealing;
+    }
+
+    public void InitMagician()
+    {
+        float PowerCache = -1;
+        if (magician != null && magician.gameObject.name != Globals.thiefPlayer.selectedMagician.name)
+        {
+            PowerCache = magician.PowerCurrent;
+            DestroyImmediate(magician.gameObject);
+            magician = null;
+        }
+
+        if(magician == null)
+        {
+            UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/" + Globals.thiefPlayer.selectedMagician.name) as UnityEngine.GameObject;
+            Globals.stealingController.magician = UnityEngine.GameObject.Instantiate(magician_prefab).GetComponent<Magician>();
+            if (PowerCache > 0)
+            {
+                magician.PowerCurrent = PowerCache;
+            }
+        }
     }
 }

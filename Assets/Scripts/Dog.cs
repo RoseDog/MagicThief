@@ -8,10 +8,10 @@ public class Dog : Guard
         bGoChaseDove = true;
 
         spriteSheet.AddAnim("idle", 4);
-        spriteSheet.AddAnim("walking", 4, 1.3f);
+        spriteSheet.AddAnim("walking", 4, 1.5f);
         spriteSheet.AddAnim("spot", 8, 1.0f, true);
         spriteSheet.AddAnim("atkReady", 7);
-        spriteSheet.AddAnim("running", 3, 1.5f);
+        spriteSheet.AddAnim("running", 3, 2.1f);
         spriteSheet.AddAnimationEvent("running", 1, () => ChasingSound());
         spriteSheet.AddAnim("wander", 12, 0.5f);        
         spriteSheet.AddAnim("Atk", 6, 1.0f, true);

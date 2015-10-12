@@ -97,11 +97,7 @@ public class TrickItem : UnityEngine.MonoBehaviour,
 
                 if (Globals.stealingController != null && trickData.nameKey == "flashGrenade")
                 {
-                    if (Globals.stealingController.magician == null)
-                    {
-                        UnityEngine.GameObject magician_prefab = UnityEngine.Resources.Load("Avatar/" + Globals.thiefPlayer.selectedMagician.name) as UnityEngine.GameObject;
-                        Globals.stealingController.magician = UnityEngine.GameObject.Instantiate(magician_prefab).GetComponent<Magician>();
-                    }
+                    Globals.stealingController.InitMagician();
                     if (Globals.stealingController.magician.ChangePower(-trickData.powerCost))
                     {
                         UnityEngine.Vector3 finger_pos = UnityEngine.Camera.main.ScreenToWorldPoint(data.position);

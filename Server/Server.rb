@@ -27,14 +27,8 @@ end
 
 class MagicianData
   attr_accessor :name
-  attr_accessor :strengthAllot
-  attr_accessor :agilityAllot
-  attr_accessor :wisdomAllot
   def initialize(nameStr)
     @name = nameStr
-    @strengthAllot = 0
-    @agilityAllot = 0
-    @wisdomAllot = 0
   end
 end
 
@@ -80,6 +74,9 @@ class UserFile
   attr_accessor :performingIncomePerHour
   attr_accessor :cashOnFloor
   attr_accessor :calcDataDuringOffLineTimeStamp
+  attr_accessor :strengthAllot
+  attr_accessor :agilityAllot
+  attr_accessor :wisdomAllot
   def initialize(bornNewTargetDuration)
     @name = ""
     @deviceID = "-1"
@@ -148,6 +145,9 @@ class UserFile
     @performingIncomePerHour=0
     @cashOnFloor=[]
     @calcDataDuringOffLineTimeStamp=Time.now
+    @strengthAllot = 0
+    @agilityAllot = 0
+    @wisdomAllot = 0
   end
 end
 
@@ -302,13 +302,9 @@ class Player
     reply += "&" + playerFile.name
     reply += "&" + playerFile.PvEProgress.to_s
     reply += "&" + @punishRoseCount.to_s
-    reply += "&"
-    playerFile.Magicians.each{ |mage_data|
-      reply += mage_data.name.to_s + ","
-      reply += mage_data.strengthAllot.to_s + ","
-      reply += mage_data.agilityAllot.to_s + ","
-      reply += mage_data.wisdomAllot.to_s + ","
-    }
+    reply += "&" + playerFile.strengthAllot.to_s
+    reply += "&" + playerFile.agilityAllot.to_s
+    reply += "&" + playerFile.wisdomAllot.to_s
     reply += "&"
     playerFile.droppedItemsFromThief.each{ |item| reply += "_" + "#{item}"}
     reply += "&"
@@ -396,15 +392,11 @@ class Player
     end
   end
 
-  def UploadMagician(protocal_no,contents)
+  def UploadRoseAllot(protocal_no,contents)
     @userFile.roseLast = contents[0].to_i
-    @userFile.Magicians.each { |mage_data|
-      if contents[1].force_encoding('utf-8') == mage_data.name
-        mage_data.strengthAllot = contents[2].to_i
-        mage_data.agilityAllot = contents[3].to_i
-        mage_data.wisdomAllot = contents[4].to_i
-      end
-    }
+    @userFile.strengthAllot = contents[1].to_i
+    @userFile.agilityAllot = contents[2].to_i
+    @userFile.wisdomAllot = contents[3].to_i
   end
 
   def SelectMagician(protocal_no,contents)
@@ -784,9 +776,9 @@ class Player
     @userFile.defReplays.each{ |replay|
       send("replay" + @seperator + PackReplay(replay))
     }
-    #@userFile.atkReplays.each{ |replay|
-    #  send("replay" + @seperator + PackReplay(replay))
-    #}
+    @userFile.atkReplays.each{ |replay|
+      send("replay" + @seperator + PackReplay(replay))
+    }
     send("replays_ready")
   end
 
@@ -1112,8 +1104,8 @@ EM::run do
               player.BuildingUnlock(protocal_no,contents)
             when "change_rose"
               player.ChangeRose(protocal_no,contents)
-            when "upload_magician"
-              player.UploadMagician(protocal_no,contents)
+            when "UploadRoseAllot"
+              player.UploadRoseAllot(protocal_no,contents)
             when "select_magician"
               player.SelectMagician(protocal_no,contents)
             when "RemoveCashOnFloor"
