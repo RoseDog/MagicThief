@@ -224,7 +224,7 @@ class Player
     @websocket = ws
     @seperator = '|'
 
-    @bornNewTargetDuration = 60*10
+    @bornNewTargetDuration = 60*5
     @userFile = UserFile.new(@bornNewTargetDuration)
     @punishRoseCount = 2
     @performingIncomeCycle = 60 * 10
@@ -646,6 +646,10 @@ class Player
 
   def SendNone(building)
     building.type = "None"
+    if building.roseGrowTimer != nil
+       EM.cancel_timer(building.roseGrowTimer)
+    end
+    building.roseGrowTimer = nil
     building.roseGrowBeginTimeStamp = -1
     building.roseGrowLastDuration = 0
     building.bornNewTargetLastDuration = @bornNewTargetDuration
@@ -777,7 +781,7 @@ class Player
       send("replay" + @seperator + PackReplay(replay))
     }
     @userFile.atkReplays.each{ |replay|
-      send("replay" + @seperator + PackReplay(replay))
+     # send("replay" + @seperator + PackReplay(replay))
     }
     send("replays_ready")
   end

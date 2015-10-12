@@ -408,7 +408,7 @@ public class Guard : Actor, System.IComparable<Guard>
         int spotDuration = 0;
         if (gameObj.layer == 11)
         {
-            spotDuration = 50;
+            spotDuration = 60;
             spot.SpotMagician(gameObj, true, spotDuration);
         }
         else if (gameObj.layer == 20)

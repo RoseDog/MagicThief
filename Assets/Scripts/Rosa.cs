@@ -36,7 +36,7 @@
         spriteSheet.AddAnim("open_chest", 4);
         spriteSheet.AddAnimationEvent("open_chest", 0, () => OpenChestSound());
         spriteSheet.AddAnim("take_money", 16);
-        spriteSheet.AddAnim("dove_trick", 12, 3.0f, true);        
+        spriteSheet.AddAnim("dove_trick", 12, 4.0f, true);        
         spriteSheet.AddAnim("sneaking", 6, sneakingAnimSpeed);
         base.Awake();
 

@@ -5,7 +5,7 @@ public class SpiderNet : Projectle
     {
         base.Awake();
         hit_target_dis = 110f;
-        jumpDuration = 10;
+        jumpDuration = 20;
         spriteSheet.init();
         spriteSheet.AddAnim("play", spriteSheet._sprites.Length, 5.0f);
         spriteSheet.Play("play");        
