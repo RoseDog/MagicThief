@@ -8,10 +8,9 @@ public class BeenHypnosised : GuardAction
     }
 
     public void GoToSleep(int duration)
-    {
-        timer = (UnityEngine.GameObject.Instantiate(Globals.stealingController.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
-
+    {       
         base.Excute();
+        timer = (UnityEngine.GameObject.Instantiate(Globals.stealingController.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
         actor.spriteSheet.Play("BeenHypnosised");
         actor.moving.canMove = false;
         guard.HideBtns();
