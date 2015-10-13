@@ -381,7 +381,7 @@ public class PlayerInfo
         slotsDatas.Add(data);
 
         data = new TrickUsingSlotData();
-        data.price = 5000;
+        data.price = 12000;
         data.idx = 2;
         slotsDatas.Add(data);
 
@@ -458,7 +458,7 @@ public class PlayerInfo
             trick.powerCost = 15;
             trick.unlockRoseCount = 60;
             trick.dropOdds = 0.3f;
-            trick.buyPrice = 1800;
+            trick.buyPrice = 300;
             trick.clickOnGuardToCast = false;
             trick.clickButtonToCast = true;
             tricks.Add(trick);
