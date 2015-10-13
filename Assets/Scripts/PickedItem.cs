@@ -21,11 +21,7 @@ public class PickedItem : Actor
     {
         base.Awake();
         fly = GetComponent<FlyToScreenNumber>();
-        tip.gameObject.SetActive(false);
-        if (spriteRenderer == null)
-        {
-            spriteRenderer = GetComponent<UnityEngine.SpriteRenderer>();
-        }                
+        tip.gameObject.SetActive(false);            
 	}
 
     public override void Start()
