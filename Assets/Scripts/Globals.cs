@@ -719,6 +719,8 @@ public class PlayerInfo
             Globals.socket.serverReplyActions.Add("new_rosebuilding", (reply) => NewRoseBuilding(reply));
 
             Globals.socket.serverReplyActions.Add("been_stolen", (reply) => BeenStolen(reply));
+            Globals.socket.serverReplyActions.Add("items_on_floor_been_stolen", (reply) => items_on_floor_been_stolen(reply));
+            Globals.socket.serverReplyActions.Add("cash_on_floor_been_stolen", (reply) => cash_on_floor_been_stolen(reply));
 
             Globals.socket.serverReplyActions.Add("performing_income", (reply) => PerformingIncome(reply));            
         }
@@ -1509,11 +1511,21 @@ public class PlayerInfo
         return replay;
     }
 
+    public void items_on_floor_been_stolen(System.String[] reply)
+    {
+        UnpackDroppedItemStr(reply[0]);
+    }
+
+    public void cash_on_floor_been_stolen(System.String[] reply)
+    {
+        UnpackCashOnFloorStr(reply[0]);
+    }
+
     public void BeenStolen(System.String[] reply)
     {
-        ReplayData replay = UnpackOneReplayData(reply);
-        Globals.canvasForMagician.ChangeCash(replay.StealingCashInSafebox);
+        ReplayData replay = UnpackOneReplayData(reply);        
         beenStolenReports.Add(replay.date.ToString(), replay);
+        defReplays.Add(replay.date.ToString(), replay);
         if(Globals.city != null)
         {
             Globals.city.BeenStolen();

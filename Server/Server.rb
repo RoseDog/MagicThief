@@ -306,10 +306,20 @@ class Player
     reply += "&" + playerFile.agilityAllot.to_s
     reply += "&" + playerFile.wisdomAllot.to_s
     reply += "&"
-    playerFile.droppedItemsFromThief.each{ |item| reply += "_" + "#{item}"}
+    reply = packDropItems(playerFile,reply)
     reply += "&"
-    playerFile.cashOnFloor.each{ |cash| reply += "_" + "#{cash}"}
+    reply = packCashOnFloor(playerFile,reply)
     reply
+  end
+
+  def packDropItems(playerFile,str)
+    playerFile.droppedItemsFromThief.each{ |item| str += "_" + "#{item}"}
+    str
+  end
+
+  def packCashOnFloor(playerFile,str)
+    playerFile.cashOnFloor.each{ |cash| str += "_" + "#{cash}"}
+    str
   end
 
   def UpgradeMaze(protocal_no,contents)
@@ -719,6 +729,7 @@ class Player
           building.bornNewTargetLastDuration = @bornNewTargetDuration - timeElapsed
           if building.bornNewTargetLastDuration < 0
             SendNewTarget(building)
+            next
           else
             building.sendNewTargetTimer = EM.add_timer(building.bornNewTargetLastDuration) do
               SendNewTarget(building)
@@ -826,7 +837,9 @@ class Player
       end
       # 如果对方在线，发送消息
       if $onlinePlayers.include?enemy
-        enemy.send("been_stolen" + @seperator + PackReplay(replay) + @seperator + "True")
+        enemy.send("items_on_floor_been_stolen" + @seperator + enemy.packDropItems(enemy.userFile,""))
+        enemy.send("cash_on_floor_been_stolen" + @seperator + enemy.packCashOnFloor(enemy.userFile,""))
+        enemy.send("been_stolen" + @seperator + PackReplay(replay))
       else
         #否则直接扣除金钱，保存防守录像
         enemy.userFile.cashAmount = (enemy.userFile.cashAmount.to_f - replay.StealingCashInSafebox.to_f).to_s

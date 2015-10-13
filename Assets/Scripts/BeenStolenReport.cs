@@ -21,6 +21,8 @@ public class BeenStolenReport : CustomEventTrigger
         {
             ReplayData replay = Globals.self.beenStolenReports[dateArray[idx].ToString()] as ReplayData;
             AddEvent(replay);
+            Globals.city.AddOneReplayToEventWindow(replay);
+            Globals.canvasForMagician.ChangeCash(-replay.StealingCashInSafebox);          
         }        
     }
 
