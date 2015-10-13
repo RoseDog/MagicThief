@@ -515,8 +515,7 @@ public class StealingLevelController : LevelController
                 }
 
                 if (!Globals.guardPlayer.isBot)
-                {                    
-                    Globals.self.StealingOver(StealingCash.numberAmont - picked_cash, picked_cash, perfect_stealing_bonus, true);
+                {
                     foreach (System.String cash_id in pickedCash)
                     {
                         Globals.guardPlayer.RemoveCashOnFloor(cash_id);
@@ -525,6 +524,9 @@ public class StealingLevelController : LevelController
                     {
                         Globals.guardPlayer.RemoveDroppedItem(itemid);
                     }
+
+                    Globals.self.StealingOver(StealingCash.numberAmont - picked_cash, picked_cash, perfect_stealing_bonus, true);
+                    
                     Globals.socket.Send("calc_stealing_data_over");                    
                 }
                 else

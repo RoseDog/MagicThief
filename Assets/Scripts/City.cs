@@ -144,37 +144,41 @@ public class City : LevelController
         foreach (System.Collections.DictionaryEntry entry in replays)
         {
             ReplayData replay = entry.Value as ReplayData;
+            AddOneReplayToEventWindow(replay);
+        }
+    }
 
-            CityEvent ce = null;
-            if (replay.thief.name == Globals.self.name)
+    public void AddOneReplayToEventWindow(ReplayData replay)
+    {
+        CityEvent ce = null;
+        if (replay.thief.name == Globals.self.name)
+        {
+            ce = eventsWindow.AddEvent(replay.everClicked);
+            Globals.languageTable.SetText(ce.uiText, "you_stole_others_event", new System.String[] { replay.guard.name });
+        }
+        else
+        {
+            ce = eventsWindow.AddEvent(replay.everClicked);
+            if (replay.StealingCashInSafebox > 0)
             {
-                ce = eventsWindow.AddEvent(replay.everClicked);
-                Globals.languageTable.SetText(ce.uiText, "you_stole_others_event", new System.String[] { replay.guard.name });
+                ce.uiText.color = UnityEngine.Color.red;
+                Globals.languageTable.SetText(ce.uiText, "stolen_by_others_event_guards_failed", new System.String[] { replay.thief.name, replay.thief.roseCount.ToString() });
             }
             else
             {
-                ce = eventsWindow.AddEvent(replay.everClicked);
-                if (replay.StealingCashInSafebox > 0)
-                {
-                    ce.uiText.color = UnityEngine.Color.red;
-                    Globals.languageTable.SetText(ce.uiText, "stolen_by_others_event_guards_failed", new System.String[] { replay.thief.name, replay.thief.roseCount.ToString()});
-                }
-                else
-                {
-                    ce.uiText.color = UnityEngine.Color.green;
-                    Globals.languageTable.SetText(ce.uiText, "stolen_by_others_event_guards_success", new System.String[] { replay.thief.name, replay.thief.roseCount.ToString() });
-                }                
+                ce.uiText.color = UnityEngine.Color.green;
+                Globals.languageTable.SetText(ce.uiText, "stolen_by_others_event_guards_success", new System.String[] { replay.thief.name, replay.thief.roseCount.ToString() });
             }
-
-            UnityEngine.UI.Button eventBtn = ce.GetComponent<UnityEngine.UI.Button>();
-            eventBtn.onClick.AddListener(() => eventsWindow.ReplayEventBtnClicked(replay, ce));
         }
+
+        UnityEngine.UI.Button eventBtn = ce.GetComponent<UnityEngine.UI.Button>();
+        eventBtn.onClick.AddListener(() => eventsWindow.ReplayEventBtnClicked(replay, ce));
     }
 
     public void BeenStolen()
     {
         beenStolenReportUI.Open();
-        Globals.self.beenStolenReports.Clear();        
+        Globals.self.beenStolenReports.Clear();    
     }
 
     public override void OnDestroy()
