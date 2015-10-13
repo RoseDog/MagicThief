@@ -20,7 +20,9 @@ public class Spider : Machine
         if(Globals.LevelController as StealingLevelController != null)
         {
             scanner.SetActive(false);
-        }                        
+        }
+
+        fixTimer_offset = new UnityEngine.Vector3(0.0f, 54.0f, 0);
     }
 
     public override void Start()

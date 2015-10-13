@@ -38,7 +38,7 @@ public class AddSafeBoxUI : CustomEventTrigger
             new System.String[] { Globals.safeBoxLvDatas[0].capacity.ToString() });
         if (Globals.self.safeBoxDatas.Count >= mazeData.safeBoxCount)
         {
-            if (Globals.self.currentMazeLevel == Globals.mazeLvDatas.Count - 1)
+            if (Globals.self.safeBoxDatas.Count == Globals.mazeLvDatas[Globals.mazeLvDatas.Count - 1].safeBoxCount)
             {
                 AddBtn.gameObject.SetActive(false);
                 capacity.gameObject.SetActive(false);

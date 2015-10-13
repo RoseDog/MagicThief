@@ -124,6 +124,7 @@ public class EnhanceDefenseUI : Actor
         if (tabBtn == mazeTab)
         {
             mazeInfo.gameObject.SetActive(true);
+            mazeInfo.UpdateMazeInfo();
         }
         else if (tabBtn == guardsTab)
         {
@@ -133,6 +134,7 @@ public class EnhanceDefenseUI : Actor
         else if (tabBtn == safeboxTab)
         {
             addSafeBox.gameObject.SetActive(true);
+            addSafeBox.UpdateInfo();
             Globals.mazeLvDatas[Globals.self.currentMazeLevel].playerEverClickSafebox = true;            
         }
 

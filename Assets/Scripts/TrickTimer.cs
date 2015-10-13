@@ -29,14 +29,20 @@ public class TrickTimer : Actor
         lastFrames = durationTime;
         posOffset = timerOffset;
         transform.position = actor.transform.position + posOffset;
-        unlockProgressBG.gameObject.SetActive(true);
+        if (unlockProgressBG)
+        {
+            unlockProgressBG.gameObject.SetActive(true);
+        }        
         timerText.enabled = true;
     }
 
     public void StopCount()
     {
         actor = null;
-        unlockProgressBG.gameObject.SetActive(false);
+        if (unlockProgressBG)
+        {
+            unlockProgressBG.gameObject.SetActive(false);
+        }        
         timerText.enabled = false;
     }
 

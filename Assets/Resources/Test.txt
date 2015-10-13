@@ -1,8 +1,5 @@
-﻿GuardCount=5
-(276.0000, 925.0000, -0.0100)=Monkey
-(-1199.0000, 0.0000, -0.0100)=Police
+﻿GuardCount=2
 (426.0000, 225.0000, -0.0100)=lamp
-(-24.0000, -900.0000, -0.0100)=dog
 (-374.0000, -125.0000, -0.0100)=Spider
 randSeedCacheWhenEditLevel=-1751443233
 Z_CELLS_COUNT=7

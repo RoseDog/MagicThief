@@ -429,7 +429,7 @@ public class PlayerInfo
             trick.nameKey = "disguise";
             trick.descriptionKey = "disguise_desc";
             trick.duration = 700;
-            trick.powerCost = 25;
+            trick.powerCost = 30;
             trick.unlockRoseCount = 30;
             trick.dropOdds = 0.9f;
             trick.weight = 0.3f;
@@ -514,11 +514,11 @@ public class PlayerInfo
         guard_data.roomConsume = 2;
         guard_data.magicianOutVisionTime = 100;
         guard_data.atkCd = 100;
-        guard_data.attackValue = 20;
+        guard_data.attackValue = 30;
         guard_data.atkShortestDistance = 120f;
         guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
-        guard_data.moveSpeed = 8f;        
+        guard_data.moveSpeed = 6f;        
         Globals.guardDatas.Add(guard_data);
 
         guard_data = new GuardData();
@@ -527,7 +527,7 @@ public class PlayerInfo
         guard_data.roomConsume = 2;
         guard_data.magicianOutVisionTime = 100;
         guard_data.atkCd = 100;
-        guard_data.attackValue = 20;
+        guard_data.attackValue = 30;
         guard_data.atkShortestDistance = 120f;
         guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;
@@ -565,7 +565,7 @@ public class PlayerInfo
         guard_data.roomConsume = 3;
         guard_data.magicianOutVisionTime = 70;
         guard_data.atkCd = 150;
-        guard_data.attackValue = 30;
+        guard_data.attackValue = 40;
         guard_data.atkShortestDistance = 500f;
         guard_data.doveOutVisionTime = 50;
         guard_data.attackSpeed = 1.0f;

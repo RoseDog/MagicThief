@@ -60,7 +60,7 @@ public class FlyUp : MagicianTrickAction
     public void InAir()
     {
         timer = (UnityEngine.GameObject.Instantiate(Globals.stealingController.magician.TrickTimerPrefab) as UnityEngine.GameObject).GetComponent<TrickTimer>();
-        timer.BeginCountDown(gameObject, data.duration, new UnityEngine.Vector3(0, 170f, 0));
+        timer.BeginCountDown(gameObject, data.duration, new UnityEngine.Vector3(0, 230f, 0));
         inAirCD = actor.SleepThenCallFunction(data.duration, () => FoldGlider());
         actor.spriteSheet.Play("flying");
         UnityEngine.Debug.Log("flying");
@@ -74,7 +74,7 @@ public class FlyUp : MagicianTrickAction
             UnityEngine.Vector3 dir = (destination + updis) - actor.transform.position;
             if (dir.magnitude > 10f)
             {
-                actor.transform.position = actor.transform.position + dir.normalized * (float)actor.moving.speed;
+                actor.transform.position = actor.transform.position + dir.normalized * mage.data.GetNormalSpeed();
                 actor.FaceDir(dir);
             }        
         }        

@@ -137,11 +137,9 @@ public class TrickItem : UnityEngine.MonoBehaviour,
                 PutItemInUse(Globals.canvasForMagician.draggingDownSlot);                
                 Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();                                                
                 Globals.canvasForMagician.draggingDownSlot.PointerExit();
-                Globals.canvasForMagician.tricksBg.trickItemsInPack.Remove(this);
             }
             else if (Globals.canvasForMagician.tricksBg.gameObject.activeSelf)
             {
-                Globals.canvasForMagician.tricksBg.trickItemsInPack.Insert(Globals.self.GetTrickIdx(trickData.nameKey), this);
                 PutItemBackInPack(this);                
             }
         }        

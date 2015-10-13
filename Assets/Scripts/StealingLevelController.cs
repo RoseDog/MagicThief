@@ -115,7 +115,7 @@ public class StealingLevelController : LevelController
             Globals.guardPlayer.slotsDatas[1].statu = "0";
             Globals.guardPlayer.slotsDatas[2].statu = "0";
             Globals.guardPlayer.isBot = true;
-            Globals.iniFileName = "pve_0";
+            Globals.iniFileName = "Test";
 
 
             Globals.guardPlayer.currentMazeRandSeedCache = -1;
@@ -184,8 +184,6 @@ public class StealingLevelController : LevelController
                 }
             }
         }
-
-
 
         randSeedCache = UnityEngine.Random.seed;
 

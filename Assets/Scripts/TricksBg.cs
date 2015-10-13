@@ -2,7 +2,6 @@ public class TricksBg : CustomEventTrigger
 {
     UnityEngine.UI.Button TrickItemsTabBtn;
     public UnityEngine.UI.GridLayoutGroup TrickItemsLayout;
-    public System.Collections.Generic.List<TrickItem> trickItemsInPack = new System.Collections.Generic.List<TrickItem>();
     public System.Collections.Generic.List<UnityEngine.GameObject> trickSlots = new System.Collections.Generic.List<UnityEngine.GameObject>();
 
     public UIMover ClickHypnosisPointer;
@@ -44,7 +43,6 @@ public class TricksBg : CustomEventTrigger
                 trickItem.name = data.nameKey;                
                 trickItem.CheckIfUnlock();
                 trickItem.slotInPack = itemSlot;
-                trickItemsInPack.Add(trickItem);
 
                 if (!data.IsLocked())
                 {
@@ -112,7 +110,6 @@ public class TricksBg : CustomEventTrigger
             DestroyObject(slot);
         }
         trickSlots.Clear();
-        trickItemsInPack.Clear();
         gameObject.SetActive(false);
         Globals.canvasForMagician.charSelect.gameObject.SetActive(false);
         Globals.canvasForMagician.CheckIfNeedDraggingItemFinger();
