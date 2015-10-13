@@ -810,8 +810,7 @@ class Player
     returnStr
   end
 
-  def StealingOver(protocal_no,contents, enemy)
-    replay = ReplayData.new()
+  def StealingOver(protocal_no,contents, enemy, replay)
     replay.date = contents[0]
     replay.StealingCashInSafebox = contents[1]
     replay.PickedCash = contents[2]
@@ -829,22 +828,22 @@ class Player
     # 如果是pvp
     if !enemy.userFile.isBot
       data = GetDataBasedOnRoseCount(enemy.userFile.currentMazeLevel)
-      replay.guard = StealingInfo(enemy.userFile)
       enemy.userFile.beenStealingTimeStamp = Time.now
       # 失败，对方得到奖励
       if !bIsPerfectStealing
         replay.reward_rose_count = 2
       end
       # 如果对方在线，发送消息
+      enemy.userFile.defReplays << replay
+      enemy.userFile.defReplays.shift if enemy.userFile.defReplays.length > 5
       if $onlinePlayers.include?enemy
-        enemy.send("items_on_floor_been_stolen" + @seperator + enemy.packDropItems(enemy.userFile,""))
-        enemy.send("cash_on_floor_been_stolen" + @seperator + enemy.packCashOnFloor(enemy.userFile,""))
+        enemy.send("cash_on_floor_been_stolen" + @seperator + enemy.packCashOnFloor(enemy.userFile, "") )
+        enemy.send("items_on_floor_been_stolen" + @seperator + enemy.packDropItems(enemy.userFile, ""))
         enemy.send("been_stolen" + @seperator + PackReplay(replay))
       else
         #否则直接扣除金钱，保存防守录像
         enemy.userFile.cashAmount = (enemy.userFile.cashAmount.to_f - replay.StealingCashInSafebox.to_f).to_s
-        enemy.userFile.defReplays << replay
-        enemy.userFile.defReplays.shift if enemy.userFile.defReplays.length > 5
+        SaveToFile(enemy.userFile.name + ".yaml", enemy.userFile)
       end
     else
       # bot的金钱是客户端上传的
@@ -1015,6 +1014,7 @@ EM::run do
         player = Player.new(ws)
         $onlinePlayers << player
         enemy = nil
+        replay = nil
         ws.onmessage do |msg|
           begin
           contents = msg.to_s.split(player.seperator)
@@ -1056,6 +1056,7 @@ EM::run do
               player.DownloadReplays(protocal_no,contents)
             when "download_target"
               enemy = nil
+              replay = ReplayData.new()
               targetName = contents[0]
               isBot = contents[1].to_bool
               buildingPosID = contents[2]
@@ -1071,6 +1072,8 @@ EM::run do
                   enemy.userFile = enemy.ReadPlayerFile((targetName + ".yaml").force_encoding('utf-8'))
                   enemy.CalcDataDuringOffLine(false)
                 end
+                # 开场前录像记录pvp的对手，pve是在结束后记录的
+                replay.guard = enemy.StealingInfo(enemy.userFile)
               else
                 enemy = Player.new(ws)
                 enemy.userFile.name = targetName
@@ -1083,7 +1086,7 @@ EM::run do
               player.websocket.send("download_target" + player.seperator + enemy.StealingInfo(enemy.userFile))
 
             when "stealing_over"
-              player.StealingOver(protocal_no,contents, enemy)
+              player.StealingOver(protocal_no,contents, enemy, replay)
             when "calc_stealing_data_over"
               if enemy.userFile.isBot == false and !$onlinePlayers.include?enemy
                 enemy.SaveToFile(enemy.userFile.name + ".yaml", enemy.userFile)
