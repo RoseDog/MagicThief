@@ -1159,7 +1159,7 @@ public class PlayerInfo
             UnityEngine.GameObject DroppedItem_prefab = UnityEngine.Resources.Load("Misc/DroppedItem") as UnityEngine.GameObject;
             UnityEngine.GameObject DroppedItemObject = UnityEngine.GameObject.Instantiate(DroppedItem_prefab) as UnityEngine.GameObject;
             DroppedItemObject.name = item_data[2];
-            DroppedItemObject.GetComponent<UnityEngine.SpriteRenderer>().sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("Misc/" + item_data[2] + "_itemImageOnFloor");
+            DroppedItemObject.GetComponent<PickedItem>().spriteRenderer.sprite = UnityEngine.Resources.Load<UnityEngine.Sprite>("Misc/" + item_data[2] + "_itemImageOnFloor");
             DroppedItemObject.transform.position = Globals.maze.GetPickedItemBasedOnRandomPos(item_data);
             DroppedItemObject.GetComponent<PickedItem>().item_id = item;
         }
