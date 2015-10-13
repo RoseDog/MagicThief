@@ -690,7 +690,7 @@ public class StealingLevelController : LevelController
                 foreach (System.String itemid in pickedItems)
                 {
                     System.String[] item = itemid.Split(',');
-                    if (data.nameKey == item[0])
+                    if (data.nameKey == item[2])
                     {
                         ++picked_count;
                     }
@@ -708,7 +708,7 @@ public class StealingLevelController : LevelController
 
         if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.Over && !Globals.guardPlayer.isBot && bIsPerfectStealing)
         {
-            ending_str += Globals.languageTable.GetText("perfect_stealing", new System.String[] { (StealingCash.numberAmont*0.5f).ToString(), rose_bonus.ToString() });            
+            ending_str += Globals.languageTable.GetText("perfect_stealing", new System.String[] { (StealingCash.numberAmont*0.5f).ToString("F0"), rose_bonus.ToString() });
             Globals.self.PickRose(rose_bonus, null);
             Globals.canvasForMagician.RoseNumber.Add(rose_bonus);
         }
