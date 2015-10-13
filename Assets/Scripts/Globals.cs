@@ -398,7 +398,7 @@ public class PlayerInfo
             trick.buyPrice = 100;
             trick.clickOnGuardToCast = true;
             trick.clickButtonToCast = false;
-            trick.castRange = new UnityEngine.Vector2(200, 500);
+            trick.castRange = new UnityEngine.Vector2(150, 400);
             tricks.Add(trick);
 
             trick = new TrickData();

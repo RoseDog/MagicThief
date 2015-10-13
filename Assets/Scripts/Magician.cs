@@ -199,7 +199,7 @@ public class Magician : Actor
             audioSource.PlayOneShot(clip);
             audioSource.volume = 0.7f;                
             
-            if (stepCount%3==0)
+            if (stepCount%2==0 || stepCount % 3 == 0)
             {
                 BarkSoundWave wave = (UnityEngine.GameObject.Instantiate(Globals.wave_prefab) as UnityEngine.GameObject).GetComponent<BarkSoundWave>();
                 wave.transform.position = (transform.position + GetWorldCenterPos()) * 0.5f;

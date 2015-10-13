@@ -226,7 +226,7 @@ class Player
 
     @bornNewTargetDuration = 60*5
     @userFile = UserFile.new(@bornNewTargetDuration)
-    @punishRoseCount = 2
+    @punishRoseCount = 1
     @performingIncomeCycle = 60 * 10
   end
 
@@ -846,7 +846,7 @@ class Player
     send("atk_replay" + seperator + PackReplay(replay))
 
     building.roseGrowTotalDuration = data.roseGrowDuration + 2
-    building.roseGrowCycle = data.roseGrowDuration / 3.0
+    building.roseGrowCycle = data.roseGrowDuration / 1.0
 
     if !enemy.userFile.isBot
       # 如果pvp胜利，刷新成poor，否则刷新成None
