@@ -36,13 +36,13 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("tricks", new System.String[] { "魔术", "Tricks" });
         table.Add("outfits", new System.String[] { "服装", "Outfits" });
         table.Add("hypnosis", new System.String[] { "催眠", "Hypnosis" });
-        table.Add("hypnosis_desc", new System.String[] { "对指定守卫施行催眠。如果对方已经发现你，催眠效果会很糟糕。", "Hypnotize the pointed security guard" });
+        table.Add("hypnosis_desc", new System.String[] { "可对警卫和马戏猴子催眠。如果距离目标过远或目标发现你，催眠效果会很糟糕。", "Hypnotize the pointed security guard" });
         table.Add("shotLight", new System.String[] { "魔术牌手枪", "Poker Pistol" });
-        table.Add("shotLight_desc", new System.String[] { "可以破坏蜘蛛。\n可以原地开枪吸引守卫注意力。", "Can be used to break spiders, you can also use the sound to draw security guards' attention." });
+        table.Add("shotLight_desc", new System.String[] { "可以暂时破坏蜘蛛和提灯鹦鹉。\n也可直接释放吸引守卫注意力并配合“浮空”盗取迷宫财物。", "Can be used to break spiders, you can also use the sound to draw security guards' attention." });
         table.Add("disguise", new System.String[] { "易容", "Disguise" });
-        table.Add("disguise_desc", new System.String[] { "魔术师以高超的手法进行乔装，让自己混进守卫之中。", "Magician can disguise himself as a security guard." });
+        table.Add("disguise_desc", new System.String[] { "魔术师仪容后可混进守卫之中，但是蜘蛛会发现你不对劲。", "Magician can disguise himself as a security guard." });
         table.Add("flyUp", new System.String[] { "浮空", "Levitate" });
-        table.Add("flyUp_desc", new System.String[] { "可以瞬间脱离守卫的追击。移动无视地形。", "Enable the magician to move across landforms" });
+        table.Add("flyUp_desc", new System.String[] { "可以飞起来并瞬间脱离守卫的追击。移动无视地形。", "Enable the magician to move across landforms" });
         table.Add("dove", new System.String[] { "鸽子戏法", "Dove Trick" });
         table.Add("dove_desc", new System.String[] { "放出鸽子吸引守卫的注意力。用来对付玩具狗效果显著。", "Release a dove to distract security guards.It is remarkbly effective for Robo-dog." });
         table.Add("flashGrenade", new System.String[] { "照明弹", "Flare" });
@@ -54,7 +54,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("duration", new System.String[] { "持续时间:{0}", "Duration:{0}" });
         table.Add("unlock_need_rose", new System.String[] { "玫瑰达到 {0} 即可解锁", "Roses {0}" });
         table.Add("restart_tutorial_level_tip", new System.String[] { 
-            "潜入失败！<b><color=red><size=30>{0}</size></color></b> 秒后重新开始\n\n 教程关卡你都能输，能专心点儿么 =.= ", 
+            "潜入失败！<b><color=red><size=30>{0}</size></color></b> 秒后重新开始该教程关卡 ", 
             "Failed！Restart After <b><color=red><size=30>{0}</size></color></b> seconds" });
         table.Add("poker_face", new System.String[] { "扑克脸", "Poker Face" });
         table.Add("cat_eye_lady", new System.String[] { "猫眼三姐妹", "Cat Eye Lady" });
@@ -282,8 +282,8 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
 
         table.Add("plz_bring_more_item", new System.String[] { "请携带更多道具", "you should carry more items" });
         table.Add("unlock_to_bring_more_item", new System.String[] { "解锁后可携带更多道具", "Unlock to carry more items." });
-        table.Add("click_guard_to_cast", new System.String[] { "直接鼠标左键点击守卫释放(不用先点图标)", "Left-click on guard to cast(no need to click the icon)" });
-        table.Add("click_to_cast", new System.String[] { "直接点击图标可释放", "Click icon to cast" });
+        table.Add("click_guard_to_cast", new System.String[] { "鼠标左键点击警卫或马戏猴子释放", "Left-click on guard to cast(no need to click the icon)" });
+        table.Add("click_to_cast", new System.String[] { "点击图标或快捷键释放", "Click icon to cast" });
         table.Add("shortcut", new System.String[] { "<color=red>快捷键：{0}</color>", "<color=red>Shortcut:{0}</color>" });
         
         table.Add("drag_to_cast", new System.String[] { "拖拽释放", "Drag to cast" });
@@ -293,9 +293,9 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("damage", new System.String[] { "伤害", "Damage" });
         table.Add("Performing_income", new System.String[] { "表演收入", "Performing income" });
 
-        table.Add("operate_guide_info", new System.String[] { "<color=red>鼠标右键移动角色\n鼠标接近屏幕边缘滚动地图</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
+        table.Add("operate_guide_info", new System.String[] { "<color=red>点击鼠标右键移动角色并盗取宝箱财物</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
         table.Add("sneaking_guide_info", new System.String[] { "<color=red>移动时按住<size=30>R</size>键可消除脚步声</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
-        table.Add("hypnosis_guide_info", new System.String[] { "<color=red>悄悄从背后靠近守卫然后催眠他</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
+        table.Add("hypnosis_guide_info", new System.String[] { "<color=red>按住<size=30>R</size>键靠近警卫将其催眠并盗取财物</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
         
 
         table.Add("replay_speed", new System.String[] { "快进 x {0}", "Speed x {0}" });
@@ -309,7 +309,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("wisdom", new System.String[] { "智力：{0}", "Wisdom:{0}" });
         table.Add("Speed", new System.String[] { "移动速度：{0}", "Moving Speed:{0}" });
         table.Add("Unlocking Duration", new System.String[] { "开锁时间：{0}", "Unlocking Duration:{0}" });
-        table.Add("TricksTotalWeight", new System.String[] { "携带的道具总重：{0}", "Tricks total weights:{0}" });
+        table.Add("TricksTotalWeight", new System.String[] { "身体负重：{0}", "Tricks total weights:{0}" });
         table.Add("magician_speed", new System.String[] { "移动速度{0},开锁时间减少{1}", "Speed {0}, Unlocking {1}" });
 
         table.Add("need_rose", new System.String[] { "玫瑰：{0}", "Rose:{0}" });
@@ -320,7 +320,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("item_consumed", new System.String[] { "<color=red>{0} -{1}</color>", "<color=red>{0} -{1}</color>" });
         table.Add("item_picked_label", new System.String[] { "你在迷宫里获得了一些道具：", "growth" });
         table.Add("item_picked", new System.String[] { "<color=yellow>{0} +{1}</color>", "<color=yellow>{0} +{1}</color>" });
-        table.Add("item_dropped_label", new System.String[] { "狼狈的逃离，你遗落了一些道具：", "growth" });
+        table.Add("item_dropped_label", new System.String[] { "狼狈逃离的你遗落了一些道具：", "growth" });
         table.Add("item_dropped", new System.String[] { "<color=red>{0} -{1}</color>", "<color=red>{0} -{1}</color>" });
 
         table.Add("character_require_rose", new System.String[] { "???:达到{0}朵玫瑰可使用该角色", "" });

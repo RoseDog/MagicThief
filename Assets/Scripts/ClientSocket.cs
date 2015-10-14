@@ -35,7 +35,7 @@ public class ClientSocket : UnityEngine.MonoBehaviour
 
         //ws = new WebSocket4Net.WebSocket("ws://96.126.116.192:42788");
         //ws = new WebSocket4Net.WebSocket("ws://192.168.1.4:42788/");
-        ws = new WebSocket4Net.WebSocket("ws://192.168.1.3:42788");
+        ws = new WebSocket4Net.WebSocket("ws://127.0.0.1:42788");
 
         ws.Opened += new System.EventHandler(OnOpen);
         ws.Closed += new System.EventHandler(OnClose);
