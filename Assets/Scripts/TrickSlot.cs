@@ -148,14 +148,10 @@ public class TrickSlot : CustomEventTrigger
             MultiLanguageUIText tip = Globals.canvasForMagician.cast_tip.GetComponentInChildren<MultiLanguageUIText>();
             TrickData trick = Globals.self.GetTrickBySlotIdx(data.idx);
             if (trick != null)
-            {
-                if (trick.nameKey == "flashGrenade")
+            {                
+                if (!trick.useShortcut)
                 {
-                    Globals.languageTable.SetText(tip, "drag_to_cast");
-                }
-                else if (trick.clickOnGuardToCast)
-                {
-                    Globals.languageTable.SetText(tip, "click_guard_to_cast");
+                    Globals.languageTable.SetText(tip, trick.shortDescriptionKey);
                 }
                 else
                 {
@@ -172,7 +168,7 @@ public class TrickSlot : CustomEventTrigger
                     {
                         shortcut_str = "E";
                     }
-                    tip.text = Globals.languageTable.GetText("click_to_cast") + " " + Globals.languageTable.GetText("shortcut",
+                    tip.text = Globals.languageTable.GetText(trick.shortDescriptionKey) + " " + Globals.languageTable.GetText("shortcut",
                         new System.String[] { shortcut_str });
                 }
             }

@@ -136,7 +136,7 @@ public class Guard : Actor, System.IComparable<Guard>
         AddAction(
                 new Cocos2dParallel(
                     new Sequence(new ScaleTo(transform, scaleCache*1.2f, 2),
-                        new ScaleTo(transform, scaleCache, 2))
+                        new ScaleTo(transform, scaleCache, 1))
                         )
                         );
         ShowArrangeBtns();

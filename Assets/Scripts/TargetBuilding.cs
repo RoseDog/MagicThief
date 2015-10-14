@@ -31,7 +31,6 @@ public class TargetBuilding : BuildingCouldDivedIn
                 Globals.languageTable.SetText(tip, data.targetName);                
             }
             tip.text = "<color=red>Lv." + data.maze_lv.ToString() + "</color> " + tip.text;
-            city.eventsWindow.AddEvent(this);
         }
         
         //spriteSheet.AddAnim("idle", 5, 0.2f, false);

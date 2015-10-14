@@ -44,9 +44,8 @@ public class ViewRankPlayer : CustomEventTrigger
         player = playerOnRank;
         PlayerName.text = playerOnRank.name;
 
-        foreach (System.Collections.DictionaryEntry entry in playerOnRank.atkReplays)
+        foreach (ReplayData replay in playerOnRank.atkReplays)
         {
-            ReplayData replay = entry.Value as ReplayData;
             AddStealingRecord(replay);
         }        
     }

@@ -37,16 +37,22 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("outfits", new System.String[] { "服装", "Outfits" });
         table.Add("hypnosis", new System.String[] { "催眠", "Hypnosis" });
         table.Add("hypnosis_desc", new System.String[] { "对指定守卫施行催眠。如果对方已经发现你，催眠效果会很糟糕。", "Hypnotize the pointed security guard" });
+        table.Add("hypnosis_short_desc", new System.String[] { "使用方法：鼠标左键点击警卫，小丑，马戏猴子(不用先点图标)", "Hypnotize the pointed security guard" });
         table.Add("shotLight", new System.String[] { "魔术牌手枪", "Poker Pistol" });
         table.Add("shotLight_desc", new System.String[] { "可以破坏蜘蛛。\n可以原地开枪吸引守卫注意力。", "Can be used to break spiders, you can also use the sound to draw security guards' attention." });
+        table.Add("shotLigh_short_desc", new System.String[] { "使用方法：鼠标左键点击蜘蛛，鹦鹉以及点击图标。", "Hypnotize the pointed security guard" });
         table.Add("disguise", new System.String[] { "易容", "Disguise" });
         table.Add("disguise_desc", new System.String[] { "魔术师以高超的手法进行乔装，让自己混进守卫之中。", "Magician can disguise himself as a security guard." });
+        table.Add("disguise_short_desc", new System.String[] { "使用方法：点击图标", "" });
         table.Add("flyUp", new System.String[] { "浮空", "Levitate" });
         table.Add("flyUp_desc", new System.String[] { "可以瞬间脱离守卫的追击。移动无视地形。", "Enable the magician to move across landforms" });
+        table.Add("flyUp_short_desc", new System.String[] { "使用方法：点击图标", "Enable the magician to move across landforms" });
         table.Add("dove", new System.String[] { "鸽子戏法", "Dove Trick" });
         table.Add("dove_desc", new System.String[] { "放出鸽子吸引守卫的注意力。用来对付玩具狗效果显著。", "Release a dove to distract security guards.It is remarkbly effective for Robo-dog." });
+        table.Add("dove_short_desc", new System.String[] { "使用方法：点击图标", "Enable the magician to move across landforms" });
         table.Add("flashGrenade", new System.String[] { "照明弹", "Flare" });
-        table.Add("flashGrenade_desc", new System.String[] { "拖拽照明弹进行投掷，可驱散迷雾。只能在潜入之前使用。", "Drag the flare and drop it to clear the mist, you can only use this before you sneak in." });                       
+        table.Add("flashGrenade_desc", new System.String[] { "拖拽照明弹进行投掷，可驱散迷雾。只能在潜入之前使用。", "Drag the flare and drop it to clear the mist, you can only use this before you sneak in." });
+        table.Add("flashGrenade_short_desc", new System.String[] { "使用方法：潜入之前拖拽到迷宫中", "Enable the magician to move across landforms" });
         table.Add("level_loading_progress", new System.String[] { "场景加载{0}%", "Level Loading:{0}%" });
         table.Add("power_cost", new System.String[] { "魔力消耗:{0}", "Power Cost:{0}" });
         table.Add("drop_odds", new System.String[] { "潜入失败时有几率遗落:{0}%", "drop_odds:{0}%" });
@@ -113,7 +119,7 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("guard", new System.String[] { "警卫", "Guard" });
         table.Add("guard_desc", new System.String[] { "接受过良好教育的执法者。他们会奋力制服并活捉来犯的盗贼。<color=red>当发现自己守护的保险箱箱被偷的时候，会去支援其他保险箱的守卫工作。\n它的视野不会驱散迷雾。</color>", "guard description.." });
         table.Add("dog", new System.String[] { "玩具狗", "Robo-Dog" });
-        table.Add("dog_desc", new System.String[] { "当发现异常情况会立刻发出警报，呼叫周围的守卫。\n自爆攻击。它的视野不会驱散迷雾。\n自爆攻击\n容易被鸽子引开。", "Bark to call teammates when spot anything unusual.not so smart, like to chase anything movable.Vision won't clear mist.Explose to cause damage." });
+        table.Add("dog_desc", new System.String[] { "当发现异常情况会立刻发出警报，呼叫周围的守卫。\n它的视野不会驱散迷雾。\n自爆攻击\n容易被鸽子引开。", "Bark to call teammates when spot anything unusual.not so smart, like to chase anything movable.Vision won't clear mist.Explose to cause damage." });
         table.Add("Spider", new System.String[] { "蜘蛛", "Robo-Spider" });
         table.Add("Spider_desc", new System.String[] { "栖息在墙上，喷射蛛网。\n它的视野不会驱散迷雾。\n可被魔术牌手枪破坏。", "Perch on wall, spit web. Vision won't clear mist. Can be broken by Poker Pistol." });
         table.Add("Monkey", new System.String[] { "马戏猴子", "Circus Monkey" });
@@ -166,10 +172,10 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("spotted_cant_escape", new System.String[] { "被守卫发现！无法逃离！", "Spotted！Can't escape！" });
         table.Add("stealing_cash_info", new System.String[] { "箱子中的金钱:{0}\n散落在迷宫角落中的金钱：{1}\n从箱子里失窃的金钱:{2}\n从地上捡起来的金钱：{3}", "Total Cash:{0}" });
         table.Add("stealing_cash", new System.String[] { "失窃金钱：{0}", "Total Cash:{0}" });
-        
-        table.Add("stolen_by_others_event_guards_failed", new System.String[] { "{0}(魅力{1})盗取了你的钱财！", "{0}(Rose {1}) steal your wealth!" });
-        table.Add("stolen_by_others_event_guards_success", new System.String[] { "你的守卫成功的赶走了{0}(魅力{1})！", "Your guard successfully drive {0}(Rose {1}) away！" });
-        table.Add("you_stole_others_event", new System.String[] { "你潜入了{0}的迷宫", "You sneak into {0}'s Maze" });
+
+        table.Add("stolen_by_others_event_guards_failed", new System.String[] { "{1}(魅力{2})盗取了你的钱财！\n{0}", "{1}(Rose {2}) steal your wealth!\n{0}" });
+        table.Add("stolen_by_others_event_guards_success", new System.String[] { "你的守卫成功的赶走了{1}(魅力{2})！\n{0}", "Your guard successfully drive {0}(Rose {1}) away！" });
+        table.Add("you_stole_others_event", new System.String[] { "你潜入了{1}的迷宫\n{0}", "You sneak into {0}'s Maze" });
         table.Add("replay", new System.String[] { "回放", "replay" });
         table.Add("few_days_ago", new System.String[] { "盗窃发生于{0}天前", "{0} days ago" });
         table.Add("few_hours_ago", new System.String[] { "盗窃发生于{0}小时前", "{0} hours ago" });

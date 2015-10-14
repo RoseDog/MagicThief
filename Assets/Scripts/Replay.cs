@@ -163,8 +163,7 @@ public class Replay : UnityEngine.MonoBehaviour
             TrickRecords += record.data.nameKey + ",";
             TrickRecords += record.data.duration.ToString() + ",";
             TrickRecords += record.data.powerCost.ToString() + ",";
-            TrickRecords += record.data.clickOnGuardToCast.ToString() + ",";
-            TrickRecords += record.data.clickButtonToCast.ToString();
+            TrickRecords += record.data.useShortcut.ToString();
             if (record != trickRecords[trickRecords.Count - 1])
             {
                 TrickRecords += " ";
@@ -277,8 +276,7 @@ public class Replay : UnityEngine.MonoBehaviour
                 record.data.nameKey = trick_data_str[1];
                 record.data.duration = int.Parse(trick_data_str[2]);
                 record.data.powerCost = int.Parse(trick_data_str[3]);
-                record.data.clickOnGuardToCast = bool.Parse(trick_data_str[4]);
-                record.data.clickButtonToCast = bool.Parse(trick_data_str[5]);       
+                record.data.useShortcut = bool.Parse(trick_data_str[4]);       
                 trickRecords.Add(record);
             }
         }

@@ -233,8 +233,11 @@ public class Chest : Actor, System.IComparable<Chest>
             }
         }
         isPlayingBack = false;
-        Globals.stealingController.magician.isOpenChest = false;
-        Globals.stealingController.magician.isTakingMoneny = false;
+        if (Globals.stealingController && Globals.stealingController.magician)
+        {
+            Globals.stealingController.magician.isOpenChest = false;
+            Globals.stealingController.magician.isTakingMoneny = false;
+        }        
     }
 
     public void LostGold()
@@ -326,7 +329,7 @@ public class Chest : Actor, System.IComparable<Chest>
     {
         AddAction(
                 new Cocos2dParallel(
-                    new Sequence(new ScaleTo(transform, new UnityEngine.Vector3(160f, 160f, 160f), 5),
+                    new Sequence(new ScaleTo(transform, new UnityEngine.Vector3(160f, 160f, 160f), 2),
                         new ScaleTo(transform, scaleCache, 5))
                         )
                         );

@@ -1,15 +1,14 @@
-
 public class TrickData
 {
     public System.String nameKey;
     public System.String descriptionKey;
+    public System.String shortDescriptionKey;
     public int duration;
     public int powerCost;
     public int unlockRoseCount;
     public int slotIdxInUsingPanel = -1;
     public int buyPrice;
-    public bool clickOnGuardToCast = false;
-    public bool clickButtonToCast = false;
+    public bool useShortcut = false;
     public int inventory;
     public float dropOdds;
     public UnityEngine.Vector2 castRange;
@@ -48,8 +47,7 @@ public class TrickData
         data.nameKey = nameKey;
         data.duration = duration;
         data.powerCost = powerCost;
-        data.clickOnGuardToCast = clickOnGuardToCast;
-        data.clickButtonToCast = clickButtonToCast;
+        data.useShortcut = useShortcut;
     }
 
     public int CalcTrickDurationBasedOnDistance(float distance, bool bad_trick)
@@ -295,9 +293,9 @@ public class PlayerInfo
     public System.Collections.Generic.List<System.String> guardsHired = new System.Collections.Generic.List<System.String>();
     public System.Collections.Generic.List<BuildingData> buildingDatas = new System.Collections.Generic.List<BuildingData>();
     public System.Collections.Generic.List<CloudData> cloudDatas = new System.Collections.Generic.List<CloudData>();
-    public System.Collections.Hashtable defReplays = new System.Collections.Hashtable();
-    public System.Collections.Hashtable atkReplays = new System.Collections.Hashtable();
-    public System.Collections.Hashtable beenStolenReports = new System.Collections.Hashtable();
+    public System.Collections.Generic.List<ReplayData> defReplays = new System.Collections.Generic.List<ReplayData>();
+    public System.Collections.Generic.List<ReplayData> atkReplays = new System.Collections.Generic.List<ReplayData>();
+    public System.Collections.Generic.List<ReplayData> beenStolenReports = new System.Collections.Generic.List<ReplayData>();
 
     public System.Collections.Generic.List<MagicianData> magicians = new System.Collections.Generic.List<MagicianData>();
     public MagicianData selectedMagician;
@@ -390,77 +388,77 @@ public class PlayerInfo
             TrickData trick = new TrickData();
             trick.nameKey = "hypnosis";
             trick.descriptionKey = "hypnosis_desc";
+            trick.shortDescriptionKey = "hypnosis_short_desc";
             trick.duration = 350;
             trick.powerCost = 15;
             trick.unlockRoseCount = 0;
             trick.dropOdds = 0.9f;
             trick.weight = 1.2f;
             trick.buyPrice = 100;
-            trick.clickOnGuardToCast = true;
-            trick.clickButtonToCast = false;
+            trick.useShortcut = false;
             trick.castRange = new UnityEngine.Vector2(100, 300);
             tricks.Add(trick);
 
             trick = new TrickData();
             trick.nameKey = "dove";
             trick.descriptionKey = "dove_desc";
+            trick.shortDescriptionKey = "dove_short_desc";
             trick.duration = 500;
             trick.powerCost = 10;
             trick.unlockRoseCount = 0;
             trick.dropOdds = 0.9f;
             trick.buyPrice = 100;
-            trick.clickOnGuardToCast = false;
-            trick.clickButtonToCast = true;
+            trick.useShortcut = true;
             tricks.Add(trick);
 
             trick = new TrickData();
             trick.nameKey = "flashGrenade";
             trick.descriptionKey = "flashGrenade_desc";
+            trick.shortDescriptionKey = "flashGrenade_short_desc";
             trick.duration = 0;
             trick.powerCost = 2;
             trick.unlockRoseCount = 10;
             trick.dropOdds = 0.9f;
             trick.buyPrice = 200;
-            trick.clickOnGuardToCast = false;
-            trick.clickButtonToCast = false;
+            trick.useShortcut = false;
             tricks.Add(trick);
 
             trick = new TrickData();
             trick.nameKey = "disguise";
             trick.descriptionKey = "disguise_desc";
+            trick.shortDescriptionKey = "disguise_short_desc";
             trick.duration = 700;
             trick.powerCost = 30;
             trick.unlockRoseCount = 30;
             trick.dropOdds = 0.9f;
             trick.weight = 0.3f;
             trick.buyPrice = 300;
-            trick.clickOnGuardToCast = false;
-            trick.clickButtonToCast = true;
+            trick.useShortcut = true;
             tricks.Add(trick);       
 
             trick = new TrickData();
             trick.nameKey = "shotLight";
             trick.descriptionKey = "shotLight_desc";
+            trick.shortDescriptionKey = "shotLight_short_desc";
             trick.duration = 700;// machine fixing duration
             trick.powerCost = 5;
             trick.unlockRoseCount = 40;
             trick.dropOdds = 0.3f;
             trick.buyPrice = 100;
-            trick.clickOnGuardToCast = true;
-            trick.clickButtonToCast = true;
+            trick.useShortcut = true;
             trick.castRange = new UnityEngine.Vector2(300, 1600);
             tricks.Add(trick);
 
             trick = new TrickData();
             trick.nameKey = "flyUp";
             trick.descriptionKey = "flyUp_desc";
+            trick.shortDescriptionKey = "flyUp_short_desc";
             trick.duration = 300;
             trick.powerCost = 15;
             trick.unlockRoseCount = 60;
             trick.dropOdds = 0.3f;
             trick.buyPrice = 300;
-            trick.clickOnGuardToCast = false;
-            trick.clickButtonToCast = true;
+            trick.useShortcut = true;
             tricks.Add(trick);
         }        
     }
@@ -513,7 +511,7 @@ public class PlayerInfo
         guard_data.price = 100;
         guard_data.roomConsume = 2;
         guard_data.magicianOutVisionTime = 100;
-        guard_data.atkCd = 100;
+        guard_data.atkCd = 70;
         guard_data.attackValue = 30;
         guard_data.atkShortestDistance = 120f;
         guard_data.doveOutVisionTime = 50;
@@ -526,7 +524,7 @@ public class PlayerInfo
         guard_data.price = 100;
         guard_data.roomConsume = 2;
         guard_data.magicianOutVisionTime = 100;
-        guard_data.atkCd = 100;
+        guard_data.atkCd = 70;
         guard_data.attackValue = 30;
         guard_data.atkShortestDistance = 120f;
         guard_data.doveOutVisionTime = 50;
@@ -996,7 +994,7 @@ public class PlayerInfo
     void OneOtherReplay(System.String[] reply)
     {
         ReplayData replay = UnpackOneReplayData(reply);
-        Globals.playerDownloading.atkReplays.Add(replay.date, replay);        
+        Globals.playerDownloading.atkReplays.Add(replay);        
     }
 
     void OtherReplaysOver(System.String[] reply)
@@ -1480,19 +1478,19 @@ public class PlayerInfo
     public void OneAtkReplay(System.String[] reply)
     {
         ReplayData replay = UnpackOneReplayData(reply);
-        if (!atkReplays.Contains(replay.date.ToString()))
+        if (!atkReplays.Contains(replay))
         {
-            atkReplays.Add(replay.date.ToString(), replay);
+            atkReplays.Add(replay);
         }       
     }        
 
     public void OneDefReplay(System.String[] reply)
     {
         ReplayData replay = UnpackOneReplayData(reply);
-        defReplays.Add(replay.date.ToString(), replay);
+        defReplays.Add(replay);
         if (!replay.everClicked)
         {
-            beenStolenReports.Add(replay.date.ToString(), replay);
+            beenStolenReports.Add(replay);
         }               
     }
 
@@ -1521,11 +1519,15 @@ public class PlayerInfo
         UnpackCashOnFloorStr(reply[0]);
     }
 
+    public float stealingCashCache;
     public void BeenStolen(System.String[] reply)
     {
         ReplayData replay = UnpackOneReplayData(reply);        
-        beenStolenReports.Add(replay.date.ToString(), replay);
-        defReplays.Add(replay.date.ToString(), replay);
+        beenStolenReports.Add(replay);
+        defReplays.Add(replay);
+
+        stealingCashCache += replay.StealingCashInSafebox;
+
         if(Globals.city != null)
         {
             Globals.city.BeenStolen();
@@ -1833,9 +1835,8 @@ public class Globals
             }            
         }
 
-        foreach (System.Collections.DictionaryEntry entry in self.defReplays)
+        foreach (ReplayData replay in self.defReplays)
         {
-            ReplayData replay = entry.Value as ReplayData;
             if (!replay.everClicked)
             {
                 ++unclicked_count;
