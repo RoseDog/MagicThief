@@ -302,7 +302,7 @@ public class StealingLevelController : LevelController
         }
         else if (Globals.self.TutorialLevelIdx == PlayerInfo.TutorialLevel.UnlockNewTrick)
         {
-            RestartText.text = "";
+            Globals.languageTable.SetText(RestartText, "dove_guide_info");
         }
         else
         {
