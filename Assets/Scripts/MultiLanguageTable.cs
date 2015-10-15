@@ -302,6 +302,8 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("operate_guide_info", new System.String[] { "<color=red>点击鼠标右键移动角色并盗取宝箱财物</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
         table.Add("sneaking_guide_info", new System.String[] { "<color=red>移动时按住<size=30>R</size>键可消除脚步声</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
         table.Add("hypnosis_guide_info", new System.String[] { "<color=red>按住<size=30>R</size>键悄悄靠近警卫，将其催眠并盗取财物</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
+        table.Add("dove_guide_info", new System.String[] { "<color=red>使用鸽子戏法来对付机械狗</color>", "<color=red>Right-click to move\nMove Mouse close to border to move the screen</color>" });
+        
         
 
         table.Add("replay_speed", new System.String[] { "快进 x {0}", "Speed x {0}" });
@@ -333,10 +335,10 @@ public class MultiLanguageTable : UnityEngine.MonoBehaviour
         table.Add("cant_use_locked_magician", new System.String[] { "该角色还不能使用", "" });
 
         table.Add("Rosa", new System.String[] { "罗萨", "Rosa" });
-        table.Add("Rosa_desc", new System.String[] { "德雷斯罗萨", "Rosa_desc" });
+        table.Add("Rosa_desc", new System.String[] { "The Show man:\n“你靠得越近，越是无法看清。”在魔术师这个群体中，始终有人坚信着这条古训，他们是一直在思考着如何愚弄观众的一群人。", "" });
 
         table.Add("Walter", new System.String[] { "沃尔特", "Walter" });
-        table.Add("Walter_desc", new System.String[] { "沃尔特", "Rosa_desc" });
+        table.Add("Walter_desc", new System.String[] { "Sleight:\n灵活的手法是魔术师这个职业的基本功和硬实力。他们花费了相当长的时间做枯燥的基本训练。这使得他们的表演总是干净利落，毫无破绽。", "" });
    }    
 
     public void SetText(UnityEngine.UI.Text uiText, System.String key, System.String[] strings = null)

@@ -62,7 +62,16 @@ public class CharacterSelect : UnityEngine.MonoBehaviour
 
         UpdateCharacterData();
 
-        Globals.languageTable.SetText(Desc, Globals.self.selectedMagician.desc);
+        if (!Globals.self.selectedMagician.IsLocked())
+        {
+            Globals.languageTable.SetText(Desc, Globals.self.selectedMagician.desc);
+        }
+        else
+        {
+            Globals.languageTable.SetText(Desc, "character_require_rose", new System.String[] { Globals.self.selectedMagician.roseRequire.ToString() });            
+        }
+
+        
         RoseToBeAllot.UpdateCurrentLife(Globals.self.roseLast.ToString(), Globals.self.roseCount, false);               
     }
 

@@ -5,12 +5,27 @@ public class CanvasForLogin : LevelController
     public UnityEngine.UI.Button DiveInBtn;
     UnityEngine.RectTransform caret;
     public MultiLanguageUIText version;
+    public UnityEngine.GameObject RosedogBillboard;
     public override void Awake()
     {
         base.Awake();
         Globals.canvasForLogin = this;
         version.text = "ver"+Globals.versionString;
         //UnityEngine.Screen.SetResolution(332, 589, false);
+    }
+
+    public void CloseRosedogBillboard()
+    {
+        RosedogBillboard.SetActive(false);
+        if (EnterName.text == "")
+        {
+            Globals.transition.BlackIn();
+        }
+        else
+        {
+            LoginUIVisible(false);
+            Submit();
+        }    
     }
     
 	// Use this for initialization
@@ -24,6 +39,7 @@ public class CanvasForLogin : LevelController
         DiveInBtn.onClick.AddListener(() => Submit());
         DiveInBtn.interactable = false;
         EnterName.onValueChange.AddListener((str) => OnValueChange(str));
+        EnterName.onValidateInput = OnValidateInput;
         Invoke("CaretOffset", 0.5f);
 
         if (System.IO.File.Exists(UnityEngine.Application.persistentDataPath + "/name.txt"))
@@ -32,18 +48,20 @@ public class CanvasForLogin : LevelController
                System.Text.Encoding.UTF8);
             EnterName.text = stream.ReadLine();
             stream.Close();
-        }
-        
-        if (EnterName.text == "")
-        {            
-            Globals.transition.BlackIn();            
-        }
-        else
-        {            
-            LoginUIVisible(false);
-            Invoke("Submit", 1.5f);
-        }                        
+        }        
 	}
+
+    char OnValidateInput(string text, int charIndex, char addedChar)
+    {
+        if (EnterName.text.Length < 8 && 
+            ((addedChar >= '0' && addedChar <= '9') || 
+            (addedChar >= 'a' && addedChar <= 'z') ||
+            (addedChar >= 'A' && addedChar <= 'Z')))
+        {
+            return addedChar;
+        }
+        return '\0';
+    }
 
     public void LoginUIVisible(bool visible)
     {
