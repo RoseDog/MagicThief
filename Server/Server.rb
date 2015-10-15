@@ -228,6 +228,8 @@ class Player
     @userFile = UserFile.new(@bornNewTargetDuration)
     @punishRoseCount = 1
     @performingIncomeCycle = 60 * 10
+    @pvpProtectionDuration= 10 * 60
+    @matchRoseDiff = 5
   end
 
   def send(msg)
@@ -275,6 +277,7 @@ class Player
   end
 
   def StealingInfo(playerFile)
+    playerFile.cashAmount = 3 if playerFile.cashAmount.to_f < 3
     reply = playerFile.TutorialLevelIdx + "&" +
         playerFile.cashAmount.to_s + "&" +
         playerFile.roseCount.to_s + "&" +
@@ -608,8 +611,8 @@ class Player
           enemies << enemyUserFile if (
           !HasTargetBuilding(enemyUserFile.name) &&
               enemyUserFile.name != @userFile.name &&
-              (enemyUserFile.roseCount - @userFile.roseCount).abs < 10 &&
-              Time.now - enemyUserFile.beenStealingTimeStamp > 10 * 60 &&
+              (enemyUserFile.roseCount - @userFile.roseCount).abs < @matchRoseDiff &&
+              Time.now - enemyUserFile.beenStealingTimeStamp > @pvpProtectionDuration &&
               enemyUserFile.TutorialLevelIdx == "Over")
         end
       end

@@ -90,13 +90,7 @@ public class City : LevelController
                 UnityEngine.GameObject building = UnityEngine.GameObject.Find("building_" + Globals.self.buildingDatas[idx].posID);
                 building.GetComponentInChildren<Building>().data = Globals.self.buildingDatas[idx];
                 UpdateBuilding(building.GetComponentInChildren<Building>(), Globals.self.buildingDatas[idx]);
-            }           
-
-            
-            
-            // 录像
-            AddReplaysToEventWindow(Globals.self.defReplays);
-            AddReplaysToEventWindow(Globals.self.atkReplays);
+            }                                               
 
             // 排行榜
             foreach(PlayerInfo playOnRank in Globals.playersOnRank)
@@ -137,16 +131,7 @@ public class City : LevelController
         {
             BeenStolen();
         }        
-    }
-
-    public void AddReplaysToEventWindow(System.Collections.Hashtable replays)
-    {
-        foreach (System.Collections.DictionaryEntry entry in replays)
-        {
-            ReplayData replay = entry.Value as ReplayData;
-            AddOneReplayToEventWindow(replay);
-        }
-    }
+    }    
 
     public void AddOneReplayToEventWindow(ReplayData replay)
     {
@@ -154,7 +139,7 @@ public class City : LevelController
         if (replay.thief.name == Globals.self.name)
         {
             ce = eventsWindow.AddEvent(replay.everClicked);
-            Globals.languageTable.SetText(ce.uiText, "you_stole_others_event", new System.String[] { replay.guard.name });
+            Globals.languageTable.SetText(ce.uiText, "you_stole_others_event", new System.String[] {replay.date.ToString(), replay.guard.name });
         }
         else
         {
@@ -162,12 +147,12 @@ public class City : LevelController
             if (replay.StealingCashInSafebox > 0)
             {
                 ce.uiText.color = UnityEngine.Color.red;
-                Globals.languageTable.SetText(ce.uiText, "stolen_by_others_event_guards_failed", new System.String[] { replay.thief.name, replay.thief.roseCount.ToString() });
+                Globals.languageTable.SetText(ce.uiText, "stolen_by_others_event_guards_failed", new System.String[] { replay.date.ToString(), replay.thief.name, replay.thief.roseCount.ToString() });
             }
             else
             {
                 ce.uiText.color = UnityEngine.Color.green;
-                Globals.languageTable.SetText(ce.uiText, "stolen_by_others_event_guards_success", new System.String[] { replay.thief.name, replay.thief.roseCount.ToString() });
+                Globals.languageTable.SetText(ce.uiText, "stolen_by_others_event_guards_success", new System.String[] { replay.date.ToString(), replay.thief.name, replay.thief.roseCount.ToString() });
             }
         }
 
@@ -178,7 +163,9 @@ public class City : LevelController
     public void BeenStolen()
     {
         beenStolenReportUI.Open();
-        Globals.self.beenStolenReports.Clear();    
+        Globals.self.beenStolenReports.Clear();
+        Globals.canvasForMagician.ChangeCash(-Globals.self.stealingCashCache);
+        Globals.self.stealingCashCache = 0;
     }
 
     public override void OnDestroy()
@@ -256,7 +243,7 @@ public class City : LevelController
         
     public void TargetClicked(System.String clickedTarget)
     {        
-        eventsWindow.EventClicked(clickedTarget);
+        //eventsWindow.EventClicked(clickedTarget);
     }
 
     public UnityEngine.Vector3 GetTargetPosition(System.String targetName)

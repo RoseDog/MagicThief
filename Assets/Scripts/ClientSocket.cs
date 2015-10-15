@@ -131,12 +131,7 @@ public class ClientSocket : UnityEngine.MonoBehaviour
     {        
         if (ws != null)
         {
-//            msgCache.Add(msg);
-//            if (msgCache.Count == 1)
-            {
-                UnityEngine.Debug.Log(msg);
-                ws.Send(msg);
-            }            
+            ws.Send(msg);          
         }        
     }
 

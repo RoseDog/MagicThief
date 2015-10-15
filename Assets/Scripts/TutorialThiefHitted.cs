@@ -5,5 +5,9 @@ public class TutorialThiefHitted : Hitted
     {
         UnityEngine.Debug.Log("hitteAnimEnd");
         base.hitteAnimEnd();
+        if(actor.IsLifeOver())
+        {
+            Globals.maze.GuardsTargetVanish(gameObject);
+        }
     }
 }

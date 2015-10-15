@@ -12,6 +12,7 @@ public class CityEventsWindow : CustomEventTrigger
     UnityEngine.UI.Button defense_reward_btn;
     MultiLanguageUIText defense_reward_number;
     public UnityEngine.GameObject highLightFrame;
+    public UnityEngine.UI.GridLayoutGroup layout;
     public override void Awake()
     {
         eventPrefab = UnityEngine.Resources.Load("UI/CityEvent") as UnityEngine.GameObject;
@@ -37,8 +38,7 @@ public class CityEventsWindow : CustomEventTrigger
 
     public void ReplayEventBtnClicked(ReplayData replay, CityEvent ce)
     {
-        System.DateTime then = System.Convert.ToDateTime(replay.date);
-        System.TimeSpan date_diff = System.DateTime.Now - then;
+        System.TimeSpan date_diff = System.DateTime.Now - replay.date;
 
         if (date_diff.Days != 0)
         {
@@ -125,22 +125,13 @@ public class CityEventsWindow : CustomEventTrigger
     {
         CityEvent ce = (Instantiate(eventPrefab) as UnityEngine.GameObject).GetComponent<CityEvent>();
         UnityEngine.RectTransform ceTransform = ce.GetComponent<UnityEngine.RectTransform>();
-        ceTransform.SetParent(transform);
+        ceTransform.SetParent(layout.transform);
         ceTransform.localScale = new UnityEngine.Vector3(1, 1, 1);        
         ce.newText.enabled = !everClicked;
         cityEvents.Add(ce);
 
-        float event_y_pos = 134.4f;
-        float padding = 3;
-        for (int idx = cityEvents.Count - 1; idx >= 0; --idx)
-        {
-            cityEvents[idx].rectTransform.localPosition = new UnityEngine.Vector3(0, event_y_pos, 0.0f);
-            event_y_pos -= cityEvents[idx].rectTransform.rect.height;
-            event_y_pos -= padding;
-        }
-
         Globals.UpdateUnclickedRedPointsText(unclickedCount);
-
+        
         return ce;
     }
 
@@ -197,12 +188,49 @@ public class CityEventsWindow : CustomEventTrigger
         highLightFrame.SetActive(false);
         city.ranksWindow.CloseBtnClcked();
         city.ChooseBuilding(null);
+
+        // 录像                
+        //         TargetBuilding[] targets = FindObjectsOfType<TargetBuilding>();
+        //         foreach(TargetBuilding building in targets)
+        //         {
+        //             AddEvent(building);
+        //             if(cityEvents.Count == 10)
+        //             {
+        //                 break;
+        //             }
+        //         }
+
+        // 录像 
+        foreach (ReplayData replay in Globals.self.defReplays)
+        {
+            city.AddOneReplayToEventWindow(replay);
+            if (cityEvents.Count == 10)
+            {
+                break;
+            }
+        }
+        foreach (ReplayData replay in Globals.self.atkReplays)
+        {
+            city.AddOneReplayToEventWindow(replay);
+            if (cityEvents.Count == 10)
+            {
+                break;
+            }
+        }
+        Globals.canvasForMagician.gameObject.SetActive(false);
     }
 
     public void CloseBtnClcked()
     {
+        highLightFrame.transform.parent = transform;
         ReplayDetail.localScale = UnityEngine.Vector3.zero;
         gameObject.SetActive(false);
+        foreach (CityEvent ce in cityEvents)
+        {
+            DestroyObject(ce.gameObject);
+        }
+        cityEvents.Clear();
+        Globals.canvasForMagician.gameObject.SetActive(true);
     }
 
     public override void OnTouchUpOutside(Finger f)

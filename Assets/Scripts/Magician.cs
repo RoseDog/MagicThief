@@ -229,7 +229,7 @@ public class Magician : Actor
         {
             return;
         }
-        if (Stealing && data.clickButtonToCast && ChangePower(-data.powerCost))
+        if (Stealing && data.useShortcut && ChangePower(-data.powerCost))
         {
             Globals.replaySystem.RecordMagicCast(data);            
             if (data.nameKey == "disguise")

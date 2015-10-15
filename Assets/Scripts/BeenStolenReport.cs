@@ -6,23 +6,14 @@ public class BeenStolenReport : CustomEventTrigger
     public void Open()
     {
         transform.parent.parent.gameObject.SetActive(true);
-        Globals.city.mainCanvas.gameObject.SetActive(false);
+        //Globals.city.mainCanvas.gameObject.SetActive(false);
 
 
         System.Collections.ArrayList dateArray = new System.Collections.ArrayList();
-        foreach (System.Collections.DictionaryEntry entry in Globals.self.beenStolenReports)
+        foreach (ReplayData replay in Globals.self.beenStolenReports)
         {
-            dateArray.Add(System.Convert.ToDateTime(entry.Key));
-        }
-
-        dateArray.Sort();
-
-        for (int idx = dateArray.Count-1; idx >= 0; --idx)
-        {
-            ReplayData replay = Globals.self.beenStolenReports[dateArray[idx].ToString()] as ReplayData;
-            AddEvent(replay);
-            Globals.city.AddOneReplayToEventWindow(replay);
-            Globals.canvasForMagician.ChangeCash(-replay.StealingCashInSafebox);          
+            dateArray.Add(replay);
+            AddEvent(replay);            
         }        
     }
 
@@ -36,9 +27,7 @@ public class BeenStolenReport : CustomEventTrigger
         UnityEngine.UI.Text stolen_by_others_event = Globals.getChildGameObject<UnityEngine.UI.Text>(report, "stolen_by_others_event");
         UnityEngine.UI.Text stealing_cash = Globals.getChildGameObject<UnityEngine.UI.Text>(report, "stealing_cash");
 
-
-        System.DateTime then = System.Convert.ToDateTime(replay.date);
-        System.TimeSpan date_diff = System.DateTime.Now - then;
+        System.TimeSpan date_diff = System.DateTime.Now - replay.date;
 
         if (date_diff.Days != 0)
         {
@@ -58,12 +47,12 @@ public class BeenStolenReport : CustomEventTrigger
         if (replay.StealingCashInSafebox > 0)
         {
             stolen_by_others_event.color = UnityEngine.Color.red;
-            Globals.languageTable.SetText(stolen_by_others_event, "stolen_by_others_event_guards_failed", new System.String[] { replay.thief.name, replay.thief.roseCount.ToString() });
+            Globals.languageTable.SetText(stolen_by_others_event, "stolen_by_others_event_guards_failed", new System.String[] { replay.date.ToString(), replay.thief.name, replay.thief.roseCount.ToString() });
         }
         else
         {
             stolen_by_others_event.color = UnityEngine.Color.green;
-            Globals.languageTable.SetText(stolen_by_others_event, "stolen_by_others_event_guards_success", new System.String[] { replay.thief.name, replay.thief.roseCount.ToString() });
+            Globals.languageTable.SetText(stolen_by_others_event, "stolen_by_others_event_guards_success", new System.String[] { replay.date.ToString(), replay.thief.name, replay.thief.roseCount.ToString() });
         }          
         
         Globals.languageTable.SetText(stealing_cash, "stealing_cash",
